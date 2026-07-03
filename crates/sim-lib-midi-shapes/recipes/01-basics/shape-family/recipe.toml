@@ -1,0 +1,8 @@
+id = "shape-family"
+title = "MIDI shape family"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["midi", "shapes", "citizen"]
+requires = ["midi-shapes", "codec/lisp"]

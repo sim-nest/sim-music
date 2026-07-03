@@ -1,0 +1,8 @@
+id = "forte-number"
+title = "Forte number descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "forte", "set-class"]
+requires = ["pitch-namer-forte", "codec/lisp"]

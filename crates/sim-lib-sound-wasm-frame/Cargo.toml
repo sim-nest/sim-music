@@ -1,0 +1,33 @@
+[package]
+name = "sim-lib-sound-wasm-frame"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Sound binary-frame facade descriptors."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-music-core = { version = "0.1.0", optional = true, path = "../sim-lib-music-core" }
+sim-lib-music-lower = { version = "0.1.0", optional = true, path = "../sim-lib-music-lower" }
+sim-lib-music-shapes = { version = "0.1.0", optional = true, path = "../sim-lib-music-shapes" }
+sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
+sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-dissonance = { version = "0.1.0", path = "../sim-lib-sound-dissonance" }
+sim-lib-sound-gm = { version = "0.1.0", path = "../sim-lib-sound-gm" }
+sim-lib-sound-render = { version = "0.1.0", path = "../sim-lib-sound-render" }
+sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
+sim-lib-stream-core = { version = "0.1.0" }
+thiserror = "1"
+
+[features]
+default = ["sound-music", "model"]
+sound-music = ["dep:sim-lib-music-core", "dep:sim-lib-music-lower", "dep:sim-lib-music-shapes"]
+# Marks the modeled (no wasm-bindgen; pure descriptor) tier; see the crate docs.
+model = []
+
+[dev-dependencies]
+sim-kernel = { version = "0.1.0" }

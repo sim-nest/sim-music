@@ -1,0 +1,5 @@
+book = "stream-midi"
+title = "Stream MIDI"
+summary = "MIDI packetization and memory stream adapters."
+order = 121
+chapters = ["01-basics"]

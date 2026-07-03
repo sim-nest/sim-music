@@ -1,0 +1,21 @@
+[package]
+name = "sim-lib-stream-file"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "File-backed source and sink adapters for STREAM 6."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
+sim-lib-stream-audio = { version = "0.1.0" }
+sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-midi = { version = "0.1.0", path = "../sim-lib-stream-midi" }
+
+[lints]
+workspace = true

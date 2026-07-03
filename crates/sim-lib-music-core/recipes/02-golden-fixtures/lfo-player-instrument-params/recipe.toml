@@ -1,0 +1,8 @@
+id = "lfo-player-instrument-params"
+title = "LFO Player And Instrument Parameters"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["music", "modulator", "lfo", "instrument", "golden"]
+requires = ["music-core", "audio-synth", "codec/lisp"]

@@ -1,0 +1,4 @@
+(quote
+  (recipe missing-capability-failure
+    (require-capability (player note-echo) oscillator)
+    (expect-error "missing capability oscillator")))

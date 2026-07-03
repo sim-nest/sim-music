@@ -1,0 +1,5 @@
+book = "music-core"
+title = "Music Core"
+summary = "Score, melody, note, and duration descriptors."
+order = 250
+chapters = ["01-basics", "02-golden-fixtures"]

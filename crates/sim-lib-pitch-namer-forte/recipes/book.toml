@@ -1,0 +1,5 @@
+book = "pitch-namer-forte"
+title = "Pitch Namer Forte"
+summary = "Forte-number descriptors for pitch-class sets."
+order = 215
+chapters = ["01-basics"]

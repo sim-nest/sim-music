@@ -1,0 +1,34 @@
+[package]
+name = "sim-lib-music-shapes"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib music shapes."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-codec = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-value = { version = "0.1.0" }
+sim-lib-midi-shapes = { version = "0.1.0", path = "../sim-lib-midi-shapes" }
+sim-lib-music-analysis = { version = "0.1.0", path = "../sim-lib-music-analysis" }
+sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
+sim-lib-music-lift = { version = "0.1.0", path = "../sim-lib-music-lift" }
+sim-lib-music-lower = { version = "0.1.0", path = "../sim-lib-music-lower" }
+sim-lib-music-transform = { version = "0.1.0", path = "../sim-lib-music-transform" }
+sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-shape = { version = "0.1.0" }
+thiserror = "1"
+
+[dev-dependencies]
+num-rational = "0.4"
+sim-codec-json = { version = "0.1.0" }
+sim-codec-lisp = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }

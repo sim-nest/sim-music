@@ -1,0 +1,5 @@
+book = "midi-ble"
+title = "MIDI BLE"
+summary = "Bluetooth MIDI descriptor fixtures."
+order = 235
+chapters = ["01-basics"]

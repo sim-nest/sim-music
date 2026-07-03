@@ -1,0 +1,13 @@
+[package]
+name = "sim-lib-sound-spectrum"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib sound spectrum."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }

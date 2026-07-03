@@ -1,0 +1,7 @@
+(quote
+  (recipe pattern-mutator-locked-take
+    (capture (take lead-a :source keyboard))
+    (player pattern-mutator :seed 3838 :amount 62)
+    (locks (lane drums) (beat 1) (pitch C4))
+    (scale-conform C-major)
+    (golden player-recipe-pattern-mutator)))

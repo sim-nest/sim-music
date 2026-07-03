@@ -1,0 +1,8 @@
+id = "synthetic-polyphonic-patch"
+title = "PS-3300 synthetic polyphonic patch"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["audio", "synth", "ps3300", "fixture"]
+requires = ["audio-synth", "codec/lisp"]

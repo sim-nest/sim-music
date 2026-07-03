@@ -1,0 +1,6 @@
+(quote
+  (recipe polystep-quad-note-seeded
+    (player polystep :seed 3828 :direction ping-pong)
+    (player quad-note-generator :master-seed 3829 :stream-seed 3830)
+    (freeze (stream :clock midi-tick))
+    (golden player-recipe-polystep-quad)))

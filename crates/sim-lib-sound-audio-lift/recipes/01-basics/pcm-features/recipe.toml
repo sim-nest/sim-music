@@ -1,0 +1,8 @@
+id = "pcm-features"
+title = "PCM feature lift"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["sound", "audio-lift", "features"]
+requires = ["sound-audio-lift", "codec/lisp"]

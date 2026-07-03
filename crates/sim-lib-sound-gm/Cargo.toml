@@ -1,0 +1,17 @@
+[package]
+name = "sim-lib-sound-gm"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib sound gm."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
+sim-lib-sound-timbre = { version = "0.1.0", path = "../sim-lib-sound-timbre" }
+
+[lints]
+workspace = true

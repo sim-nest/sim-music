@@ -1,0 +1,7 @@
+(quote
+  (recipe bassline-chord-sup
+    (progression (Cmaj7 480) (Fmaj7 480) (G7 480))
+    (player chord-sequencer :key C-major)
+    (player bassline-generator :seed 3824 :density 100 :chord-follow on)
+    (target (sup-instrument dx7-lead))
+    (golden player-recipe-bassline-chord)))

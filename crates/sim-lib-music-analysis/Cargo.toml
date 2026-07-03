@@ -1,0 +1,23 @@
+[package]
+name = "sim-lib-music-analysis"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib music analysis."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-discrete-spectral = { optional = true, version = "0.1.0" }
+sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+
+[dev-dependencies]
+num-rational = "0.4"
+
+[features]
+default = []
+discrete-fwht = ["dep:sim-lib-discrete-spectral"]

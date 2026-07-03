@@ -1,0 +1,8 @@
+id = "tonic-function"
+title = "Tonic function descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "riemann", "function"]
+requires = ["pitch-namer-riemann", "codec/lisp"]

@@ -1,0 +1,8 @@
+id = "offline-bridge"
+title = "Offline bridge descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["stream", "bridge", "offline"]
+requires = ["stream-bridge", "codec/lisp"]

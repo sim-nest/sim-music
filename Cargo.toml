@@ -1,0 +1,61 @@
+
+[workspace]
+resolver = "3"
+members = [
+  "crates/sim-lib-music-synth",
+  "crates/sim-lib-midi-ble",
+  "crates/sim-lib-midi-core",
+  "crates/sim-lib-midi-live",
+  "crates/sim-lib-midi-rtmidi",
+  "crates/sim-lib-midi-shapes",
+  "crates/sim-lib-midi-smf",
+  "crates/sim-lib-midi-sysex",
+  "crates/sim-lib-midi-wasm-frame",
+  "crates/sim-lib-music-analysis",
+  "crates/sim-lib-music-combinators",
+  "crates/sim-lib-music-core",
+  "crates/sim-lib-music-lift",
+  "crates/sim-lib-music-lower",
+  "crates/sim-lib-music-notation",
+  "crates/sim-lib-music-shapes",
+  "crates/sim-lib-music-transform",
+  "crates/sim-lib-music-wasm-frame",
+  "crates/sim-lib-pitch-chord",
+  "crates/sim-lib-pitch-core",
+  "crates/sim-lib-pitch-dissonance",
+  "crates/sim-lib-pitch-namer",
+  "crates/sim-lib-pitch-namer-forte",
+  "crates/sim-lib-pitch-namer-jazz",
+  "crates/sim-lib-pitch-namer-riemann",
+  "crates/sim-lib-pitch-namer-roman",
+  "crates/sim-lib-pitch-scale",
+  "crates/sim-lib-pitch-set",
+  "crates/sim-lib-pitch-shapes",
+  "crates/sim-lib-pitch-wasm-frame",
+  "crates/sim-lib-sound-audio-lift",
+  "crates/sim-lib-sound-bridge",
+  "crates/sim-lib-sound-core",
+  "crates/sim-lib-sound-dissonance",
+  "crates/sim-lib-sound-gm",
+  "crates/sim-lib-sound-render",
+  "crates/sim-lib-sound-shapes",
+  "crates/sim-lib-sound-spectrum",
+  "crates/sim-lib-sound-timbre",
+  "crates/sim-lib-sound-tuning",
+  "crates/sim-lib-sound-wasm-frame",
+  "crates/sim-lib-stream-bridge",
+  "crates/sim-lib-stream-file",
+  "crates/sim-lib-stream-midi",
+  "crates/sim-lib-daw-session",
+  "crates/sim-table-fs",
+  "xtask",
+]
+
+[workspace.package]
+edition = "2024"
+license = "MPL-2.0"
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

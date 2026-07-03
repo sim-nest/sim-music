@@ -1,0 +1,35 @@
+[package]
+name = "sim-lib-music-synth"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Playable pure Rust software synthesizer primitives for the SIM audio graph."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-lib-audio-dsp = { version = "0.1.0" }
+sim-lib-audio-graph-core = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
+sim-lib-midi-sysex = { version = "0.1.0", path = "../sim-lib-midi-sysex" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-topology = { version = "0.1.0" }
+sim-value = { version = "0.1.0" }
+
+[dev-dependencies]
+sim-codec = { version = "0.1.0" }
+sim-codec-json = { version = "0.1.0" }
+sim-codec-lisp = { version = "0.1.0" }
+sim-lib-audio-graph-live = { version = "0.1.0" }
+sim-test-support = { version = "0.1.0" }
+
+[lints]
+workspace = true

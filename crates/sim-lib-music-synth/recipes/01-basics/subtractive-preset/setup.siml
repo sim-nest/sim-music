@@ -1,0 +1,1 @@
+(quote (audio-synth subtractive preset adsr oscillator offline-render))

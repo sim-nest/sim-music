@@ -1,0 +1,8 @@
+id = "from-midi-track"
+title = "Lift from MIDI track"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "lift", "midi"]
+requires = ["music-lift", "codec/lisp"]

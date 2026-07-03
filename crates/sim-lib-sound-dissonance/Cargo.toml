@@ -1,0 +1,21 @@
+[package]
+name = "sim-lib-sound-dissonance"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib sound dissonance."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-dissonance = { version = "0.1.0", path = "../sim-lib-pitch-dissonance" }
+sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-spectrum = { version = "0.1.0", path = "../sim-lib-sound-spectrum" }
+thiserror = "1"

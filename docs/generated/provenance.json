@@ -1,0 +1,6 @@
+{
+  "schema": "sim.provenance.v1",
+  "repo": "sim-music",
+  "generated_by": "cargo run -p xtask -- simdoc",
+  "api_docs": "target/doc/"
+}

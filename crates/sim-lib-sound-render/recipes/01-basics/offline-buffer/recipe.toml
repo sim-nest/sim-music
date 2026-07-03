@@ -1,0 +1,8 @@
+id = "offline-buffer"
+title = "Offline render buffer"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["sound", "render", "offline"]
+requires = ["sound-render", "codec/lisp"]

@@ -1,0 +1,5 @@
+book = "sound-timbre"
+title = "Sound Timbre"
+summary = "Timbre, filter, and envelope descriptors."
+order = 272
+chapters = ["01-basics"]

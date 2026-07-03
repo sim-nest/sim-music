@@ -1,0 +1,5 @@
+book = "midi-smf"
+title = "MIDI SMF"
+summary = "Standard MIDI File structure and metadata descriptors."
+order = 231
+chapters = ["01-basics", "02-export-fixtures"]

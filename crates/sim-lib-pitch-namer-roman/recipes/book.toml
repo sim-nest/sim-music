@@ -1,0 +1,5 @@
+book = "pitch-namer-roman"
+title = "Pitch Namer Roman"
+summary = "Roman numeral analysis descriptors."
+order = 217
+chapters = ["01-basics"]

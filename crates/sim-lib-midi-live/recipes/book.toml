@@ -1,0 +1,5 @@
+book = "midi-live"
+title = "MIDI Live"
+summary = "Live MIDI session descriptors using in-memory rings."
+order = 233
+chapters = ["01-basics"]

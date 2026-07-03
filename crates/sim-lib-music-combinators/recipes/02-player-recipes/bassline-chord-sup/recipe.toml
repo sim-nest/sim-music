@@ -1,0 +1,8 @@
+id = "bassline-chord-sup"
+title = "Bassline Chord SUP Instrument"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["music", "player", "bassline", "chord-sequencer", "instrument", "golden"]
+requires = ["music-combinators", "pitch-chord", "codec/lisp"]

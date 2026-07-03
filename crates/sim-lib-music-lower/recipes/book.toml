@@ -1,0 +1,5 @@
+book = "music-lower"
+title = "Music Lower"
+summary = "Lowering descriptors from scores to MIDI-like tracks."
+order = 254
+chapters = ["01-basics"]

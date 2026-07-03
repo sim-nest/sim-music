@@ -1,0 +1,5 @@
+book = "audio-synth-system700"
+title = "System 700"
+summary = "System 700 module ids, main-console patch rendering, and synthetic fixtures."
+order = 30
+chapters = ["."]

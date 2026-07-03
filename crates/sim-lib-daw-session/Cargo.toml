@@ -1,0 +1,28 @@
+[package]
+name = "sim-lib-daw-session"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Headless DAW session surface for SIM audio graph workspaces."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-lib-audio-graph-core = { version = "0.1.0" }
+sim-lib-audio-graph-live = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-music-core = { version = "0.1.0" }
+sim-lib-plugin-core = { version = "0.1.0" }
+sim-lib-stream-audio = { version = "0.1.0" }
+sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-midi = { version = "0.1.0" }
+sim-lib-topology = { version = "0.1.0" }
+sim-value = { version = "0.1.0" }
+
+[lints]
+workspace = true

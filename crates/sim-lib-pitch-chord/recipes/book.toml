@@ -1,0 +1,5 @@
+book = "pitch-chord"
+title = "Pitch Chord"
+summary = "Chord spelling and quality descriptors."
+order = 213
+chapters = ["01-basics"]

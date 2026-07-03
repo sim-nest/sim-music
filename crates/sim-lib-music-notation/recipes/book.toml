@@ -1,0 +1,5 @@
+book = "music-notation"
+title = "Music Notation"
+summary = "Notation import and export descriptors."
+order = 256
+chapters = ["01-basics"]

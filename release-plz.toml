@@ -1,0 +1,10 @@
+# NOTE: the release.yml workflow is NOT injected at genesis (the first release
+# uses the manual `simctl publish-crates` sweep). Add release.yml + the
+# CARGO_REGISTRY_TOKEN secret per repo when you start ongoing per-repo releases.
+# Synchronized versions across the workspace; dev harnesses are publish=false in
+# their own Cargo.toml and are skipped automatically.
+[workspace]
+# One version for the whole constellation; bump together.
+dependencies_update = true
+git_release_enable = true
+# Publish crates in dependency order (release-plz computes the order).

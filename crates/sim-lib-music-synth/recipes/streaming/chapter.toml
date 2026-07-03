@@ -1,0 +1,3 @@
+title = "Streaming"
+order = 70
+summary = "Instrument patch, control, audio, preview, and trace stream descriptors."

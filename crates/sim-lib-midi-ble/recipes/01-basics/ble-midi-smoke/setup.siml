@@ -1,0 +1,1 @@
+(quote (midi-ble smoke bluez-gatt operator-device))

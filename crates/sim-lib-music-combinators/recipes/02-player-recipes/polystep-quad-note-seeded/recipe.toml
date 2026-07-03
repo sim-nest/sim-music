@@ -1,0 +1,8 @@
+id = "polystep-quad-note-seeded"
+title = "PolyStep And Quad Note Seeds"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 40
+tags = ["music", "player", "polystep", "quad-note", "seed", "golden"]
+requires = ["music-combinators", "codec/lisp"]

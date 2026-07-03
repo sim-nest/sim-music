@@ -1,0 +1,8 @@
+id = "frame-facade"
+title = "Music frame facade"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "wasm", "facade"]
+requires = ["music-wasm", "codec/lisp"]

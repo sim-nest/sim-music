@@ -1,0 +1,8 @@
+id = "note-echo-frozen-midi"
+title = "Note Echo Frozen MIDI"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["midi", "smf", "note-echo", "golden"]
+requires = ["midi-smf", "music-core", "codec/lisp"]

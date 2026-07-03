@@ -1,0 +1,5 @@
+book = "midi-rtmidi"
+title = "MIDI RtMidi"
+summary = "RtMidi backend descriptors with virtual and ALSA sequencer ports."
+order = 234
+chapters = ["01-basics"]

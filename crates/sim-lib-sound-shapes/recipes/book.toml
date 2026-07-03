@@ -1,0 +1,5 @@
+book = "sound-shapes"
+title = "Sound Shapes"
+summary = "Citizen descriptor shapes for sound objects."
+order = 279
+chapters = ["01-basics"]

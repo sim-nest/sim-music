@@ -1,0 +1,28 @@
+[package]
+name = "sim-lib-sound-shapes"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib sound shapes."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-codec = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-value = { version = "0.1.0" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-sound-audio-lift = { version = "0.1.0", path = "../sim-lib-sound-audio-lift" }
+sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
+sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-dissonance = { version = "0.1.0", path = "../sim-lib-sound-dissonance" }
+sim-lib-sound-render = { version = "0.1.0", path = "../sim-lib-sound-render" }
+sim-lib-sound-spectrum = { version = "0.1.0", path = "../sim-lib-sound-spectrum" }
+sim-lib-sound-timbre = { version = "0.1.0", path = "../sim-lib-sound-timbre" }
+sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
+sim-shape = { version = "0.1.0" }
+thiserror = "1"

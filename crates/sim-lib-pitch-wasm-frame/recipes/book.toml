@@ -1,0 +1,5 @@
+book = "pitch-wasm"
+title = "Pitch Wasm"
+summary = "Browser-safe pitch facade descriptors."
+order = 221
+chapters = ["01-basics"]

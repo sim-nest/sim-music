@@ -1,0 +1,13 @@
+[package]
+name = "sim-lib-midi-sysex"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib midi sysex."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }

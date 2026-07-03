@@ -1,0 +1,5 @@
+book = "stream-file"
+title = "Stream File"
+summary = "Capability-gated WAV and SMF stream adapters."
+order = 118
+chapters = ["01-basics"]

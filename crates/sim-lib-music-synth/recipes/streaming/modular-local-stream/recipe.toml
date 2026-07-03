@@ -1,0 +1,8 @@
+id = "modular-local-stream"
+title = "Modular local stream"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["audio", "synth", "stream", "modular", "local"]
+requires = ["audio-synth", "stream-bridge", "audio-graph-live", "codec/lisp"]

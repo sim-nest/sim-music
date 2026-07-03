@@ -1,0 +1,5 @@
+book = "midi-wasm"
+title = "MIDI Wasm"
+summary = "Browser-safe MIDI facade descriptors."
+order = 237
+chapters = ["01-basics"]

@@ -1,0 +1,8 @@
+id = "captured-take-direct-record"
+title = "Captured Take Direct Record"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "performance", "cassette", "piano-roll", "golden"]
+requires = ["music-core", "stream-core", "codec/lisp"]

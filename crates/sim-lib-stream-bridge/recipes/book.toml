@@ -1,0 +1,5 @@
+book = "stream-bridge"
+title = "Stream Bridge"
+summary = "Offline MIDI-to-PCM rendering and PCM-to-MIDI lifting descriptors."
+order = 114
+chapters = ["01-basics"]

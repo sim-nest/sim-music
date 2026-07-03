@@ -1,0 +1,5 @@
+book = "music-transform"
+title = "Music Transform"
+summary = "Pure music transformation descriptors."
+order = 253
+chapters = ["01-basics"]

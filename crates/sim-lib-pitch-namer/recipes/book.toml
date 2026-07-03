@@ -1,0 +1,5 @@
+book = "pitch-namer"
+title = "Pitch Namer"
+summary = "Pitch and set naming registry descriptors."
+order = 214
+chapters = ["01-basics"]

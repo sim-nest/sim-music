@@ -1,0 +1,8 @@
+id = "chord-symbol"
+title = "Chord symbol descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "jazz", "chord"]
+requires = ["pitch-namer-jazz", "codec/lisp"]

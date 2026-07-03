@@ -1,0 +1,5 @@
+book = "sound-core"
+title = "Sound Core"
+summary = "Tone, oscillator, and amplitude descriptors."
+order = 270
+chapters = ["01-basics"]

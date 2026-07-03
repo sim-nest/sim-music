@@ -1,0 +1,5 @@
+book = "pitch-namer-riemann"
+title = "Pitch Namer Riemann"
+summary = "Riemannian function descriptors."
+order = 218
+chapters = ["01-basics"]

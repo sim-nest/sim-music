@@ -1,0 +1,8 @@
+id = "major-triad"
+title = "Major triad descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "chord", "triad"]
+requires = ["pitch-chord", "codec/lisp"]

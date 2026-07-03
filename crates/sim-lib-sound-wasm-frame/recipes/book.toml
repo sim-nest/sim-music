@@ -1,0 +1,5 @@
+book = "sound-wasm"
+title = "Sound Wasm"
+summary = "Browser-safe sound facade descriptors."
+order = 280
+chapters = ["01-basics"]

@@ -1,0 +1,5 @@
+book = "midi-shapes"
+title = "MIDI Shapes"
+summary = "Citizen descriptor shapes for MIDI values."
+order = 236
+chapters = ["01-basics"]

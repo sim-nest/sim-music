@@ -1,0 +1,8 @@
+id = "sequence-tools"
+title = "Sequence combinators"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "combinators", "sequence"]
+requires = ["music-combinators", "codec/lisp"]

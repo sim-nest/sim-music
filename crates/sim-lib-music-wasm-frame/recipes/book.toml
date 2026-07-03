@@ -1,0 +1,5 @@
+book = "music-wasm"
+title = "Music Wasm"
+summary = "Browser-safe music facade descriptors."
+order = 258
+chapters = ["01-basics"]

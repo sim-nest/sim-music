@@ -1,0 +1,8 @@
+id = "frame-facade"
+title = "MIDI frame facade"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["midi", "wasm", "facade"]
+requires = ["midi-wasm", "codec/lisp"]

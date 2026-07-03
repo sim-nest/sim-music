@@ -1,0 +1,5 @@
+book = "sound-bridge"
+title = "Sound Bridge"
+summary = "Music and MIDI bridge descriptors for sound playback."
+order = 275
+chapters = ["01-basics"]

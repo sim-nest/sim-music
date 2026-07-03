@@ -1,0 +1,5 @@
+book = "audio-synth-ps3300"
+title = "PS-3300"
+summary = "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata."
+order = 32
+chapters = ["."]

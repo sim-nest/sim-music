@@ -1,0 +1,8 @@
+id = "gm-voice"
+title = "GM voice bridge descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["sound", "bridge", "gm"]
+requires = ["sound-bridge", "codec/lisp"]

@@ -1,0 +1,5 @@
+book = "daw-session"
+title = "DAW Session"
+summary = "Portable DAW session, clip, render, and topology descriptors."
+order = 138
+chapters = ["01-basics", "02-performance-integration"]

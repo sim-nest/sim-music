@@ -1,0 +1,5 @@
+book = "midi-sysex"
+title = "MIDI SysEx"
+summary = "System exclusive message descriptors."
+order = 232
+chapters = ["01-basics"]

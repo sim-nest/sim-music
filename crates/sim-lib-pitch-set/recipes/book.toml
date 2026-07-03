@@ -1,0 +1,5 @@
+book = "pitch-set"
+title = "Pitch Set"
+summary = "Pitch-class sets, masks, and normal-form descriptors."
+order = 211
+chapters = ["01-basics"]

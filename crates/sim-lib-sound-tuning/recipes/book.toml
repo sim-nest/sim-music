@@ -1,0 +1,5 @@
+book = "sound-tuning"
+title = "Sound Tuning"
+summary = "Tuning-system descriptors."
+order = 273
+chapters = ["01-basics"]

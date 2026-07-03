@@ -1,0 +1,8 @@
+id = "keyboard-scales-dual-arp"
+title = "Keyboard Scales And Dual Arpeggio"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "player", "keyboard", "piano-roll", "golden"]
+requires = ["music-core", "music-combinators", "pitch-chord", "codec/lisp"]

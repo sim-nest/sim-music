@@ -1,0 +1,5 @@
+book = "sound-dissonance"
+title = "Sound Dissonance"
+summary = "Roughness and spectrum-pair descriptors."
+order = 274
+chapters = ["01-basics"]

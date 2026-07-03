@@ -1,0 +1,8 @@
+id = "sup-instrument-performance"
+title = "SUP Instrument Performance"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["daw", "session", "instrument", "player", "golden"]
+requires = ["daw-session", "music-core", "codec/lisp"]

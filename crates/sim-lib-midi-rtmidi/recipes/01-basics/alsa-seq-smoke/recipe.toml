@@ -1,0 +1,8 @@
+id = "alsa-seq-smoke"
+title = "ALSA sequencer smoke check"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["midi", "rtmidi", "alsa-seq", "hardware"]
+requires = ["midi-rtmidi", "codec/lisp", "alsa-seq"]

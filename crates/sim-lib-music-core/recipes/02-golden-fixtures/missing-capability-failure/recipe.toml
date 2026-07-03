@@ -1,0 +1,8 @@
+id = "missing-capability-failure"
+title = "Missing Capability Failure"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 40
+tags = ["music", "capability", "failure"]
+requires = ["music-core", "codec/lisp"]

@@ -1,0 +1,5 @@
+book = "sound-spectrum"
+title = "Sound Spectrum"
+summary = "Partial, centroid, and peak descriptors."
+order = 271
+chapters = ["01-basics"]

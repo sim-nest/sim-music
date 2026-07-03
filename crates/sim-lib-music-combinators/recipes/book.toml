@@ -1,0 +1,5 @@
+book = "music-combinators"
+title = "Music Combinators"
+summary = "Sequence, parallel, repeat, and transform combinator descriptors."
+order = 251
+chapters = ["01-basics", "02-player-recipes"]

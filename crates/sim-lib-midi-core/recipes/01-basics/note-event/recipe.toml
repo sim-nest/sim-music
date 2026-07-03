@@ -1,0 +1,8 @@
+id = "note-event"
+title = "Note event descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["midi", "event", "note"]
+requires = ["midi-io", "codec/lisp"]

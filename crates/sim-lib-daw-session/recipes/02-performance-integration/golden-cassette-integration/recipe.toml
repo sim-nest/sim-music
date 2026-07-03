@@ -1,0 +1,8 @@
+id = "golden-cassette-integration"
+title = "Golden Cassette Integration"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["daw", "session", "stream", "cassette", "golden"]
+requires = ["daw-session", "stream-core", "codec/lisp"]

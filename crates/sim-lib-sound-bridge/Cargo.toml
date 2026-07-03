@@ -1,0 +1,23 @@
+[package]
+name = "sim-lib-sound-bridge"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib sound bridge."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-timbre = { version = "0.1.0", path = "../sim-lib-sound-timbre" }
+sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
+thiserror = "1"
+
+[lints]
+workspace = true

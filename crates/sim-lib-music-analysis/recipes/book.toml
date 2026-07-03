@@ -1,0 +1,5 @@
+book = "music-analysis"
+title = "Music Analysis"
+summary = "Pitch-class, histogram, and chord-window analysis descriptors."
+order = 252
+chapters = ["01-basics"]

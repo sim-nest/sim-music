@@ -1,0 +1,5 @@
+book = "midi-io"
+title = "MIDI Core"
+summary = "MIDI event, tempo, and metadata descriptors."
+order = 230
+chapters = ["01-basics"]

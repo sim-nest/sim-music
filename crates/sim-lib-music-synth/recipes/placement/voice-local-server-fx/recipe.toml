@@ -1,0 +1,8 @@
+id = "voice-local-server-fx"
+title = "Voice local server FX"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["audio", "synth", "placement", "server-fx"]
+requires = ["audio-synth", "audio-graph-live", "stream-fabric", "codec/lisp"]

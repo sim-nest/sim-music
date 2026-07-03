@@ -1,0 +1,8 @@
+id = "synthetic-voice"
+title = "System 55 synthetic voice"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["audio", "synth", "system55", "fixture"]
+requires = ["audio-synth", "codec/lisp"]

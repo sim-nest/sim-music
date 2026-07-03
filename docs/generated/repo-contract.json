@@ -1,0 +1,18 @@
+{
+  "schema": "sim.repo-contract.v1",
+  "repo": "sim-music",
+  "lanes": [
+    "target/doc/",
+    "docs/agents/cards.jsonl",
+    "docs/humans/",
+    "docs/diagrams/src/",
+    "docs/diagrams/generated/"
+  ],
+  "contracts": [
+    "docs/generated/provenance.json",
+    "docs/generated/repo-contract.json",
+    "docs/generated/rustdoc-index.json",
+    "docs/generated/card-index.json",
+    "docs/generated/feature-map.json"
+  ]
+}

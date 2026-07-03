@@ -1,0 +1,7 @@
+(quote
+  (recipe beat-map-gm-smf
+    (player beat-map :seed 3800 :density 100 :complexity 64)
+    (drum-map (gm kick 36) (gm snare 38) (gm closed-hat 42))
+    (freeze (midi-track :channel 9))
+    (export (smf :format 0 :tpq 480))
+    (golden player-recipe-beat-map-smf)))

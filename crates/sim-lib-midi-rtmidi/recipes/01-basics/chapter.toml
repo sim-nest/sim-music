@@ -1,0 +1,3 @@
+title = "Basics"
+order = 10
+summary = "RtMidi descriptors and hardware-gated ALSA sequencer checks."

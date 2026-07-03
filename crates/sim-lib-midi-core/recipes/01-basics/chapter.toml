@@ -1,0 +1,3 @@
+title = "Basics"
+order = 10
+summary = "Device-free MIDI event descriptors."

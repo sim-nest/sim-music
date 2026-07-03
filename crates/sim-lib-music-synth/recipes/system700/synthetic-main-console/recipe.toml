@@ -1,0 +1,8 @@
+id = "synthetic-main-console"
+title = "System 700 synthetic main console"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["audio", "synth", "system700", "fixture"]
+requires = ["audio-synth", "codec/lisp"]

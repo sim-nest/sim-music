@@ -1,0 +1,17 @@
+[package]
+name = "sim-lib-pitch-chord"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib pitch chord."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-roman = { version = "0.1.0", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+thiserror = "1"

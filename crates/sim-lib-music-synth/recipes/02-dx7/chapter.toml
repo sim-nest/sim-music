@@ -1,0 +1,3 @@
+title = "DX7"
+order = 20
+summary = "DX7 synthetic patch rendering, fixture metadata, and local SysEx input."

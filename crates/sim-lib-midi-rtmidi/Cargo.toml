@@ -1,0 +1,28 @@
+[package]
+name = "sim-lib-midi-rtmidi"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Modeled RtMidi MIDI adapter surface for SIM (in-process simulation; no live MIDI hardware I/O)."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[features]
+default = ["model"]
+# Marks the modeled (pure-Rust, no-FFI) capability tier; see the crate docs.
+model = []
+rtmidi-hardware = ["dep:midir", "dep:sim-lib-midi-live"]
+
+[dependencies]
+midir = { version = "0.11", optional = true, default-features = false }
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-live = { version = "0.1.0", path = "../sim-lib-midi-live", optional = true }
+sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-host = { version = "0.1.0" }
+
+[lints]
+workspace = true

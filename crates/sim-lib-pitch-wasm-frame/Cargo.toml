@@ -1,0 +1,25 @@
+[package]
+name = "sim-lib-pitch-wasm-frame"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Pitch binary-frame facade descriptors."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[features]
+default = ["model"]
+# Marks the modeled (no wasm-bindgen; pure descriptor) tier; see the crate docs.
+model = []
+
+[dependencies]
+sim-codec = { version = "0.1.0" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-dissonance = { version = "0.1.0", path = "../sim-lib-pitch-dissonance" }
+sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
+sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-pitch-shapes = { version = "0.1.0", path = "../sim-lib-pitch-shapes" }
+thiserror = "1"

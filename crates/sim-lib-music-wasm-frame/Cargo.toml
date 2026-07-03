@@ -1,0 +1,27 @@
+[package]
+name = "sim-lib-music-wasm-frame"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Music binary-frame facade descriptors."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[features]
+default = ["model"]
+# Marks the modeled (no wasm-bindgen; pure descriptor) tier; see the crate docs.
+model = []
+
+[dependencies]
+sim-codec = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
+sim-lib-midi-wasm-frame = { version = "0.1.0", path = "../sim-lib-midi-wasm-frame" }
+sim-lib-music-analysis = { version = "0.1.0", path = "../sim-lib-music-analysis" }
+sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
+sim-lib-music-lift = { version = "0.1.0", path = "../sim-lib-music-lift" }
+sim-lib-music-lower = { version = "0.1.0", path = "../sim-lib-music-lower" }
+sim-lib-music-shapes = { version = "0.1.0", path = "../sim-lib-music-shapes" }
+thiserror = "1"

@@ -1,0 +1,3 @@
+title = "Player Recipes"
+order = 20
+summary = "Deterministic player-chain recipes with frozen render fixtures."

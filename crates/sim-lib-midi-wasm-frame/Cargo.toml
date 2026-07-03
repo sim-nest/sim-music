@@ -1,0 +1,21 @@
+[package]
+name = "sim-lib-midi-wasm-frame"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "MIDI binary-frame facade descriptors."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[features]
+default = ["model"]
+# Marks the modeled (no wasm-bindgen; pure descriptor) tier; see the crate docs.
+model = []
+
+[dependencies]
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
+sim-wasm-abi = { version = "0.1.0" }
+thiserror = "1"

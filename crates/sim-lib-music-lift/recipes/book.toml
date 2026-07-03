@@ -1,0 +1,5 @@
+book = "music-lift"
+title = "Music Lift"
+summary = "Lifting descriptors from MIDI-style tracks into music objects."
+order = 255
+chapters = ["01-basics"]

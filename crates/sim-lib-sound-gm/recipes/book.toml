@@ -1,0 +1,5 @@
+book = "sound-gm"
+title = "Sound GM"
+summary = "General MIDI bank and preset descriptors."
+order = 278
+chapters = ["01-basics"]

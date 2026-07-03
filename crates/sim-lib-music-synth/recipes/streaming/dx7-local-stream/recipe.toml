@@ -1,0 +1,8 @@
+id = "dx7-local-stream"
+title = "DX7 local stream"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["audio", "synth", "stream", "dx7", "local"]
+requires = ["audio-synth", "stream-bridge", "audio-graph-live", "codec/lisp"]

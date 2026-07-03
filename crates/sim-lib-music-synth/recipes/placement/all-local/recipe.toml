@@ -1,0 +1,8 @@
+id = "all-local"
+title = "All local placement"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["audio", "synth", "placement", "local"]
+requires = ["audio-synth", "audio-graph-live", "codec/lisp"]

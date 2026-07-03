@@ -1,0 +1,33 @@
+[package]
+name = "sim-lib-midi-ble"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "BLE-MIDI discovery, packet framing, and stream-host placement seams."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[features]
+default = ["model"]
+# Marks the modeled (pure-Rust, no-FFI) capability tier; see the crate docs.
+model = []
+ble-midi-hardware = ["dep:sim-lib-midi-live", "dep:zbus"]
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-live = { version = "0.1.0", path = "../sim-lib-midi-live", optional = true }
+sim-lib-midi-rtmidi = { version = "0.1.0", path = "../sim-lib-midi-rtmidi" }
+sim-lib-stream-host = { version = "0.1.0" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+zbus = { version = "5", optional = true }
+
+[dev-dependencies]
+sim-test-support = { version = "0.1.0" }
+
+[lints]
+workspace = true

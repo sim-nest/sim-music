@@ -1,0 +1,5 @@
+book = "pitch-scale"
+title = "Pitch Scale"
+summary = "Scale and degree descriptors."
+order = 212
+chapters = ["01-basics"]

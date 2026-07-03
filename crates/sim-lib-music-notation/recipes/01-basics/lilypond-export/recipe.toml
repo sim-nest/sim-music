@@ -1,0 +1,8 @@
+id = "lilypond-export"
+title = "LilyPond export descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "notation", "export"]
+requires = ["music-notation", "codec/lisp"]

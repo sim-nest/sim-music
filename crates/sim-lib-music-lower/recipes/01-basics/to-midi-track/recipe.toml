@@ -1,0 +1,8 @@
+id = "to-midi-track"
+title = "Lower to MIDI track"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "lower", "midi"]
+requires = ["music-lower", "codec/lisp"]

@@ -1,0 +1,5 @@
+book = "pitch-core"
+title = "Pitch Core"
+summary = "Pitch values, names, MIDI notes, and frequency descriptors."
+order = 210
+chapters = ["01-basics"]

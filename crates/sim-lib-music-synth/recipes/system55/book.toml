@@ -1,0 +1,5 @@
+book = "audio-synth-system55"
+title = "System 55"
+summary = "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence."
+order = 31
+chapters = ["."]

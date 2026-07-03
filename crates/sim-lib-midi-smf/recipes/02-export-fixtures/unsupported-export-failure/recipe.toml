@@ -1,0 +1,8 @@
+id = "unsupported-export-failure"
+title = "Unsupported Export Failure"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["midi", "smf", "failure"]
+requires = ["midi-smf", "codec/lisp"]

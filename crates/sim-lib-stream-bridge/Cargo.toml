@@ -1,0 +1,28 @@
+[package]
+name = "sim-lib-stream-bridge"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "MIDI/audio bridge helpers for STREAM 6."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-citizen = { version = "0.1.0" }
+sim-citizen-derive = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-lib-sound-audio-lift = { version = "0.1.0", path = "../sim-lib-sound-audio-lift" }
+sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
+sim-lib-sound-gm = { version = "0.1.0", path = "../sim-lib-sound-gm" }
+sim-lib-sound-render = { version = "0.1.0", path = "../sim-lib-sound-render" }
+sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
+sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-midi = { version = "0.1.0", path = "../sim-lib-stream-midi" }
+sim-lib-stream-prelude = { version = "0.1.0" }
+
+[lints]
+workspace = true

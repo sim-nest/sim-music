@@ -1,0 +1,8 @@
+id = "test-message"
+title = "SysEx fixture descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["midi", "sysex", "fixture"]
+requires = ["midi-sysex", "codec/lisp"]

@@ -1,0 +1,5 @@
+book = "sound-render"
+title = "Sound Render"
+summary = "Offline PCM render descriptors."
+order = 276
+chapters = ["01-basics"]

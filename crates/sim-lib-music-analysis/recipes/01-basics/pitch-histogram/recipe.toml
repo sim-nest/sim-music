@@ -1,0 +1,8 @@
+id = "pitch-histogram"
+title = "Pitch histogram descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "analysis", "histogram"]
+requires = ["music-analysis", "codec/lisp"]

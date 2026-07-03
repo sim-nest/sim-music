@@ -1,0 +1,7 @@
+(quote
+  (recipe lfo-player-instrument-params
+    (modulator lfo :frequency 1 :shape sine)
+    (target (player-param amount))
+    (target (instrument-param amp-gain))
+    (freeze (stream :clock control))
+    (golden player-recipe-lfo-params)))

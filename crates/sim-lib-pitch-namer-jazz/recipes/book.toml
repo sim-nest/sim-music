@@ -1,0 +1,5 @@
+book = "pitch-namer-jazz"
+title = "Pitch Namer Jazz"
+summary = "Jazz chord naming descriptors."
+order = 216
+chapters = ["01-basics"]

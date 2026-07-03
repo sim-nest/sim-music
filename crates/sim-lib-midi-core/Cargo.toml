@@ -1,0 +1,15 @@
+[package]
+name = "sim-lib-midi-core"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib midi core."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+thiserror = "1"

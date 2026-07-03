@@ -1,0 +1,5 @@
+book = "pitch-shapes"
+title = "Pitch Shapes"
+summary = "Citizen descriptor shapes for pitch values."
+order = 220
+chapters = ["01-basics"]

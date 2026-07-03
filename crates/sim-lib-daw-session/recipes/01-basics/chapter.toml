@@ -1,0 +1,3 @@
+title = "Basics"
+order = 10
+summary = "Headless session descriptors for offline rendering."

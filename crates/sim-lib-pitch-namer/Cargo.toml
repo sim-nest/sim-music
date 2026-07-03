@@ -1,0 +1,23 @@
+[package]
+name = "sim-lib-pitch-namer"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "SIM workspace package for sim lib pitch namer."
+readme = "README.md"
+publish = true
+repository = "https://github.com/sim-nest/sim-music"
+homepage = "https://github.com/sim-nest/sim-music"
+
+[dependencies]
+sim-kernel = { version = "0.1.0" }
+sim-lib-core = { version = "0.1.0" }
+sim-lib-pitch-chord = { version = "0.1.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-forte = { version = "0.1.0", path = "../sim-lib-pitch-namer-forte" }
+sim-lib-pitch-namer-jazz = { version = "0.1.0", path = "../sim-lib-pitch-namer-jazz" }
+sim-lib-pitch-namer-riemann = { version = "0.1.0", path = "../sim-lib-pitch-namer-riemann" }
+sim-lib-pitch-namer-roman = { version = "0.1.0", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+thiserror = "1"

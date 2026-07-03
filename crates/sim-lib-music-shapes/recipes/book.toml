@@ -1,0 +1,5 @@
+book = "music-shapes"
+title = "Music Shapes"
+summary = "Citizen descriptor shapes for music objects."
+order = 257
+chapters = ["01-basics"]

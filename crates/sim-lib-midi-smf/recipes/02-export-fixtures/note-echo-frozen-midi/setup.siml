@@ -1,0 +1,6 @@
+(quote
+  (recipe note-echo-frozen-midi
+    (player note-echo :delay 120 :repeats 2 :pitch-offsets (0 4 7))
+    (freeze (midi-track :notes (C4 E4 G4)))
+    (export (smf :format 0 :tpq 480))
+    (golden player-recipe-note-echo-smf)))

@@ -1,0 +1,8 @@
+id = "acoustic-grand"
+title = "Acoustic grand preset"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["sound", "gm", "preset"]
+requires = ["sound-gm", "codec/lisp"]

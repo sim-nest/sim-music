@@ -1,0 +1,8 @@
+id = "ble-midi-smoke"
+title = "BLE MIDI smoke"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["midi", "ble", "hardware"]
+requires = ["midi-ble", "codec/lisp", "ble-midi-hardware"]

@@ -1,0 +1,5 @@
+book = "audio-synth"
+title = "Audio Synth"
+summary = "Software synth preset, oscillator, envelope, and offline render data."
+order = 133
+chapters = ["01-basics", "02-dx7", "system700", "system55", "ps3300", "streaming", "placement"]
