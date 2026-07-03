@@ -5,16 +5,12 @@ of repos that build together; contributions of all sizes are welcome.
 
 ## Building and testing
 
-SIM builds as one system. The supported path is the meta-workspace:
+This repo is self-contained and builds against the published SIM crates on
+crates.io -- no extra tooling or sibling checkouts are required:
 
-- Clone the sibling repos and generate the unified workspace with the control-plane
-  tooling, then build/test through it. `sim-kernel` is the only crate that builds
-  standalone; every other crate resolves its siblings through the workspace.
-- Per-crate check (through the generated workspace):
-  `cargo <cmd> --manifest-path .meta-workspace/Cargo.toml -p <crate>`.
-
-Once the crates are published, a normal `cargo build` inside a single repo also
-works, resolving siblings from crates.io.
+- Clone this repo and run `cargo build` and `cargo test --workspace`.
+- Cross-repo dependencies resolve from crates.io; dependencies within this repo
+  resolve locally.
 
 ## What a pull request must pass
 
