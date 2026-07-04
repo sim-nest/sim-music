@@ -95,8 +95,6 @@ pub struct System700RenderFixtureMetadata {
     pub event_sequence: Vec<String>,
     /// Version strings of the components used.
     pub component_versions: Vec<String>,
-    /// Hash of the rendered sample buffer.
-    pub trace_hash: String,
 }
 
 /// Acceptance tolerances for comparing a rendered mode against the ideal render.
@@ -324,10 +322,8 @@ pub fn system700_render_fixture_manifest() -> String {
             fixture.channels
         ));
         out.push_str(&format!(
-            "patch_id = \"{}\"\npatch_hash = \"{}\"\ntrace_hash = \"{}\"\n",
-            fixture.metadata.default_patch_id,
-            fixture.metadata.patch_hash,
-            fixture.metadata.trace_hash
+            "patch_id = \"{}\"\npatch_hash = \"{}\"\n",
+            fixture.metadata.default_patch_id, fixture.metadata.patch_hash
         ));
         out.push_str(&format!(
             "event_sequence = [{}]\n",
@@ -356,7 +352,7 @@ fn render_fixture(
     let sample_rate_hz = 48_000;
     let channels = 1;
     let tolerance = System700RenderTolerance::default();
-    let metadata = fixture_metadata(&patch, mode, &events, sample_rate_hz, frames, channels);
+    let metadata = fixture_metadata(&patch, mode, &events, sample_rate_hz);
     System700RenderFixture {
         id: id.to_owned(),
         kind,
@@ -376,11 +372,7 @@ fn fixture_metadata(
     mode: System700RenderMode,
     events: &[BlockEvent<'static>],
     sample_rate_hz: u32,
-    frames: usize,
-    channels: usize,
 ) -> System700RenderFixtureMetadata {
-    let mut system = System700::new(patch.clone(), mode);
-    let trace = render_processor(&mut system, events, sample_rate_hz, frames, channels);
     System700RenderFixtureMetadata {
         sample_rate_hz,
         mode: mode.as_str().to_owned(),
@@ -388,7 +380,6 @@ fn fixture_metadata(
         patch_hash: hash_patch(patch),
         event_sequence: events.iter().copied().map(event_label).collect(),
         component_versions: component_versions(),
-        trace_hash: hash_samples(&trace),
     }
 }
 
@@ -465,16 +456,6 @@ fn hash_patch(patch: &InstrumentPatch) -> String {
     hash.finish_hex()
 }
 
-fn hash_samples(samples: &[Vec<f32>]) -> String {
-    let mut hash = Fnv64::new();
-    for channel in samples {
-        for sample in channel {
-            hash.i64((*sample * 1_000_000.0).round() as i64);
-        }
-    }
-    hash.finish_hex()
-}
-
 fn peak(samples: &[Vec<f32>]) -> f32 {
     samples
         .iter()
@@ -511,10 +492,6 @@ impl Fnv64 {
     fn u8(&mut self, value: u8) {
         self.0 ^= u64::from(value);
         self.0 = self.0.wrapping_mul(0x0000_0100_0000_01b3);
-    }
-
-    fn i64(&mut self, value: i64) {
-        self.bytes(&value.to_le_bytes());
     }
 
     fn finish_hex(self) -> String {

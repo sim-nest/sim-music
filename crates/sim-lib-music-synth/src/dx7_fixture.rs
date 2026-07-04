@@ -74,8 +74,6 @@ pub struct Dx7RenderFixtureMetadata {
     pub midi_sequence: Vec<String>,
     /// Versioned component identifiers contributing to the trace.
     pub component_versions: Vec<String>,
-    /// FNV-64 hex hash of the rendered sample trace.
-    pub trace_hash: String,
 }
 
 /// Per-fixture sample-error budget for comparing two renderer backends.
@@ -355,10 +353,9 @@ pub fn dx7_render_fixture_manifest() -> String {
             fixture.sample_rate_hz, fixture.frames, fixture.channels
         ));
         out.push_str(&format!(
-            "mode = \"{}\"\npatch_hash = \"{}\"\ntrace_hash = \"{}\"\n",
+            "mode = \"{}\"\npatch_hash = \"{}\"\n",
             toml_escape(&fixture.metadata.mode),
-            fixture.metadata.patch_hash,
-            fixture.metadata.trace_hash
+            fixture.metadata.patch_hash
         ));
         out.push_str(&format!(
             "midi_sequence = [{}]\n",
@@ -401,7 +398,7 @@ fn dx7_render_fixture(
     let sample_rate_hz = 48_000;
     let channels = 1;
     let tolerance = Dx7RenderTolerance::default();
-    let metadata = dx7_fixture_metadata(&patch, &events, sample_rate_hz, frames, channels);
+    let metadata = dx7_fixture_metadata(&patch, &events, sample_rate_hz);
     Dx7RenderFixture {
         id,
         kind,
@@ -419,18 +416,13 @@ fn dx7_fixture_metadata(
     patch: &Dx7Patch,
     events: &[BlockEvent<'static>],
     sample_rate_hz: u32,
-    frames: usize,
-    channels: usize,
 ) -> Dx7RenderFixtureMetadata {
-    let mut voice = Dx7Voice::new(patch.clone(), ComponentBackend::Algorithmic);
-    let trace = render_processor(&mut voice, events, sample_rate_hz, frames, channels);
     Dx7RenderFixtureMetadata {
         sample_rate_hz,
         mode: ComponentBackend::Algorithmic.as_str().to_owned(),
         patch_hash: hash_patch(patch),
         midi_sequence: events.iter().copied().map(event_label).collect(),
         component_versions: component_versions(),
-        trace_hash: hash_samples(&trace),
     }
 }
 
@@ -619,16 +611,6 @@ fn hash_patch(patch: &Dx7Patch) -> String {
     hash.finish_hex()
 }
 
-fn hash_samples(samples: &[Vec<f32>]) -> String {
-    let mut hash = Fnv64::new();
-    for channel in samples {
-        for sample in channel {
-            hash.i64((*sample * 1_000_000.0).round() as i64);
-        }
-    }
-    hash.finish_hex()
-}
-
 fn peak(samples: &[Vec<f32>]) -> f32 {
     samples
         .iter()
@@ -665,10 +647,6 @@ impl Fnv64 {
     fn u8(&mut self, value: u8) {
         self.0 ^= u64::from(value);
         self.0 = self.0.wrapping_mul(0x0000_0100_0000_01b3);
-    }
-
-    fn i64(&mut self, value: i64) {
-        self.bytes(&value.to_le_bytes());
     }
 
     fn finish_hex(self) -> String {

@@ -157,7 +157,6 @@ fn system700_patch_round_trip_fixture_serializes() {
         .find(|fixture| fixture.kind == System700RenderFixtureKind::PatchRoundTrip)
         .expect("patch round trip fixture");
     assert_eq!(fixture.metadata.patch_hash.len(), 16);
-    assert_eq!(fixture.metadata.trace_hash.len(), 16);
     assert_eq!(
         fixture.metadata.default_patch_id,
         system700_default_patch_id().as_qualified_str()

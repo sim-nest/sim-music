@@ -206,7 +206,6 @@ fn dx7_render_fixture_catalog_records_metadata() {
         assert_eq!(fixture.metadata.sample_rate_hz, fixture.sample_rate_hz);
         assert_eq!(fixture.metadata.mode, "algorithmic");
         assert_eq!(fixture.metadata.patch_hash.len(), 16);
-        assert_eq!(fixture.metadata.trace_hash.len(), 16);
         assert!(!fixture.metadata.midi_sequence.is_empty());
         assert!(
             fixture
