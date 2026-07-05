@@ -6,6 +6,7 @@ license.workspace = true
 publish = false
 
 [dependencies]
+sim-lib-music-synth = { path = "../crates/sim-lib-music-synth" }
 
 [lints]
 workspace = true

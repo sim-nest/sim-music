@@ -1,11 +1,15 @@
 [package]
 name = "sim-lib-music-synth"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "Playable pure Rust software synthesizer primitives for the SIM audio graph."
 readme = "README.md"
 publish = true
+# No published binary targets: the fixture-manifest generators are maintainer codegen
+# tools and live in this repo's `xtask` (`cargo run -p xtask -- music-fixtures <name>`),
+# not on this crate's installable surface.
+autobins = false
 repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
