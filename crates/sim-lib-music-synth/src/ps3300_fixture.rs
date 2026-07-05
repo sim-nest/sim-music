@@ -11,8 +11,7 @@ use crate::{
 pub const PS3300_RENDER_FIXTURE_MANIFEST_PATH: &str =
     "crates/sim-lib-music-synth/fixtures/ps3300/render-fixtures.toml";
 /// Shell command that regenerates the PS-3300 render fixtures and manifest.
-pub const PS3300_FIXTURE_REGENERATE_COMMAND: &str =
-    "cargo run -p xtask -- music-fixtures ps3300";
+pub const PS3300_FIXTURE_REGENERATE_COMMAND: &str = "cargo run -p xtask -- music-fixtures ps3300";
 /// Stable ids of the five PS-3300 render fixtures, in manifest order.
 pub const PS3300_RENDER_FIXTURE_IDS: [&str; 5] = [
     "ps3300-ps3-one-cell-render",

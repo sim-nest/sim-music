@@ -9,8 +9,7 @@ use crate::{
 pub const DX7_RENDER_FIXTURE_MANIFEST_PATH: &str =
     "crates/sim-lib-music-synth/fixtures/dx7/render-fixtures.toml";
 /// Cargo command that regenerates the DX7 render fixtures and their manifest.
-pub const DX7_FIXTURE_REGENERATE_COMMAND: &str =
-    "cargo run -p xtask -- music-fixtures dx7";
+pub const DX7_FIXTURE_REGENERATE_COMMAND: &str = "cargo run -p xtask -- music-fixtures dx7";
 
 /// Categorizes a DX7 render fixture by the synthesis scenario it exercises.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

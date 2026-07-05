@@ -18,9 +18,10 @@ use sim_lib_music_synth::{
 
 pub fn run(args: &[String]) -> Result<(), String> {
     match args.first().map(String::as_str) {
-        Some("dx7") => {
-            write_manifest(DX7_RENDER_FIXTURE_MANIFEST_PATH, dx7_render_fixture_manifest())
-        }
+        Some("dx7") => write_manifest(
+            DX7_RENDER_FIXTURE_MANIFEST_PATH,
+            dx7_render_fixture_manifest(),
+        ),
         Some("ps3300") => write_manifest(
             PS3300_RENDER_FIXTURE_MANIFEST_PATH,
             ps3300_render_fixture_manifest(),
@@ -34,9 +35,7 @@ pub fn run(args: &[String]) -> Result<(), String> {
             system700_render_fixture_manifest(),
         ),
         Some(other) => Err(format!("unknown music-fixtures target: {other}")),
-        None => Err(
-            "usage: xtask music-fixtures <dx7|ps3300|system55|system700>".to_owned(),
-        ),
+        None => Err("usage: xtask music-fixtures <dx7|ps3300|system55|system700>".to_owned()),
     }
 }
 
