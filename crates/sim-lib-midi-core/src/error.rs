@@ -18,6 +18,12 @@ pub enum MidiError {
     /// A scaling ratio had a zero numerator or denominator.
     #[error("invalid ratio {0}/{1}")]
     InvalidRatio(i64, i64),
+    /// A channel-message decode ran out of data bytes.
+    #[error("channel message data is truncated")]
+    TruncatedChannel,
+    /// A status byte's high nibble is not a channel-voice message.
+    #[error("status byte {0:#04x} is not a channel message")]
+    NotChannelStatus(u8),
     /// A [`TickTime::rebase`](crate::TickTime::rebase) could not be performed
     /// exactly.
     #[error("inexact TPQ rebase")]
