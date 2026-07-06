@@ -30,5 +30,6 @@ thiserror = "1"
 num-rational = "0.4"
 sim-codec-json = { version = "0.1.0" }
 sim-codec-lisp = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0", features = ["test-support"] }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
