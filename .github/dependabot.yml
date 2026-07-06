@@ -1,0 +1,19 @@
+version: 2
+# Dependency updates for a sim-nest code repo. The inter-crate sim-* dependencies are
+# released deliberately in dependency order (the surgical release playbook), so
+# Dependabot ignores them and only tracks external crates and GitHub Actions.
+updates:
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      external-cargo:
+        patterns: ["*"]
+    ignore:
+      - dependency-name: "sim-*"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
