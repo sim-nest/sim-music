@@ -1,7 +1,6 @@
 use sim_kernel::{Error, Result};
 use sim_lib_midi_core::{
-    Channel, ChannelMessage, MidiEvent, MidiPayload, MidiSink, MidiSource, RawBytes, SysExEvent,
-    U7, U14, synthetic_origin,
+    MidiEvent, MidiPayload, MidiSink, MidiSource, RawBytes, SysExEvent, synthetic_origin, wire,
 };
 
 use crate::{RtmidiEvent, RtmidiTiming};
@@ -120,55 +119,35 @@ pub fn payload_from_bytes(bytes: &[u8]) -> Result<MidiPayload> {
     let Some((&status, data)) = bytes.split_first() else {
         return Err(Error::Eval("RtMidi event had no status byte".to_owned()));
     };
-    let channel = || Channel::new(status & 0x0f).map_err(midi_error);
-    let u7 = |value: u8| U7::try_from(u16::from(value)).map_err(midi_error);
-    match status & 0xf0 {
-        0x80 if data.len() >= 2 => Ok(MidiPayload::Channel(ChannelMessage::NoteOff {
-            ch: channel()?,
-            key: u7(data[0])?,
-            vel: u7(data[1])?,
-        })),
-        0x90 if data.len() >= 2 => Ok(MidiPayload::Channel(ChannelMessage::NoteOn {
-            ch: channel()?,
-            key: u7(data[0])?,
-            vel: u7(data[1])?,
-        })),
-        0xa0 if data.len() >= 2 => Ok(MidiPayload::Channel(ChannelMessage::PolyAftertouch {
-            ch: channel()?,
-            key: u7(data[0])?,
-            pressure: u7(data[1])?,
-        })),
-        0xb0 if data.len() >= 2 => Ok(MidiPayload::Channel(ChannelMessage::ControlChange {
-            ch: channel()?,
-            cc: u7(data[0])?,
-            value: u7(data[1])?,
-        })),
-        0xc0 if !data.is_empty() => Ok(MidiPayload::Channel(ChannelMessage::ProgramChange {
-            ch: channel()?,
-            program: u7(data[0])?,
-        })),
-        0xd0 if !data.is_empty() => Ok(MidiPayload::Channel(ChannelMessage::ChanAftertouch {
-            ch: channel()?,
-            pressure: u7(data[0])?,
-        })),
-        0xe0 if data.len() >= 2 => {
-            let value = u16::from(data[0] & 0x7f) | (u16::from(data[1] & 0x7f) << 7);
-            Ok(MidiPayload::Channel(ChannelMessage::PitchBend {
-                ch: channel()?,
-                value: U14::try_from(value).map_err(midi_error)?,
-            }))
-        }
-        _ => Ok(MidiPayload::Raw(RawBytes {
-            status,
-            data: data.to_vec(),
-        })),
+    // A live port may deliver a truncated or non-channel buffer; keep those as
+    // raw bytes rather than failing, and decode only complete channel messages
+    // through the shared `wire::decode_channel`.
+    let complete = match status & 0xf0 {
+        0x80 | 0x90 | 0xa0 | 0xb0 | 0xe0 => data.len() >= 2,
+        0xc0 | 0xd0 => !data.is_empty(),
+        _ => false,
+    };
+    if complete {
+        return Ok(MidiPayload::Channel(
+            wire::decode_channel(status, data).map_err(midi_error)?,
+        ));
     }
+    Ok(MidiPayload::Raw(RawBytes {
+        status,
+        data: data.to_vec(),
+    }))
 }
 
 /// Converts an existing MIDI payload into the bytes sent by RtMidi.
 pub fn bytes_from_payload(payload: &MidiPayload) -> Result<Vec<u8>> {
     match payload {
-        MidiPayload::Channel(message) => Ok(bytes_from_channel_message(*message)),
+        MidiPayload::Channel(message) => {
+            let (status, data) = wire::encode_channel(message);
+            let mut bytes = Vec::with_capacity(data.len() + 1);
+            bytes.push(status);
+            bytes.extend_from_slice(&data);
+            Ok(bytes)
+        }
         MidiPayload::SysEx(SysExEvent::F0 { data }) => {
             let mut bytes = Vec::with_capacity(data.len() + 1);
             bytes.push(0xf0);
@@ -190,24 +169,6 @@ pub fn bytes_from_payload(payload: &MidiPayload) -> Result<Vec<u8>> {
         MidiPayload::Meta(_) => Err(Error::Eval(
             "RtMidi cannot send MIDI meta events to a live port".to_owned(),
         )),
-    }
-}
-
-fn bytes_from_channel_message(message: ChannelMessage) -> Vec<u8> {
-    match message {
-        ChannelMessage::NoteOff { ch, key, vel } => vec![0x80 | ch.0, key.0, vel.0],
-        ChannelMessage::NoteOn { ch, key, vel } => vec![0x90 | ch.0, key.0, vel.0],
-        ChannelMessage::PolyAftertouch { ch, key, pressure } => {
-            vec![0xa0 | ch.0, key.0, pressure.0]
-        }
-        ChannelMessage::ControlChange { ch, cc, value } => vec![0xb0 | ch.0, cc.0, value.0],
-        ChannelMessage::ProgramChange { ch, program } => vec![0xc0 | ch.0, program.0],
-        ChannelMessage::ChanAftertouch { ch, pressure } => vec![0xd0 | ch.0, pressure.0],
-        ChannelMessage::PitchBend { ch, value } => {
-            let lsb = (value.0 & 0x7f) as u8;
-            let msb = ((value.0 >> 7) & 0x7f) as u8;
-            vec![0xe0 | ch.0, lsb, msb]
-        }
     }
 }
 

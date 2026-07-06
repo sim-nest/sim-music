@@ -1,8 +1,8 @@
 use thiserror::Error;
 
 use sim_lib_midi_core::{
-    Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent,
-    TickTime, U7, U14, synthetic_origin,
+    ChannelMessage, MetaBucket, MetaEvent, MidiError, MidiEvent, MidiPayload, RawBytes, SysExEvent,
+    TickTime, synthetic_origin, wire,
 };
 use sim_lib_midi_smf::{SmfError, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_wasm_abi::Frame;
@@ -269,43 +269,10 @@ fn encode_channel(time: TickTime, message: &ChannelMessage) -> MidiEventFrame {
 }
 
 fn decode_channel(status: u8, data: &[u8]) -> Result<ChannelMessage, MidiWasmError> {
-    let ch = Channel::new(status & 0x0f).map_err(|_| MidiWasmError::InvalidStatus(status))?;
-    match status & 0xf0 {
-        0x80 => Ok(ChannelMessage::NoteOff {
-            ch,
-            key: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-            vel: U7(*data.get(1).ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0x90 => Ok(ChannelMessage::NoteOn {
-            ch,
-            key: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-            vel: U7(*data.get(1).ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0xa0 => Ok(ChannelMessage::PolyAftertouch {
-            ch,
-            key: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-            pressure: U7(*data.get(1).ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0xb0 => Ok(ChannelMessage::ControlChange {
-            ch,
-            cc: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-            value: U7(*data.get(1).ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0xc0 => Ok(ChannelMessage::ProgramChange {
-            ch,
-            program: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0xd0 => Ok(ChannelMessage::ChanAftertouch {
-            ch,
-            pressure: U7(*data.first().ok_or(MidiWasmError::InvalidFrame)?),
-        }),
-        0xe0 => Ok(ChannelMessage::PitchBend {
-            ch,
-            value: U14(u16::from(*data.first().ok_or(MidiWasmError::InvalidFrame)?)
-                | (u16::from(*data.get(1).ok_or(MidiWasmError::InvalidFrame)?) << 7)),
-        }),
-        _ => Err(MidiWasmError::InvalidStatus(status)),
-    }
+    wire::decode_channel(status, data).map_err(|error| match error {
+        MidiError::TruncatedChannel => MidiWasmError::InvalidFrame,
+        _ => MidiWasmError::InvalidStatus(status),
+    })
 }
 
 fn encode_meta(time: TickTime, meta: &MetaEvent) -> MidiEventFrame {

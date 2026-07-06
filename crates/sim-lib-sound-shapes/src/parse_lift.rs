@@ -3,9 +3,7 @@ use sim_lib_sound_audio_lift::{
     AudioLiftFrame, AudioLiftOptions, AudioNoteCandidate, PitchCandidate,
 };
 
-use crate::parse::{
-    Node, field_atom, field_form_text, field_list, node_text, parse_f64, parse_node,
-};
+use crate::parse::{Node, field_atom, field_form_text, field_list, parse_f64, parse_node};
 use crate::{SoundShapeError, decode_amplitude, decode_frequency, decode_spectrum};
 
 /// Decodes [`AudioLiftOptions`] from its sound-shape text form.
@@ -65,7 +63,7 @@ pub fn decode_audio_lift_frame(value: &str) -> Result<AudioLiftFrame, SoundShape
         spectrum: decode_spectrum(&field_form_text(&node, "spectrum")?)?,
         pitch_candidates: field_list(&node, "pitch_candidates")?
             .iter()
-            .map(node_text)
+            .map(Node::render_text)
             .map(|text| decode_pitch_candidate(&text))
             .collect::<Result<Vec<_>, _>>()?,
         diagnostics: string_list(field_list(&node, "diagnostics")?)?,

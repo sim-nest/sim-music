@@ -45,7 +45,10 @@ macro_rules! text_citizen {
 
             /// Canonicalizes `value` and wraps it in a citizen read-construct expression.
             pub fn read_construct_expr_from_text(value: &str) -> Result<Expr> {
-                Ok(read_construct_expr($symbol_fn(), $canonical(value)?))
+                Ok(sim_citizen::text_read_construct_expr(
+                    $symbol_fn(),
+                    $canonical(value)?,
+                ))
             }
         }
 
@@ -229,17 +232,6 @@ fn canonical_score(value: &str) -> Result<String> {
     decode_score(value)
         .map(|score| encode_score(&score))
         .map_err(codec_error)
-}
-
-fn read_construct_expr(class: Symbol, form: String) -> Expr {
-    Expr::Extension {
-        tag: Symbol::qualified("citizen", "read-construct"),
-        payload: Box::new(Expr::Vector(vec![
-            Expr::Symbol(class),
-            Expr::Symbol(Symbol::new("v1")),
-            Expr::String(form),
-        ])),
-    }
 }
 
 fn codec_error(error: MusicShapeError) -> Error {

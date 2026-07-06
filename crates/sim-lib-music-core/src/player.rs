@@ -1,6 +1,7 @@
 use sim_kernel::{Error, Expr, Result, Symbol};
 use sim_lib_stream_core::{ClockDomain, LatencyClass, RateContract};
 use sim_lib_topology::{PlacementNodeProfile, SiteId};
+use sim_value::access;
 
 use crate::{LaneId, LaneTarget, PlayEvent};
 
@@ -405,22 +406,13 @@ pub(crate) fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a E
 }
 
 pub(crate) fn string_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a str> {
-    match field(entries, name)? {
-        Expr::String(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be text"))),
-    }
+    access::entry_required_str(entries, name, "string field")
 }
 
 pub(crate) fn symbol_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a Symbol> {
-    match field(entries, name)? {
-        Expr::Symbol(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be a symbol"))),
-    }
+    access::entry_required_sym(entries, name, "symbol field")
 }
 
 pub(crate) fn bool_field(entries: &[(Expr, Expr)], name: &str) -> Result<bool> {
-    match field(entries, name)? {
-        Expr::Bool(value) => Ok(*value),
-        _ => Err(Error::Eval(format!("{name} field must be a boolean"))),
-    }
+    access::entry_required_bool(entries, name, "boolean field")
 }

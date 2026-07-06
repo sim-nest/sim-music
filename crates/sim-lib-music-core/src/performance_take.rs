@@ -1,6 +1,8 @@
 use std::collections::BTreeMap;
 
 use sim_kernel::{Error, Expr, Result, Symbol};
+use sim_value::access;
+
 use sim_lib_stream_core::{
     BufferPolicy, ClockDomain, StreamCassette, StreamDirection, StreamItem, StreamMedia,
     StreamMetadata, StreamPacket, StreamStats, TransportProfile,
@@ -328,17 +330,11 @@ fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a Expr> {
 }
 
 fn string_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a str> {
-    match field(entries, name)? {
-        Expr::String(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be text"))),
-    }
+    access::entry_required_str(entries, name, "string field")
 }
 
 fn symbol_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a Symbol> {
-    match field(entries, name)? {
-        Expr::Symbol(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be a symbol"))),
-    }
+    access::entry_required_sym(entries, name, "symbol field")
 }
 
 fn i64_field(entries: &[(Expr, Expr)], name: &str) -> Result<i64> {

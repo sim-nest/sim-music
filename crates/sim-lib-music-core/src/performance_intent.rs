@@ -1,4 +1,5 @@
 use sim_kernel::{Error, Expr, Result, Symbol};
+use sim_value::access;
 
 use crate::{Channel, Pitch, Tick};
 
@@ -242,37 +243,16 @@ fn channel_expr(channel: Channel) -> Expr {
     Expr::String(channel.0.to_string())
 }
 
-fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a Expr> {
-    entries
-        .iter()
-        .find_map(|(key, value)| match key {
-            Expr::Symbol(symbol) if symbol.namespace.is_none() && symbol.name.as_ref() == name => {
-                Some(value)
-            }
-            _ => None,
-        })
-        .ok_or_else(|| Error::Eval(format!("missing {name} field")))
-}
-
 fn string_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a str> {
-    match field(entries, name)? {
-        Expr::String(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be text"))),
-    }
+    access::entry_required_str(entries, name, "string field")
 }
 
 fn symbol_field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Result<&'a Symbol> {
-    match field(entries, name)? {
-        Expr::Symbol(value) => Ok(value),
-        _ => Err(Error::Eval(format!("{name} field must be a symbol"))),
-    }
+    access::entry_required_sym(entries, name, "symbol field")
 }
 
 fn bool_field(entries: &[(Expr, Expr)], name: &str) -> Result<bool> {
-    match field(entries, name)? {
-        Expr::Bool(value) => Ok(*value),
-        _ => Err(Error::Eval(format!("{name} field must be a boolean"))),
-    }
+    access::entry_required_bool(entries, name, "boolean field")
 }
 
 fn i64_field(entries: &[(Expr, Expr)], name: &str) -> Result<i64> {

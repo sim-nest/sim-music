@@ -1,4 +1,5 @@
 use sim_kernel::{Error, Expr, Result, Symbol};
+use sim_value::build::entry;
 
 use crate::{MusicComponentDescriptor, MusicComponentRegistry, MusicComponentRegistryEntry};
 
@@ -145,8 +146,4 @@ fn browse_test_card(descriptor: &MusicComponentDescriptor) -> Expr {
         entry("expr", descriptor.to_expr()),
         entry("expect", Expr::Symbol(Symbol::new("present"))),
     ])
-}
-
-fn entry(name: &'static str, value: Expr) -> (Expr, Expr) {
-    (Expr::Symbol(Symbol::new(name)), value)
 }

@@ -69,7 +69,7 @@ pub fn decode_diff_roll(value: &str) -> Result<DiffRoll, MusicShapeError> {
     ensure_form(&node, "DiffRoll")?;
     let frames = field_list(&node, "frames")?
         .iter()
-        .map(decode_diff_frame_node)
+        .map(|frame| decode_diff_frame_node(frame.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     Ok(DiffRoll { frames })
 }
@@ -112,7 +112,7 @@ pub(crate) fn parse_node(value: &str) -> Result<DomainForm, MusicShapeError> {
     Ok(parse_domain_form(value)?)
 }
 
-fn decode_diff_frame_node(node: &impl AsForm) -> Result<DiffFrame, MusicShapeError> {
+fn decode_diff_frame_node(node: &DomainForm) -> Result<DiffFrame, MusicShapeError> {
     ensure_form(node, "DiffFrame")?;
     Ok(DiffFrame {
         at: decode_time(&field_atom(node, "at")?)?,
@@ -131,29 +131,8 @@ fn decode_diff_frame_node(node: &impl AsForm) -> Result<DiffFrame, MusicShapeErr
     })
 }
 
-/// Accessor over a parsed value that is expected to be a `#(...)` form: either
-/// the top-level form, or a form-typed list item.
-pub(crate) trait AsForm {
-    fn as_form(&self) -> Result<&DomainForm, MusicShapeError>;
-}
-
-impl AsForm for DomainForm {
-    fn as_form(&self) -> Result<&DomainForm, MusicShapeError> {
-        Ok(self)
-    }
-}
-
-impl AsForm for DomainValue {
-    fn as_form(&self) -> Result<&DomainForm, MusicShapeError> {
-        match self {
-            DomainValue::Form(form) => Ok(form),
-            _ => Err(MusicShapeError::InvalidMusic),
-        }
-    }
-}
-
-pub(crate) fn ensure_form(node: &impl AsForm, expected: &str) -> Result<(), MusicShapeError> {
-    if node.as_form()?.name == expected {
+pub(crate) fn ensure_form(node: &DomainForm, expected: &str) -> Result<(), MusicShapeError> {
+    if node.name == expected {
         Ok(())
     } else {
         Err(MusicShapeError::InvalidMusic)
@@ -161,15 +140,13 @@ pub(crate) fn ensure_form(node: &impl AsForm, expected: &str) -> Result<(), Musi
 }
 
 pub(crate) fn field<'a>(
-    node: &'a impl AsForm,
+    node: &'a DomainForm,
     name: &str,
 ) -> Result<&'a DomainValue, MusicShapeError> {
-    node.as_form()?
-        .field(name)
-        .ok_or(MusicShapeError::InvalidMusic)
+    node.field(name).ok_or(MusicShapeError::InvalidMusic)
 }
 
-pub(crate) fn field_atom(node: &impl AsForm, name: &str) -> Result<String, MusicShapeError> {
+pub(crate) fn field_atom(node: &DomainForm, name: &str) -> Result<String, MusicShapeError> {
     match field(node, name)? {
         DomainValue::Atom(value) => Ok(value.clone()),
         _ => Err(MusicShapeError::InvalidMusic),
@@ -177,7 +154,7 @@ pub(crate) fn field_atom(node: &impl AsForm, name: &str) -> Result<String, Music
 }
 
 pub(crate) fn field_list<'a>(
-    node: &'a impl AsForm,
+    node: &'a DomainForm,
     name: &str,
 ) -> Result<&'a [DomainValue], MusicShapeError> {
     match field(node, name)? {

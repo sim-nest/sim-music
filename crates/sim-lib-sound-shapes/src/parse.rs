@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use sim_codec::{DomainForm, DomainFormError, DomainValue, format_domain_form, parse_domain_form};
+use sim_codec::{DomainForm, DomainFormError, DomainValue, parse_domain_form};
 use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
 use sim_lib_sound_timbre::{AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe};
@@ -19,9 +19,9 @@ impl From<DomainFormError> for SoundShapeError {
             | DomainFormError::InvalidToken
             | DomainFormError::TrailingInput
             | DomainFormError::DuplicateField(_) => SoundShapeError::InvalidToken,
-            DomainFormError::MissingField(_) | DomainFormError::WrongFieldKind(_) => {
-                SoundShapeError::InvalidSoundShape
-            }
+            DomainFormError::MissingField(_)
+            | DomainFormError::WrongFieldKind(_)
+            | DomainFormError::WrongValueKind => SoundShapeError::InvalidSoundShape,
         }
     }
 }
@@ -85,7 +85,7 @@ pub fn decode_tone(value: &str) -> Result<Tone, SoundShapeError> {
     let node = parse_node(value)?;
     let partials = field_list(&node, "partials")?
         .iter()
-        .map(node_text)
+        .map(DomainValue::render_text)
         .map(|text| decode_partial(&text))
         .collect::<Result<Vec<_>, _>>()?;
     Tone::from_partials(
@@ -123,15 +123,11 @@ pub fn decode_spectrum(value: &str) -> Result<Spectrum, SoundShapeError> {
     let node = parse_node(value)?;
     let bins = field_list(&node, "bins")?
         .iter()
-        .map(|node| match node {
-            DomainValue::Form(_) => Ok(node),
-            _ => Err(SoundShapeError::InvalidSoundShape),
-        })
-        .map(|node| {
-            let node = node?;
+        .map(|bin| {
+            let bin = bin.as_form()?;
             Ok((
-                decode_frequency(&field_form_text(node, "frequency")?)?,
-                decode_amplitude(&field_form_text(node, "amplitude")?)?,
+                decode_frequency(&field_form_text(bin, "frequency")?)?,
+                decode_amplitude(&field_form_text(bin, "amplitude")?)?,
             ))
         })
         .collect::<Result<Vec<_>, SoundShapeError>>()?;
@@ -189,6 +185,7 @@ pub fn decode_filter(value: &str) -> Result<Filter, SoundShapeError> {
             bands: field_list(&node, "bands")?
                 .iter()
                 .map(|band| {
+                    let band = band.as_form()?;
                     Ok((
                         decode_frequency(&field_form_text(band, "frequency")?)?,
                         parse_f64(&field_atom(band, "width")?)?,
@@ -261,7 +258,7 @@ pub fn decode_timbre(value: &str) -> Result<Timbre, SoundShapeError> {
         metadata: decode_timbre_meta(&field_form_text(&node, "meta")?)?,
         filters: field_list(&node, "filters")?
             .iter()
-            .map(node_text)
+            .map(DomainValue::render_text)
             .map(|text| decode_filter(&text))
             .collect::<Result<Vec<_>, _>>()?,
     })
@@ -271,70 +268,29 @@ pub(crate) fn parse_node(value: &str) -> Result<DomainForm, SoundShapeError> {
     Ok(parse_domain_form(value)?)
 }
 
-/// Accessor over a parsed value that is expected to be a `#(...)` form: either
-/// the top-level form, or a form-typed list item.
-pub(crate) trait AsForm {
-    fn as_form(&self) -> Result<&DomainForm, SoundShapeError>;
+pub(crate) fn field_atom(form: &DomainForm, field: &str) -> Result<String, SoundShapeError> {
+    Ok(form.atom(field)?.to_owned())
 }
 
-impl AsForm for DomainForm {
-    fn as_form(&self) -> Result<&DomainForm, SoundShapeError> {
-        Ok(self)
-    }
+pub(crate) fn field_string(form: &DomainForm, field: &str) -> Result<String, SoundShapeError> {
+    Ok(form.string(field)?.to_owned())
 }
 
-impl AsForm for DomainValue {
-    fn as_form(&self) -> Result<&DomainForm, SoundShapeError> {
-        match self {
-            DomainValue::Form(form) => Ok(form),
-            _ => Err(SoundShapeError::InvalidSoundShape),
-        }
-    }
-}
-
-pub(crate) fn field_atom(node: &impl AsForm, field: &str) -> Result<String, SoundShapeError> {
-    Ok(node.as_form()?.atom(field)?.to_owned())
-}
-
-pub(crate) fn field_string(node: &impl AsForm, field: &str) -> Result<String, SoundShapeError> {
-    Ok(node.as_form()?.string(field)?.to_owned())
-}
-
-pub(crate) fn field_form_text(node: &impl AsForm, field: &str) -> Result<String, SoundShapeError> {
-    Ok(node_text(field_node(node, field)?))
+pub(crate) fn field_form_text(form: &DomainForm, field: &str) -> Result<String, SoundShapeError> {
+    Ok(form.field_text(field)?)
 }
 
 pub(crate) fn field_list<'a>(
-    node: &'a impl AsForm,
+    form: &'a DomainForm,
     field: &str,
 ) -> Result<&'a [DomainValue], SoundShapeError> {
-    Ok(node.as_form()?.list(field)?)
-}
-
-fn field_node<'a>(node: &'a impl AsForm, field: &str) -> Result<&'a DomainValue, SoundShapeError> {
-    node.as_form()?
-        .field(field)
-        .ok_or(SoundShapeError::InvalidSoundShape)
+    Ok(form.list(field)?)
 }
 
 pub(crate) fn atom_text(node: &DomainValue) -> String {
     match node {
         DomainValue::Atom(atom) => atom.clone(),
         _ => String::new(),
-    }
-}
-
-pub(crate) fn node_text(node: &DomainValue) -> String {
-    match node {
-        DomainValue::Form(form) => format_domain_form(form),
-        DomainValue::List(items) => format!(
-            "[{}]",
-            items.iter().map(node_text).collect::<Vec<_>>().join(",")
-        ),
-        DomainValue::String(value) => {
-            format!("\"{}\"", value.replace('\\', "\\\\").replace('"', "\\\""))
-        }
-        DomainValue::Atom(value) => value.clone(),
     }
 }
 

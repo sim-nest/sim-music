@@ -140,6 +140,7 @@ pub fn decode_timbre_bank(value: &str) -> Result<TimbreBank, SoundShapeError> {
     let node = parse_node(value)?;
     let mut bank = TimbreBank::new(decode_timbre(&field_form_text(&node, "fallback")?)?);
     for entry in field_list(&node, "entries")? {
+        let entry = entry.as_form()?;
         let bank_msb = field_atom(entry, "bank_msb")?
             .parse()
             .map_err(|_| SoundShapeError::InvalidSoundShape)?;

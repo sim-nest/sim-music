@@ -19,9 +19,9 @@ impl From<DomainFormError> for MusicShapeError {
             | DomainFormError::InvalidToken
             | DomainFormError::TrailingInput
             | DomainFormError::DuplicateField(_) => MusicShapeError::InvalidToken,
-            DomainFormError::MissingField(_) | DomainFormError::WrongFieldKind(_) => {
-                MusicShapeError::InvalidMusic
-            }
+            DomainFormError::MissingField(_)
+            | DomainFormError::WrongFieldKind(_)
+            | DomainFormError::WrongValueKind => MusicShapeError::InvalidMusic,
         }
     }
 }
@@ -154,7 +154,7 @@ fn decode_chord_node(form: &DomainForm) -> Result<Chord, MusicShapeError> {
         .collect::<Result<Vec<_>, _>>()?;
     Chord::new(
         decode_time(form.atom("dur")?)?,
-        field_string_or_atom(form, "symbol")?,
+        form.field_atom_or_string("symbol")?,
         pitches,
         parse_u8(form.atom("vel")?)?,
         Channel::new(parse_u8(form.atom("channel")?)?)
@@ -169,7 +169,7 @@ fn decode_melody_node(form: &DomainForm) -> Result<Melody, MusicShapeError> {
         .list("items")?
         .iter()
         .map(|value| {
-            let item = expect_form(value)?;
+            let item = value.as_form()?;
             match item.name.as_str() {
                 "Note" => decode_note_node(item).map(MelodyItem::Note),
                 "Rest" => decode_rest_node(item).map(MelodyItem::Rest),
@@ -186,7 +186,7 @@ fn decode_progression_node(form: &DomainForm) -> Result<Progression, MusicShapeE
     let chords = form
         .list("chords")?
         .iter()
-        .map(|value| decode_chord_node(expect_form(value)?))
+        .map(|value| decode_chord_node(value.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     Progression::new(key, chords).map_err(Into::into)
 }
@@ -204,7 +204,7 @@ fn decode_counterpoint_node(form: &DomainForm) -> Result<Counterpoint, MusicShap
     let voices = form
         .list("voices")?
         .iter()
-        .map(|value| decode_melody_node(expect_form(value)?))
+        .map(|value| decode_melody_node(value.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     Counterpoint::new(voices, voice_names).map_err(Into::into)
 }
@@ -214,7 +214,7 @@ fn decode_piano_roll_node(form: &DomainForm) -> Result<PianoRoll, MusicShapeErro
     let items = form
         .list("items")?
         .iter()
-        .map(|value| decode_timed_note_node(expect_form(value)?))
+        .map(|value| decode_timed_note_node(value.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     PianoRoll::new(items).map_err(Into::into)
 }
@@ -224,12 +224,12 @@ fn decode_arranger_node(form: &DomainForm) -> Result<Arranger, MusicShapeError> 
     let lanes = form
         .list("lanes")?
         .iter()
-        .map(|value| Ok(LaneId::new(value_string_or_atom(value)?)))
+        .map(|value| Ok(LaneId::new(value.atom_or_string()?)))
         .collect::<Result<Vec<_>, MusicShapeError>>()?;
     let placements = form
         .list("placements")?
         .iter()
-        .map(|value| decode_arranger_placement_node(expect_form(value)?))
+        .map(|value| decode_arranger_placement_node(value.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     Arranger::new(placements, lanes).map_err(|_| MusicShapeError::InvalidMusic)
 }
@@ -244,7 +244,7 @@ fn decode_arranger_placement_node(form: &DomainForm) -> Result<ArrangerPlacement
     let targets = form
         .list("targets")?
         .iter()
-        .map(|value| decode_lane_target_node(expect_form(value)?))
+        .map(|value| decode_lane_target_node(value.as_form()?))
         .collect::<Result<Vec<_>, _>>()?;
     let filter = match field(form, "filter")? {
         DomainValue::Atom(value) if value == "none" => None,
@@ -261,13 +261,13 @@ fn decode_arranger_placement_node(form: &DomainForm) -> Result<ArrangerPlacement
         playable: decode_playable_ref(field(form, "playable")?)?,
         at: decode_time(form.atom("at")?)?,
         duration,
-        lane: LaneId::new(field_string_or_atom(form, "lane")?),
+        lane: LaneId::new(form.field_atom_or_string("lane")?),
         targets,
         stretch: decode_stretch_policy_node(form.form("stretch")?)?,
         transform: form
             .list("transforms")?
             .iter()
-            .map(|value| decode_placement_transform_node(expect_form(value)?))
+            .map(|value| decode_placement_transform_node(value.as_form()?))
             .collect::<Result<Vec<_>, _>>()?,
         remap_pitch: decode_pitch_remap_node(form.form("remap")?)?,
         filter,
@@ -280,7 +280,7 @@ fn decode_arranger_placement_node(form: &DomainForm) -> Result<ArrangerPlacement
 }
 
 fn decode_playable_ref(value: &DomainValue) -> Result<PlayableRef, MusicShapeError> {
-    let form = expect_form(value)?;
+    let form = value.as_form()?;
     if form.name == "PlayableRef" {
         match form.atom("kind")? {
             "symbol" => Ok(PlayableRef::symbol(symbol_from_value(field(
@@ -359,7 +359,7 @@ fn decode_pitch_remap_node(form: &DomainForm) -> Result<PitchRemap, MusicShapeEr
             .list("items")?
             .iter()
             .map(|value| {
-                let item = expect_form(value)?;
+                let item = value.as_form()?;
                 ensure_form(item, "DrumKey")?;
                 Ok((parse_u8(item.atom("from")?)?, parse_u8(item.atom("to")?)?))
             })
@@ -381,7 +381,7 @@ fn decode_filter_ref_node(form: &DomainForm) -> Result<FilterRef, MusicShapeErro
         symbol_from_value(field(form, "id")?)?,
         form.list("keep_lanes")?
             .iter()
-            .map(|value| Ok(LaneId::new(value_string_or_atom(value)?)))
+            .map(|value| Ok(LaneId::new(value.atom_or_string()?)))
             .collect::<Result<Vec<_>, MusicShapeError>>()?,
     ))
 }
@@ -441,7 +441,7 @@ fn decode_children(form: &DomainForm) -> Result<Vec<Box<dyn MusicObject>>, Music
     form.list("children")?
         .iter()
         .map(|value| {
-            let child = expect_form(value)?;
+            let child = value.as_form()?;
             Ok(Box::new(decode_music_node(child)?) as Box<dyn MusicObject>)
         })
         .collect()
@@ -476,35 +476,12 @@ fn ensure_form(form: &DomainForm, expected: &str) -> Result<(), MusicShapeError>
     }
 }
 
-fn expect_form(value: &DomainValue) -> Result<&DomainForm, MusicShapeError> {
-    match value {
-        DomainValue::Form(form) => Ok(form),
-        _ => Err(MusicShapeError::InvalidMusic),
-    }
-}
-
 fn field<'a>(form: &'a DomainForm, name: &str) -> Result<&'a DomainValue, MusicShapeError> {
     form.field(name).ok_or(MusicShapeError::InvalidMusic)
 }
 
-fn field_string_or_atom(form: &DomainForm, name: &str) -> Result<String, MusicShapeError> {
-    match field(form, name)? {
-        DomainValue::String(value) => Ok(value.clone()),
-        DomainValue::Atom(value) => Ok(value.clone()),
-        _ => Err(MusicShapeError::InvalidMusic),
-    }
-}
-
-fn value_string_or_atom(value: &DomainValue) -> Result<String, MusicShapeError> {
-    match value {
-        DomainValue::String(value) => Ok(value.clone()),
-        DomainValue::Atom(value) => Ok(value.clone()),
-        _ => Err(MusicShapeError::InvalidMusic),
-    }
-}
-
 fn symbol_from_value(value: &DomainValue) -> Result<Symbol, MusicShapeError> {
-    Ok(symbol_from_text(&value_string_or_atom(value)?))
+    Ok(symbol_from_text(value.atom_or_string()?))
 }
 
 fn symbol_from_text(value: &str) -> Symbol {

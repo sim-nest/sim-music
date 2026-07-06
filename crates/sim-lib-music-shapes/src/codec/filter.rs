@@ -85,14 +85,14 @@ pub fn decode_custom_filter(value: &str) -> Result<CustomFilter, MusicShapeError
     if node.name != "CustomFilter" {
         return Err(MusicShapeError::InvalidMusic);
     }
-    let id = string_or_atom(field(&node, "id")?)?;
-    let input = decode_shape(value_form(field(&node, "input")?)?)?;
-    let output = decode_shape(value_form(field(&node, "output")?)?)?;
+    let id = field(&node, "id")?.atom_or_string()?.to_owned();
+    let input = decode_shape(field(&node, "input")?.as_form()?)?;
+    let output = decode_shape(field(&node, "output")?.as_form()?)?;
     let capabilities = decode_capabilities(field_list(&node, "caps")?)?;
     let determinism = DeterminismPolicy::from_wire_label(&field_atom(&node, "determinism")?)
         .ok_or(MusicShapeError::InvalidMusic)?;
     let trace = decode_trace(&field_atom(&node, "trace")?)?;
-    let body = decode_body(value_form(field(&node, "body")?)?)?;
+    let body = decode_body(field(&node, "body")?.as_form()?)?;
     CustomFilter::new(id, input, output, capabilities, determinism, trace, body)
         .map_err(|_| MusicShapeError::InvalidMusic)
 }
@@ -385,11 +385,11 @@ fn decode_body(node: &sim_codec::DomainForm) -> Result<FilterBody, MusicShapeErr
         "rule" => Ok(FilterBody::Rule(
             field_list(node, "rules")?
                 .iter()
-                .map(|value| decode_rule(value_form(value)?))
+                .map(|value| decode_rule(value.as_form()?))
                 .collect::<Result<Vec<_>, _>>()?,
         )),
         "callable" => Ok(FilterBody::Callable(CallableFilterRef::new(
-            string_or_atom(field(node, "name")?)?,
+            field(node, "name")?.atom_or_string()?,
         ))),
         _ => Err(MusicShapeError::InvalidMusic),
     }
@@ -408,8 +408,8 @@ fn decode_rule(node: &sim_codec::DomainForm) -> Result<FilterRule, MusicShapeErr
         return Err(MusicShapeError::InvalidMusic);
     }
     Ok(FilterRule::new(
-        decode_predicate(value_form(field(node, "when")?)?)?,
-        decode_op(value_form(field(node, "op")?)?)?,
+        decode_predicate(field(node, "when")?.as_form()?)?,
+        decode_op(field(node, "op")?.as_form()?)?,
     ))
 }
 
@@ -441,9 +441,9 @@ fn decode_predicate(node: &sim_codec::DomainForm) -> Result<FilterPredicate, Mus
             lane_kind_from_wire(&field_atom(node, "lane_kind")?)
                 .ok_or(MusicShapeError::InvalidMusic)?,
         )),
-        "lane" => Ok(FilterPredicate::Lane(LaneId::new(string_or_atom(field(
-            node, "lane",
-        )?)?))),
+        "lane" => Ok(FilterPredicate::Lane(LaneId::new(
+            field(node, "lane")?.atom_or_string()?,
+        ))),
         _ => Err(MusicShapeError::InvalidMusic),
     }
 }
@@ -502,7 +502,7 @@ fn decode_op(node: &sim_codec::DomainForm) -> Result<FilterOp, MusicShapeError> 
             copies: parse_u8(&field_atom(node, "copies")?)?,
         }),
         "rewrite" => Ok(FilterOp::Rewrite {
-            lane: match string_or_atom(field(node, "lane")?)?.as_str() {
+            lane: match field(node, "lane")?.atom_or_string()? {
                 "none" => None,
                 value => Some(LaneId::new(value.to_owned())),
             },
@@ -510,10 +510,10 @@ fn decode_op(node: &sim_codec::DomainForm) -> Result<FilterOp, MusicShapeError> 
             velocity_delta: parse_i16(&field_atom(node, "velocity_delta")?)?,
         }),
         "route" => Ok(FilterOp::Route {
-            lane: LaneId::new(string_or_atom(field(node, "lane")?)?),
+            lane: LaneId::new(field(node, "lane")?.atom_or_string()?),
         }),
         "annotate" => Ok(FilterOp::Annotate {
-            message: string_or_atom(field(node, "message")?)?,
+            message: field(node, "message")?.atom_or_string()?.to_owned(),
         }),
         "quantize" => Ok(FilterOp::Quantize {
             grid_ticks: parse_i64(&field_atom(node, "grid_ticks")?)?,
@@ -526,8 +526,8 @@ fn decode_op(node: &sim_codec::DomainForm) -> Result<FilterOp, MusicShapeError> 
             step_ticks: parse_i64(&field_atom(node, "step_ticks")?)?,
         }),
         "sidechain" => Ok(FilterOp::Sidechain {
-            lane: LaneId::new(string_or_atom(field(node, "lane")?)?),
-            control: string_or_atom(field(node, "control")?)?,
+            lane: LaneId::new(field(node, "lane")?.atom_or_string()?),
+            control: field(node, "control")?.atom_or_string()?.to_owned(),
         }),
         _ => Err(MusicShapeError::InvalidMusic),
     }
@@ -538,7 +538,7 @@ fn decode_capabilities(values: &[DomainValue]) -> Result<FilterCapabilitySet, Mu
         values
             .iter()
             .map(|value| {
-                FilterCapability::from_wire_label(&value_string_or_atom(value)?)
+                FilterCapability::from_wire_label(value.atom_or_string()?)
                     .ok_or(MusicShapeError::InvalidMusic)
             })
             .collect::<Result<Vec<_>, _>>()?,
@@ -562,26 +562,8 @@ fn decode_trace(value: &str) -> Result<TracePolicy, MusicShapeError> {
     }
 }
 
-fn value_form(value: &DomainValue) -> Result<&sim_codec::DomainForm, MusicShapeError> {
-    match value {
-        DomainValue::Form(form) => Ok(form),
-        _ => Err(MusicShapeError::InvalidMusic),
-    }
-}
-
 fn value_lane_kind(value: &DomainValue) -> Result<LaneKind, MusicShapeError> {
-    lane_kind_from_wire(&value_string_or_atom(value)?).ok_or(MusicShapeError::InvalidMusic)
-}
-
-fn string_or_atom(value: &DomainValue) -> Result<String, MusicShapeError> {
-    match value {
-        DomainValue::String(value) | DomainValue::Atom(value) => Ok(value.clone()),
-        _ => Err(MusicShapeError::InvalidMusic),
-    }
-}
-
-fn value_string_or_atom(value: &DomainValue) -> Result<String, MusicShapeError> {
-    string_or_atom(value)
+    lane_kind_from_wire(value.atom_or_string()?).ok_or(MusicShapeError::InvalidMusic)
 }
 
 fn parse_u8(value: &str) -> Result<u8, MusicShapeError> {
