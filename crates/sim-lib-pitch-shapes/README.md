@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch shapes.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-shapes/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch shapes.
+Citizen descriptors, text codecs, and runtime shapes for SIM pitch types.

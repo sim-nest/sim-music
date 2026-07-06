@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound dissonance.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-dissonance/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound dissonance.
+Psychoacoustic dissonance models for the SIM music constellation.

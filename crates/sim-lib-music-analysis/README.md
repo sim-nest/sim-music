@@ -7,9 +7,9 @@ SIM workspace package for sim lib music analysis.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-analysis/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music analysis.
+Analysis of musical material for the SIM music libraries.

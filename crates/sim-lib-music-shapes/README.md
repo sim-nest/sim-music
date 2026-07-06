@@ -7,9 +7,9 @@ SIM workspace package for sim lib music shapes.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-shapes/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music shapes.
+Shape protocol surfaces for SIM music types.

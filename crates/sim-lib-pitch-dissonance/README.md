@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch dissonance.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-dissonance/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch dissonance.
+Dissonance and harmonic-complexity scoring for the SIM music libraries.

@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound shapes.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-shapes/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound shapes.
+Sound-shape codec surface for the SIM music constellation.

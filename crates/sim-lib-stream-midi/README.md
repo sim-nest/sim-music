@@ -7,9 +7,9 @@ MIDI source, sink, and stream-spine adapters for STREAM 6.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-stream-midi/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-MIDI source, sink, and stream-spine adapters for STREAM 6.
+MIDI source, sink, and stream-spine adapters.

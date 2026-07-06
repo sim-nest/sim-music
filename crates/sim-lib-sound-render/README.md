@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound render.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-render/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound render.
+Sound rendering for the SIM music constellation.

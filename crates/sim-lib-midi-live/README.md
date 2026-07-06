@@ -7,9 +7,9 @@ SIM workspace package for sim lib midi live.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-midi-live/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib midi live.
+Real-time MIDI buffering for the SIM music stack.

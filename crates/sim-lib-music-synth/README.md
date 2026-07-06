@@ -7,9 +7,9 @@ Playable pure Rust software synthesizer primitives for the SIM audio graph.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-synth/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-Playable pure Rust software synthesizer primitives for the SIM audio graph.
+Playable pure-Rust software synthesizer primitives for the SIM audio graph.

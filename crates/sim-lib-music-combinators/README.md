@@ -7,9 +7,9 @@ SIM workspace package for sim lib music combinators.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-combinators/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music combinators.
+Composable music-transform combinators for the SIM music constellation.

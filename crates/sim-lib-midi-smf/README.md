@@ -7,9 +7,9 @@ SIM workspace package for sim lib midi smf.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-midi-smf/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib midi smf.
+Standard MIDI File (SMF) reading and writing for the SIM music stack.

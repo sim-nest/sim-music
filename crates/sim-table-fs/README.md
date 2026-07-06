@@ -7,9 +7,9 @@ SIM workspace package for sim table fs.
 ## Package Metadata
 
 - Manifest: `crates/sim-table-fs/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim table fs.
+Filesystem-backed table store for SIM.

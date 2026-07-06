@@ -7,9 +7,9 @@ SIM workspace package for sim lib music notation.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-notation/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music notation.
+Score and notation model for the SIM music libraries.

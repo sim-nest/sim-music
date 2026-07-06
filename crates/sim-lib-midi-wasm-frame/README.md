@@ -7,7 +7,7 @@ MIDI binary-frame facade descriptors.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-midi-wasm-frame/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation

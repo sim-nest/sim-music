@@ -7,9 +7,9 @@ SIM workspace package for sim lib midi core.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-midi-core/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib midi core.
+Core MIDI data model and in-memory I/O for the SIM music stack.

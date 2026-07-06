@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch core.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-core/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch core.
+Core pitch theory primitives for the SIM music libraries.

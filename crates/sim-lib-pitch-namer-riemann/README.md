@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch namer riemann.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-namer-riemann/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch namer riemann.
+Neo-Riemannian / functional triad naming for the SIM music libraries.

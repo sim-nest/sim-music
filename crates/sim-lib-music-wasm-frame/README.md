@@ -7,7 +7,7 @@ Music binary-frame facade descriptors.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-wasm-frame/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation

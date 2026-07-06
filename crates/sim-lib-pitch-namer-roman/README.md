@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch namer roman.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-namer-roman/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch namer roman.
+Roman-numeral harmonic analysis for the SIM music libraries.

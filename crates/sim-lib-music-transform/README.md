@@ -7,9 +7,9 @@ SIM workspace package for sim lib music transform.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-transform/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music transform.
+Music transformation layer for the SIM music constellation.

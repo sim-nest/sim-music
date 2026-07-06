@@ -7,9 +7,9 @@ SIM workspace package for sim lib midi shapes.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-midi-shapes/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib midi shapes.
+Shape and citizen surfaces that expose the MIDI model to the SIM runtime.

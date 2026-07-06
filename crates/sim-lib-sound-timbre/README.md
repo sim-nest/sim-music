@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound timbre.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-timbre/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound timbre.
+Timbre models and spectral filters for the SIM music constellation.

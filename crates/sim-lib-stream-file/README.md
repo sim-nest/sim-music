@@ -7,7 +7,7 @@ File-backed source and sink adapters for STREAM 6.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-stream-file/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation

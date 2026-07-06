@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound audio lift.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-audio-lift/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound audio lift.
+Audio-to-notes lifting for the SIM music constellation.

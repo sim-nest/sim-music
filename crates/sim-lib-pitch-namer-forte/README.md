@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch namer forte.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-namer-forte/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch namer forte.
+Forte set-class naming for the SIM music libraries.

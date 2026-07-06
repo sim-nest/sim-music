@@ -7,9 +7,9 @@ SIM workspace package for sim lib music core.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-music-core/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib music core.
+Core music model layer for the SIM music constellation.

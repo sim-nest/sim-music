@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound bridge.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-bridge/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound bridge.
+MIDI-to-sound bridging for the SIM music constellation.

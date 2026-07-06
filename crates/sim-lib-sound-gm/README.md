@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound gm.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-gm/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound gm.
+General MIDI sound set for the SIM music constellation.

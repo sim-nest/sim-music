@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch namer.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-namer/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch namer.
+Multi-school cluster naming for the SIM music libraries.

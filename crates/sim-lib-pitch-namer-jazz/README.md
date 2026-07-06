@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch namer jazz.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-namer-jazz/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch namer jazz.
+Jazz chord-symbol naming for the SIM music libraries.

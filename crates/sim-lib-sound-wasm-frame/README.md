@@ -7,7 +7,7 @@ Sound binary-frame facade descriptors.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-wasm-frame/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation

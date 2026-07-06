@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound tuning.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-tuning/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound tuning.
+Tuning systems and temperaments for the SIM music constellation.

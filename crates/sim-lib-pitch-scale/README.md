@@ -7,9 +7,9 @@ SIM workspace package for sim lib pitch scale.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-pitch-scale/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib pitch scale.
+Scales, modes, and scale-locking for the SIM music libraries.

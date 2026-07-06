@@ -7,9 +7,9 @@ SIM workspace package for sim lib sound spectrum.
 ## Package Metadata
 
 - Manifest: `crates/sim-lib-sound-spectrum/Cargo.toml`
-- Publish: `false`
+- Publish: `true`
 - Targets: `lib`
 
 ## Crate Documentation
 
-SIM workspace package for sim lib sound spectrum.
+Spectral analysis for the SIM music constellation.
