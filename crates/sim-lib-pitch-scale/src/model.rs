@@ -200,7 +200,7 @@ impl Scale {
     /// Returns the pitch class at the one-based `degree`, wrapping past the octave.
     pub fn pitch_at_degree(self, degree: usize) -> PitchClass {
         let intervals = self.mode.intervals();
-        let index = (degree - 1) % intervals.len();
+        let index = degree.saturating_sub(1) % intervals.len();
         self.tonic.transpose(i32::from(intervals[index]))
     }
 
