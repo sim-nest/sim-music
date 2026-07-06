@@ -14,7 +14,7 @@ channels = 1
 patch_id = "audio-synth/patch/moog-system-55-synthetic-voice"
 patch_hash = "2d4d0f90332401de"
 event_sequence = ["offset:0:note-on:ch0:key60:vel0.756", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System55@0.1.1", "System55VcoDriver@0.1.1", "System55Vco@0.1.1", "System55Mixer@0.1.1", "System55LadderLpf@0.1.1", "System55Envelope@0.1.1", "System55Vca@0.1.1", "System55FixedFilterBank@0.1.1", "System55Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "System55@0.1.3", "System55VcoDriver@0.1.3", "System55Vco@0.1.3", "System55Mixer@0.1.3", "System55LadderLpf@0.1.3", "System55Envelope@0.1.3", "System55Vca@0.1.3", "System55FixedFilterBank@0.1.3", "System55Sequencer@0.1.3"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -28,7 +28,7 @@ channels = 1
 patch_id = "audio-synth/patch/moog-system-55-synthetic-voice"
 patch_hash = "e5e9f0cd8923037e"
 event_sequence = []
-component_versions = ["sim-lib-music-synth@0.1.1", "System55@0.1.1", "System55VcoDriver@0.1.1", "System55Vco@0.1.1", "System55Mixer@0.1.1", "System55LadderLpf@0.1.1", "System55Envelope@0.1.1", "System55Vca@0.1.1", "System55FixedFilterBank@0.1.1", "System55Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "System55@0.1.3", "System55VcoDriver@0.1.3", "System55Vco@0.1.3", "System55Mixer@0.1.3", "System55LadderLpf@0.1.3", "System55Envelope@0.1.3", "System55Vca@0.1.3", "System55FixedFilterBank@0.1.3", "System55Sequencer@0.1.3"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -42,7 +42,7 @@ channels = 1
 patch_id = "audio-synth/patch/moog-system-55-synthetic-voice"
 patch_hash = "c56958068652a3d6"
 event_sequence = ["offset:0:note-on:ch0:key64:vel0.882", "offset:56:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System55@0.1.1", "System55VcoDriver@0.1.1", "System55Vco@0.1.1", "System55Mixer@0.1.1", "System55LadderLpf@0.1.1", "System55Envelope@0.1.1", "System55Vca@0.1.1", "System55FixedFilterBank@0.1.1", "System55Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "System55@0.1.3", "System55VcoDriver@0.1.3", "System55Vco@0.1.3", "System55Mixer@0.1.3", "System55LadderLpf@0.1.3", "System55Envelope@0.1.3", "System55Vca@0.1.3", "System55FixedFilterBank@0.1.3", "System55Sequencer@0.1.3"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -56,7 +56,7 @@ channels = 1
 patch_id = "audio-synth/patch/moog-system-55-synthetic-voice"
 patch_hash = "eb88f82618ec0a19"
 event_sequence = []
-component_versions = ["sim-lib-music-synth@0.1.1", "System55@0.1.1", "System55VcoDriver@0.1.1", "System55Vco@0.1.1", "System55Mixer@0.1.1", "System55LadderLpf@0.1.1", "System55Envelope@0.1.1", "System55Vca@0.1.1", "System55FixedFilterBank@0.1.1", "System55Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "System55@0.1.3", "System55VcoDriver@0.1.3", "System55Vco@0.1.3", "System55Mixer@0.1.3", "System55LadderLpf@0.1.3", "System55Envelope@0.1.3", "System55Vca@0.1.3", "System55FixedFilterBank@0.1.3", "System55Sequencer@0.1.3"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -70,6 +70,6 @@ channels = 1
 patch_id = "audio-synth/patch/moog-system-55-synthetic-voice"
 patch_hash = "855cc0d28a451040"
 event_sequence = ["offset:0:note-on:ch0:key67:vel0.787", "offset:56:note-off:ch0:key67:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System55@0.1.1", "System55VcoDriver@0.1.1", "System55Vco@0.1.1", "System55Mixer@0.1.1", "System55LadderLpf@0.1.1", "System55Envelope@0.1.1", "System55Vca@0.1.1", "System55FixedFilterBank@0.1.1", "System55Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "System55@0.1.3", "System55VcoDriver@0.1.3", "System55Vco@0.1.3", "System55Mixer@0.1.3", "System55LadderLpf@0.1.3", "System55Envelope@0.1.3", "System55Vca@0.1.3", "System55FixedFilterBank@0.1.3", "System55Sequencer@0.1.3"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250

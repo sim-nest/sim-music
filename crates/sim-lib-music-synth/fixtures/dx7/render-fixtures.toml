@@ -11,7 +11,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "f508c0f6cdd351eb"
 midi_sequence = ["offset:0:note-on:ch0:key60:vel0.787", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -24,7 +24,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "543264aad05f2647"
 midi_sequence = ["offset:0:note-on:ch0:key60:vel0.882", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -37,7 +37,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "6d959bfcc718fed6"
 midi_sequence = ["offset:0:note-on:ch0:key61:vel0.756", "offset:48:note-off:ch0:key61:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -50,7 +50,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "2b9181356d331a46"
 midi_sequence = ["offset:0:note-on:ch0:key62:vel0.756", "offset:48:note-off:ch0:key62:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -63,7 +63,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "5aa7a34302040c76"
 midi_sequence = ["offset:0:note-on:ch0:key63:vel0.756", "offset:48:note-off:ch0:key63:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -76,7 +76,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "a1b08109177d91ea"
 midi_sequence = ["offset:0:note-on:ch0:key64:vel0.756", "offset:48:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -89,7 +89,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "b83c26578e79d3ca"
 midi_sequence = ["offset:0:note-on:ch0:key65:vel0.756", "offset:48:note-off:ch0:key65:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -102,7 +102,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "948a5c6739b8d2f2"
 midi_sequence = ["offset:0:note-on:ch0:key66:vel0.756", "offset:48:note-off:ch0:key66:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -115,7 +115,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "6a14b37f3e40ff3a"
 midi_sequence = ["offset:0:note-on:ch0:key67:vel0.756", "offset:48:note-off:ch0:key67:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -128,7 +128,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "d470469f7735dace"
 midi_sequence = ["offset:0:note-on:ch0:key68:vel0.756", "offset:48:note-off:ch0:key68:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -141,7 +141,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "5c96209d396e689e"
 midi_sequence = ["offset:0:note-on:ch0:key69:vel0.756", "offset:48:note-off:ch0:key69:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -154,7 +154,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "71d8099b85678385"
 midi_sequence = ["offset:0:note-on:ch0:key70:vel0.756", "offset:48:note-off:ch0:key70:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -167,7 +167,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "1d752c2a426e00c5"
 midi_sequence = ["offset:0:note-on:ch0:key71:vel0.756", "offset:48:note-off:ch0:key71:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -180,7 +180,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "7e0d45e0f26192a9"
 midi_sequence = ["offset:0:note-on:ch0:key60:vel0.756", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -193,7 +193,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "a50e4d33bfcbb8a9"
 midi_sequence = ["offset:0:note-on:ch0:key61:vel0.756", "offset:48:note-off:ch0:key61:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -206,7 +206,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "8deea55c320fd691"
 midi_sequence = ["offset:0:note-on:ch0:key62:vel0.756", "offset:48:note-off:ch0:key62:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -219,7 +219,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "11ff1412a883ac01"
 midi_sequence = ["offset:0:note-on:ch0:key63:vel0.756", "offset:48:note-off:ch0:key63:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -232,7 +232,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "1925dc2bf15854ed"
 midi_sequence = ["offset:0:note-on:ch0:key64:vel0.756", "offset:48:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -245,7 +245,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "20fcb6cd02d9d0f5"
 midi_sequence = ["offset:0:note-on:ch0:key65:vel0.756", "offset:48:note-off:ch0:key65:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -258,7 +258,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "61816eb104f3abfd"
 midi_sequence = ["offset:0:note-on:ch0:key66:vel0.756", "offset:48:note-off:ch0:key66:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -271,7 +271,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "1e703db80a552b4d"
 midi_sequence = ["offset:0:note-on:ch0:key67:vel0.756", "offset:48:note-off:ch0:key67:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -284,7 +284,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "2098a30871e80488"
 midi_sequence = ["offset:0:note-on:ch0:key68:vel0.756", "offset:48:note-off:ch0:key68:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -297,7 +297,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "5758a18d2f1ff6ec"
 midi_sequence = ["offset:0:note-on:ch0:key69:vel0.756", "offset:48:note-off:ch0:key69:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -310,7 +310,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "06402e64934d4ca8"
 midi_sequence = ["offset:0:note-on:ch0:key70:vel0.756", "offset:48:note-off:ch0:key70:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -323,7 +323,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "39576869b8595c24"
 midi_sequence = ["offset:0:note-on:ch0:key71:vel0.756", "offset:48:note-off:ch0:key71:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -336,7 +336,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "eb8a2ea2069968a4"
 midi_sequence = ["offset:0:note-on:ch0:key60:vel0.756", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -349,7 +349,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "727c96f6a0451708"
 midi_sequence = ["offset:0:note-on:ch0:key61:vel0.756", "offset:48:note-off:ch0:key61:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -362,7 +362,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "a318568608a4bf0c"
 midi_sequence = ["offset:0:note-on:ch0:key62:vel0.756", "offset:48:note-off:ch0:key62:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -375,7 +375,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "cbc43031ad2e3010"
 midi_sequence = ["offset:0:note-on:ch0:key63:vel0.756", "offset:48:note-off:ch0:key63:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -388,7 +388,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "c226fbb6db0e09b0"
 midi_sequence = ["offset:0:note-on:ch0:key64:vel0.756", "offset:48:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -401,7 +401,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "25928b4c991da344"
 midi_sequence = ["offset:0:note-on:ch0:key65:vel0.756", "offset:48:note-off:ch0:key65:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -414,7 +414,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "cbe1aa67f250d453"
 midi_sequence = ["offset:0:note-on:ch0:key66:vel0.756", "offset:48:note-off:ch0:key66:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -427,7 +427,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "d4120cfae697b6c7"
 midi_sequence = ["offset:0:note-on:ch0:key67:vel0.756", "offset:48:note-off:ch0:key67:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -440,7 +440,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "7613eb11742118a7"
 midi_sequence = ["offset:0:note-on:ch0:key68:vel0.756", "offset:48:note-off:ch0:key68:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
@@ -453,7 +453,7 @@ channels = 1
 mode = "algorithmic"
 patch_hash = "8b5b578358d3d4f3"
 midi_sequence = ["offset:0:note-on:ch0:key57:vel0.900", "offset:40:note-off:ch0:key57:vel0.000", "offset:56:midi:[b0, 40, 00]:len:3"]
-component_versions = ["sim-lib-music-synth@0.1.1", "Dx7Voice@0.1.1", "Dx7FmOperator@0.1.1", "Dx7ModeledOperator@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.3", "Dx7Voice@0.1.3", "Dx7FmOperator@0.1.3", "Dx7ModeledOperator@0.1.3"]
 compatible_max_abs_delta = 1.250
 compatible_mean_abs_delta = 0.750
 
