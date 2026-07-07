@@ -1,5 +1,32 @@
 # sim-music
 
+Gives you the whole world of music as first-class Rust objects -- pitches,
+chords, scales, notes, MIDI, tunings, timbres, and synthesized sound -- that you
+can build, transform, analyze, and render.
+
+## Example
+
+```console
+$ cargo add sim-lib-pitch-core
+```
+
+```rust
+use sim_lib_pitch_core::PitchClass;
+
+// Transpose C up a perfect fifth (7 semitones); measure an interval class.
+assert_eq!(PitchClass::C.transpose(7), PitchClass::G);
+assert_eq!(PitchClass::E.interval_class(PitchClass::C), 4);
+```
+
+`PitchClass` is a mod-12 pitch class (`C = 0` .. `B = 11`), the foundational
+primitive shared across the pitch crates. (Doctest:
+`crates/sim-lib-pitch-core/src/model.rs:27`.)
+
+The full SIM walkthrough, including how to run the `sim` CLI (`cargo install
+sim-run`), lives in `sim-say`.
+
+## How it works
+
 `sim-music` is the music and audio domain of the SIM constellation. SIM is an
 expandable Rust runtime built around a small protocol kernel plus a large set of
 loadable libraries: the kernel defines contracts, libraries provide behavior.
