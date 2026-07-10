@@ -1,4 +1,5 @@
-# Sequence transform descriptor
+# Sequence Transform (descriptor)
 
-This recipe records a chain of common music transformations as data for an
-offline sequence transform.
+Documents sequence transform in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

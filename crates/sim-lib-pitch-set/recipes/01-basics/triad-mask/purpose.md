@@ -1,4 +1,5 @@
-# Triad mask descriptor
+# Triad Mask (descriptor)
 
-This recipe shows a pitch-class set as a small symbolic mask with the common
-normalization operations that can be applied offline.
+Documents triad mask in the pitch domain. the pitch and harmony-theory classes are not among the domains loaded in the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

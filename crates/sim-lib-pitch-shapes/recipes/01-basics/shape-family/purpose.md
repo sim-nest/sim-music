@@ -1,4 +1,5 @@
-# Pitch shape family
+# Shape Family (descriptor)
 
-This recipe lists the pitch descriptor families that can be represented through
-citizen-style data forms.
+Documents shape family in the pitch domain. the pitch and harmony-theory classes are not among the domains loaded in the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

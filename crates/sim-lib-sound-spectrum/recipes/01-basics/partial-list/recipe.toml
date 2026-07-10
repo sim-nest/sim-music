@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "spectrum", "partials"]
+tags = ["sound", "spectrum", "partials", "sandbox-descriptor"]
 requires = ["sound-spectrum", "codec/lisp"]

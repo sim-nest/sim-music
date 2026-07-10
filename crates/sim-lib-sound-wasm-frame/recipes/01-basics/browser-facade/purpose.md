@@ -1,4 +1,5 @@
-# Sound frame facade
+# Browser Facade (descriptor)
 
-This recipe shows the sound wasm facade as a frame-safe descriptor for rendering
-and music-file integration.
+Documents browser facade in the sound domain. sound synthesis, spectra, timbre, and rendering run through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

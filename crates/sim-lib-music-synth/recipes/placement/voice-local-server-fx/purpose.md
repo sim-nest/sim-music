@@ -1,5 +1,5 @@
-# Voice local server FX
+# Voice Local Server Fx (descriptor)
 
-This recipe keeps the instrument voice on the local host callback site, routes
-effects through a process/server site, and records an offline-render plus
-buffered-preview latency budget.
+Documents voice local server fx in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

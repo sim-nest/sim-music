@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 20
-tags = ["midi", "rtmidi", "alsa-seq", "hardware"]
+tags = ["midi", "rtmidi", "alsa-seq", "hardware", "sandbox-descriptor"]
 requires = ["midi-rtmidi", "codec/lisp", "alsa-seq"]

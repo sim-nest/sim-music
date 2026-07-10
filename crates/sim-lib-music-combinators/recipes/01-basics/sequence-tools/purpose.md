@@ -1,4 +1,5 @@
-# Sequence combinators
+# Sequence Tools (descriptor)
 
-This recipe lists the small combinators used to assemble deterministic music
-fragments before lowering them to another surface.
+Documents sequence tools in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

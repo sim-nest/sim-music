@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["stream", "bridge", "offline"]
+tags = ["stream", "bridge", "offline", "sandbox-descriptor"]
 requires = ["stream-bridge", "codec/lisp"]

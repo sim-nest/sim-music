@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["stream", "file", "wav", "smf"]
+tags = ["stream", "file", "wav", "smf", "sandbox-descriptor"]
 requires = ["stream-file", "codec/lisp"]

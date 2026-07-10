@@ -1,4 +1,5 @@
-# Virtual RtMidi port
+# Virtual Port (descriptor)
 
-This recipe names a fake RtMidi backend and virtual input port so the cookbook
-does not depend on native MIDI services.
+Documents virtual port in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

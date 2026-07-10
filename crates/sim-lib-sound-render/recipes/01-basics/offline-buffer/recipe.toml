@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "render", "offline"]
+tags = ["sound", "render", "offline", "sandbox-descriptor"]
 requires = ["sound-render", "codec/lisp"]

@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["daw", "session", "instrument", "player", "golden"]
+tags = ["daw", "session", "instrument", "player", "golden", "sandbox-descriptor"]
 requires = ["daw-session", "music-core", "codec/lisp"]

@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["music", "analysis", "histogram"]
+tags = ["music", "analysis", "histogram", "sandbox-descriptor"]
 requires = ["music-analysis", "codec/lisp"]

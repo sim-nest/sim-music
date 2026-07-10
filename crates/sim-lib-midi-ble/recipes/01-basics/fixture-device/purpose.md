@@ -1,4 +1,5 @@
-# BLE fixture device
+# Fixture Device (descriptor)
 
-This recipe records BLE MIDI discovery data as a fixture, keeping radio and
-platform Bluetooth state out of cookbook validation.
+Documents fixture device in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

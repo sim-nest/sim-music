@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 20
-tags = ["music", "player", "drum", "gm", "smf", "golden"]
+tags = ["music", "player", "drum", "gm", "smf", "golden", "sandbox-descriptor"]
 requires = ["music-combinators", "sound-gm", "midi-smf", "codec/lisp"]

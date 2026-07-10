@@ -1,4 +1,5 @@
-# LFO Player And Instrument Parameters
+# Lfo Player Instrument Params (descriptor)
 
-This recipe routes an LFO modulator to both a player parameter and an
-instrument parameter using declared target paths.
+Documents lfo player instrument params in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

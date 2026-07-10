@@ -1,4 +1,5 @@
-# SUP Instrument Performance
+# Sup Instrument Performance (descriptor)
 
-This recipe routes a player chain to the DX7 SUP instrument fixture, exports
-plugin automation, and records placement metadata for live preview.
+Documents sup instrument performance in the daw domain. a DAW session drives instruments, takes, and cassettes through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

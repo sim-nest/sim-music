@@ -1,5 +1,5 @@
-# Generic instrument stream
+# Generic Instrument Stream (descriptor)
 
-This recipe names the patch input, MIDI input, parameter control input, local
-audio output, buffered preview output, and trace stream used by a generic
-instrument graph.
+Documents generic instrument stream in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

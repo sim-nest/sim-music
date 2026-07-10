@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "gm", "preset"]
+tags = ["sound", "gm", "preset", "sandbox-descriptor"]
 requires = ["sound-gm", "codec/lisp"]

@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "namer", "registry"]
+tags = ["pitch", "namer", "registry", "sandbox-descriptor"]
 requires = ["pitch-namer", "codec/lisp"]

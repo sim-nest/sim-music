@@ -1,4 +1,5 @@
-# PCM feature lift
+# Pcm Features (descriptor)
 
-This recipe describes lifting an offline PCM buffer into pitch and onset
-features with confidence scores.
+Documents pcm features in the sound domain. sound synthesis, spectra, timbre, and rendering run through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

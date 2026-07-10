@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "dissonance", "interval"]
+tags = ["pitch", "dissonance", "interval", "sandbox-descriptor"]
 requires = ["pitch-dissonance", "codec/lisp"]

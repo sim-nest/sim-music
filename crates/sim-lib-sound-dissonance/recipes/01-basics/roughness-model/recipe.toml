@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "dissonance", "roughness"]
+tags = ["sound", "dissonance", "roughness", "sandbox-descriptor"]
 requires = ["sound-dissonance", "codec/lisp"]

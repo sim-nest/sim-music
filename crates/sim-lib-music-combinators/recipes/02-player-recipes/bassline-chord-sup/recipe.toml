@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 30
-tags = ["music", "player", "bassline", "chord-sequencer", "instrument", "golden"]
+tags = ["music", "player", "bassline", "chord-sequencer", "instrument", "golden", "sandbox-descriptor"]
 requires = ["music-combinators", "pitch-chord", "codec/lisp"]

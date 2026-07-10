@@ -1,4 +1,5 @@
-# Partial list descriptor
+# Partial List (descriptor)
 
-This recipe describes spectrum data with partials, centroid, and peaks rather
-than raw samples.
+Documents partial list in the sound domain. sound synthesis, spectra, timbre, and rendering run through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

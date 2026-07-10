@@ -1,4 +1,5 @@
-# MIDI frame facade
+# Browser Facade (descriptor)
 
-This recipe shows the MIDI wasm facade as a frame-safe descriptor for SMF and
-event handling.
+Documents browser facade in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

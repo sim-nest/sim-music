@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["daw", "session", "offline"]
+tags = ["daw", "session", "offline", "sandbox-descriptor"]
 requires = ["daw-session", "codec/lisp"]

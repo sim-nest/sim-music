@@ -1,4 +1,5 @@
-# Offline render buffer
+# Offline Buffer (descriptor)
 
-This recipe keeps rendering as an offline PCM buffer request, so validation does
-not need an audio host.
+Documents offline buffer in the sound domain. sound synthesis, spectra, timbre, and rendering run through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

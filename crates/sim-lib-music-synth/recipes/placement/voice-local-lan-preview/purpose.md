@@ -1,4 +1,5 @@
-# Voice local LAN preview
+# Voice Local Lan Preview (descriptor)
 
-This recipe keeps the instrument voice on the local host callback site and
-routes preview packets through the LAN buffered audio preview profile.
+Documents voice local lan preview in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

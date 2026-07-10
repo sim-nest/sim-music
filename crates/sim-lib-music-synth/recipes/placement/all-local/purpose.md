@@ -1,4 +1,5 @@
-# All local placement
+# All Local (descriptor)
 
-This recipe places voice, effects, preview, and trace work on the local host
-callback site with a sample-exact latency budget and hashable placement report.
+Documents all local in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

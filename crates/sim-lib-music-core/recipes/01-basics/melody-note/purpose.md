@@ -1,4 +1,5 @@
-# Melody note descriptor
+# Melody Note (descriptor)
 
-This recipe uses a compact score fragment to show how a note and duration move
-through the music stack as plain data.
+Documents melody note in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

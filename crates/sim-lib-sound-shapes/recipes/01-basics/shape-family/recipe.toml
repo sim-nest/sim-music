@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "shapes", "citizen"]
+tags = ["sound", "shapes", "citizen", "sandbox-descriptor"]
 requires = ["sound-shapes", "codec/lisp"]

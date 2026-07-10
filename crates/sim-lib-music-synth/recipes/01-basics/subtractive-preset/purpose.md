@@ -1,4 +1,5 @@
-# Subtractive synth preset descriptor
+# Subtractive Preset (descriptor)
 
-This recipe names the portable synth pieces: preset, oscillator, ADSR envelope,
-and offline render path.
+Documents subtractive preset in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

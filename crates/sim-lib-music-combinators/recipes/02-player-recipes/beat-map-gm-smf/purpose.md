@@ -1,4 +1,5 @@
-# Beat Map GM SMF Export
+# Beat Map Gm Smf (descriptor)
 
-This recipe renders a seeded Beat Map through a General MIDI drum map and uses
-the SMF exporter fixture for byte-stable drum output.
+Documents beat map gm smf in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

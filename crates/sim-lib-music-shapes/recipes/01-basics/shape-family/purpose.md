@@ -1,4 +1,5 @@
-# Music shape family
+# Shape Family (descriptor)
 
-This recipe lists the music descriptor families that can be represented through
-citizen-style data forms.
+Documents shape family in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

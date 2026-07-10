@@ -1,4 +1,5 @@
-# Note Echo Frozen MIDI
+# Note Echo Frozen Midi (descriptor)
 
-This recipe freezes parallel Note Echo output to a single-track Standard MIDI
-File and checks the exported bytes.
+Documents note echo frozen midi in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

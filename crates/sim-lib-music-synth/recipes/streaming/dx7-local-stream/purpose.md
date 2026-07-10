@@ -1,5 +1,5 @@
-# DX7 local stream
+# Dx7 Local Stream (descriptor)
 
-This recipe drives the DX7 graph with the shared MIDI and parameter streams,
-keeps the hard-real-time audio path local, and refuses remote hard-real-time
-audio transport by default.
+Documents dx7 local stream in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

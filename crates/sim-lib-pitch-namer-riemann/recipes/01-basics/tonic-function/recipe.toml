@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "riemann", "function"]
+tags = ["pitch", "riemann", "function", "sandbox-descriptor"]
 requires = ["pitch-namer-riemann", "codec/lisp"]

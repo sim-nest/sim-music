@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["audio", "synth", "stream", "preview", "trace"]
+tags = ["audio", "synth", "stream", "preview", "trace", "sandbox-descriptor"]
 requires = ["audio-synth", "stream-bridge", "audio-graph-live", "codec/lisp"]

@@ -1,4 +1,5 @@
-# MIDI packet descriptor
+# Packetize (descriptor)
 
-This recipe describes MIDI source and sink adaptation as stream packet data.
-Use it before adding host MIDI backends.
+Documents packetize in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

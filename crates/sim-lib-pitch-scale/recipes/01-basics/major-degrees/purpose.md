@@ -1,4 +1,5 @@
-# Major scale degrees
+# Major Degrees (descriptor)
 
-This recipe records a scale, tonic, and selected degrees as data that can be
-shared by naming, harmony, and transformation recipes.
+Documents major degrees in the pitch domain. the pitch and harmony-theory classes are not among the domains loaded in the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

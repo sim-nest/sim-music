@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "forte", "set-class"]
+tags = ["pitch", "forte", "set-class", "sandbox-descriptor"]
 requires = ["pitch-namer-forte", "codec/lisp"]

@@ -1,6 +1,5 @@
-# PS-3300 synthetic polyphonic patch
+# Synthetic Polyphonic Patch (descriptor)
 
-This recipe renders the synthetic PS-3300 polyphonic patch through the audio
-graph, records fixture metadata, names the section graph and polyphony summary,
-and names the user-local patch path
-`$HOME/.local/share/sim/ps3300/synthetic-polyphonic.patch.siml`.
+Documents synthetic polyphonic patch in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

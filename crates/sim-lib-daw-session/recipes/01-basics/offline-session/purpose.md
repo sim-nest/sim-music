@@ -1,4 +1,5 @@
-# Offline session descriptor
+# Offline Session (descriptor)
 
-This recipe describes a DAW session as portable data: tracks, clips, plugin
-chains, offline rendering, and topology package export.
+Documents offline session in the daw domain. a DAW session drives instruments, takes, and cassettes through the audio pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

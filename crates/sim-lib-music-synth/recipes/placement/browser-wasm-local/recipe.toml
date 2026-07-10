@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 40
-tags = ["audio", "synth", "placement", "browser-wasm"]
+tags = ["audio", "synth", "placement", "browser-wasm", "sandbox-descriptor"]
 requires = ["audio-synth", "audio-graph-live", "web-bridge", "codec/lisp"]

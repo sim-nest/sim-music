@@ -1,4 +1,5 @@
-# Pitch histogram descriptor
+# Pitch Histogram (descriptor)
 
-This recipe shows a pure analysis request that can be computed from score data
-without playback.
+Documents pitch histogram in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

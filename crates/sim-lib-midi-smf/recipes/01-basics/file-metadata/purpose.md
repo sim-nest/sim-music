@@ -1,4 +1,5 @@
-# SMF metadata descriptor
+# File Metadata (descriptor)
 
-This recipe sketches the metadata carried by a Standard MIDI File without
-touching the filesystem or live devices.
+Documents file metadata in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "chord", "triad"]
+tags = ["pitch", "chord", "triad", "sandbox-descriptor"]
 requires = ["pitch-chord", "codec/lisp"]

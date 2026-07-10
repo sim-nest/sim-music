@@ -1,4 +1,5 @@
-# Browser wasm local placement
+# Browser Wasm Local (descriptor)
 
-This recipe places voice and preview work on the browser wasm site and records
-browser-local stream ids plus hashable placement artifacts.
+Documents browser wasm local in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

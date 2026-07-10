@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "audio-lift", "features"]
+tags = ["sound", "audio-lift", "features", "sandbox-descriptor"]
 requires = ["sound-audio-lift", "codec/lisp"]

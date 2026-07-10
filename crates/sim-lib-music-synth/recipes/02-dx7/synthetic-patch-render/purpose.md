@@ -1,5 +1,5 @@
-# DX7 synthetic patch render
+# Synthetic Patch Render (descriptor)
 
-This recipe renders a synthetic DX7 patch through the offline audio graph,
-records fixture metadata, and names the user-local SysEx bank path
-`$HOME/.local/share/sim/dx7/user-bank.syx`.
+Documents synthetic patch render in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

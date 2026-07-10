@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 40
-tags = ["music", "player", "polystep", "quad-note", "seed", "golden"]
+tags = ["music", "player", "polystep", "quad-note", "seed", "golden", "sandbox-descriptor"]
 requires = ["music-combinators", "codec/lisp"]

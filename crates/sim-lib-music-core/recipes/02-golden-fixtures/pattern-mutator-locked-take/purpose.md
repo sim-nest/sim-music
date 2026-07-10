@@ -1,4 +1,5 @@
-# Pattern Mutator Locked Take
+# Pattern Mutator Locked Take (descriptor)
 
-This recipe mutates a captured performance take while keeping declared lanes,
-beats, and anchor pitches locked.
+Documents pattern mutator locked take in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

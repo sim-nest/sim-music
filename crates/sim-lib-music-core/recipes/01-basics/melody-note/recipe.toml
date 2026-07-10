@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["music", "melody", "note"]
+tags = ["music", "melody", "note", "sandbox-descriptor"]
 requires = ["music-core", "codec/lisp"]

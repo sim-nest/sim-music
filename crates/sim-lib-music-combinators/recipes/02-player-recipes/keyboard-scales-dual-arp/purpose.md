@@ -1,4 +1,5 @@
-# Keyboard Scales And Dual Arpeggio
+# Keyboard Scales Dual Arp (descriptor)
 
-This recipe captures a keyboard note, quantizes it through Scales and Chords,
-runs both arpeggio lanes, and direct-records the frozen notes to a piano roll.
+Documents keyboard scales dual arp in the music domain. music sequencing, synthesis, and notation run through the audio and render pipeline outside the cookbook sandbox eval stack, so this is documented rather than run in
+the cookbook, whose sandbox eval stack loads only core construction and math over the number
+domains.

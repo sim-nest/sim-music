@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["sound", "timbre", "envelope"]
+tags = ["sound", "timbre", "envelope", "sandbox-descriptor"]
 requires = ["sound-timbre", "codec/lisp"]

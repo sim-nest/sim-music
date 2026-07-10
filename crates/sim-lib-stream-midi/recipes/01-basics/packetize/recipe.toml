@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["stream", "midi", "packet"]
+tags = ["stream", "midi", "packet", "sandbox-descriptor"]
 requires = ["stream-midi", "codec/lisp"]

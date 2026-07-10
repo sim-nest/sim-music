@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["midi", "sysex", "fixture"]
+tags = ["midi", "sysex", "fixture", "sandbox-descriptor"]
 requires = ["midi-sysex", "codec/lisp"]
