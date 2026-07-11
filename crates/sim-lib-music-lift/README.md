@@ -8,7 +8,7 @@ SIM workspace package for sim lib music lift.
 
 - Manifest: `crates/sim-lib-music-lift/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

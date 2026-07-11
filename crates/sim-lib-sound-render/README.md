@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound render.
 
 - Manifest: `crates/sim-lib-sound-render/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

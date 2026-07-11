@@ -14,7 +14,7 @@ channels = 1
 patch_id = "audio-synth/patch/roland-system-700-single-module"
 patch_hash = "d0739caeec73ac1c"
 event_sequence = ["offset:0:note-on:ch0:key60:vel0.756", "offset:48:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System700@0.1.1", "System700Vco@0.1.1", "System700Vcf@0.1.1", "System700Vca@0.1.1", "System700Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.4", "System700@0.1.4", "System700Vco@0.1.4", "System700Vcf@0.1.4", "System700Vca@0.1.4", "System700Sequencer@0.1.4"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -28,7 +28,7 @@ channels = 1
 patch_id = "audio-synth/patch/roland-system-700-two-module"
 patch_hash = "baad291e46628501"
 event_sequence = ["offset:0:note-on:ch0:key62:vel0.756", "offset:48:note-off:ch0:key62:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System700@0.1.1", "System700Vco@0.1.1", "System700Vcf@0.1.1", "System700Vca@0.1.1", "System700Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.4", "System700@0.1.4", "System700Vco@0.1.4", "System700Vcf@0.1.4", "System700Vca@0.1.4", "System700Sequencer@0.1.4"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -42,7 +42,7 @@ channels = 1
 patch_id = "audio-synth/patch/roland-system-700-main-console"
 patch_hash = "8a2cf231d5306c30"
 event_sequence = ["offset:0:note-on:ch0:key64:vel0.882", "offset:56:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System700@0.1.1", "System700Vco@0.1.1", "System700Vcf@0.1.1", "System700Vca@0.1.1", "System700Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.4", "System700@0.1.4", "System700Vco@0.1.4", "System700Vcf@0.1.4", "System700Vca@0.1.4", "System700Sequencer@0.1.4"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -56,7 +56,7 @@ channels = 1
 patch_id = "audio-synth/patch/roland-system-700-main-console"
 patch_hash = "83ecc639399afb70"
 event_sequence = []
-component_versions = ["sim-lib-music-synth@0.1.1", "System700@0.1.1", "System700Vco@0.1.1", "System700Vcf@0.1.1", "System700Vca@0.1.1", "System700Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.4", "System700@0.1.4", "System700Vco@0.1.4", "System700Vcf@0.1.4", "System700Vca@0.1.4", "System700Sequencer@0.1.4"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 
@@ -70,7 +70,7 @@ channels = 1
 patch_id = "audio-synth/patch/roland-system-700-main-console"
 patch_hash = "8cab05ae3c11b8c7"
 event_sequence = ["offset:0:note-on:ch0:key67:vel0.787", "offset:56:note-off:ch0:key67:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.1", "System700@0.1.1", "System700Vco@0.1.1", "System700Vcf@0.1.1", "System700Vca@0.1.1", "System700Sequencer@0.1.1"]
+component_versions = ["sim-lib-music-synth@0.1.4", "System700@0.1.4", "System700Vco@0.1.4", "System700Vcf@0.1.4", "System700Vca@0.1.4", "System700Sequencer@0.1.4"]
 max_abs_delta = 0.450
 mean_abs_delta = 0.250
 

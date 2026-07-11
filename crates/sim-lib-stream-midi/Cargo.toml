@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-stream-midi"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "MIDI source, sink, and stream-spine adapters for STREAM 6."
@@ -10,9 +10,13 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
+sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-stream-core = { version = "0.1.0" }
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
 
 [lints]
 workspace = true

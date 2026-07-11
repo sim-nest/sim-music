@@ -8,7 +8,7 @@ File-backed source and sink adapters for STREAM 6.
 
 - Manifest: `crates/sim-lib-stream-file/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

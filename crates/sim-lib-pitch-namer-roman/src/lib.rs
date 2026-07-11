@@ -90,6 +90,10 @@ fn chord_quality(mask: PitchClassMask, root: PitchClass) -> Option<&'static str>
     }
 }
 
+/// Cookbook recipes for this lib, embedded at build time.
+pub static RECIPES: sim_cookbook::EmbeddedDir =
+    include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
+
 #[cfg(test)]
 mod tests {
     use sim_lib_pitch_core::PitchClass;

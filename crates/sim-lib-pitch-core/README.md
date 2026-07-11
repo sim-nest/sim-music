@@ -8,7 +8,7 @@ SIM workspace package for sim lib pitch core.
 
 - Manifest: `crates/sim-lib-pitch-core/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

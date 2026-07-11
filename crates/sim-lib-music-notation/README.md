@@ -8,7 +8,7 @@ SIM workspace package for sim lib music notation.
 
 - Manifest: `crates/sim-lib-music-notation/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-sound-shapes"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "SIM workspace package for sim lib sound shapes."
@@ -13,6 +13,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 sim-citizen = { version = "0.1.0" }
 sim-citizen-derive = { version = "0.1.0" }
 sim-codec = { version = "0.1.0" }
+sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
@@ -26,6 +27,9 @@ sim-lib-sound-timbre = { version = "0.1.0", path = "../sim-lib-sound-timbre" }
 sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
 sim-shape = { version = "0.1.0" }
 thiserror = "1"
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-kernel = { version = "0.1.0", features = ["test-support"] }

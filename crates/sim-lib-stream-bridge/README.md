@@ -8,7 +8,7 @@ MIDI/audio bridge helpers for STREAM 6.
 
 - Manifest: `crates/sim-lib-stream-bridge/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-wasm-frame"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "Music binary-frame facade descriptors."
@@ -16,6 +16,7 @@ model = []
 
 [dependencies]
 sim-codec = { version = "0.1.0" }
+sim-cookbook = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
 sim-lib-midi-wasm-frame = { version = "0.1.0", path = "../sim-lib-midi-wasm-frame" }
@@ -25,3 +26,7 @@ sim-lib-music-lift = { version = "0.1.0", path = "../sim-lib-music-lift" }
 sim-lib-music-lower = { version = "0.1.0", path = "../sim-lib-music-lower" }
 sim-lib-music-shapes = { version = "0.1.0", path = "../sim-lib-music-shapes" }
 thiserror = "1"
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
+

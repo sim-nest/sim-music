@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-ble"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "BLE-MIDI discovery, packet framing, and stream-host placement seams."
@@ -16,12 +16,16 @@ model = []
 ble-midi-hardware = ["dep:sim-lib-midi-live", "dep:zbus"]
 
 [dependencies]
+sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-live = { version = "0.1.0", path = "../sim-lib-midi-live", optional = true }
 sim-lib-midi-rtmidi = { version = "0.1.0", path = "../sim-lib-midi-rtmidi" }
 sim-lib-stream-host = { version = "0.1.0" }
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
 
 [target.'cfg(target_os = "linux")'.dependencies]
 zbus = { version = "5", optional = true }

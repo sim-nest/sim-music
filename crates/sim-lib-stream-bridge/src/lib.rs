@@ -20,5 +20,9 @@ pub use model::{
 pub use render::{render_midi_items_to_pcm, render_midi_stream_to_pcm};
 pub use runtime::{StreamBridgeLib, install_stream_bridge_lib};
 
+/// Cookbook recipes for this lib, embedded at build time.
+pub static RECIPES: sim_cookbook::EmbeddedDir =
+    include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
+
 #[cfg(test)]
 mod tests;

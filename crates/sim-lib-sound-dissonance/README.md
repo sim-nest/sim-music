@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound dissonance.
 
 - Manifest: `crates/sim-lib-sound-dissonance/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

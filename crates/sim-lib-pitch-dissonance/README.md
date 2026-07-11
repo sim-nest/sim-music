@@ -8,7 +8,7 @@ SIM workspace package for sim lib pitch dissonance.
 
 - Manifest: `crates/sim-lib-pitch-dissonance/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

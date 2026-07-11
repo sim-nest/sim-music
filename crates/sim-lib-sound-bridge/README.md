@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound bridge.
 
 - Manifest: `crates/sim-lib-sound-bridge/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

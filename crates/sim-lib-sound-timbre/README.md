@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound timbre.
 
 - Manifest: `crates/sim-lib-sound-timbre/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

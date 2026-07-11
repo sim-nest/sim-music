@@ -8,7 +8,7 @@ SIM workspace package for sim lib midi shapes.
 
 - Manifest: `crates/sim-lib-midi-shapes/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

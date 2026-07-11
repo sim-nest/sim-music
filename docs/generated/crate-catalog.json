@@ -11,6 +11,7 @@
       "readme": "crates/sim-lib-daw-session/README.md",
       "root": "crates/sim-lib-daw-session",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -23,6 +24,7 @@
       "readme": "crates/sim-lib-midi-ble/README.md",
       "root": "crates/sim-lib-midi-ble",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -35,6 +37,7 @@
       "readme": "crates/sim-lib-midi-core/README.md",
       "root": "crates/sim-lib-midi-core",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -47,6 +50,7 @@
       "readme": "crates/sim-lib-midi-live/README.md",
       "root": "crates/sim-lib-midi-live",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -59,6 +63,7 @@
       "readme": "crates/sim-lib-midi-rtmidi/README.md",
       "root": "crates/sim-lib-midi-rtmidi",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -71,6 +76,7 @@
       "readme": "crates/sim-lib-midi-shapes/README.md",
       "root": "crates/sim-lib-midi-shapes",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -83,6 +89,7 @@
       "readme": "crates/sim-lib-midi-smf/README.md",
       "root": "crates/sim-lib-midi-smf",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -95,6 +102,7 @@
       "readme": "crates/sim-lib-midi-sysex/README.md",
       "root": "crates/sim-lib-midi-sysex",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -107,6 +115,7 @@
       "readme": "crates/sim-lib-midi-wasm-frame/README.md",
       "root": "crates/sim-lib-midi-wasm-frame",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -119,6 +128,7 @@
       "readme": "crates/sim-lib-music-analysis/README.md",
       "root": "crates/sim-lib-music-analysis",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -131,6 +141,7 @@
       "readme": "crates/sim-lib-music-combinators/README.md",
       "root": "crates/sim-lib-music-combinators",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -143,6 +154,7 @@
       "readme": "crates/sim-lib-music-core/README.md",
       "root": "crates/sim-lib-music-core",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -155,6 +167,7 @@
       "readme": "crates/sim-lib-music-lift/README.md",
       "root": "crates/sim-lib-music-lift",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -167,6 +180,7 @@
       "readme": "crates/sim-lib-music-lower/README.md",
       "root": "crates/sim-lib-music-lower",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -179,6 +193,7 @@
       "readme": "crates/sim-lib-music-notation/README.md",
       "root": "crates/sim-lib-music-notation",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -191,6 +206,7 @@
       "readme": "crates/sim-lib-music-shapes/README.md",
       "root": "crates/sim-lib-music-shapes",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -203,6 +219,7 @@
       "readme": "crates/sim-lib-music-synth/README.md",
       "root": "crates/sim-lib-music-synth",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -215,6 +232,7 @@
       "readme": "crates/sim-lib-music-transform/README.md",
       "root": "crates/sim-lib-music-transform",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -227,6 +245,7 @@
       "readme": "crates/sim-lib-music-wasm-frame/README.md",
       "root": "crates/sim-lib-music-wasm-frame",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -239,6 +258,7 @@
       "readme": "crates/sim-lib-pitch-chord/README.md",
       "root": "crates/sim-lib-pitch-chord",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -251,6 +271,7 @@
       "readme": "crates/sim-lib-pitch-core/README.md",
       "root": "crates/sim-lib-pitch-core",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -263,6 +284,7 @@
       "readme": "crates/sim-lib-pitch-dissonance/README.md",
       "root": "crates/sim-lib-pitch-dissonance",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -275,6 +297,7 @@
       "readme": "crates/sim-lib-pitch-namer-forte/README.md",
       "root": "crates/sim-lib-pitch-namer-forte",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -287,6 +310,7 @@
       "readme": "crates/sim-lib-pitch-namer-jazz/README.md",
       "root": "crates/sim-lib-pitch-namer-jazz",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -299,6 +323,7 @@
       "readme": "crates/sim-lib-pitch-namer-riemann/README.md",
       "root": "crates/sim-lib-pitch-namer-riemann",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -311,6 +336,7 @@
       "readme": "crates/sim-lib-pitch-namer-roman/README.md",
       "root": "crates/sim-lib-pitch-namer-roman",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -323,6 +349,7 @@
       "readme": "crates/sim-lib-pitch-namer/README.md",
       "root": "crates/sim-lib-pitch-namer",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -335,6 +362,7 @@
       "readme": "crates/sim-lib-pitch-scale/README.md",
       "root": "crates/sim-lib-pitch-scale",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -347,6 +375,7 @@
       "readme": "crates/sim-lib-pitch-set/README.md",
       "root": "crates/sim-lib-pitch-set",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -359,6 +388,7 @@
       "readme": "crates/sim-lib-pitch-shapes/README.md",
       "root": "crates/sim-lib-pitch-shapes",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -371,6 +401,7 @@
       "readme": "crates/sim-lib-pitch-wasm-frame/README.md",
       "root": "crates/sim-lib-pitch-wasm-frame",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -383,6 +414,7 @@
       "readme": "crates/sim-lib-sound-audio-lift/README.md",
       "root": "crates/sim-lib-sound-audio-lift",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -395,6 +427,7 @@
       "readme": "crates/sim-lib-sound-bridge/README.md",
       "root": "crates/sim-lib-sound-bridge",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -407,6 +440,7 @@
       "readme": "crates/sim-lib-sound-core/README.md",
       "root": "crates/sim-lib-sound-core",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -419,6 +453,7 @@
       "readme": "crates/sim-lib-sound-dissonance/README.md",
       "root": "crates/sim-lib-sound-dissonance",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -431,6 +466,7 @@
       "readme": "crates/sim-lib-sound-gm/README.md",
       "root": "crates/sim-lib-sound-gm",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -443,6 +479,7 @@
       "readme": "crates/sim-lib-sound-render/README.md",
       "root": "crates/sim-lib-sound-render",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -455,6 +492,7 @@
       "readme": "crates/sim-lib-sound-shapes/README.md",
       "root": "crates/sim-lib-sound-shapes",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -467,6 +505,7 @@
       "readme": "crates/sim-lib-sound-spectrum/README.md",
       "root": "crates/sim-lib-sound-spectrum",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -479,6 +518,7 @@
       "readme": "crates/sim-lib-sound-timbre/README.md",
       "root": "crates/sim-lib-sound-timbre",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -491,6 +531,7 @@
       "readme": "crates/sim-lib-sound-tuning/README.md",
       "root": "crates/sim-lib-sound-tuning",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -503,6 +544,7 @@
       "readme": "crates/sim-lib-sound-wasm-frame/README.md",
       "root": "crates/sim-lib-sound-wasm-frame",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -515,6 +557,7 @@
       "readme": "crates/sim-lib-stream-bridge/README.md",
       "root": "crates/sim-lib-stream-bridge",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -527,6 +570,7 @@
       "readme": "crates/sim-lib-stream-file/README.md",
       "root": "crates/sim-lib-stream-file",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },
@@ -539,6 +583,7 @@
       "readme": "crates/sim-lib-stream-midi/README.md",
       "root": "crates/sim-lib-stream-midi",
       "target_kinds": [
+        "custom-build",
         "lib"
       ]
     },

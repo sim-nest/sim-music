@@ -8,7 +8,7 @@ SIM workspace package for sim lib music lower.
 
 - Manifest: `crates/sim-lib-music-lower/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

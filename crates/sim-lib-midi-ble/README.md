@@ -8,7 +8,7 @@ BLE-MIDI discovery, packet framing, and stream-host placement seams.
 
 - Manifest: `crates/sim-lib-midi-ble/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

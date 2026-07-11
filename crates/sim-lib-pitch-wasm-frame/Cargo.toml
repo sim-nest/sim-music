@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-wasm-frame"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "Pitch binary-frame facade descriptors."
@@ -16,6 +16,7 @@ model = []
 
 [dependencies]
 sim-codec = { version = "0.1.0" }
+sim-cookbook = { version = "0.1.0" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-dissonance = { version = "0.1.0", path = "../sim-lib-pitch-dissonance" }
 sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
@@ -23,3 +24,7 @@ sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
 sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
 sim-lib-pitch-shapes = { version = "0.1.0", path = "../sim-lib-pitch-shapes" }
 thiserror = "1"
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
+

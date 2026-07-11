@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-lift"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "SIM workspace package for sim lib music lift."
@@ -11,6 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 num-rational = "0.4"
+sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
@@ -21,6 +22,9 @@ sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
 sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
 thiserror = "1"
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-lib-music-lower = { version = "0.1.0", path = "../sim-lib-music-lower" }
