@@ -8,7 +8,7 @@ SIM workspace package for sim lib pitch namer jazz.
 
 - Manifest: `crates/sim-lib-pitch-namer-jazz/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

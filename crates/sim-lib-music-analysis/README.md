@@ -8,7 +8,7 @@ SIM workspace package for sim lib music analysis.
 
 - Manifest: `crates/sim-lib-music-analysis/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

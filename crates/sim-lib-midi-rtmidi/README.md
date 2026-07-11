@@ -8,7 +8,7 @@ Modeled RtMidi MIDI adapter surface for SIM (in-process simulation; no live MIDI
 
 - Manifest: `crates/sim-lib-midi-rtmidi/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

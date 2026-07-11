@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-core"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "SIM workspace package for sim lib pitch core."
@@ -11,3 +11,8 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 thiserror = "1"
+sim-cookbook = { version = "0.1.0" }
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
+

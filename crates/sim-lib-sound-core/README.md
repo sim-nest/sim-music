@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound core.
 
 - Manifest: `crates/sim-lib-sound-core/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

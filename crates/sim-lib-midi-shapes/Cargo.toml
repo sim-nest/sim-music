@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-shapes"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "SIM workspace package for sim lib midi shapes."
@@ -12,12 +12,16 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-citizen = { version = "0.1.0" }
 sim-citizen-derive = { version = "0.1.0" }
+sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
 sim-shape = { version = "0.1.0" }
 thiserror = "1"
+
+[build-dependencies]
+sim-cookbook = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-kernel = { version = "0.1.0", features = ["test-support"] }

@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound spectrum.
 
 - Manifest: `crates/sim-lib-sound-spectrum/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

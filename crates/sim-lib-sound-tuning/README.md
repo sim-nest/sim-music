@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound tuning.
 
 - Manifest: `crates/sim-lib-sound-tuning/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

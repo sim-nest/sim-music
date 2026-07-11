@@ -8,7 +8,7 @@ Pitch binary-frame facade descriptors.
 
 - Manifest: `crates/sim-lib-pitch-wasm-frame/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

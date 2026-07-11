@@ -8,7 +8,7 @@ SIM workspace package for sim lib midi live.
 
 - Manifest: `crates/sim-lib-midi-live/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

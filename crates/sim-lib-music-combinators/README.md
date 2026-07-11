@@ -8,7 +8,7 @@ SIM workspace package for sim lib music combinators.
 
 - Manifest: `crates/sim-lib-music-combinators/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

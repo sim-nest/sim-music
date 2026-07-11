@@ -8,7 +8,7 @@ SIM workspace package for sim lib sound shapes.
 
 - Manifest: `crates/sim-lib-sound-shapes/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

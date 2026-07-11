@@ -8,7 +8,7 @@ SIM workspace package for sim lib pitch chord.
 
 - Manifest: `crates/sim-lib-pitch-chord/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

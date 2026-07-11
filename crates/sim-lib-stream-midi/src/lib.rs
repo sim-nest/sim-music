@@ -19,5 +19,9 @@ pub use sink::{midi_packet_to_events, write_midi_packets_to_sink};
 pub use spine::{midi_source_to_stream, midi_stream_to_sink};
 pub use tracked::{TrackedMidiPacket, packetize_tracked_midi_source};
 
+/// Cookbook recipes for this lib, embedded at build time.
+pub static RECIPES: sim_cookbook::EmbeddedDir =
+    include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
+
 #[cfg(test)]
 mod tests;

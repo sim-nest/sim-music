@@ -39,6 +39,10 @@ pub fn label_riemann(mask: PitchClassMask, root: Option<PitchClass>) -> Option<S
     Some(format!("{quality}({})", root.canonical_name()))
 }
 
+/// Cookbook recipes for this lib, embedded at build time.
+pub static RECIPES: sim_cookbook::EmbeddedDir =
+    include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
+
 #[cfg(test)]
 mod tests {
     use sim_lib_pitch_core::PitchClass;

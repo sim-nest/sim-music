@@ -8,7 +8,7 @@ SIM workspace package for sim lib midi sysex.
 
 - Manifest: `crates/sim-lib-midi-sysex/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

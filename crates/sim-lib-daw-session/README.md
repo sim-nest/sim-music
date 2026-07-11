@@ -8,7 +8,7 @@ Headless DAW session surface for SIM audio graph workspaces.
 
 - Manifest: `crates/sim-lib-daw-session/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 

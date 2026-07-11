@@ -8,7 +8,7 @@ SIM workspace package for sim lib music transform.
 
 - Manifest: `crates/sim-lib-music-transform/Cargo.toml`
 - Publish: `true`
-- Targets: `lib`
+- Targets: `custom-build, lib`
 
 ## Crate Documentation
 
