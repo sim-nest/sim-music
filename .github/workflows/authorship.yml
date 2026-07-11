@@ -81,15 +81,20 @@ jobs:
                   stderr=subprocess.DEVNULL,
               ).returncode == 0
 
-          def ensure_commit(sha, remote_url=None, ref=None):
+          def try_ensure_commit(sha, remote_url=None, ref=None):
               if git_ok(["cat-file", "-e", f"{sha}^{{commit}}"]):
-                  return
+                  return True
               if git_ok(["fetch", "--no-tags", "--depth=1", "origin", sha]):
-                  return
+                  return True
               if remote_url and ref:
                   dst = f"refs/remotes/authorship-pr/{sha}"
                   if git_ok(["fetch", "--no-tags", "--depth=1", remote_url, f"+refs/heads/{ref}:{dst}"]):
-                      return
+                      return True
+              return False
+
+          def ensure_commit(sha, remote_url=None, ref=None):
+              if try_ensure_commit(sha, remote_url, ref):
+                  return
               print(f"cannot fetch commit {sha}", file=sys.stderr)
               raise SystemExit(1)
 
@@ -102,6 +107,25 @@ jobs:
               if git_ok(["fetch", "--no-tags", "--depth=1", "origin", f"{branch}:refs/remotes/{ref}"]):
                   return ref
               return None
+
+          def push_rev_args(before, after, default_branch):
+              ensure_commit(after)
+              if before != ZEROS and try_ensure_commit(before):
+                  return [f"{before}..{after}"]
+              base = ensure_origin_branch(default_branch)
+              if base:
+                  if before != ZEROS:
+                      print(
+                          f"push before {before[:12]} unavailable; scanning {base}..{after[:12]}",
+                          file=sys.stderr,
+                      )
+                  return [f"{base}..{after}"]
+              if before != ZEROS:
+                  print(
+                      f"push before {before[:12]} unavailable and default branch unavailable; scanning {after[:12]}",
+                      file=sys.stderr,
+                  )
+              return [after]
 
           def scan_commits(args):
               bad = []
@@ -149,12 +173,8 @@ jobs:
               after = event.get("after") or ZEROS
               if after == ZEROS:
                   raise SystemExit(0)
-              if before == ZEROS:
-                  default_branch = (event.get("repository") or {}).get("default_branch")
-                  base = ensure_origin_branch(default_branch)
-                  rev_args = [f"{base}..{after}"] if base else [after]
-              else:
-                  rev_args = [f"{before}..{after}"]
+              default_branch = (event.get("repository") or {}).get("default_branch")
+              rev_args = push_rev_args(before, after, default_branch)
           else:
               rev_args = ["HEAD"]
 
