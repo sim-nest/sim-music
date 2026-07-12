@@ -42,6 +42,7 @@
 
 mod cc;
 mod error;
+mod frame_digest;
 mod io;
 mod model;
 mod player;
@@ -53,6 +54,7 @@ pub mod wire;
 
 pub use cc::*;
 pub use error::*;
+pub use frame_digest::{MidiDigestLib, manifest_name as midi_digest_manifest_name};
 pub use io::*;
 pub use model::*;
 pub use player::*;
