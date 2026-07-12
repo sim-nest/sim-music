@@ -76,6 +76,51 @@ fn install_pitch_shapes_lib_registers_runtime_shape_exports() {
 }
 
 #[test]
+fn pitch_shapes_reject_invalid_values() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_pitch_shapes_lib(&mut cx).unwrap();
+
+    let pitch = cx
+        .registry()
+        .shape_by_symbol(&Symbol::qualified("pitch", "Pitch"))
+        .expect("pitch shape")
+        .clone();
+    let pitch_shape = pitch.object().as_shape().expect("shape protocol");
+    assert!(!pitch_shape.is_total());
+    assert!(
+        pitch_shape
+            .check_expr(&mut cx, &Expr::String("C4".to_owned()))
+            .unwrap()
+            .accepted
+    );
+    assert!(
+        !pitch_shape
+            .check_expr(&mut cx, &Expr::Bool(false))
+            .unwrap()
+            .accepted
+    );
+
+    let mask = cx
+        .registry()
+        .shape_by_symbol(&Symbol::qualified("pitch", "PitchClassMask"))
+        .expect("pitch-class mask shape")
+        .clone();
+    let mask_shape = mask.object().as_shape().expect("shape protocol");
+    assert!(
+        mask_shape
+            .check_expr(&mut cx, &Expr::String("#(PitchClassMask 145)".to_owned()))
+            .unwrap()
+            .accepted
+    );
+    assert!(
+        !mask_shape
+            .check_expr(&mut cx, &Expr::String("#(Interval 7)".to_owned()))
+            .unwrap()
+            .accepted
+    );
+}
+
+#[test]
 fn pitch_citizens_accept_legacy_text_and_read_construct() {
     let mut cx = cx_with_citizens();
 
