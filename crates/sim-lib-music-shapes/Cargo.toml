@@ -12,7 +12,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-citizen = { version = "0.1.0" }
 sim-citizen-derive = { version = "0.1.0" }
-sim-codec = { version = "0.1.0" }
+sim-codec = { version = "0.1.4" }
 sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }

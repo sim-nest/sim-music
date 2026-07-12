@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, read_construct_capability};
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, Value, read_construct_capability};
 use sim_lib_sound_audio_lift::{
     AudioLiftFrame, AudioLiftOptions, AudioNoteCandidate, PitchCandidate,
 };
@@ -272,6 +272,33 @@ fn install_sound_shapes_lib_registers_audio_lift_shapes() {
 }
 
 #[test]
+fn sound_runtime_shapes_reject_bad_domain_forms() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_shapes_lib(&mut cx).unwrap();
+
+    let frequency = registered_sound_shape(&cx, "Frequency");
+    assert_shape_accepts(&mut cx, &frequency, &encode_frequency(Frequency(440.0)));
+    assert!(!frequency.object().as_shape().unwrap().is_total());
+    assert_shape_rejects(&mut cx, &frequency, "#(Frequency)");
+    assert_shape_rejects(&mut cx, &frequency, "#(Amplitude linear=1.0)");
+    assert_shape_rejects(
+        &mut cx,
+        &frequency,
+        "#(Frequency hz=#(Amplitude linear=1.0))",
+    );
+
+    let amplitude = registered_sound_shape(&cx, "Amplitude");
+    assert_shape_accepts(&mut cx, &amplitude, &encode_amplitude(Amplitude(0.5)));
+    assert_shape_rejects(&mut cx, &amplitude, "#(Amplitude)");
+    assert_shape_rejects(&mut cx, &amplitude, "#(Frequency hz=440.0)");
+    assert_shape_rejects(
+        &mut cx,
+        &amplitude,
+        "#(Amplitude linear=#(Frequency hz=440.0))",
+    );
+}
+
+#[test]
 fn sound_citizens_accept_legacy_text_and_read_construct() {
     let frequency = Frequency(440.0);
     let amplitude = Amplitude(1.0);
@@ -354,6 +381,43 @@ fn cx_with_citizens() -> Cx {
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx
+}
+
+fn registered_sound_shape(cx: &Cx, name: &'static str) -> Value {
+    cx.registry()
+        .shape_by_symbol(&Symbol::qualified("sound", name))
+        .expect("registered sound shape")
+        .clone()
+}
+
+fn assert_shape_accepts(cx: &mut Cx, shape: &Value, text: &str) {
+    let expr = Expr::String(text.to_owned());
+    let matched = shape
+        .object()
+        .as_shape()
+        .expect("shape protocol")
+        .check_expr(cx, &expr)
+        .unwrap();
+    assert!(
+        matched.accepted,
+        "{text} rejected: {:?}",
+        matched.diagnostics
+    );
+}
+
+fn assert_shape_rejects(cx: &mut Cx, shape: &Value, text: &str) {
+    let expr = Expr::String(text.to_owned());
+    let matched = shape
+        .object()
+        .as_shape()
+        .expect("shape protocol")
+        .check_expr(cx, &expr)
+        .unwrap();
+    assert!(
+        !matched.accepted,
+        "{text} unexpectedly matched with score {:?}",
+        matched.score
+    );
 }
 
 fn read_construct<T>(cx: &mut Cx, class: Symbol, form: &str) -> T

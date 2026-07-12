@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 mod custom_filter;
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, read_construct_capability};
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, Value, read_construct_capability};
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MidiEvent, MidiPayload, TickTime, U7, synthetic_origin,
 };
@@ -243,6 +243,51 @@ fn install_music_shapes_lib_registers_runtime_shape_exports() {
 }
 
 #[test]
+fn music_runtime_shapes_reject_bad_domain_forms() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_shapes_lib(&mut cx).unwrap();
+
+    let note_value = note(60);
+    let note_shape = registered_music_shape(&cx, "Note");
+    assert_shape_accepts(&mut cx, &note_shape, &encode_note(&note_value));
+    assert!(!note_shape.object().as_shape().unwrap().is_total());
+    assert_shape_rejects(
+        &mut cx,
+        &note_shape,
+        "#(Note pitch=C4 vel=100 channel=0 articulation=Normal)",
+    );
+    assert_shape_rejects(&mut cx, &note_shape, "#(Rest dur=1/4)");
+    assert_shape_rejects(
+        &mut cx,
+        &note_shape,
+        "#(Note dur=#(Rest dur=1/4) pitch=C4 vel=100 channel=0 articulation=Normal)",
+    );
+
+    let rest_shape = registered_music_shape(&cx, "Rest");
+    assert_shape_accepts(
+        &mut cx,
+        &rest_shape,
+        &encode_rest(&Rest::new(quarter()).expect("rest")),
+    );
+    assert_shape_rejects(&mut cx, &rest_shape, "#(Rest)");
+    assert_shape_rejects(&mut cx, &rest_shape, &encode_note(&note_value));
+
+    let score = Score::new(120, (4, 4), None, Music::Note(note_value)).expect("score");
+    let score_shape = registered_music_shape(&cx, "Score");
+    assert_shape_accepts(&mut cx, &score_shape, &encode_score(&score));
+    assert_shape_rejects(
+        &mut cx,
+        &score_shape,
+        "#(Score tempo=120 time_sig=4/4 key=none)",
+    );
+    assert_shape_rejects(
+        &mut cx,
+        &score_shape,
+        "#(Score tempo=120 time_sig=4/4 key=none body=[#(Rest dur=1/4)])",
+    );
+}
+
+#[test]
 fn music_citizens_accept_legacy_text_and_read_construct() {
     let mut cx = cx_with_citizens();
 
@@ -292,6 +337,43 @@ fn cx_with_citizens() -> Cx {
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx
+}
+
+fn registered_music_shape(cx: &Cx, name: &'static str) -> Value {
+    cx.registry()
+        .shape_by_symbol(&Symbol::qualified("music", name))
+        .expect("registered music shape")
+        .clone()
+}
+
+fn assert_shape_accepts(cx: &mut Cx, shape: &Value, text: &str) {
+    let expr = Expr::String(text.to_owned());
+    let matched = shape
+        .object()
+        .as_shape()
+        .expect("shape protocol")
+        .check_expr(cx, &expr)
+        .unwrap();
+    assert!(
+        matched.accepted,
+        "{text} rejected: {:?}",
+        matched.diagnostics
+    );
+}
+
+fn assert_shape_rejects(cx: &mut Cx, shape: &Value, text: &str) {
+    let expr = Expr::String(text.to_owned());
+    let matched = shape
+        .object()
+        .as_shape()
+        .expect("shape protocol")
+        .check_expr(cx, &expr)
+        .unwrap();
+    assert!(
+        !matched.accepted,
+        "{text} unexpectedly matched with score {:?}",
+        matched.score
+    );
 }
 
 fn read_construct<T>(cx: &mut Cx, class: Symbol, form: &str) -> T
