@@ -1,0 +1,11 @@
+id = "chord-digest"
+title = "Digest an offline MIDI chord render"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["midi", "offline", "deterministic", "compute"]
+requires = ["midi/digest"]
+[[expect]]
+form = 0
+result = "\"(frame (bytes 9) (hash 605946920012b4cc))\""
