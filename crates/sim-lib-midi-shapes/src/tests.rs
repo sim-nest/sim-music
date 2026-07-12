@@ -184,6 +184,54 @@ fn install_midi_shapes_lib_registers_runtime_shape_exports() {
 }
 
 #[test]
+fn midi_shapes_reject_invalid_values() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_midi_shapes_lib(&mut cx).unwrap();
+
+    let tick = cx
+        .registry()
+        .shape_by_symbol(&Symbol::qualified("midi", "TickTime"))
+        .expect("tick-time shape")
+        .clone();
+    let tick_shape = tick.object().as_shape().expect("shape protocol");
+    assert!(!tick_shape.is_total());
+    assert!(
+        tick_shape
+            .check_expr(&mut cx, &Expr::String("2q".to_owned()))
+            .unwrap()
+            .accepted
+    );
+    assert!(
+        !tick_shape
+            .check_expr(&mut cx, &Expr::Bool(false))
+            .unwrap()
+            .accepted
+    );
+
+    let channel = cx
+        .registry()
+        .shape_by_symbol(&Symbol::qualified("midi", "ChannelMessage"))
+        .expect("channel-message shape")
+        .clone();
+    let channel_shape = channel.object().as_shape().expect("shape protocol");
+    assert!(
+        channel_shape
+            .check_expr(
+                &mut cx,
+                &Expr::String("#(Channel NoteOn 0 60 100)".to_owned())
+            )
+            .unwrap()
+            .accepted
+    );
+    assert!(
+        !channel_shape
+            .check_expr(&mut cx, &Expr::String("#(Meta Tempo 500000)".to_owned()))
+            .unwrap()
+            .accepted
+    );
+}
+
+#[test]
 fn midi_citizens_accept_legacy_text_and_read_construct() {
     let mut cx = cx_with_citizens();
 
