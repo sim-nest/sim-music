@@ -19,7 +19,7 @@ sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-stream-core = { version = "0.1.0" }
 sim-lib-topology = { version = "0.1.0" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

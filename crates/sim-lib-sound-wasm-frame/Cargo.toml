@@ -22,7 +22,7 @@ sim-lib-sound-gm = { version = "0.1.0", path = "../sim-lib-sound-gm" }
 sim-lib-sound-render = { version = "0.1.0", path = "../sim-lib-sound-render" }
 sim-lib-sound-tuning = { version = "0.1.0", path = "../sim-lib-sound-tuning" }
 sim-lib-stream-core = { version = "0.1.0" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

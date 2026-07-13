@@ -19,7 +19,7 @@ sim-value = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
 sim-shape = { version = "0.1.0" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

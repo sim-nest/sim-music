@@ -21,7 +21,7 @@ sim-lib-pitch-namer-riemann = { version = "0.1.0", path = "../sim-lib-pitch-name
 sim-lib-pitch-namer-roman = { version = "0.1.0", path = "../sim-lib-pitch-namer-roman" }
 sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
 sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
