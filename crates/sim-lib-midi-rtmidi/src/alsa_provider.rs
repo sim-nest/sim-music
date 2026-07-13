@@ -17,7 +17,7 @@ macro_rules! native_midi_provider {
         input_site: $input_site:ident,
         output_site: $output_site:ident,
         duplex_site: $duplex_site:ident,
-        transport: $transport:literal,
+        transport: $transport:expr,
         label: $label:literal,
         provider_doc: $provider_doc:literal,
         input_doc: $input_doc:literal,
@@ -163,12 +163,17 @@ macro_rules! native_midi_provider {
     };
 }
 
+/// Returns the RtMidi ALSA sequencer candidate name used by safe config probes.
+pub fn alsa_seq_midi_backend_candidate() -> &'static str {
+    crate::RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE
+}
+
 native_midi_provider! {
     provider: AlsaMidiProvider,
     input_site: AlsaMidiInputEvalSite,
     output_site: AlsaMidiOutputEvalSite,
     duplex_site: AlsaMidiDuplexEvalSite,
-    transport: "alsa-seq",
+    transport: crate::RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE,
     label: "AlsaMidiProvider",
     provider_doc: "ALSA-sequencer placement provider backed by RtMidi-compatible port metadata.",
     input_doc: "Input evaluation site for an ALSA MIDI port.",
@@ -181,7 +186,7 @@ native_midi_provider! {
     input_site: CoreMidiInputEvalSite,
     output_site: CoreMidiOutputEvalSite,
     duplex_site: CoreMidiDuplexEvalSite,
-    transport: "coremidi",
+    transport: crate::RTMIDI_COREMIDI_MIDI_BACKEND_CANDIDATE,
     label: "CoreMidiProvider",
     provider_doc: "CoreMIDI placement provider backed by RtMidi-compatible port metadata.",
     input_doc: "Input evaluation site for a CoreMIDI port.",
@@ -194,7 +199,7 @@ native_midi_provider! {
     input_site: WinMmInputEvalSite,
     output_site: WinMmOutputEvalSite,
     duplex_site: WinMmDuplexEvalSite,
-    transport: "winmm",
+    transport: crate::RTMIDI_WINMM_MIDI_BACKEND_CANDIDATE,
     label: "WinMmProvider",
     provider_doc: "Windows multimedia MIDI placement provider backed by RtMidi-compatible port metadata.",
     input_doc: "Input evaluation site for a Windows multimedia MIDI port.",
