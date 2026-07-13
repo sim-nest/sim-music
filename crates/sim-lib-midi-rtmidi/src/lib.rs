@@ -31,11 +31,28 @@ mod model;
 mod native;
 mod runtime;
 
+/// RtMidi ALSA sequencer candidate name used by safe config probes.
+pub const RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE: &str = "alsa-seq";
+/// RtMidi CoreMIDI candidate name used by safe config probes.
+pub const RTMIDI_COREMIDI_MIDI_BACKEND_CANDIDATE: &str = "coremidi";
+/// RtMidi Windows multimedia candidate name used by safe config probes.
+pub const RTMIDI_WINMM_MIDI_BACKEND_CANDIDATE: &str = "winmm";
+
+/// Returns the RtMidi hardware MIDI backend candidate names.
+pub fn rtmidi_midi_backend_candidates() -> [&'static str; 3] {
+    [
+        RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE,
+        RTMIDI_COREMIDI_MIDI_BACKEND_CANDIDATE,
+        RTMIDI_WINMM_MIDI_BACKEND_CANDIDATE,
+    ]
+}
+
 #[cfg(feature = "rtmidi-hardware")]
 pub use alsa_provider::{
     AlsaMidiDuplexEvalSite, AlsaMidiInputEvalSite, AlsaMidiOutputEvalSite, AlsaMidiProvider,
     CoreMidiDuplexEvalSite, CoreMidiInputEvalSite, CoreMidiOutputEvalSite, CoreMidiProvider,
     WinMmDuplexEvalSite, WinMmInputEvalSite, WinMmOutputEvalSite, WinMmProvider,
+    alsa_seq_midi_backend_candidate,
 };
 pub use backend::{RtmidiBackend, rtmidi_backend_symbol, rtmidi_transport_symbol};
 #[cfg(feature = "rtmidi-hardware")]

@@ -6,8 +6,9 @@ use sim_lib_stream_core::{BufferPolicy, StreamMedia};
 use sim_lib_stream_host::{HostBackend, HostDirection, HostStreamConfigRequest};
 
 use crate::{
-    RtmidiBackend, RtmidiEvent, RtmidiMidiSink, RtmidiTiming, bytes_from_payload,
-    missing_rtmidi_dependency_card, payload_from_bytes, rtmidi_backend_symbol,
+    RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE, RtmidiBackend, RtmidiEvent, RtmidiMidiSink,
+    RtmidiTiming, bytes_from_payload, missing_rtmidi_dependency_card, payload_from_bytes,
+    rtmidi_backend_symbol, rtmidi_midi_backend_candidates,
 };
 
 #[cfg(feature = "rtmidi-hardware")]
@@ -36,6 +37,13 @@ fn rtmidi_lists_and_opens_fake_ports_without_hardware() {
     );
     let opened = backend.open(request).unwrap();
     assert_eq!(opened.config().device(), &Symbol::new("rtmidi/fake-in"));
+}
+
+#[test]
+fn config_probe_candidate_names_rtmidi_backends() {
+    let candidates = rtmidi_midi_backend_candidates();
+    assert_eq!(candidates[0], RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE);
+    assert_eq!(candidates, ["alsa-seq", "coremidi", "winmm"]);
 }
 
 #[test]
