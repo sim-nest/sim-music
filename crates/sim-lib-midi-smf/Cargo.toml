@@ -12,7 +12,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

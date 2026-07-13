@@ -16,7 +16,7 @@ sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

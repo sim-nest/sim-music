@@ -19,7 +19,7 @@ sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
 sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
 sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
 sim-lib-sound-spectrum = { version = "0.1.0", path = "../sim-lib-sound-spectrum" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

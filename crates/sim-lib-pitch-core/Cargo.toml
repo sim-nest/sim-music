@@ -10,7 +10,7 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-thiserror = "1"
+thiserror = "2"
 sim-cookbook = { version = "0.1.0" }
 
 [build-dependencies]

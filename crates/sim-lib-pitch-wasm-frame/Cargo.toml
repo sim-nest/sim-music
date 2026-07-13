@@ -23,7 +23,7 @@ sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
 sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
 sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
 sim-lib-pitch-shapes = { version = "0.1.0", path = "../sim-lib-pitch-shapes" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
