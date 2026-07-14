@@ -8,17 +8,17 @@ use sim_codec::{Input, Output, decode_with_codec, encode_with_codec};
 use sim_kernel::{
     Cx, EncodeOptions, Error, Expr, Object, ObjectEncode, ObjectEncoding, ReadPolicy, Result,
     Symbol, Value,
-    capability::{
-        table_fs_capability, table_fs_mkdir_capability, table_fs_read_capability,
-        table_fs_rmdir_capability, table_fs_write_capability,
-    },
     id::CORE_TABLE_CLASS_ID,
     object::ClassRef,
     table::{Dir, Table},
 };
 
-use crate::citizen::fs_dir_class_symbol;
-use crate::roadmap11::{decode_expr_for_ext, encode_expr_for_ext, infer_ext_from_expr, known_exts};
+use crate::{
+    citizen::fs_dir_class_symbol,
+    roadmap11::{decode_expr_for_ext, encode_expr_for_ext, infer_ext_from_expr, known_exts},
+    table_fs_capability, table_fs_mkdir_capability, table_fs_read_capability,
+    table_fs_rmdir_capability, table_fs_write_capability,
+};
 
 const DEFAULT_EXT: &str = "siml";
 

@@ -12,14 +12,14 @@ use sim_codec_json::JsonCodecLib;
 use sim_codec_lisp::LispCodecLib;
 use sim_kernel::{
     DefaultFactory, Dir, EagerPolicy, EncodeOptions, Expr, ObjectEncoding, Symbol,
-    capability::{
-        table_fs_capability, table_fs_mkdir_capability, table_fs_read_capability,
-        table_fs_rmdir_capability, table_fs_write_capability,
-    },
     read_construct_capability,
 };
 
-use crate::{FsDir, FsDirDescriptor, fs_dir_class_symbol, install_fs_dir_lib};
+use crate::{
+    FsDir, FsDirDescriptor, fs_dir_class_symbol, install_fs_dir_lib, table_fs_capability,
+    table_fs_mkdir_capability, table_fs_read_capability, table_fs_rmdir_capability,
+    table_fs_write_capability,
+};
 
 fn test_root(name: &str) -> PathBuf {
     let nanos = SystemTime::now()
