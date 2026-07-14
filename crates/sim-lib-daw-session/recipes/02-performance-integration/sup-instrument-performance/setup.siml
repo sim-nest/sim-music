@@ -1,7 +1,1 @@
-(quote
-  (recipe sup-instrument-performance
-    (session instrument-fixture)
-    (player-chain bassline-chord :target dx7-lead :placement audio-worklet)
-    (automation (seed 3824) (chord-follow true))
-    (plugin-export (param-set operator-level 87))
-    (golden daw-recipe-sup-instrument-performance)))
+daw-session/DawInstrumentInstance

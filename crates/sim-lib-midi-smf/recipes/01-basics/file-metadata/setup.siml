@@ -1,1 +1,1 @@
-(quote (midi-smf file format-1 track tempo note-events metadata))
+"midi-smf descriptor: format-1 file with tempo, note events, and metadata"

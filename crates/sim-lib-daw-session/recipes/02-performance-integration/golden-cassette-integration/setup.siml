@@ -1,7 +1,1 @@
-(quote
-  (recipe golden-cassette-integration
-    (session instrument-fixture)
-    (freeze (player-chain bassline-recipe))
-    (stream-envelopes data midi)
-    (cassette daw-recipe-performance-cassette)
-    (golden daw-recipe-performance-hash)))
+daw-session/DawRenderOffline

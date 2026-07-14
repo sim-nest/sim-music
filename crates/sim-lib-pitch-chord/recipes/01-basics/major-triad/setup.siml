@@ -1,1 +1,1 @@
-(quote (pitch-chord C major triad notes C E G))
+"pitch-chord descriptor: C major triad with notes C, E, and G"

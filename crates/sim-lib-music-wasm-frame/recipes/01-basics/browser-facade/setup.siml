@@ -1,1 +1,1 @@
-(quote (music-wasm facade score transform frame-safe))
+"music-wasm descriptor: score and transform frame facade for browser guests"

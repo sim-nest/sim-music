@@ -1,1 +1,1 @@
-(quote (instrument-placement all-local site-map "voice=stream/site/host-callback;fx=stream/site/host-callback;preview=stream/site/host-callback" streams stream/live/patch stream/live/midi stream/live/parameter stream/live/audio-output stream/live/preview stream/live/diagnostic latency sample-exact artifacts all-local.placement-report.json all-local.artifacts.sha256))
+audio-synth/InstrumentPlacementRecipeSpec

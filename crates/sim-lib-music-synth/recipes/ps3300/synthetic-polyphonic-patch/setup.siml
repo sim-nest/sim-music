@@ -1,1 +1,1 @@
-(quote (audio-synth ps3300 synthetic-polyphonic-patch render-mode modeled fixture ps3300-ps3-three-section-stack-render user-patch-path "$HOME/.local/share/sim/ps3300/synthetic-polyphonic.patch.siml" section-graph (keyboard->pin-matrix modulation-generator->pin-matrix sample-hold->pin-matrix external-processor->pin-matrix pin-matrix->section-a pin-matrix->section-b pin-matrix->section-c sections->triple-resonator sections+resonator->output-mixer) polyphony-summary (sections 3 keys-per-section 48 total-key-cells 144)))
+audio-synth/Ps3300RenderGate

@@ -1,1 +1,1 @@
-(quote (instrument-placement browser-wasm-local site-map "voice=stream/site/browser-wasm;preview=stream/site/browser-wasm" streams stream/live/patch stream/live/midi stream/live/parameter stream/live/audio-output stream/live/preview stream/live/diagnostic latency browser-local artifacts browser-wasm-local.placement-report.json browser-wasm-local.artifacts.sha256))
+audio-synth/InstrumentPlacementRecipeSpec

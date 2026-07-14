@@ -1,1 +1,1 @@
-(quote (stream-file wav pcm16 smf bytes effects capability-gated))
+"stream-file descriptor: WAV PCM16 and SMF byte stream with capability-gated effects"

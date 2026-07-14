@@ -1,1 +1,1 @@
-(quote (pitch-namer-roman key C-major chord G7 numeral V7))
+"pitch-namer-roman descriptor: G7 in C-major names as V7"

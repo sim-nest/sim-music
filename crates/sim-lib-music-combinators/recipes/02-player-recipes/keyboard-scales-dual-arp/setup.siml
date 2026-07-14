@@ -1,7 +1,1 @@
-(quote
-  (recipe keyboard-scales-dual-arp
-    (input (keyboard C#4 velocity 112))
-    (chain (scales-chords :scale C-major :policy quantize)
-           (dual-arpeggio :a-rate 120 :b-rate 240 :mode parallel))
-    (direct-record (piano-roll :lane performance-notes))
-    (golden player-recipe-keyboard-dual-arp)))
+"music-combinators descriptor: keyboard C#4 drives scale quantize and dual arpeggio direct record"

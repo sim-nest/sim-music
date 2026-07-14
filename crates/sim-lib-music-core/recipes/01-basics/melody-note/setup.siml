@@ -1,1 +1,1 @@
-(quote (music-core score melody note C4 duration quarter))
+"music-core descriptor: score with one C4 quarter-note melody"

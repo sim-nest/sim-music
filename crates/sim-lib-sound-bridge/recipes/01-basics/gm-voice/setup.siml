@@ -1,1 +1,1 @@
-(quote (sound-bridge gm-bank midi-note voice-pool offline))
+sound/MidiToSoundBridge

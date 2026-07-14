@@ -1,1 +1,1 @@
-(quote (sound-core tone sine frequency 440 amplitude 0.5))
+"sound-core descriptor: sine tone at 440 Hz with 0.5 linear amplitude"
