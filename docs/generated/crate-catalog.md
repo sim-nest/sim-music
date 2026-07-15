@@ -51,5 +51,4 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-stream-bridge` | `true` | `custom-build, lib` | MIDI/audio bridge helpers for STREAM 6. |
 | `sim-lib-stream-file` | `true` | `custom-build, lib` | File-backed source and sink adapters for STREAM 6. |
 | `sim-lib-stream-midi` | `true` | `custom-build, lib` | MIDI source, sink, and stream-spine adapters for STREAM 6. |
-| `sim-table-fs` | `true` | `lib` | SIM workspace package for sim table fs. |
 | `xtask` | `false` | `bin` | SIM workspace package for xtask. |

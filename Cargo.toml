@@ -47,7 +47,6 @@ members = [
   "crates/sim-lib-stream-file",
   "crates/sim-lib-stream-midi",
   "crates/sim-lib-daw-session",
-  "crates/sim-table-fs",
   "xtask",
 ]
 

@@ -170,12 +170,6 @@ loadable SIM libs.
 - `sim-lib-stream-bridge` -- adapts finite stream packet spines between MIDI and
   PCM using the sound and audio-lift libraries.
 
-### Support
-
-- `sim-table-fs` -- a host directory exposed as a SIM table, gated by kernel
-  table-fs capabilities, with optional domain-shape round-tripping for
-  recognized extensions (`.mid`, `.music`, `.tone`, `.scl`, `.ly`).
-
 ## Lift and lower
 
 The music domain is organized around a single reversible pipeline. A *lift*

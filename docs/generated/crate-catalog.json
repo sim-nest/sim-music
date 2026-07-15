@@ -1,6 +1,6 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 47,
+  "package_count": 46,
   "packages": [
     {
       "description": "Headless DAW session surface for SIM audio graph workspaces.",
@@ -584,18 +584,6 @@
       "root": "crates/sim-lib-stream-midi",
       "target_kinds": [
         "custom-build",
-        "lib"
-      ]
-    },
-    {
-      "description": "SIM workspace package for sim table fs.",
-      "generated_readme": true,
-      "manifest": "crates/sim-table-fs/Cargo.toml",
-      "name": "sim-table-fs",
-      "publish": "true",
-      "readme": "crates/sim-table-fs/README.md",
-      "root": "crates/sim-table-fs",
-      "target_kinds": [
         "lib"
       ]
     },
