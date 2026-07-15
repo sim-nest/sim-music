@@ -3,10 +3,12 @@
 //! File-backed source and sink adapters for STREAM 6.
 //!
 //! The crate keeps host filesystem access behind explicit stream file
-//! capabilities and records each read or write as a KERNEL 6 filesystem effect.
-//! SMF support reuses the in-tree MIDI file codec; WAV support is limited to
-//! canonical little-endian PCM16 RIFF/WAVE because that is the PCM packet format
-//! implemented by the stream audio layer.
+//! capabilities: reads require `fs/read`, writes require `fs/write`, and
+//! compatibility `stream.file.*` aliases are accepted by the gates. Each read or
+//! write is recorded as a KERNEL 6 filesystem effect. SMF support reuses the
+//! in-tree MIDI file codec; WAV support is limited to canonical little-endian
+//! PCM16 RIFF/WAVE because that is the PCM packet format implemented by the
+//! stream audio layer.
 
 mod cap;
 mod cassette;

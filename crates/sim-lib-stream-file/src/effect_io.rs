@@ -2,7 +2,7 @@ use std::{fs, path::Path};
 
 use sim_kernel::{Cx, Datum, DatumStore, Effect, Error, Ref, Result, Symbol, core_any_ref, effect};
 
-use crate::cap::{stream_file_read_capability, stream_file_write_capability};
+use crate::cap::{stream_file_read_effect_capability, stream_file_write_effect_capability};
 
 pub(crate) fn read_file_with_effect(cx: &mut Cx, path: impl AsRef<Path>) -> Result<Vec<u8>> {
     let path = path.as_ref().to_path_buf();
@@ -15,7 +15,7 @@ pub(crate) fn read_file_with_effect(cx: &mut Cx, path: impl AsRef<Path>) -> Resu
         effect::effect_resume_op_key(),
         effect::effect_abort_op_key(),
     )
-    .requiring(stream_file_read_capability())
+    .requiring(stream_file_read_effect_capability(cx))
     .with_replay_key(Some(Ref::Symbol(Symbol::qualified(
         "stream/file",
         "read-v1",
@@ -42,7 +42,7 @@ pub(crate) fn write_file_with_effect(
         effect::effect_resume_op_key(),
         effect::effect_abort_op_key(),
     )
-    .requiring(stream_file_write_capability())
+    .requiring(stream_file_write_effect_capability(cx))
     .with_replay_key(Some(Ref::Symbol(Symbol::qualified(
         "stream/file",
         "write-v1",

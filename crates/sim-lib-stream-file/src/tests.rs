@@ -221,6 +221,28 @@ fn file_effects_and_capabilities_are_recorded() {
     assert!(denied[0].aborted);
 }
 
+#[test]
+fn compatibility_stream_file_capability_aliases_are_accepted() {
+    let temp = TempPath::new("compat-caps.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/compat-write")).unwrap();
+    let mut cx = cx(&[
+        CapabilityName::new("stream.file.write"),
+        CapabilityName::new("stream.file.read"),
+    ]);
+
+    write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/compat-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
 fn cx(capabilities: &[CapabilityName]) -> Cx {
     let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
     for capability in capabilities {
