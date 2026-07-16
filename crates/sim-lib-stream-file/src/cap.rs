@@ -1,4 +1,4 @@
-use sim_kernel::{CapabilityName, Cx};
+use sim_kernel::{CapabilityName, Cx, Symbol};
 
 /// Returns the capability gating filesystem reads (`fs/read`).
 ///
@@ -16,6 +16,10 @@ pub fn stream_file_read_capability() -> CapabilityName {
 /// Returns the capability gating filesystem writes (`fs/write`).
 pub fn stream_file_write_capability() -> CapabilityName {
     CapabilityName::new("fs/write")
+}
+
+pub(crate) fn stream_file_filesystem_effect_kind() -> Symbol {
+    Symbol::qualified("effect", "filesystem")
 }
 
 pub(crate) fn stream_file_read_effect_capability(cx: &Cx) -> CapabilityName {

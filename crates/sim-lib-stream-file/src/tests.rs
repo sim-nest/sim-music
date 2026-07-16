@@ -6,7 +6,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol, effect};
+use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol};
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
     TickTime, U7, synthetic_origin,
@@ -19,6 +19,7 @@ use sim_lib_stream_core::{
 };
 use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
 
+use crate::cap::stream_file_filesystem_effect_kind;
 use crate::{
     cassette_expr_to_stream, pcm_buffers_to_wav_bytes, read_smf_stream, read_wav_stream,
     stream_file_read_capability, stream_file_write_capability, stream_to_cassette,
@@ -199,7 +200,7 @@ fn file_effects_and_capabilities_are_recorded() {
     assert_eq!(records.len(), 1);
     assert!(!records[0].aborted);
     let recorded = write_cx.effect_ledger().effect(&records[0].effect).unwrap();
-    assert_eq!(recorded.kind, effect::effect_filesystem_kind());
+    assert_eq!(recorded.kind, stream_file_filesystem_effect_kind());
     assert!(recorded.requires.contains(&stream_file_write_capability()));
 
     let mut read_cx = cx(&[]);

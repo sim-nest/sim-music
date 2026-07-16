@@ -2,13 +2,16 @@ use std::{fs, path::Path};
 
 use sim_kernel::{Cx, Datum, DatumStore, Effect, Error, Ref, Result, Symbol, core_any_ref, effect};
 
-use crate::cap::{stream_file_read_effect_capability, stream_file_write_effect_capability};
+use crate::cap::{
+    stream_file_filesystem_effect_kind, stream_file_read_effect_capability,
+    stream_file_write_effect_capability,
+};
 
 pub(crate) fn read_file_with_effect(cx: &mut Cx, path: impl AsRef<Path>) -> Result<Vec<u8>> {
     let path = path.as_ref().to_path_buf();
     let input = operation_input_ref(cx, "read", &path, None)?;
     let effect = Effect::new(
-        effect::effect_filesystem_kind(),
+        stream_file_filesystem_effect_kind(),
         Ref::Symbol(Symbol::qualified("stream/file", "read")),
         input,
         core_any_ref(),
@@ -35,7 +38,7 @@ pub(crate) fn write_file_with_effect(
     let path = path.as_ref().to_path_buf();
     let input = operation_input_ref(cx, "write", &path, Some(&bytes))?;
     let effect = Effect::new(
-        effect::effect_filesystem_kind(),
+        stream_file_filesystem_effect_kind(),
         Ref::Symbol(Symbol::qualified("stream/file", "write")),
         input,
         core_any_ref(),
