@@ -1,18 +1,5220 @@
 {
-  "schema": "sim.repo-contract.v1",
-  "repo": "sim-music",
-  "lanes": [
-    "target/doc/",
-    "docs/agents/cards.jsonl",
-    "docs/humans/",
-    "docs/diagrams/src/",
-    "docs/diagrams/generated/"
+  "card_count": 50,
+  "cards": [
+    {
+      "id": "browse/catalog",
+      "kind": "browse-root",
+      "owner": "workspace",
+      "summary": "root browse catalog"
+    },
+    {
+      "id": "cookbook/audio-synth",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-synth",
+      "summary": "Software synth preset, oscillator, envelope, and offline render data."
+    },
+    {
+      "id": "cookbook/audio-synth-ps3300",
+      "kind": "cookbook-recipe",
+      "owner": "recipes",
+      "summary": "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata."
+    },
+    {
+      "id": "cookbook/audio-synth-system55",
+      "kind": "cookbook-recipe",
+      "owner": "recipes",
+      "summary": "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence."
+    },
+    {
+      "id": "cookbook/audio-synth-system700",
+      "kind": "cookbook-recipe",
+      "owner": "recipes",
+      "summary": "System 700 module ids, main-console patch rendering, and synthetic fixtures."
+    },
+    {
+      "id": "cookbook/daw-session",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-daw-session",
+      "summary": "Portable DAW session, clip, render, and topology descriptors."
+    },
+    {
+      "id": "cookbook/midi-ble",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-ble",
+      "summary": "Bluetooth MIDI descriptor fixtures."
+    },
+    {
+      "id": "cookbook/midi-io",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-core",
+      "summary": "MIDI event, tempo, and metadata descriptors."
+    },
+    {
+      "id": "cookbook/midi-live",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-live",
+      "summary": "Live MIDI session descriptors using in-memory rings."
+    },
+    {
+      "id": "cookbook/midi-rtmidi",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-rtmidi",
+      "summary": "RtMidi backend descriptors with virtual and ALSA sequencer ports."
+    },
+    {
+      "id": "cookbook/midi-shapes",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-shapes",
+      "summary": "Citizen descriptor shapes for MIDI values."
+    },
+    {
+      "id": "cookbook/midi-smf",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-smf",
+      "summary": "Standard MIDI File structure and metadata descriptors."
+    },
+    {
+      "id": "cookbook/midi-sysex",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-sysex",
+      "summary": "System exclusive message descriptors."
+    },
+    {
+      "id": "cookbook/midi-wasm",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-midi-wasm-frame",
+      "summary": "Browser-safe MIDI facade descriptors."
+    },
+    {
+      "id": "cookbook/music-analysis",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-analysis",
+      "summary": "Pitch-class, histogram, and chord-window analysis descriptors."
+    },
+    {
+      "id": "cookbook/music-combinators",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-combinators",
+      "summary": "Sequence, parallel, repeat, and transform combinator descriptors."
+    },
+    {
+      "id": "cookbook/music-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-core",
+      "summary": "Score, melody, note, and duration descriptors."
+    },
+    {
+      "id": "cookbook/music-lift",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-lift",
+      "summary": "Lifting descriptors from MIDI-style tracks into music objects."
+    },
+    {
+      "id": "cookbook/music-lower",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-lower",
+      "summary": "Lowering descriptors from scores to MIDI-like tracks."
+    },
+    {
+      "id": "cookbook/music-notation",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-notation",
+      "summary": "Notation import and export descriptors."
+    },
+    {
+      "id": "cookbook/music-shapes",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-shapes",
+      "summary": "Citizen descriptor shapes for music objects."
+    },
+    {
+      "id": "cookbook/music-transform",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-transform",
+      "summary": "Pure music transformation descriptors."
+    },
+    {
+      "id": "cookbook/music-wasm",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-wasm-frame",
+      "summary": "Browser-safe music facade descriptors."
+    },
+    {
+      "id": "cookbook/pitch-chord",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-chord",
+      "summary": "Chord spelling and quality descriptors."
+    },
+    {
+      "id": "cookbook/pitch-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-core",
+      "summary": "Pitch values, names, MIDI notes, and frequency descriptors."
+    },
+    {
+      "id": "cookbook/pitch-dissonance",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-dissonance",
+      "summary": "Interval and set dissonance descriptors."
+    },
+    {
+      "id": "cookbook/pitch-namer",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-namer",
+      "summary": "Pitch and set naming registry descriptors."
+    },
+    {
+      "id": "cookbook/pitch-namer-forte",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-namer-forte",
+      "summary": "Forte-number descriptors for pitch-class sets."
+    },
+    {
+      "id": "cookbook/pitch-namer-jazz",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-namer-jazz",
+      "summary": "Jazz chord naming descriptors."
+    },
+    {
+      "id": "cookbook/pitch-namer-riemann",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-namer-riemann",
+      "summary": "Riemannian function descriptors."
+    },
+    {
+      "id": "cookbook/pitch-namer-roman",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-namer-roman",
+      "summary": "Roman numeral analysis descriptors."
+    },
+    {
+      "id": "cookbook/pitch-scale",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-scale",
+      "summary": "Scale and degree descriptors."
+    },
+    {
+      "id": "cookbook/pitch-set",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-set",
+      "summary": "Pitch-class sets, masks, and normal-form descriptors."
+    },
+    {
+      "id": "cookbook/pitch-shapes",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-shapes",
+      "summary": "Citizen descriptor shapes for pitch values."
+    },
+    {
+      "id": "cookbook/pitch-wasm",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-wasm-frame",
+      "summary": "Browser-safe pitch facade descriptors."
+    },
+    {
+      "id": "cookbook/sound-audio-lift",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-audio-lift",
+      "summary": "Descriptors that lift PCM into sound and music features."
+    },
+    {
+      "id": "cookbook/sound-bridge",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-bridge",
+      "summary": "Music and MIDI bridge descriptors for sound playback."
+    },
+    {
+      "id": "cookbook/sound-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-core",
+      "summary": "Tone, oscillator, and amplitude descriptors."
+    },
+    {
+      "id": "cookbook/sound-dissonance",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-dissonance",
+      "summary": "Roughness and spectrum-pair descriptors."
+    },
+    {
+      "id": "cookbook/sound-gm",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-gm",
+      "summary": "General MIDI bank and preset descriptors."
+    },
+    {
+      "id": "cookbook/sound-render",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-render",
+      "summary": "Offline PCM render descriptors."
+    },
+    {
+      "id": "cookbook/sound-shapes",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-shapes",
+      "summary": "Citizen descriptor shapes for sound objects."
+    },
+    {
+      "id": "cookbook/sound-spectrum",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-spectrum",
+      "summary": "Partial, centroid, and peak descriptors."
+    },
+    {
+      "id": "cookbook/sound-timbre",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-timbre",
+      "summary": "Timbre, filter, and envelope descriptors."
+    },
+    {
+      "id": "cookbook/sound-tuning",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-tuning",
+      "summary": "Tuning-system descriptors."
+    },
+    {
+      "id": "cookbook/sound-wasm",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-sound-wasm-frame",
+      "summary": "Browser-safe sound facade descriptors."
+    },
+    {
+      "id": "cookbook/stream-bridge",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-stream-bridge",
+      "summary": "Offline MIDI-to-PCM rendering and PCM-to-MIDI lifting descriptors."
+    },
+    {
+      "id": "cookbook/stream-file",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-stream-file",
+      "summary": "Capability-gated WAV and SMF stream adapters."
+    },
+    {
+      "id": "cookbook/stream-midi",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-stream-midi",
+      "summary": "MIDI packetization and memory stream adapters."
+    },
+    {
+      "id": "registry/catalog",
+      "kind": "browse-registry",
+      "owner": "workspace",
+      "summary": "registry catalog browse card"
+    }
   ],
-  "contracts": [
-    "docs/generated/provenance.json",
-    "docs/generated/repo-contract.json",
-    "docs/generated/rustdoc-index.json",
-    "docs/generated/card-index.json",
-    "docs/generated/feature-map.json"
+  "citizen_count": 0,
+  "citizens": [],
+  "generator": "xtask repo-contract v1",
+  "group_count": 1,
+  "group_order": [
+    "workspace"
+  ],
+  "groups": {
+    "workspace": [
+      "sim-lib-daw-session",
+      "sim-lib-midi-ble",
+      "sim-lib-midi-core",
+      "sim-lib-midi-live",
+      "sim-lib-midi-rtmidi",
+      "sim-lib-midi-shapes",
+      "sim-lib-midi-smf",
+      "sim-lib-midi-sysex",
+      "sim-lib-midi-wasm-frame",
+      "sim-lib-music-analysis",
+      "sim-lib-music-combinators",
+      "sim-lib-music-core",
+      "sim-lib-music-lift",
+      "sim-lib-music-lower",
+      "sim-lib-music-notation",
+      "sim-lib-music-shapes",
+      "sim-lib-music-synth",
+      "sim-lib-music-transform",
+      "sim-lib-music-wasm-frame",
+      "sim-lib-pitch-chord",
+      "sim-lib-pitch-core",
+      "sim-lib-pitch-dissonance",
+      "sim-lib-pitch-namer",
+      "sim-lib-pitch-namer-forte",
+      "sim-lib-pitch-namer-jazz",
+      "sim-lib-pitch-namer-riemann",
+      "sim-lib-pitch-namer-roman",
+      "sim-lib-pitch-scale",
+      "sim-lib-pitch-set",
+      "sim-lib-pitch-shapes",
+      "sim-lib-pitch-wasm-frame",
+      "sim-lib-sound-audio-lift",
+      "sim-lib-sound-bridge",
+      "sim-lib-sound-core",
+      "sim-lib-sound-dissonance",
+      "sim-lib-sound-gm",
+      "sim-lib-sound-render",
+      "sim-lib-sound-shapes",
+      "sim-lib-sound-spectrum",
+      "sim-lib-sound-timbre",
+      "sim-lib-sound-tuning",
+      "sim-lib-sound-wasm-frame",
+      "sim-lib-stream-bridge",
+      "sim-lib-stream-file",
+      "sim-lib-stream-midi",
+      "xtask"
+    ]
+  },
+  "non_citizen_exemption_count": 0,
+  "non_citizen_exemptions": [],
+  "package_count": 46,
+  "packages": [
+    {
+      "crate_name": "sim_lib_daw_session",
+      "dependencies": [],
+      "description": "Headless DAW session surface for SIM audio graph workspaces.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-daw-session/Cargo.toml",
+      "name": "sim-lib-daw-session",
+      "publish": "true",
+      "root": "crates/sim-lib-daw-session",
+      "rustdoc_summary": "Headless DAW session surface for SIM audio graph workspaces.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_daw_session",
+          "src": "crates/sim-lib-daw-session/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-daw-session/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_ble",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-midi-live",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-rtmidi",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "BLE-MIDI discovery, packet framing, and stream-host placement seams.",
+      "features": [
+        {
+          "edges": [
+            "dep:sim-lib-midi-live",
+            "dep:zbus"
+          ],
+          "name": "ble-midi-hardware",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-midi-live"
+            }
+          ]
+        },
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-ble/Cargo.toml",
+      "name": "sim-lib-midi-ble",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-ble",
+      "rustdoc_summary": "BLE-MIDI discovery, packet framing, and stream-host placement support.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_ble",
+          "src": "crates/sim-lib-midi-ble/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-ble/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_core",
+      "dependencies": [],
+      "description": "SIM workspace package for sim lib midi core.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-core/Cargo.toml",
+      "name": "sim-lib-midi-core",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-core",
+      "rustdoc_summary": "Core MIDI data model and in-memory I/O for the SIM music stack.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_core",
+          "src": "crates/sim-lib-midi-core/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-core/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_live",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib midi live.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-live/Cargo.toml",
+      "name": "sim-lib-midi-live",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-live",
+      "rustdoc_summary": "Real-time MIDI buffering for the SIM music stack.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_live",
+          "src": "crates/sim-lib-midi-live/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-live/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_rtmidi",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-midi-live",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Modeled RtMidi MIDI adapter surface for SIM (in-process simulation; no live MIDI hardware I/O).",
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:midir",
+            "dep:sim-lib-midi-live"
+          ],
+          "name": "rtmidi-hardware",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-midi-live"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-rtmidi/Cargo.toml",
+      "name": "sim-lib-midi-rtmidi",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-rtmidi",
+      "rustdoc_summary": "RtMidi MIDI adapter surface for SIM.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_rtmidi",
+          "src": "crates/sim-lib-midi-rtmidi/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-rtmidi/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_shapes",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib midi shapes.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-shapes/Cargo.toml",
+      "name": "sim-lib-midi-shapes",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-shapes",
+      "rustdoc_summary": "Shape and citizen surfaces that expose the MIDI model to the SIM runtime.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_shapes",
+          "src": "crates/sim-lib-midi-shapes/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-shapes/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_smf",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib midi smf.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-smf/Cargo.toml",
+      "name": "sim-lib-midi-smf",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-smf",
+      "rustdoc_summary": "Standard MIDI File (SMF) reading and writing for the SIM music stack.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_smf",
+          "src": "crates/sim-lib-midi-smf/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-smf/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_sysex",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib midi sysex.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-sysex/Cargo.toml",
+      "name": "sim-lib-midi-sysex",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-sysex",
+      "rustdoc_summary": "Typed views over MIDI system-exclusive (SysEx) messages.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_sysex",
+          "src": "crates/sim-lib-midi-sysex/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-sysex/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_midi_wasm_frame",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "MIDI binary-frame facade descriptors.",
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-wasm-frame/Cargo.toml",
+      "name": "sim-lib-midi-wasm-frame",
+      "publish": "true",
+      "root": "crates/sim-lib-midi-wasm-frame",
+      "rustdoc_summary": "MIDI binary-frame facade descriptors.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_midi_wasm_frame",
+          "src": "crates/sim-lib-midi-wasm-frame/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-midi-wasm-frame/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_analysis",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music analysis.",
+      "features": [
+        {
+          "edges": [],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-discrete-spectral"
+          ],
+          "name": "discrete-fwht",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-analysis/Cargo.toml",
+      "name": "sim-lib-music-analysis",
+      "publish": "true",
+      "root": "crates/sim-lib-music-analysis",
+      "rustdoc_summary": "Analysis of musical material for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_analysis",
+          "src": "crates/sim-lib-music-analysis/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-analysis/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_combinators",
+      "dependencies": [
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-pitch-chord",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-gm",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music combinators.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-combinators/Cargo.toml",
+      "name": "sim-lib-music-combinators",
+      "publish": "true",
+      "root": "crates/sim-lib-music-combinators",
+      "rustdoc_summary": "Composable music-transform combinators for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_combinators",
+          "src": "crates/sim-lib-music-combinators/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-combinators/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_core",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music core.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-core/Cargo.toml",
+      "name": "sim-lib-music-core",
+      "publish": "true",
+      "root": "crates/sim-lib-music-core",
+      "rustdoc_summary": "Core music model layer for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_core",
+          "src": "crates/sim-lib-music-core/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-core/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_lift",
+      "dependencies": [
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-analysis",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music lift.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-lift/Cargo.toml",
+      "name": "sim-lib-music-lift",
+      "publish": "true",
+      "root": "crates/sim-lib-music-lift",
+      "rustdoc_summary": "Lifts music from lower-level representations to higher-level ones.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_lift",
+          "src": "crates/sim-lib-music-lift/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-lift/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_lower",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music lower.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-lower/Cargo.toml",
+      "name": "sim-lib-music-lower",
+      "publish": "true",
+      "root": "crates/sim-lib-music-lower",
+      "rustdoc_summary": "Lowers music from higher-level representations to renderable ones.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_lower",
+          "src": "crates/sim-lib-music-lower/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-lower/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_notation",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music notation.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-notation/Cargo.toml",
+      "name": "sim-lib-music-notation",
+      "publish": "true",
+      "root": "crates/sim-lib-music-notation",
+      "rustdoc_summary": "Score and notation model for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_notation",
+          "src": "crates/sim-lib-music-notation/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-notation/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_shapes",
+      "dependencies": [
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-shapes",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-analysis",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-transform",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music shapes.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-shapes/Cargo.toml",
+      "name": "sim-lib-music-shapes",
+      "publish": "true",
+      "root": "crates/sim-lib-music-shapes",
+      "rustdoc_summary": "Shape protocol surfaces for SIM music types.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_shapes",
+          "src": "crates/sim-lib-music-shapes/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-shapes/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_synth",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-sysex",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Playable pure Rust software synthesizer primitives for the SIM audio graph.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-synth/Cargo.toml",
+      "name": "sim-lib-music-synth",
+      "publish": "true",
+      "root": "crates/sim-lib-music-synth",
+      "rustdoc_summary": "Playable pure-Rust software synthesizer primitives for the SIM audio graph.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_synth",
+          "src": "crates/sim-lib-music-synth/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-synth/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_transform",
+      "dependencies": [
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-chord",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib music transform.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-transform/Cargo.toml",
+      "name": "sim-lib-music-transform",
+      "publish": "true",
+      "root": "crates/sim-lib-music-transform",
+      "rustdoc_summary": "Music transformation layer for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_transform",
+          "src": "crates/sim-lib-music-transform/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-transform/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_wasm_frame",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-wasm-frame",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-analysis",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-shapes",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Music binary-frame facade descriptors.",
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-wasm-frame/Cargo.toml",
+      "name": "sim-lib-music-wasm-frame",
+      "publish": "true",
+      "root": "crates/sim-lib-music-wasm-frame",
+      "rustdoc_summary": "Music binary-frame facade descriptors.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_wasm_frame",
+          "src": "crates/sim-lib-music-wasm-frame/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-wasm-frame/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_chord",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer-roman",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch chord.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-chord/Cargo.toml",
+      "name": "sim-lib-pitch-chord",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-chord",
+      "rustdoc_summary": "Chords, voicings, and harmonic sequencing for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_chord",
+          "src": "crates/sim-lib-pitch-chord/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-chord/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_core",
+      "dependencies": [],
+      "description": "SIM workspace package for sim lib pitch core.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-core/Cargo.toml",
+      "name": "sim-lib-pitch-core",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-core",
+      "rustdoc_summary": "Core pitch theory primitives for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_core",
+          "src": "crates/sim-lib-pitch-core/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-core/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_dissonance",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch dissonance.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-dissonance/Cargo.toml",
+      "name": "sim-lib-pitch-dissonance",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-dissonance",
+      "rustdoc_summary": "Dissonance and harmonic-complexity scoring for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_dissonance",
+          "src": "crates/sim-lib-pitch-dissonance/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-dissonance/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-chord",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer-forte",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer-jazz",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer-riemann",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer-roman",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch namer.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer/Cargo.toml",
+      "name": "sim-lib-pitch-namer",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-namer",
+      "rustdoc_summary": "Multi-school cluster naming for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_namer",
+          "src": "crates/sim-lib-pitch-namer/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-namer/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_forte",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch namer forte.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-forte/Cargo.toml",
+      "name": "sim-lib-pitch-namer-forte",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-namer-forte",
+      "rustdoc_summary": "Forte set-class naming for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_namer_forte",
+          "src": "crates/sim-lib-pitch-namer-forte/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-namer-forte/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_jazz",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-chord",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch namer jazz.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-jazz/Cargo.toml",
+      "name": "sim-lib-pitch-namer-jazz",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-namer-jazz",
+      "rustdoc_summary": "Jazz chord-symbol naming for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_namer_jazz",
+          "src": "crates/sim-lib-pitch-namer-jazz/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-namer-jazz/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_riemann",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch namer riemann.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-riemann/Cargo.toml",
+      "name": "sim-lib-pitch-namer-riemann",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-namer-riemann",
+      "rustdoc_summary": "Neo-Riemannian / functional triad naming for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_namer_riemann",
+          "src": "crates/sim-lib-pitch-namer-riemann/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-namer-riemann/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_roman",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch namer roman.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-roman/Cargo.toml",
+      "name": "sim-lib-pitch-namer-roman",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-namer-roman",
+      "rustdoc_summary": "Roman-numeral harmonic analysis for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_namer_roman",
+          "src": "crates/sim-lib-pitch-namer-roman/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-namer-roman/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_scale",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch scale.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-scale/Cargo.toml",
+      "name": "sim-lib-pitch-scale",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-scale",
+      "rustdoc_summary": "Scales, modes, and scale-locking for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_scale",
+          "src": "crates/sim-lib-pitch-scale/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-scale/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_set",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch set.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-set/Cargo.toml",
+      "name": "sim-lib-pitch-set",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-set",
+      "rustdoc_summary": "Pitch-class set representations and operations for the SIM music libraries.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_set",
+          "src": "crates/sim-lib-pitch-set/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-set/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_shapes",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-chord",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib pitch shapes.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-shapes/Cargo.toml",
+      "name": "sim-lib-pitch-shapes",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-shapes",
+      "rustdoc_summary": "Citizen descriptors, text codecs, and runtime shapes for SIM pitch types.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_shapes",
+          "src": "crates/sim-lib-pitch-shapes/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-shapes/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_pitch_wasm_frame",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-shapes",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Pitch binary-frame facade descriptors.",
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-wasm-frame/Cargo.toml",
+      "name": "sim-lib-pitch-wasm-frame",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-wasm-frame",
+      "rustdoc_summary": "Pitch binary-frame facade descriptors.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_wasm_frame",
+          "src": "crates/sim-lib-pitch-wasm-frame/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-wasm-frame/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_audio_lift",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-music-analysis",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-spectrum",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound audio lift.",
+      "features": [
+        {
+          "edges": [],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-music-core",
+            "dep:sim-lib-music-analysis"
+          ],
+          "name": "sound-music",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-music-core"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-analysis"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-audio-lift/Cargo.toml",
+      "name": "sim-lib-sound-audio-lift",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-audio-lift",
+      "rustdoc_summary": "Audio-to-notes lifting for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_audio_lift",
+          "src": "crates/sim-lib-sound-audio-lift/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-audio-lift/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_bridge",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-timbre",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound bridge.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-bridge/Cargo.toml",
+      "name": "sim-lib-sound-bridge",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-bridge",
+      "rustdoc_summary": "MIDI-to-sound bridging for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_bridge",
+          "src": "crates/sim-lib-sound-bridge/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-bridge/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_core",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound core.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-core/Cargo.toml",
+      "name": "sim-lib-sound-core",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-core",
+      "rustdoc_summary": "Core sound primitives for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_core",
+          "src": "crates/sim-lib-sound-core/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-core/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_dissonance",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-spectrum",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound dissonance.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-dissonance/Cargo.toml",
+      "name": "sim-lib-sound-dissonance",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-dissonance",
+      "rustdoc_summary": "Psychoacoustic dissonance models for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_dissonance",
+          "src": "crates/sim-lib-sound-dissonance/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-dissonance/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_gm",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-bridge",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-timbre",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound gm.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-gm/Cargo.toml",
+      "name": "sim-lib-sound-gm",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-gm",
+      "rustdoc_summary": "General MIDI sound set for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_gm",
+          "src": "crates/sim-lib-sound-gm/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-gm/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_render",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-bridge",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound render.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-render/Cargo.toml",
+      "name": "sim-lib-sound-render",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-render",
+      "rustdoc_summary": "Sound rendering for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_render",
+          "src": "crates/sim-lib-sound-render/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-render/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_shapes",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-audio-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-bridge",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-render",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-spectrum",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-timbre",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound shapes.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-shapes/Cargo.toml",
+      "name": "sim-lib-sound-shapes",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-shapes",
+      "rustdoc_summary": "Sound-shape codec surface for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_shapes",
+          "src": "crates/sim-lib-sound-shapes/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-shapes/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_spectrum",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound spectrum.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-spectrum/Cargo.toml",
+      "name": "sim-lib-sound-spectrum",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-spectrum",
+      "rustdoc_summary": "Spectral analysis for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_spectrum",
+          "src": "crates/sim-lib-sound-spectrum/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-spectrum/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_timbre",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound timbre.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-timbre/Cargo.toml",
+      "name": "sim-lib-sound-timbre",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-timbre",
+      "rustdoc_summary": "Timbre models and spectral filters for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_timbre",
+          "src": "crates/sim-lib-sound-timbre/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-timbre/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_tuning",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for sim lib sound tuning.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-tuning/Cargo.toml",
+      "name": "sim-lib-sound-tuning",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-tuning",
+      "rustdoc_summary": "Tuning systems and temperaments for the SIM music constellation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_tuning",
+          "src": "crates/sim-lib-sound-tuning/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-tuning/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_sound_wasm_frame",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": true,
+          "package": "sim-lib-music-shapes",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-bridge",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-gm",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-render",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Sound binary-frame facade descriptors.",
+      "features": [
+        {
+          "edges": [
+            "sound-music",
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-music-core",
+            "dep:sim-lib-music-lower",
+            "dep:sim-lib-music-shapes"
+          ],
+          "name": "sound-music",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-music-core"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-lower"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-shapes"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-wasm-frame/Cargo.toml",
+      "name": "sim-lib-sound-wasm-frame",
+      "publish": "true",
+      "root": "crates/sim-lib-sound-wasm-frame",
+      "rustdoc_summary": "Sound binary-frame facade descriptors.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_sound_wasm_frame",
+          "src": "crates/sim-lib-sound-wasm-frame/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-sound-wasm-frame/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_stream_bridge",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-audio-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-bridge",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-gm",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-render",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-stream-midi",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "MIDI/audio bridge helpers for STREAM 6.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-bridge/Cargo.toml",
+      "name": "sim-lib-stream-bridge",
+      "publish": "true",
+      "root": "crates/sim-lib-stream-bridge",
+      "rustdoc_summary": "MIDI/audio bridge helpers for STREAM 6.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_stream_bridge",
+          "src": "crates/sim-lib-stream-bridge/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-stream-bridge/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_stream_file",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-stream-midi",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "File-backed source and sink adapters for STREAM 6.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-file/Cargo.toml",
+      "name": "sim-lib-stream-file",
+      "publish": "true",
+      "root": "crates/sim-lib-stream-file",
+      "rustdoc_summary": "File-backed source and sink adapters for STREAM 6.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_stream_file",
+          "src": "crates/sim-lib-stream-file/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-stream-file/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_stream_midi",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "MIDI source, sink, and stream-spine adapters for STREAM 6.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-midi/Cargo.toml",
+      "name": "sim-lib-stream-midi",
+      "publish": "true",
+      "root": "crates/sim-lib-stream-midi",
+      "rustdoc_summary": "MIDI source, sink, and stream-spine adapters.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_stream_midi",
+          "src": "crates/sim-lib-stream-midi/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-stream-midi/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "xtask",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-synth",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "SIM workspace package for xtask.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "xtask/Cargo.toml",
+      "name": "xtask",
+      "publish": "false",
+      "root": "xtask",
+      "rustdoc_summary": "SIM workspace package for xtask.",
+      "target_kinds": [
+        "bin"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "bin"
+          ],
+          "name": "xtask",
+          "src": "xtask/src/main.rs"
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "api_docs": "target/doc/",
+    "generated_by": "cargo run -p xtask -- simdoc",
+    "generation_timestamp": "2026-07-15T20:01:50+02:00",
+    "generator": "xtask repo-contract v1",
+    "git_commit": "b326ad6b810d5c0038d48b16c19c0a80472c04ba",
+    "repo": "sim-music",
+    "schema": "sim.provenance.v1",
+    "source_commit": "b326ad6b810d5c0038d48b16c19c0a80472c04ba",
+    "source_remote": "https://github.com/sim-nest/sim-music",
+    "validation_commands": [
+      "cargo fmt --all --check",
+      "cargo test",
+      "cargo clippy --all-targets -- -D warnings",
+      "cargo doc --no-deps",
+      "cargo run -p xtask -- simdoc --check",
+      "cargo run -p xtask -- check-file-sizes",
+      "cargo run -p xtask -- repo-contract --check --repo .",
+      "cargo run -p xtask -- validation-matrix --check --repo .",
+      "cargo run -p xtask -- crate-catalog --check --repo ."
+    ],
+    "workspace_hash": "ecacf38140acbb2b",
+    "workspace_hash_algorithm": "fnv1a64",
+    "workspace_hash_input_count": 626,
+    "workspace_hash_inputs": [
+      "Cargo.toml",
+      "crates/sim-lib-daw-session/Cargo.toml",
+      "crates/sim-lib-daw-session/build.rs",
+      "crates/sim-lib-daw-session/recipes/01-basics/offline-session/recipe.toml",
+      "crates/sim-lib-daw-session/recipes/02-performance-integration/golden-cassette-integration/recipe.toml",
+      "crates/sim-lib-daw-session/recipes/02-performance-integration/sup-instrument-performance/recipe.toml",
+      "crates/sim-lib-daw-session/recipes/book.toml",
+      "crates/sim-lib-daw-session/src/browse.rs",
+      "crates/sim-lib-daw-session/src/builder.rs",
+      "crates/sim-lib-daw-session/src/citizen.rs",
+      "crates/sim-lib-daw-session/src/codec.rs",
+      "crates/sim-lib-daw-session/src/expr_util.rs",
+      "crates/sim-lib-daw-session/src/integration.rs",
+      "crates/sim-lib-daw-session/src/integration_stream.rs",
+      "crates/sim-lib-daw-session/src/integration_tests.rs",
+      "crates/sim-lib-daw-session/src/lib.rs",
+      "crates/sim-lib-daw-session/src/model/clip.rs",
+      "crates/sim-lib-daw-session/src/model/instrument.rs",
+      "crates/sim-lib-daw-session/src/model/plugin.rs",
+      "crates/sim-lib-daw-session/src/model/track.rs",
+      "crates/sim-lib-daw-session/src/model.rs",
+      "crates/sim-lib-daw-session/src/prelude.rs",
+      "crates/sim-lib-daw-session/src/recipe_tests.rs",
+      "crates/sim-lib-daw-session/src/render.rs",
+      "crates/sim-lib-daw-session/src/runtime.rs",
+      "crates/sim-lib-daw-session/src/tests.rs",
+      "crates/sim-lib-daw-session/src/topology.rs",
+      "crates/sim-lib-midi-ble/Cargo.toml",
+      "crates/sim-lib-midi-ble/build.rs",
+      "crates/sim-lib-midi-ble/recipes/01-basics/ble-midi-smoke/recipe.toml",
+      "crates/sim-lib-midi-ble/recipes/01-basics/fixture-device/recipe.toml",
+      "crates/sim-lib-midi-ble/recipes/book.toml",
+      "crates/sim-lib-midi-ble/src/discovery.rs",
+      "crates/sim-lib-midi-ble/src/lib.rs",
+      "crates/sim-lib-midi-ble/src/model.rs",
+      "crates/sim-lib-midi-ble/src/native/bluez.rs",
+      "crates/sim-lib-midi-ble/src/native/packet.rs",
+      "crates/sim-lib-midi-ble/src/native.rs",
+      "crates/sim-lib-midi-ble/src/runtime.rs",
+      "crates/sim-lib-midi-ble/src/tests.rs",
+      "crates/sim-lib-midi-core/Cargo.toml",
+      "crates/sim-lib-midi-core/build.rs",
+      "crates/sim-lib-midi-core/recipes/01-basics/chord-digest/recipe.toml",
+      "crates/sim-lib-midi-core/recipes/01-basics/note-event/recipe.toml",
+      "crates/sim-lib-midi-core/recipes/book.toml",
+      "crates/sim-lib-midi-core/src/cc.rs",
+      "crates/sim-lib-midi-core/src/error.rs",
+      "crates/sim-lib-midi-core/src/frame_digest.rs",
+      "crates/sim-lib-midi-core/src/io.rs",
+      "crates/sim-lib-midi-core/src/lib.rs",
+      "crates/sim-lib-midi-core/src/meta_view.rs",
+      "crates/sim-lib-midi-core/src/model.rs",
+      "crates/sim-lib-midi-core/src/player.rs",
+      "crates/sim-lib-midi-core/src/runtime.rs",
+      "crates/sim-lib-midi-core/src/tempo.rs",
+      "crates/sim-lib-midi-core/src/tests.rs",
+      "crates/sim-lib-midi-core/src/wire.rs",
+      "crates/sim-lib-midi-live/Cargo.toml",
+      "crates/sim-lib-midi-live/build.rs",
+      "crates/sim-lib-midi-live/recipes/01-basics/memory-ring/recipe.toml",
+      "crates/sim-lib-midi-live/recipes/book.toml",
+      "crates/sim-lib-midi-live/src/error.rs",
+      "crates/sim-lib-midi-live/src/lib.rs",
+      "crates/sim-lib-midi-live/src/ring.rs",
+      "crates/sim-lib-midi-live/src/runtime.rs",
+      "crates/sim-lib-midi-live/src/session.rs",
+      "crates/sim-lib-midi-live/src/tests.rs",
+      "crates/sim-lib-midi-rtmidi/Cargo.toml",
+      "crates/sim-lib-midi-rtmidi/build.rs",
+      "crates/sim-lib-midi-rtmidi/recipes/01-basics/alsa-seq-smoke/recipe.toml",
+      "crates/sim-lib-midi-rtmidi/recipes/01-basics/virtual-port/recipe.toml",
+      "crates/sim-lib-midi-rtmidi/recipes/book.toml",
+      "crates/sim-lib-midi-rtmidi/src/alsa_provider.rs",
+      "crates/sim-lib-midi-rtmidi/src/backend.rs",
+      "crates/sim-lib-midi-rtmidi/src/fixture.rs",
+      "crates/sim-lib-midi-rtmidi/src/io.rs",
+      "crates/sim-lib-midi-rtmidi/src/lib.rs",
+      "crates/sim-lib-midi-rtmidi/src/model.rs",
+      "crates/sim-lib-midi-rtmidi/src/native.rs",
+      "crates/sim-lib-midi-rtmidi/src/runtime.rs",
+      "crates/sim-lib-midi-rtmidi/src/tests.rs",
+      "crates/sim-lib-midi-shapes/Cargo.toml",
+      "crates/sim-lib-midi-shapes/build.rs",
+      "crates/sim-lib-midi-shapes/recipes/01-basics/shape-family/recipe.toml",
+      "crates/sim-lib-midi-shapes/recipes/book.toml",
+      "crates/sim-lib-midi-shapes/src/citizen.rs",
+      "crates/sim-lib-midi-shapes/src/codec.rs",
+      "crates/sim-lib-midi-shapes/src/lib.rs",
+      "crates/sim-lib-midi-shapes/src/runtime.rs",
+      "crates/sim-lib-midi-shapes/src/tests.rs",
+      "crates/sim-lib-midi-smf/Cargo.toml",
+      "crates/sim-lib-midi-smf/build.rs",
+      "crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml",
+      "crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml",
+      "crates/sim-lib-midi-smf/recipes/02-export-fixtures/unsupported-export-failure/recipe.toml",
+      "crates/sim-lib-midi-smf/recipes/book.toml",
+      "crates/sim-lib-midi-smf/src/error.rs",
+      "crates/sim-lib-midi-smf/src/lib.rs",
+      "crates/sim-lib-midi-smf/src/model.rs",
+      "crates/sim-lib-midi-smf/src/reader.rs",
+      "crates/sim-lib-midi-smf/src/recipe_tests.rs",
+      "crates/sim-lib-midi-smf/src/tests.rs",
+      "crates/sim-lib-midi-smf/src/vlq.rs",
+      "crates/sim-lib-midi-smf/src/writer.rs",
+      "crates/sim-lib-midi-sysex/Cargo.toml",
+      "crates/sim-lib-midi-sysex/build.rs",
+      "crates/sim-lib-midi-sysex/recipes/01-basics/test-message/recipe.toml",
+      "crates/sim-lib-midi-sysex/recipes/book.toml",
+      "crates/sim-lib-midi-sysex/src/dx7.rs",
+      "crates/sim-lib-midi-sysex/src/lib.rs",
+      "crates/sim-lib-midi-sysex/src/model.rs",
+      "crates/sim-lib-midi-sysex/src/tests.rs",
+      "crates/sim-lib-midi-wasm-frame/Cargo.toml",
+      "crates/sim-lib-midi-wasm-frame/build.rs",
+      "crates/sim-lib-midi-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+      "crates/sim-lib-midi-wasm-frame/recipes/book.toml",
+      "crates/sim-lib-midi-wasm-frame/src/lib.rs",
+      "crates/sim-lib-midi-wasm-frame/src/model.rs",
+      "crates/sim-lib-midi-wasm-frame/src/tests.rs",
+      "crates/sim-lib-music-analysis/Cargo.toml",
+      "crates/sim-lib-music-analysis/build.rs",
+      "crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml",
+      "crates/sim-lib-music-analysis/recipes/book.toml",
+      "crates/sim-lib-music-analysis/src/lib.rs",
+      "crates/sim-lib-music-analysis/src/model.rs",
+      "crates/sim-lib-music-analysis/src/tests.rs",
+      "crates/sim-lib-music-analysis/src/walsh.rs",
+      "crates/sim-lib-music-combinators/Cargo.toml",
+      "crates/sim-lib-music-combinators/build.rs",
+      "crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/02-player-recipes/bassline-chord-sup/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/02-player-recipes/beat-map-gm-smf/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/02-player-recipes/keyboard-scales-dual-arp/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/book.toml",
+      "crates/sim-lib-music-combinators/src/arp_lab.rs",
+      "crates/sim-lib-music-combinators/src/arpeggio.rs",
+      "crates/sim-lib-music-combinators/src/bassline.rs",
+      "crates/sim-lib-music-combinators/src/beat_map.rs",
+      "crates/sim-lib-music-combinators/src/builders.rs",
+      "crates/sim-lib-music-combinators/src/drum.rs",
+      "crates/sim-lib-music-combinators/src/euclid.rs",
+      "crates/sim-lib-music-combinators/src/lib.rs",
+      "crates/sim-lib-music-combinators/src/player.rs",
+      "crates/sim-lib-music-combinators/src/polystep.rs",
+      "crates/sim-lib-music-combinators/src/quad_note.rs",
+      "crates/sim-lib-music-combinators/src/recipe_tests.rs",
+      "crates/sim-lib-music-combinators/src/tests.rs",
+      "crates/sim-lib-music-core/Cargo.toml",
+      "crates/sim-lib-music-core/build.rs",
+      "crates/sim-lib-music-core/recipes/01-basics/melody-note/recipe.toml",
+      "crates/sim-lib-music-core/recipes/02-golden-fixtures/captured-take-direct-record/recipe.toml",
+      "crates/sim-lib-music-core/recipes/02-golden-fixtures/lfo-player-instrument-params/recipe.toml",
+      "crates/sim-lib-music-core/recipes/02-golden-fixtures/missing-capability-failure/recipe.toml",
+      "crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/recipe.toml",
+      "crates/sim-lib-music-core/recipes/book.toml",
+      "crates/sim-lib-music-core/src/arranger.rs",
+      "crates/sim-lib-music-core/src/arranger_expr.rs",
+      "crates/sim-lib-music-core/src/arranger_music_expr.rs",
+      "crates/sim-lib-music-core/src/arranger_render.rs",
+      "crates/sim-lib-music-core/src/arranger_tests.rs",
+      "crates/sim-lib-music-core/src/browse.rs",
+      "crates/sim-lib-music-core/src/citizen.rs",
+      "crates/sim-lib-music-core/src/descriptor.rs",
+      "crates/sim-lib-music-core/src/descriptor_defaults.rs",
+      "crates/sim-lib-music-core/src/descriptor_modulators.rs",
+      "crates/sim-lib-music-core/src/descriptor_step_players.rs",
+      "crates/sim-lib-music-core/src/event.rs",
+      "crates/sim-lib-music-core/src/freeze.rs",
+      "crates/sim-lib-music-core/src/lane.rs",
+      "crates/sim-lib-music-core/src/lib.rs",
+      "crates/sim-lib-music-core/src/model.rs",
+      "crates/sim-lib-music-core/src/objects.rs",
+      "crates/sim-lib-music-core/src/performance.rs",
+      "crates/sim-lib-music-core/src/performance_intent.rs",
+      "crates/sim-lib-music-core/src/performance_source.rs",
+      "crates/sim-lib-music-core/src/performance_take.rs",
+      "crates/sim-lib-music-core/src/performance_tests.rs",
+      "crates/sim-lib-music-core/src/piano_roll.rs",
+      "crates/sim-lib-music-core/src/piano_roll_tests.rs",
+      "crates/sim-lib-music-core/src/playable.rs",
+      "crates/sim-lib-music-core/src/player.rs",
+      "crates/sim-lib-music-core/src/player_chain.rs",
+      "crates/sim-lib-music-core/src/player_tests.rs",
+      "crates/sim-lib-music-core/src/recipe_tests.rs",
+      "crates/sim-lib-music-core/src/registry.rs",
+      "crates/sim-lib-music-core/src/registry_tests.rs",
+      "crates/sim-lib-music-core/src/tests.rs",
+      "crates/sim-lib-music-core/src/time.rs",
+      "crates/sim-lib-music-core/src/trace.rs",
+      "crates/sim-lib-music-lift/Cargo.toml",
+      "crates/sim-lib-music-lift/build.rs",
+      "crates/sim-lib-music-lift/recipes/01-basics/from-midi-track/recipe.toml",
+      "crates/sim-lib-music-lift/recipes/book.toml",
+      "crates/sim-lib-music-lift/src/collect.rs",
+      "crates/sim-lib-music-lift/src/counterpoint.rs",
+      "crates/sim-lib-music-lift/src/lib.rs",
+      "crates/sim-lib-music-lift/src/model.rs",
+      "crates/sim-lib-music-lift/src/progression.rs",
+      "crates/sim-lib-music-lift/src/runtime.rs",
+      "crates/sim-lib-music-lift/src/tests.rs",
+      "crates/sim-lib-music-lower/Cargo.toml",
+      "crates/sim-lib-music-lower/build.rs",
+      "crates/sim-lib-music-lower/recipes/01-basics/to-midi-track/recipe.toml",
+      "crates/sim-lib-music-lower/recipes/book.toml",
+      "crates/sim-lib-music-lower/src/lib.rs",
+      "crates/sim-lib-music-lower/src/model.rs",
+      "crates/sim-lib-music-lower/src/piano_roll.rs",
+      "crates/sim-lib-music-lower/src/tests.rs",
+      "crates/sim-lib-music-notation/Cargo.toml",
+      "crates/sim-lib-music-notation/build.rs",
+      "crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml",
+      "crates/sim-lib-music-notation/recipes/book.toml",
+      "crates/sim-lib-music-notation/src/export.rs",
+      "crates/sim-lib-music-notation/src/import.rs",
+      "crates/sim-lib-music-notation/src/lib.rs",
+      "crates/sim-lib-music-notation/src/model.rs",
+      "crates/sim-lib-music-notation/src/runtime.rs",
+      "crates/sim-lib-music-notation/src/spell.rs",
+      "crates/sim-lib-music-notation/src/tests.rs",
+      "crates/sim-lib-music-shapes/Cargo.toml",
+      "crates/sim-lib-music-shapes/build.rs",
+      "crates/sim-lib-music-shapes/recipes/01-basics/shape-family/recipe.toml",
+      "crates/sim-lib-music-shapes/recipes/book.toml",
+      "crates/sim-lib-music-shapes/src/citizen.rs",
+      "crates/sim-lib-music-shapes/src/codec/analysis.rs",
+      "crates/sim-lib-music-shapes/src/codec/encode_arranger.rs",
+      "crates/sim-lib-music-shapes/src/codec/filter.rs",
+      "crates/sim-lib-music-shapes/src/codec/lift.rs",
+      "crates/sim-lib-music-shapes/src/codec/parse.rs",
+      "crates/sim-lib-music-shapes/src/codec.rs",
+      "crates/sim-lib-music-shapes/src/lib.rs",
+      "crates/sim-lib-music-shapes/src/runtime.rs",
+      "crates/sim-lib-music-shapes/src/tests/custom_filter.rs",
+      "crates/sim-lib-music-shapes/src/tests.rs",
+      "crates/sim-lib-music-synth/Cargo.toml",
+      "crates/sim-lib-music-synth/build.rs",
+      "crates/sim-lib-music-synth/recipes/01-basics/subtractive-preset/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/book.toml",
+      "crates/sim-lib-music-synth/recipes/placement/all-local/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/placement/browser-wasm-local/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/placement/voice-local-lan-preview/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/placement/voice-local-server-fx/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/ps3300/book.toml",
+      "crates/sim-lib-music-synth/recipes/ps3300/synthetic-polyphonic-patch/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/streaming/dx7-local-stream/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/streaming/generic-instrument-stream/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/streaming/modular-local-stream/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/system55/book.toml",
+      "crates/sim-lib-music-synth/recipes/system55/synthetic-voice/recipe.toml",
+      "crates/sim-lib-music-synth/recipes/system700/book.toml",
+      "crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/recipe.toml",
+      "crates/sim-lib-music-synth/src/algorithm.rs",
+      "crates/sim-lib-music-synth/src/backend.rs",
+      "crates/sim-lib-music-synth/src/builder.rs",
+      "crates/sim-lib-music-synth/src/citizen.rs",
+      "crates/sim-lib-music-synth/src/component.rs",
+      "crates/sim-lib-music-synth/src/cv.rs",
+      "crates/sim-lib-music-synth/src/dac_float.rs",
+      "crates/sim-lib-music-synth/src/daw.rs",
+      "crates/sim-lib-music-synth/src/dsp_fixed.rs",
+      "crates/sim-lib-music-synth/src/dx7.rs",
+      "crates/sim-lib-music-synth/src/dx7_envelope.rs",
+      "crates/sim-lib-music-synth/src/dx7_fixture.rs",
+      "crates/sim-lib-music-synth/src/dx7_inspection.rs",
+      "crates/sim-lib-music-synth/src/dx7_lfo.rs",
+      "crates/sim-lib-music-synth/src/dx7_operator.rs",
+      "crates/sim-lib-music-synth/src/dx7_patch.rs",
+      "crates/sim-lib-music-synth/src/dx7_pitch.rs",
+      "crates/sim-lib-music-synth/src/dx7_scaling.rs",
+      "crates/sim-lib-music-synth/src/dx7_velocity.rs",
+      "crates/sim-lib-music-synth/src/editor.rs",
+      "crates/sim-lib-music-synth/src/egs.rs",
+      "crates/sim-lib-music-synth/src/envelope.rs",
+      "crates/sim-lib-music-synth/src/exports.rs",
+      "crates/sim-lib-music-synth/src/fixture.rs",
+      "crates/sim-lib-music-synth/src/graph_host.rs",
+      "crates/sim-lib-music-synth/src/lfo.rs",
+      "crates/sim-lib-music-synth/src/lib.rs",
+      "crates/sim-lib-music-synth/src/lut.rs",
+      "crates/sim-lib-music-synth/src/modeled.rs",
+      "crates/sim-lib-music-synth/src/modulation.rs",
+      "crates/sim-lib-music-synth/src/modulator/generator.rs",
+      "crates/sim-lib-music-synth/src/modulator.rs",
+      "crates/sim-lib-music-synth/src/modules/clock.rs",
+      "crates/sim-lib-music-synth/src/modules/common.rs",
+      "crates/sim-lib-music-synth/src/modules/coupler.rs",
+      "crates/sim-lib-music-synth/src/modules/envelope.rs",
+      "crates/sim-lib-music-synth/src/modules/extin.rs",
+      "crates/sim-lib-music-synth/src/modules/hpf.rs",
+      "crates/sim-lib-music-synth/src/modules/keyboard.rs",
+      "crates/sim-lib-music-synth/src/modules/ladder.rs",
+      "crates/sim-lib-music-synth/src/modules/lfo.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_amp_control/components.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_amp_control.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_noise.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_play_control.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_sample_control.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_spectral_utility.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_utility.rs",
+      "crates/sim-lib-music-synth/src/modules/m55_vco.rs",
+      "crates/sim-lib-music-synth/src/modules/mixer.rs",
+      "crates/sim-lib-music-synth/src/modules/mult.rs",
+      "crates/sim-lib-music-synth/src/modules/noise.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_cell/components.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_cell.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_keyboard.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_matrix.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_modulation/components.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_modulation.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_noise.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_resonator.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_section.rs",
+      "crates/sim-lib-music-synth/src/modules/ps3_tonegen.rs",
+      "crates/sim-lib-music-synth/src/modules/ring.rs",
+      "crates/sim-lib-music-synth/src/modules/sample_hold.rs",
+      "crates/sim-lib-music-synth/src/modules/sequencer.rs",
+      "crates/sim-lib-music-synth/src/modules/vca.rs",
+      "crates/sim-lib-music-synth/src/modules/vcf.rs",
+      "crates/sim-lib-music-synth/src/modules/vco.rs",
+      "crates/sim-lib-music-synth/src/modules/vco_driver.rs",
+      "crates/sim-lib-music-synth/src/modules/vproc.rs",
+      "crates/sim-lib-music-synth/src/modules.rs",
+      "crates/sim-lib-music-synth/src/ops.rs",
+      "crates/sim-lib-music-synth/src/oscillator.rs",
+      "crates/sim-lib-music-synth/src/param.rs",
+      "crates/sim-lib-music-synth/src/patch.rs",
+      "crates/sim-lib-music-synth/src/poly.rs",
+      "crates/sim-lib-music-synth/src/port.rs",
+      "crates/sim-lib-music-synth/src/preset.rs",
+      "crates/sim-lib-music-synth/src/processor.rs",
+      "crates/sim-lib-music-synth/src/ps3300/patch.rs",
+      "crates/sim-lib-music-synth/src/ps3300.rs",
+      "crates/sim-lib-music-synth/src/ps3300_fixture.rs",
+      "crates/sim-lib-music-synth/src/ps3300_patch.rs",
+      "crates/sim-lib-music-synth/src/ps3300_wrapper.rs",
+      "crates/sim-lib-music-synth/src/registry/entries.rs",
+      "crates/sim-lib-music-synth/src/registry.rs",
+      "crates/sim-lib-music-synth/src/registry_ps3300.rs",
+      "crates/sim-lib-music-synth/src/registry_system55.rs",
+      "crates/sim-lib-music-synth/src/runtime.rs",
+      "crates/sim-lib-music-synth/src/system55/patch.rs",
+      "crates/sim-lib-music-synth/src/system55.rs",
+      "crates/sim-lib-music-synth/src/system55_fixture.rs",
+      "crates/sim-lib-music-synth/src/system55_patch.rs",
+      "crates/sim-lib-music-synth/src/system55_wrapper.rs",
+      "crates/sim-lib-music-synth/src/system700.rs",
+      "crates/sim-lib-music-synth/src/system700_fixture.rs",
+      "crates/sim-lib-music-synth/src/system700_wrapper.rs",
+      "crates/sim-lib-music-synth/src/tests/cv.rs",
+      "crates/sim-lib-music-synth/src/tests/daw.rs",
+      "crates/sim-lib-music-synth/src/tests/dx7.rs",
+      "crates/sim-lib-music-synth/src/tests/dx7_modeled.rs",
+      "crates/sim-lib-music-synth/src/tests/dx7_operator.rs",
+      "crates/sim-lib-music-synth/src/tests/dx7_patch.rs",
+      "crates/sim-lib-music-synth/src/tests/editor.rs",
+      "crates/sim-lib-music-synth/src/tests/fixed.rs",
+      "crates/sim-lib-music-synth/src/tests/graph_host.rs",
+      "crates/sim-lib-music-synth/src/tests/modulator.rs",
+      "crates/sim-lib-music-synth/src/tests/patch.rs",
+      "crates/sim-lib-music-synth/src/tests/poly.rs",
+      "crates/sim-lib-music-synth/src/tests/ps3300.rs",
+      "crates/sim-lib-music-synth/src/tests/ps3300_cell.rs",
+      "crates/sim-lib-music-synth/src/tests/ps3300_control.rs",
+      "crates/sim-lib-music-synth/src/tests/ps3300_tone.rs",
+      "crates/sim-lib-music-synth/src/tests/ps3300_wrapper.rs",
+      "crates/sim-lib-music-synth/src/tests/registry.rs",
+      "crates/sim-lib-music-synth/src/tests/system55.rs",
+      "crates/sim-lib-music-synth/src/tests/system55_control.rs",
+      "crates/sim-lib-music-synth/src/tests/system55_filter.rs",
+      "crates/sim-lib-music-synth/src/tests/system55_oscillator.rs",
+      "crates/sim-lib-music-synth/src/tests/system55_wrapper.rs",
+      "crates/sim-lib-music-synth/src/tests/system700.rs",
+      "crates/sim-lib-music-synth/src/tests/system700_control.rs",
+      "crates/sim-lib-music-synth/src/tests/system700_shaper.rs",
+      "crates/sim-lib-music-synth/src/tests/system700_wrapper.rs",
+      "crates/sim-lib-music-synth/src/tests.rs",
+      "crates/sim-lib-music-synth/src/trace.rs",
+      "crates/sim-lib-music-synth/src/voice.rs",
+      "crates/sim-lib-music-transform/Cargo.toml",
+      "crates/sim-lib-music-transform/build.rs",
+      "crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/recipe.toml",
+      "crates/sim-lib-music-transform/recipes/book.toml",
+      "crates/sim-lib-music-transform/src/arranger.rs",
+      "crates/sim-lib-music-transform/src/diagnostic.rs",
+      "crates/sim-lib-music-transform/src/filter.rs",
+      "crates/sim-lib-music-transform/src/filter_eval.rs",
+      "crates/sim-lib-music-transform/src/lib.rs",
+      "crates/sim-lib-music-transform/src/model.rs",
+      "crates/sim-lib-music-transform/src/mutator/ops.rs",
+      "crates/sim-lib-music-transform/src/mutator/rng.rs",
+      "crates/sim-lib-music-transform/src/mutator/wire.rs",
+      "crates/sim-lib-music-transform/src/mutator.rs",
+      "crates/sim-lib-music-transform/src/player.rs",
+      "crates/sim-lib-music-transform/src/remap.rs",
+      "crates/sim-lib-music-transform/src/tests/filter.rs",
+      "crates/sim-lib-music-transform/src/tests.rs",
+      "crates/sim-lib-music-wasm-frame/Cargo.toml",
+      "crates/sim-lib-music-wasm-frame/build.rs",
+      "crates/sim-lib-music-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+      "crates/sim-lib-music-wasm-frame/recipes/book.toml",
+      "crates/sim-lib-music-wasm-frame/src/lib.rs",
+      "crates/sim-lib-music-wasm-frame/src/model.rs",
+      "crates/sim-lib-music-wasm-frame/src/tests.rs",
+      "crates/sim-lib-pitch-chord/Cargo.toml",
+      "crates/sim-lib-pitch-chord/build.rs",
+      "crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml",
+      "crates/sim-lib-pitch-chord/recipes/book.toml",
+      "crates/sim-lib-pitch-chord/src/lib.rs",
+      "crates/sim-lib-pitch-chord/src/model.rs",
+      "crates/sim-lib-pitch-chord/src/player.rs",
+      "crates/sim-lib-pitch-chord/src/sequencer.rs",
+      "crates/sim-lib-pitch-chord/src/suggest.rs",
+      "crates/sim-lib-pitch-chord/src/tests.rs",
+      "crates/sim-lib-pitch-chord/src/voicing.rs",
+      "crates/sim-lib-pitch-core/Cargo.toml",
+      "crates/sim-lib-pitch-core/build.rs",
+      "crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml",
+      "crates/sim-lib-pitch-core/recipes/book.toml",
+      "crates/sim-lib-pitch-core/src/lib.rs",
+      "crates/sim-lib-pitch-core/src/model.rs",
+      "crates/sim-lib-pitch-core/src/tests.rs",
+      "crates/sim-lib-pitch-dissonance/Cargo.toml",
+      "crates/sim-lib-pitch-dissonance/build.rs",
+      "crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/recipe.toml",
+      "crates/sim-lib-pitch-dissonance/recipes/book.toml",
+      "crates/sim-lib-pitch-dissonance/src/lib.rs",
+      "crates/sim-lib-pitch-dissonance/src/model.rs",
+      "crates/sim-lib-pitch-dissonance/src/runtime.rs",
+      "crates/sim-lib-pitch-dissonance/src/tests.rs",
+      "crates/sim-lib-pitch-namer/Cargo.toml",
+      "crates/sim-lib-pitch-namer/build.rs",
+      "crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/recipe.toml",
+      "crates/sim-lib-pitch-namer/recipes/book.toml",
+      "crates/sim-lib-pitch-namer/src/lib.rs",
+      "crates/sim-lib-pitch-namer/src/registry.rs",
+      "crates/sim-lib-pitch-namer/src/runtime.rs",
+      "crates/sim-lib-pitch-namer/src/set_theory.rs",
+      "crates/sim-lib-pitch-namer/src/tests.rs",
+      "crates/sim-lib-pitch-namer/src/types.rs",
+      "crates/sim-lib-pitch-namer-forte/Cargo.toml",
+      "crates/sim-lib-pitch-namer-forte/build.rs",
+      "crates/sim-lib-pitch-namer-forte/recipes/01-basics/forte-number/recipe.toml",
+      "crates/sim-lib-pitch-namer-forte/recipes/book.toml",
+      "crates/sim-lib-pitch-namer-forte/src/lib.rs",
+      "crates/sim-lib-pitch-namer-forte/src/table.rs",
+      "crates/sim-lib-pitch-namer-forte/src/tests.rs",
+      "crates/sim-lib-pitch-namer-jazz/Cargo.toml",
+      "crates/sim-lib-pitch-namer-jazz/build.rs",
+      "crates/sim-lib-pitch-namer-jazz/recipes/01-basics/chord-symbol/recipe.toml",
+      "crates/sim-lib-pitch-namer-jazz/recipes/book.toml",
+      "crates/sim-lib-pitch-namer-jazz/src/lib.rs",
+      "crates/sim-lib-pitch-namer-jazz/src/model.rs",
+      "crates/sim-lib-pitch-namer-jazz/src/parser.rs",
+      "crates/sim-lib-pitch-namer-jazz/src/tests.rs",
+      "crates/sim-lib-pitch-namer-riemann/Cargo.toml",
+      "crates/sim-lib-pitch-namer-riemann/build.rs",
+      "crates/sim-lib-pitch-namer-riemann/recipes/01-basics/tonic-function/recipe.toml",
+      "crates/sim-lib-pitch-namer-riemann/recipes/book.toml",
+      "crates/sim-lib-pitch-namer-riemann/src/lib.rs",
+      "crates/sim-lib-pitch-namer-roman/Cargo.toml",
+      "crates/sim-lib-pitch-namer-roman/build.rs",
+      "crates/sim-lib-pitch-namer-roman/recipes/01-basics/dominant-seven/recipe.toml",
+      "crates/sim-lib-pitch-namer-roman/recipes/book.toml",
+      "crates/sim-lib-pitch-namer-roman/src/lib.rs",
+      "crates/sim-lib-pitch-scale/Cargo.toml",
+      "crates/sim-lib-pitch-scale/build.rs",
+      "crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml",
+      "crates/sim-lib-pitch-scale/recipes/book.toml",
+      "crates/sim-lib-pitch-scale/src/lib.rs",
+      "crates/sim-lib-pitch-scale/src/model.rs",
+      "crates/sim-lib-pitch-scale/src/player.rs",
+      "crates/sim-lib-pitch-scale/src/tests.rs",
+      "crates/sim-lib-pitch-set/Cargo.toml",
+      "crates/sim-lib-pitch-set/build.rs",
+      "crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml",
+      "crates/sim-lib-pitch-set/recipes/book.toml",
+      "crates/sim-lib-pitch-set/src/lib.rs",
+      "crates/sim-lib-pitch-set/src/model.rs",
+      "crates/sim-lib-pitch-set/src/tests.rs",
+      "crates/sim-lib-pitch-shapes/Cargo.toml",
+      "crates/sim-lib-pitch-shapes/build.rs",
+      "crates/sim-lib-pitch-shapes/recipes/01-basics/shape-family/recipe.toml",
+      "crates/sim-lib-pitch-shapes/recipes/book.toml",
+      "crates/sim-lib-pitch-shapes/src/citizen.rs",
+      "crates/sim-lib-pitch-shapes/src/codec.rs",
+      "crates/sim-lib-pitch-shapes/src/lib.rs",
+      "crates/sim-lib-pitch-shapes/src/runtime.rs",
+      "crates/sim-lib-pitch-shapes/src/tests.rs",
+      "crates/sim-lib-pitch-wasm-frame/Cargo.toml",
+      "crates/sim-lib-pitch-wasm-frame/build.rs",
+      "crates/sim-lib-pitch-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+      "crates/sim-lib-pitch-wasm-frame/recipes/book.toml",
+      "crates/sim-lib-pitch-wasm-frame/src/lib.rs",
+      "crates/sim-lib-pitch-wasm-frame/src/model.rs",
+      "crates/sim-lib-pitch-wasm-frame/src/tests.rs",
+      "crates/sim-lib-sound-audio-lift/Cargo.toml",
+      "crates/sim-lib-sound-audio-lift/build.rs",
+      "crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml",
+      "crates/sim-lib-sound-audio-lift/recipes/book.toml",
+      "crates/sim-lib-sound-audio-lift/src/lib.rs",
+      "crates/sim-lib-sound-audio-lift/src/model.rs",
+      "crates/sim-lib-sound-audio-lift/src/music.rs",
+      "crates/sim-lib-sound-audio-lift/src/pipeline.rs",
+      "crates/sim-lib-sound-audio-lift/src/runtime.rs",
+      "crates/sim-lib-sound-audio-lift/src/tests.rs",
+      "crates/sim-lib-sound-bridge/Cargo.toml",
+      "crates/sim-lib-sound-bridge/build.rs",
+      "crates/sim-lib-sound-bridge/recipes/01-basics/gm-voice/recipe.toml",
+      "crates/sim-lib-sound-bridge/recipes/book.toml",
+      "crates/sim-lib-sound-bridge/src/bank.rs",
+      "crates/sim-lib-sound-bridge/src/bridge.rs",
+      "crates/sim-lib-sound-bridge/src/error.rs",
+      "crates/sim-lib-sound-bridge/src/lib.rs",
+      "crates/sim-lib-sound-bridge/src/pool.rs",
+      "crates/sim-lib-sound-bridge/src/runtime.rs",
+      "crates/sim-lib-sound-bridge/src/tests.rs",
+      "crates/sim-lib-sound-core/Cargo.toml",
+      "crates/sim-lib-sound-core/build.rs",
+      "crates/sim-lib-sound-core/recipes/01-basics/sine-tone/recipe.toml",
+      "crates/sim-lib-sound-core/recipes/book.toml",
+      "crates/sim-lib-sound-core/src/lib.rs",
+      "crates/sim-lib-sound-core/src/model.rs",
+      "crates/sim-lib-sound-core/src/tests.rs",
+      "crates/sim-lib-sound-dissonance/Cargo.toml",
+      "crates/sim-lib-sound-dissonance/build.rs",
+      "crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml",
+      "crates/sim-lib-sound-dissonance/recipes/book.toml",
+      "crates/sim-lib-sound-dissonance/src/lib.rs",
+      "crates/sim-lib-sound-dissonance/src/model.rs",
+      "crates/sim-lib-sound-dissonance/src/runtime.rs",
+      "crates/sim-lib-sound-dissonance/src/tests.rs",
+      "crates/sim-lib-sound-gm/Cargo.toml",
+      "crates/sim-lib-sound-gm/build.rs",
+      "crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/recipe.toml",
+      "crates/sim-lib-sound-gm/recipes/book.toml",
+      "crates/sim-lib-sound-gm/src/lib.rs",
+      "crates/sim-lib-sound-gm/src/model.rs",
+      "crates/sim-lib-sound-gm/src/tests.rs",
+      "crates/sim-lib-sound-render/Cargo.toml",
+      "crates/sim-lib-sound-render/build.rs",
+      "crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml",
+      "crates/sim-lib-sound-render/recipes/book.toml",
+      "crates/sim-lib-sound-render/src/error.rs",
+      "crates/sim-lib-sound-render/src/lib.rs",
+      "crates/sim-lib-sound-render/src/model.rs",
+      "crates/sim-lib-sound-render/src/runtime.rs",
+      "crates/sim-lib-sound-render/src/tests.rs",
+      "crates/sim-lib-sound-shapes/Cargo.toml",
+      "crates/sim-lib-sound-shapes/build.rs",
+      "crates/sim-lib-sound-shapes/recipes/01-basics/shape-family/recipe.toml",
+      "crates/sim-lib-sound-shapes/recipes/book.toml",
+      "crates/sim-lib-sound-shapes/src/citizen.rs",
+      "crates/sim-lib-sound-shapes/src/codec.rs",
+      "crates/sim-lib-sound-shapes/src/lib.rs",
+      "crates/sim-lib-sound-shapes/src/parse.rs",
+      "crates/sim-lib-sound-shapes/src/parse_lift.rs",
+      "crates/sim-lib-sound-shapes/src/parse_surface.rs",
+      "crates/sim-lib-sound-shapes/src/runtime.rs",
+      "crates/sim-lib-sound-shapes/src/tests.rs",
+      "crates/sim-lib-sound-spectrum/Cargo.toml",
+      "crates/sim-lib-sound-spectrum/build.rs",
+      "crates/sim-lib-sound-spectrum/recipes/01-basics/partial-list/recipe.toml",
+      "crates/sim-lib-sound-spectrum/recipes/book.toml",
+      "crates/sim-lib-sound-spectrum/src/lib.rs",
+      "crates/sim-lib-sound-spectrum/src/model.rs",
+      "crates/sim-lib-sound-spectrum/src/tests.rs",
+      "crates/sim-lib-sound-timbre/Cargo.toml",
+      "crates/sim-lib-sound-timbre/build.rs",
+      "crates/sim-lib-sound-timbre/recipes/01-basics/bright-envelope/recipe.toml",
+      "crates/sim-lib-sound-timbre/recipes/book.toml",
+      "crates/sim-lib-sound-timbre/src/filter.rs",
+      "crates/sim-lib-sound-timbre/src/lib.rs",
+      "crates/sim-lib-sound-timbre/src/model.rs",
+      "crates/sim-lib-sound-timbre/src/runtime.rs",
+      "crates/sim-lib-sound-timbre/src/tests.rs",
+      "crates/sim-lib-sound-tuning/Cargo.toml",
+      "crates/sim-lib-sound-tuning/build.rs",
+      "crates/sim-lib-sound-tuning/recipes/01-basics/equal-temperament/recipe.toml",
+      "crates/sim-lib-sound-tuning/recipes/book.toml",
+      "crates/sim-lib-sound-tuning/src/lib.rs",
+      "crates/sim-lib-sound-tuning/src/model.rs",
+      "crates/sim-lib-sound-tuning/src/runtime.rs",
+      "crates/sim-lib-sound-tuning/src/surface.rs",
+      "crates/sim-lib-sound-tuning/src/tests.rs",
+      "crates/sim-lib-sound-wasm-frame/Cargo.toml",
+      "crates/sim-lib-sound-wasm-frame/build.rs",
+      "crates/sim-lib-sound-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+      "crates/sim-lib-sound-wasm-frame/recipes/book.toml",
+      "crates/sim-lib-sound-wasm-frame/src/lib.rs",
+      "crates/sim-lib-sound-wasm-frame/src/model.rs",
+      "crates/sim-lib-sound-wasm-frame/src/tests.rs",
+      "crates/sim-lib-stream-bridge/Cargo.toml",
+      "crates/sim-lib-stream-bridge/build.rs",
+      "crates/sim-lib-stream-bridge/recipes/01-basics/offline-bridge/recipe.toml",
+      "crates/sim-lib-stream-bridge/recipes/book.toml",
+      "crates/sim-lib-stream-bridge/src/lib.rs",
+      "crates/sim-lib-stream-bridge/src/lift.rs",
+      "crates/sim-lib-stream-bridge/src/model.rs",
+      "crates/sim-lib-stream-bridge/src/render.rs",
+      "crates/sim-lib-stream-bridge/src/runtime.rs",
+      "crates/sim-lib-stream-bridge/src/tests.rs",
+      "crates/sim-lib-stream-file/Cargo.toml",
+      "crates/sim-lib-stream-file/build.rs",
+      "crates/sim-lib-stream-file/recipes/01-basics/wav-smf/recipe.toml",
+      "crates/sim-lib-stream-file/recipes/book.toml",
+      "crates/sim-lib-stream-file/src/cap.rs",
+      "crates/sim-lib-stream-file/src/cassette.rs",
+      "crates/sim-lib-stream-file/src/effect_io.rs",
+      "crates/sim-lib-stream-file/src/lib.rs",
+      "crates/sim-lib-stream-file/src/midi.rs",
+      "crates/sim-lib-stream-file/src/tests.rs",
+      "crates/sim-lib-stream-file/src/wav.rs",
+      "crates/sim-lib-stream-midi/Cargo.toml",
+      "crates/sim-lib-stream-midi/build.rs",
+      "crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml",
+      "crates/sim-lib-stream-midi/recipes/book.toml",
+      "crates/sim-lib-stream-midi/src/codec.rs",
+      "crates/sim-lib-stream-midi/src/lib.rs",
+      "crates/sim-lib-stream-midi/src/packetize.rs",
+      "crates/sim-lib-stream-midi/src/sink.rs",
+      "crates/sim-lib-stream-midi/src/spine.rs",
+      "crates/sim-lib-stream-midi/src/tests.rs",
+      "crates/sim-lib-stream-midi/src/tracked.rs",
+      "xtask/Cargo.toml"
+    ]
+  },
+  "recipe_book_count": 48,
+  "recipes": [
+    {
+      "book": "daw-session",
+      "book_toml": "crates/sim-lib-daw-session/recipes/book.toml",
+      "card_id": "cookbook/daw-session",
+      "group": "workspace",
+      "package": "sim-lib-daw-session",
+      "recipe_count": 3,
+      "recipes": [
+        {
+          "card_id": "daw-session/01-basics/offline-session",
+          "codec": "lisp",
+          "id": "offline-session",
+          "package": "sim-lib-daw-session",
+          "recipe_toml": "crates/sim-lib-daw-session/recipes/01-basics/offline-session/recipe.toml",
+          "title": "Offline session descriptor"
+        },
+        {
+          "card_id": "daw-session/02-performance-integration/golden-cassette-integration",
+          "codec": "lisp",
+          "id": "golden-cassette-integration",
+          "package": "sim-lib-daw-session",
+          "recipe_toml": "crates/sim-lib-daw-session/recipes/02-performance-integration/golden-cassette-integration/recipe.toml",
+          "title": "Golden Cassette Integration"
+        },
+        {
+          "card_id": "daw-session/02-performance-integration/sup-instrument-performance",
+          "codec": "lisp",
+          "id": "sup-instrument-performance",
+          "package": "sim-lib-daw-session",
+          "recipe_toml": "crates/sim-lib-daw-session/recipes/02-performance-integration/sup-instrument-performance/recipe.toml",
+          "title": "SUP Instrument Performance"
+        }
+      ],
+      "summary": "Portable DAW session, clip, render, and topology descriptors.",
+      "title": "DAW Session"
+    },
+    {
+      "book": "midi-ble",
+      "book_toml": "crates/sim-lib-midi-ble/recipes/book.toml",
+      "card_id": "cookbook/midi-ble",
+      "group": "workspace",
+      "package": "sim-lib-midi-ble",
+      "recipe_count": 2,
+      "recipes": [
+        {
+          "card_id": "midi-ble/01-basics/ble-midi-smoke",
+          "codec": "lisp",
+          "id": "ble-midi-smoke",
+          "package": "sim-lib-midi-ble",
+          "recipe_toml": "crates/sim-lib-midi-ble/recipes/01-basics/ble-midi-smoke/recipe.toml",
+          "title": "BLE MIDI smoke"
+        },
+        {
+          "card_id": "midi-ble/01-basics/fixture-device",
+          "codec": "lisp",
+          "id": "fixture-device",
+          "package": "sim-lib-midi-ble",
+          "recipe_toml": "crates/sim-lib-midi-ble/recipes/01-basics/fixture-device/recipe.toml",
+          "title": "BLE fixture device"
+        }
+      ],
+      "summary": "Bluetooth MIDI descriptor fixtures.",
+      "title": "MIDI BLE"
+    },
+    {
+      "book": "midi-io",
+      "book_toml": "crates/sim-lib-midi-core/recipes/book.toml",
+      "card_id": "cookbook/midi-io",
+      "group": "workspace",
+      "package": "sim-lib-midi-core",
+      "recipe_count": 2,
+      "recipes": [
+        {
+          "card_id": "midi-io/01-basics/chord-digest",
+          "codec": "lisp",
+          "id": "chord-digest",
+          "package": "sim-lib-midi-core",
+          "recipe_toml": "crates/sim-lib-midi-core/recipes/01-basics/chord-digest/recipe.toml",
+          "title": "Digest an offline MIDI chord render"
+        },
+        {
+          "card_id": "midi-io/01-basics/note-event",
+          "codec": "lisp",
+          "id": "note-event",
+          "package": "sim-lib-midi-core",
+          "recipe_toml": "crates/sim-lib-midi-core/recipes/01-basics/note-event/recipe.toml",
+          "title": "Note event descriptor"
+        }
+      ],
+      "summary": "MIDI event, tempo, and metadata descriptors.",
+      "title": "MIDI Core"
+    },
+    {
+      "book": "midi-live",
+      "book_toml": "crates/sim-lib-midi-live/recipes/book.toml",
+      "card_id": "cookbook/midi-live",
+      "group": "workspace",
+      "package": "sim-lib-midi-live",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "midi-live/01-basics/memory-ring",
+          "codec": "lisp",
+          "id": "memory-ring",
+          "package": "sim-lib-midi-live",
+          "recipe_toml": "crates/sim-lib-midi-live/recipes/01-basics/memory-ring/recipe.toml",
+          "title": "In-memory live ring"
+        }
+      ],
+      "summary": "Live MIDI session descriptors using in-memory rings.",
+      "title": "MIDI Live"
+    },
+    {
+      "book": "midi-rtmidi",
+      "book_toml": "crates/sim-lib-midi-rtmidi/recipes/book.toml",
+      "card_id": "cookbook/midi-rtmidi",
+      "group": "workspace",
+      "package": "sim-lib-midi-rtmidi",
+      "recipe_count": 2,
+      "recipes": [
+        {
+          "card_id": "midi-rtmidi/01-basics/alsa-seq-smoke",
+          "codec": "lisp",
+          "id": "alsa-seq-smoke",
+          "package": "sim-lib-midi-rtmidi",
+          "recipe_toml": "crates/sim-lib-midi-rtmidi/recipes/01-basics/alsa-seq-smoke/recipe.toml",
+          "title": "ALSA sequencer smoke check"
+        },
+        {
+          "card_id": "midi-rtmidi/01-basics/virtual-port",
+          "codec": "lisp",
+          "id": "virtual-port",
+          "package": "sim-lib-midi-rtmidi",
+          "recipe_toml": "crates/sim-lib-midi-rtmidi/recipes/01-basics/virtual-port/recipe.toml",
+          "title": "Virtual RtMidi port"
+        }
+      ],
+      "summary": "RtMidi backend descriptors with virtual and ALSA sequencer ports.",
+      "title": "MIDI RtMidi"
+    },
+    {
+      "book": "midi-shapes",
+      "book_toml": "crates/sim-lib-midi-shapes/recipes/book.toml",
+      "card_id": "cookbook/midi-shapes",
+      "group": "workspace",
+      "package": "sim-lib-midi-shapes",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "midi-shapes/01-basics/shape-family",
+          "codec": "lisp",
+          "id": "shape-family",
+          "package": "sim-lib-midi-shapes",
+          "recipe_toml": "crates/sim-lib-midi-shapes/recipes/01-basics/shape-family/recipe.toml",
+          "title": "MIDI shape family"
+        }
+      ],
+      "summary": "Citizen descriptor shapes for MIDI values.",
+      "title": "MIDI Shapes"
+    },
+    {
+      "book": "midi-smf",
+      "book_toml": "crates/sim-lib-midi-smf/recipes/book.toml",
+      "card_id": "cookbook/midi-smf",
+      "group": "workspace",
+      "package": "sim-lib-midi-smf",
+      "recipe_count": 3,
+      "recipes": [
+        {
+          "card_id": "midi-smf/01-basics/file-metadata",
+          "codec": "lisp",
+          "id": "file-metadata",
+          "package": "sim-lib-midi-smf",
+          "recipe_toml": "crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml",
+          "title": "SMF metadata descriptor"
+        },
+        {
+          "card_id": "midi-smf/02-export-fixtures/note-echo-frozen-midi",
+          "codec": "lisp",
+          "id": "note-echo-frozen-midi",
+          "package": "sim-lib-midi-smf",
+          "recipe_toml": "crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml",
+          "title": "Note Echo Frozen MIDI"
+        },
+        {
+          "card_id": "midi-smf/02-export-fixtures/unsupported-export-failure",
+          "codec": "lisp",
+          "id": "unsupported-export-failure",
+          "package": "sim-lib-midi-smf",
+          "recipe_toml": "crates/sim-lib-midi-smf/recipes/02-export-fixtures/unsupported-export-failure/recipe.toml",
+          "title": "Unsupported Export Failure"
+        }
+      ],
+      "summary": "Standard MIDI File structure and metadata descriptors.",
+      "title": "MIDI SMF"
+    },
+    {
+      "book": "midi-sysex",
+      "book_toml": "crates/sim-lib-midi-sysex/recipes/book.toml",
+      "card_id": "cookbook/midi-sysex",
+      "group": "workspace",
+      "package": "sim-lib-midi-sysex",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "midi-sysex/01-basics/test-message",
+          "codec": "lisp",
+          "id": "test-message",
+          "package": "sim-lib-midi-sysex",
+          "recipe_toml": "crates/sim-lib-midi-sysex/recipes/01-basics/test-message/recipe.toml",
+          "title": "SysEx fixture descriptor"
+        }
+      ],
+      "summary": "System exclusive message descriptors.",
+      "title": "MIDI SysEx"
+    },
+    {
+      "book": "midi-wasm",
+      "book_toml": "crates/sim-lib-midi-wasm-frame/recipes/book.toml",
+      "card_id": "cookbook/midi-wasm",
+      "group": "workspace",
+      "package": "sim-lib-midi-wasm-frame",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "midi-wasm/01-basics/frame-facade",
+          "codec": "lisp",
+          "id": "frame-facade",
+          "package": "sim-lib-midi-wasm-frame",
+          "recipe_toml": "crates/sim-lib-midi-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+          "title": "MIDI frame facade"
+        }
+      ],
+      "summary": "Browser-safe MIDI facade descriptors.",
+      "title": "MIDI Wasm"
+    },
+    {
+      "book": "music-analysis",
+      "book_toml": "crates/sim-lib-music-analysis/recipes/book.toml",
+      "card_id": "cookbook/music-analysis",
+      "group": "workspace",
+      "package": "sim-lib-music-analysis",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-analysis/01-basics/pitch-histogram",
+          "codec": "lisp",
+          "id": "pitch-histogram",
+          "package": "sim-lib-music-analysis",
+          "recipe_toml": "crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml",
+          "title": "Pitch histogram descriptor"
+        }
+      ],
+      "summary": "Pitch-class, histogram, and chord-window analysis descriptors.",
+      "title": "Music Analysis"
+    },
+    {
+      "book": "music-combinators",
+      "book_toml": "crates/sim-lib-music-combinators/recipes/book.toml",
+      "card_id": "cookbook/music-combinators",
+      "group": "workspace",
+      "package": "sim-lib-music-combinators",
+      "recipe_count": 5,
+      "recipes": [
+        {
+          "card_id": "music-combinators/01-basics/sequence-tools",
+          "codec": "lisp",
+          "id": "sequence-tools",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml",
+          "title": "Sequence combinators"
+        },
+        {
+          "card_id": "music-combinators/02-player-recipes/bassline-chord-sup",
+          "codec": "lisp",
+          "id": "bassline-chord-sup",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/02-player-recipes/bassline-chord-sup/recipe.toml",
+          "title": "Bassline Chord SUP Instrument"
+        },
+        {
+          "card_id": "music-combinators/02-player-recipes/beat-map-gm-smf",
+          "codec": "lisp",
+          "id": "beat-map-gm-smf",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/02-player-recipes/beat-map-gm-smf/recipe.toml",
+          "title": "Beat Map GM SMF Export"
+        },
+        {
+          "card_id": "music-combinators/02-player-recipes/keyboard-scales-dual-arp",
+          "codec": "lisp",
+          "id": "keyboard-scales-dual-arp",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/02-player-recipes/keyboard-scales-dual-arp/recipe.toml",
+          "title": "Keyboard Scales And Dual Arpeggio"
+        },
+        {
+          "card_id": "music-combinators/02-player-recipes/polystep-quad-note-seeded",
+          "codec": "lisp",
+          "id": "polystep-quad-note-seeded",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/recipe.toml",
+          "title": "PolyStep And Quad Note Seeds"
+        }
+      ],
+      "summary": "Sequence, parallel, repeat, and transform combinator descriptors.",
+      "title": "Music Combinators"
+    },
+    {
+      "book": "music-core",
+      "book_toml": "crates/sim-lib-music-core/recipes/book.toml",
+      "card_id": "cookbook/music-core",
+      "group": "workspace",
+      "package": "sim-lib-music-core",
+      "recipe_count": 5,
+      "recipes": [
+        {
+          "card_id": "music-core/01-basics/melody-note",
+          "codec": "lisp",
+          "id": "melody-note",
+          "package": "sim-lib-music-core",
+          "recipe_toml": "crates/sim-lib-music-core/recipes/01-basics/melody-note/recipe.toml",
+          "title": "Melody note descriptor"
+        },
+        {
+          "card_id": "music-core/02-golden-fixtures/captured-take-direct-record",
+          "codec": "lisp",
+          "id": "captured-take-direct-record",
+          "package": "sim-lib-music-core",
+          "recipe_toml": "crates/sim-lib-music-core/recipes/02-golden-fixtures/captured-take-direct-record/recipe.toml",
+          "title": "Captured Take Direct Record"
+        },
+        {
+          "card_id": "music-core/02-golden-fixtures/lfo-player-instrument-params",
+          "codec": "lisp",
+          "id": "lfo-player-instrument-params",
+          "package": "sim-lib-music-core",
+          "recipe_toml": "crates/sim-lib-music-core/recipes/02-golden-fixtures/lfo-player-instrument-params/recipe.toml",
+          "title": "LFO Player And Instrument Parameters"
+        },
+        {
+          "card_id": "music-core/02-golden-fixtures/missing-capability-failure",
+          "codec": "lisp",
+          "id": "missing-capability-failure",
+          "package": "sim-lib-music-core",
+          "recipe_toml": "crates/sim-lib-music-core/recipes/02-golden-fixtures/missing-capability-failure/recipe.toml",
+          "title": "Missing Capability Failure"
+        },
+        {
+          "card_id": "music-core/02-golden-fixtures/pattern-mutator-locked-take",
+          "codec": "lisp",
+          "id": "pattern-mutator-locked-take",
+          "package": "sim-lib-music-core",
+          "recipe_toml": "crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/recipe.toml",
+          "title": "Pattern Mutator Locked Take"
+        }
+      ],
+      "summary": "Score, melody, note, and duration descriptors.",
+      "title": "Music Core"
+    },
+    {
+      "book": "music-lift",
+      "book_toml": "crates/sim-lib-music-lift/recipes/book.toml",
+      "card_id": "cookbook/music-lift",
+      "group": "workspace",
+      "package": "sim-lib-music-lift",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-lift/01-basics/from-midi-track",
+          "codec": "lisp",
+          "id": "from-midi-track",
+          "package": "sim-lib-music-lift",
+          "recipe_toml": "crates/sim-lib-music-lift/recipes/01-basics/from-midi-track/recipe.toml",
+          "title": "Lift from MIDI track"
+        }
+      ],
+      "summary": "Lifting descriptors from MIDI-style tracks into music objects.",
+      "title": "Music Lift"
+    },
+    {
+      "book": "music-lower",
+      "book_toml": "crates/sim-lib-music-lower/recipes/book.toml",
+      "card_id": "cookbook/music-lower",
+      "group": "workspace",
+      "package": "sim-lib-music-lower",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-lower/01-basics/to-midi-track",
+          "codec": "lisp",
+          "id": "to-midi-track",
+          "package": "sim-lib-music-lower",
+          "recipe_toml": "crates/sim-lib-music-lower/recipes/01-basics/to-midi-track/recipe.toml",
+          "title": "Lower to MIDI track"
+        }
+      ],
+      "summary": "Lowering descriptors from scores to MIDI-like tracks.",
+      "title": "Music Lower"
+    },
+    {
+      "book": "music-notation",
+      "book_toml": "crates/sim-lib-music-notation/recipes/book.toml",
+      "card_id": "cookbook/music-notation",
+      "group": "workspace",
+      "package": "sim-lib-music-notation",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-notation/01-basics/lilypond-export",
+          "codec": "lisp",
+          "id": "lilypond-export",
+          "package": "sim-lib-music-notation",
+          "recipe_toml": "crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml",
+          "title": "LilyPond export descriptor"
+        }
+      ],
+      "summary": "Notation import and export descriptors.",
+      "title": "Music Notation"
+    },
+    {
+      "book": "music-shapes",
+      "book_toml": "crates/sim-lib-music-shapes/recipes/book.toml",
+      "card_id": "cookbook/music-shapes",
+      "group": "workspace",
+      "package": "sim-lib-music-shapes",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-shapes/01-basics/shape-family",
+          "codec": "lisp",
+          "id": "shape-family",
+          "package": "sim-lib-music-shapes",
+          "recipe_toml": "crates/sim-lib-music-shapes/recipes/01-basics/shape-family/recipe.toml",
+          "title": "Music shape family"
+        }
+      ],
+      "summary": "Citizen descriptor shapes for music objects.",
+      "title": "Music Shapes"
+    },
+    {
+      "book": "audio-synth",
+      "book_toml": "crates/sim-lib-music-synth/recipes/book.toml",
+      "card_id": "cookbook/audio-synth",
+      "group": "workspace",
+      "package": "sim-lib-music-synth",
+      "recipe_count": 12,
+      "recipes": [
+        {
+          "card_id": "audio-synth/01-basics/subtractive-preset",
+          "codec": "lisp",
+          "id": "subtractive-preset",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/01-basics/subtractive-preset/recipe.toml",
+          "title": "Subtractive synth preset descriptor"
+        },
+        {
+          "card_id": "audio-synth/02-dx7/synthetic-patch-render",
+          "codec": "lisp",
+          "id": "synthetic-patch-render",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/recipe.toml",
+          "title": "DX7 synthetic patch render"
+        },
+        {
+          "card_id": "audio-synth/placement/all-local",
+          "codec": "lisp",
+          "id": "all-local",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/placement/all-local/recipe.toml",
+          "title": "All local placement"
+        },
+        {
+          "card_id": "audio-synth/placement/browser-wasm-local",
+          "codec": "lisp",
+          "id": "browser-wasm-local",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/placement/browser-wasm-local/recipe.toml",
+          "title": "Browser wasm local placement"
+        },
+        {
+          "card_id": "audio-synth/placement/voice-local-lan-preview",
+          "codec": "lisp",
+          "id": "voice-local-lan-preview",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/placement/voice-local-lan-preview/recipe.toml",
+          "title": "Voice local LAN preview"
+        },
+        {
+          "card_id": "audio-synth/placement/voice-local-server-fx",
+          "codec": "lisp",
+          "id": "voice-local-server-fx",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/placement/voice-local-server-fx/recipe.toml",
+          "title": "Voice local server FX"
+        },
+        {
+          "card_id": "audio-synth/ps3300/synthetic-polyphonic-patch",
+          "codec": "lisp",
+          "id": "synthetic-polyphonic-patch",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/ps3300/synthetic-polyphonic-patch/recipe.toml",
+          "title": "PS-3300 synthetic polyphonic patch"
+        },
+        {
+          "card_id": "audio-synth/streaming/dx7-local-stream",
+          "codec": "lisp",
+          "id": "dx7-local-stream",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/streaming/dx7-local-stream/recipe.toml",
+          "title": "DX7 local stream"
+        },
+        {
+          "card_id": "audio-synth/streaming/generic-instrument-stream",
+          "codec": "lisp",
+          "id": "generic-instrument-stream",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/streaming/generic-instrument-stream/recipe.toml",
+          "title": "Generic instrument stream"
+        },
+        {
+          "card_id": "audio-synth/streaming/modular-local-stream",
+          "codec": "lisp",
+          "id": "modular-local-stream",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/streaming/modular-local-stream/recipe.toml",
+          "title": "Modular local stream"
+        },
+        {
+          "card_id": "audio-synth/system55/synthetic-voice",
+          "codec": "lisp",
+          "id": "synthetic-voice",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/system55/synthetic-voice/recipe.toml",
+          "title": "System 55 synthetic voice"
+        },
+        {
+          "card_id": "audio-synth/system700/synthetic-main-console",
+          "codec": "lisp",
+          "id": "synthetic-main-console",
+          "package": "sim-lib-music-synth",
+          "recipe_toml": "crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/recipe.toml",
+          "title": "System 700 synthetic main console"
+        }
+      ],
+      "summary": "Software synth preset, oscillator, envelope, and offline render data.",
+      "title": "Audio Synth"
+    },
+    {
+      "book": "audio-synth-ps3300",
+      "book_toml": "crates/sim-lib-music-synth/recipes/ps3300/book.toml",
+      "card_id": "cookbook/audio-synth-ps3300",
+      "group": "",
+      "package": "recipes",
+      "recipe_count": 0,
+      "recipes": [],
+      "summary": "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata.",
+      "title": "PS-3300"
+    },
+    {
+      "book": "audio-synth-system55",
+      "book_toml": "crates/sim-lib-music-synth/recipes/system55/book.toml",
+      "card_id": "cookbook/audio-synth-system55",
+      "group": "",
+      "package": "recipes",
+      "recipe_count": 0,
+      "recipes": [],
+      "summary": "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence.",
+      "title": "System 55"
+    },
+    {
+      "book": "audio-synth-system700",
+      "book_toml": "crates/sim-lib-music-synth/recipes/system700/book.toml",
+      "card_id": "cookbook/audio-synth-system700",
+      "group": "",
+      "package": "recipes",
+      "recipe_count": 0,
+      "recipes": [],
+      "summary": "System 700 module ids, main-console patch rendering, and synthetic fixtures.",
+      "title": "System 700"
+    },
+    {
+      "book": "music-transform",
+      "book_toml": "crates/sim-lib-music-transform/recipes/book.toml",
+      "card_id": "cookbook/music-transform",
+      "group": "workspace",
+      "package": "sim-lib-music-transform",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-transform/01-basics/sequence-transform",
+          "codec": "lisp",
+          "id": "sequence-transform",
+          "package": "sim-lib-music-transform",
+          "recipe_toml": "crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/recipe.toml",
+          "title": "Sequence transform descriptor"
+        }
+      ],
+      "summary": "Pure music transformation descriptors.",
+      "title": "Music Transform"
+    },
+    {
+      "book": "music-wasm",
+      "book_toml": "crates/sim-lib-music-wasm-frame/recipes/book.toml",
+      "card_id": "cookbook/music-wasm",
+      "group": "workspace",
+      "package": "sim-lib-music-wasm-frame",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-wasm/01-basics/frame-facade",
+          "codec": "lisp",
+          "id": "frame-facade",
+          "package": "sim-lib-music-wasm-frame",
+          "recipe_toml": "crates/sim-lib-music-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+          "title": "Music frame facade"
+        }
+      ],
+      "summary": "Browser-safe music facade descriptors.",
+      "title": "Music Wasm"
+    },
+    {
+      "book": "pitch-chord",
+      "book_toml": "crates/sim-lib-pitch-chord/recipes/book.toml",
+      "card_id": "cookbook/pitch-chord",
+      "group": "workspace",
+      "package": "sim-lib-pitch-chord",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-chord/01-basics/major-triad",
+          "codec": "lisp",
+          "id": "major-triad",
+          "package": "sim-lib-pitch-chord",
+          "recipe_toml": "crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml",
+          "title": "Major triad descriptor"
+        }
+      ],
+      "summary": "Chord spelling and quality descriptors.",
+      "title": "Pitch Chord"
+    },
+    {
+      "book": "pitch-core",
+      "book_toml": "crates/sim-lib-pitch-core/recipes/book.toml",
+      "card_id": "cookbook/pitch-core",
+      "group": "workspace",
+      "package": "sim-lib-pitch-core",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-core/01-basics/pitch-value",
+          "codec": "lisp",
+          "id": "pitch-value",
+          "package": "sim-lib-pitch-core",
+          "recipe_toml": "crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml",
+          "title": "Pitch value descriptor"
+        }
+      ],
+      "summary": "Pitch values, names, MIDI notes, and frequency descriptors.",
+      "title": "Pitch Core"
+    },
+    {
+      "book": "pitch-dissonance",
+      "book_toml": "crates/sim-lib-pitch-dissonance/recipes/book.toml",
+      "card_id": "cookbook/pitch-dissonance",
+      "group": "workspace",
+      "package": "sim-lib-pitch-dissonance",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-dissonance/01-basics/tritone-score",
+          "codec": "lisp",
+          "id": "tritone-score",
+          "package": "sim-lib-pitch-dissonance",
+          "recipe_toml": "crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/recipe.toml",
+          "title": "Tritone score descriptor"
+        }
+      ],
+      "summary": "Interval and set dissonance descriptors.",
+      "title": "Pitch Dissonance"
+    },
+    {
+      "book": "pitch-namer",
+      "book_toml": "crates/sim-lib-pitch-namer/recipes/book.toml",
+      "card_id": "cookbook/pitch-namer",
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-namer/01-basics/name-registry",
+          "codec": "lisp",
+          "id": "name-registry",
+          "package": "sim-lib-pitch-namer",
+          "recipe_toml": "crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/recipe.toml",
+          "title": "Name registry descriptor"
+        }
+      ],
+      "summary": "Pitch and set naming registry descriptors.",
+      "title": "Pitch Namer"
+    },
+    {
+      "book": "pitch-namer-forte",
+      "book_toml": "crates/sim-lib-pitch-namer-forte/recipes/book.toml",
+      "card_id": "cookbook/pitch-namer-forte",
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-forte",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-namer-forte/01-basics/forte-number",
+          "codec": "lisp",
+          "id": "forte-number",
+          "package": "sim-lib-pitch-namer-forte",
+          "recipe_toml": "crates/sim-lib-pitch-namer-forte/recipes/01-basics/forte-number/recipe.toml",
+          "title": "Forte number descriptor"
+        }
+      ],
+      "summary": "Forte-number descriptors for pitch-class sets.",
+      "title": "Pitch Namer Forte"
+    },
+    {
+      "book": "pitch-namer-jazz",
+      "book_toml": "crates/sim-lib-pitch-namer-jazz/recipes/book.toml",
+      "card_id": "cookbook/pitch-namer-jazz",
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-jazz",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-namer-jazz/01-basics/chord-symbol",
+          "codec": "lisp",
+          "id": "chord-symbol",
+          "package": "sim-lib-pitch-namer-jazz",
+          "recipe_toml": "crates/sim-lib-pitch-namer-jazz/recipes/01-basics/chord-symbol/recipe.toml",
+          "title": "Chord symbol descriptor"
+        }
+      ],
+      "summary": "Jazz chord naming descriptors.",
+      "title": "Pitch Namer Jazz"
+    },
+    {
+      "book": "pitch-namer-riemann",
+      "book_toml": "crates/sim-lib-pitch-namer-riemann/recipes/book.toml",
+      "card_id": "cookbook/pitch-namer-riemann",
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-riemann",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-namer-riemann/01-basics/tonic-function",
+          "codec": "lisp",
+          "id": "tonic-function",
+          "package": "sim-lib-pitch-namer-riemann",
+          "recipe_toml": "crates/sim-lib-pitch-namer-riemann/recipes/01-basics/tonic-function/recipe.toml",
+          "title": "Tonic function descriptor"
+        }
+      ],
+      "summary": "Riemannian function descriptors.",
+      "title": "Pitch Namer Riemann"
+    },
+    {
+      "book": "pitch-namer-roman",
+      "book_toml": "crates/sim-lib-pitch-namer-roman/recipes/book.toml",
+      "card_id": "cookbook/pitch-namer-roman",
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-roman",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-namer-roman/01-basics/dominant-seven",
+          "codec": "lisp",
+          "id": "dominant-seven",
+          "package": "sim-lib-pitch-namer-roman",
+          "recipe_toml": "crates/sim-lib-pitch-namer-roman/recipes/01-basics/dominant-seven/recipe.toml",
+          "title": "Dominant seventh analysis"
+        }
+      ],
+      "summary": "Roman numeral analysis descriptors.",
+      "title": "Pitch Namer Roman"
+    },
+    {
+      "book": "pitch-scale",
+      "book_toml": "crates/sim-lib-pitch-scale/recipes/book.toml",
+      "card_id": "cookbook/pitch-scale",
+      "group": "workspace",
+      "package": "sim-lib-pitch-scale",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-scale/01-basics/major-degrees",
+          "codec": "lisp",
+          "id": "major-degrees",
+          "package": "sim-lib-pitch-scale",
+          "recipe_toml": "crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml",
+          "title": "Major scale degrees"
+        }
+      ],
+      "summary": "Scale and degree descriptors.",
+      "title": "Pitch Scale"
+    },
+    {
+      "book": "pitch-set",
+      "book_toml": "crates/sim-lib-pitch-set/recipes/book.toml",
+      "card_id": "cookbook/pitch-set",
+      "group": "workspace",
+      "package": "sim-lib-pitch-set",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-set/01-basics/triad-mask",
+          "codec": "lisp",
+          "id": "triad-mask",
+          "package": "sim-lib-pitch-set",
+          "recipe_toml": "crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml",
+          "title": "Triad mask descriptor"
+        }
+      ],
+      "summary": "Pitch-class sets, masks, and normal-form descriptors.",
+      "title": "Pitch Set"
+    },
+    {
+      "book": "pitch-shapes",
+      "book_toml": "crates/sim-lib-pitch-shapes/recipes/book.toml",
+      "card_id": "cookbook/pitch-shapes",
+      "group": "workspace",
+      "package": "sim-lib-pitch-shapes",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-shapes/01-basics/shape-family",
+          "codec": "lisp",
+          "id": "shape-family",
+          "package": "sim-lib-pitch-shapes",
+          "recipe_toml": "crates/sim-lib-pitch-shapes/recipes/01-basics/shape-family/recipe.toml",
+          "title": "Pitch shape family"
+        }
+      ],
+      "summary": "Citizen descriptor shapes for pitch values.",
+      "title": "Pitch Shapes"
+    },
+    {
+      "book": "pitch-wasm",
+      "book_toml": "crates/sim-lib-pitch-wasm-frame/recipes/book.toml",
+      "card_id": "cookbook/pitch-wasm",
+      "group": "workspace",
+      "package": "sim-lib-pitch-wasm-frame",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-wasm/01-basics/frame-facade",
+          "codec": "lisp",
+          "id": "frame-facade",
+          "package": "sim-lib-pitch-wasm-frame",
+          "recipe_toml": "crates/sim-lib-pitch-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+          "title": "Pitch frame facade"
+        }
+      ],
+      "summary": "Browser-safe pitch facade descriptors.",
+      "title": "Pitch Wasm"
+    },
+    {
+      "book": "sound-audio-lift",
+      "book_toml": "crates/sim-lib-sound-audio-lift/recipes/book.toml",
+      "card_id": "cookbook/sound-audio-lift",
+      "group": "workspace",
+      "package": "sim-lib-sound-audio-lift",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-audio-lift/01-basics/pcm-features",
+          "codec": "lisp",
+          "id": "pcm-features",
+          "package": "sim-lib-sound-audio-lift",
+          "recipe_toml": "crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml",
+          "title": "PCM feature lift"
+        }
+      ],
+      "summary": "Descriptors that lift PCM into sound and music features.",
+      "title": "Sound Audio Lift"
+    },
+    {
+      "book": "sound-bridge",
+      "book_toml": "crates/sim-lib-sound-bridge/recipes/book.toml",
+      "card_id": "cookbook/sound-bridge",
+      "group": "workspace",
+      "package": "sim-lib-sound-bridge",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-bridge/01-basics/gm-voice",
+          "codec": "lisp",
+          "id": "gm-voice",
+          "package": "sim-lib-sound-bridge",
+          "recipe_toml": "crates/sim-lib-sound-bridge/recipes/01-basics/gm-voice/recipe.toml",
+          "title": "GM voice bridge descriptor"
+        }
+      ],
+      "summary": "Music and MIDI bridge descriptors for sound playback.",
+      "title": "Sound Bridge"
+    },
+    {
+      "book": "sound-core",
+      "book_toml": "crates/sim-lib-sound-core/recipes/book.toml",
+      "card_id": "cookbook/sound-core",
+      "group": "workspace",
+      "package": "sim-lib-sound-core",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-core/01-basics/sine-tone",
+          "codec": "lisp",
+          "id": "sine-tone",
+          "package": "sim-lib-sound-core",
+          "recipe_toml": "crates/sim-lib-sound-core/recipes/01-basics/sine-tone/recipe.toml",
+          "title": "Sine tone descriptor"
+        }
+      ],
+      "summary": "Tone, oscillator, and amplitude descriptors.",
+      "title": "Sound Core"
+    },
+    {
+      "book": "sound-dissonance",
+      "book_toml": "crates/sim-lib-sound-dissonance/recipes/book.toml",
+      "card_id": "cookbook/sound-dissonance",
+      "group": "workspace",
+      "package": "sim-lib-sound-dissonance",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-dissonance/01-basics/roughness-model",
+          "codec": "lisp",
+          "id": "roughness-model",
+          "package": "sim-lib-sound-dissonance",
+          "recipe_toml": "crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml",
+          "title": "Roughness model descriptor"
+        }
+      ],
+      "summary": "Roughness and spectrum-pair descriptors.",
+      "title": "Sound Dissonance"
+    },
+    {
+      "book": "sound-gm",
+      "book_toml": "crates/sim-lib-sound-gm/recipes/book.toml",
+      "card_id": "cookbook/sound-gm",
+      "group": "workspace",
+      "package": "sim-lib-sound-gm",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-gm/01-basics/acoustic-grand",
+          "codec": "lisp",
+          "id": "acoustic-grand",
+          "package": "sim-lib-sound-gm",
+          "recipe_toml": "crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/recipe.toml",
+          "title": "Acoustic grand preset"
+        }
+      ],
+      "summary": "General MIDI bank and preset descriptors.",
+      "title": "Sound GM"
+    },
+    {
+      "book": "sound-render",
+      "book_toml": "crates/sim-lib-sound-render/recipes/book.toml",
+      "card_id": "cookbook/sound-render",
+      "group": "workspace",
+      "package": "sim-lib-sound-render",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-render/01-basics/offline-buffer",
+          "codec": "lisp",
+          "id": "offline-buffer",
+          "package": "sim-lib-sound-render",
+          "recipe_toml": "crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml",
+          "title": "Offline render buffer"
+        }
+      ],
+      "summary": "Offline PCM render descriptors.",
+      "title": "Sound Render"
+    },
+    {
+      "book": "sound-shapes",
+      "book_toml": "crates/sim-lib-sound-shapes/recipes/book.toml",
+      "card_id": "cookbook/sound-shapes",
+      "group": "workspace",
+      "package": "sim-lib-sound-shapes",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-shapes/01-basics/shape-family",
+          "codec": "lisp",
+          "id": "shape-family",
+          "package": "sim-lib-sound-shapes",
+          "recipe_toml": "crates/sim-lib-sound-shapes/recipes/01-basics/shape-family/recipe.toml",
+          "title": "Sound shape family"
+        }
+      ],
+      "summary": "Citizen descriptor shapes for sound objects.",
+      "title": "Sound Shapes"
+    },
+    {
+      "book": "sound-spectrum",
+      "book_toml": "crates/sim-lib-sound-spectrum/recipes/book.toml",
+      "card_id": "cookbook/sound-spectrum",
+      "group": "workspace",
+      "package": "sim-lib-sound-spectrum",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-spectrum/01-basics/partial-list",
+          "codec": "lisp",
+          "id": "partial-list",
+          "package": "sim-lib-sound-spectrum",
+          "recipe_toml": "crates/sim-lib-sound-spectrum/recipes/01-basics/partial-list/recipe.toml",
+          "title": "Partial list descriptor"
+        }
+      ],
+      "summary": "Partial, centroid, and peak descriptors.",
+      "title": "Sound Spectrum"
+    },
+    {
+      "book": "sound-timbre",
+      "book_toml": "crates/sim-lib-sound-timbre/recipes/book.toml",
+      "card_id": "cookbook/sound-timbre",
+      "group": "workspace",
+      "package": "sim-lib-sound-timbre",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-timbre/01-basics/bright-envelope",
+          "codec": "lisp",
+          "id": "bright-envelope",
+          "package": "sim-lib-sound-timbre",
+          "recipe_toml": "crates/sim-lib-sound-timbre/recipes/01-basics/bright-envelope/recipe.toml",
+          "title": "Bright timbre descriptor"
+        }
+      ],
+      "summary": "Timbre, filter, and envelope descriptors.",
+      "title": "Sound Timbre"
+    },
+    {
+      "book": "sound-tuning",
+      "book_toml": "crates/sim-lib-sound-tuning/recipes/book.toml",
+      "card_id": "cookbook/sound-tuning",
+      "group": "workspace",
+      "package": "sim-lib-sound-tuning",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-tuning/01-basics/equal-temperament",
+          "codec": "lisp",
+          "id": "equal-temperament",
+          "package": "sim-lib-sound-tuning",
+          "recipe_toml": "crates/sim-lib-sound-tuning/recipes/01-basics/equal-temperament/recipe.toml",
+          "title": "Equal temperament descriptor"
+        }
+      ],
+      "summary": "Tuning-system descriptors.",
+      "title": "Sound Tuning"
+    },
+    {
+      "book": "sound-wasm",
+      "book_toml": "crates/sim-lib-sound-wasm-frame/recipes/book.toml",
+      "card_id": "cookbook/sound-wasm",
+      "group": "workspace",
+      "package": "sim-lib-sound-wasm-frame",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "sound-wasm/01-basics/frame-facade",
+          "codec": "lisp",
+          "id": "frame-facade",
+          "package": "sim-lib-sound-wasm-frame",
+          "recipe_toml": "crates/sim-lib-sound-wasm-frame/recipes/01-basics/browser-facade/recipe.toml",
+          "title": "Sound frame facade"
+        }
+      ],
+      "summary": "Browser-safe sound facade descriptors.",
+      "title": "Sound Wasm"
+    },
+    {
+      "book": "stream-bridge",
+      "book_toml": "crates/sim-lib-stream-bridge/recipes/book.toml",
+      "card_id": "cookbook/stream-bridge",
+      "group": "workspace",
+      "package": "sim-lib-stream-bridge",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "stream-bridge/01-basics/offline-bridge",
+          "codec": "lisp",
+          "id": "offline-bridge",
+          "package": "sim-lib-stream-bridge",
+          "recipe_toml": "crates/sim-lib-stream-bridge/recipes/01-basics/offline-bridge/recipe.toml",
+          "title": "Offline bridge descriptor"
+        }
+      ],
+      "summary": "Offline MIDI-to-PCM rendering and PCM-to-MIDI lifting descriptors.",
+      "title": "Stream Bridge"
+    },
+    {
+      "book": "stream-file",
+      "book_toml": "crates/sim-lib-stream-file/recipes/book.toml",
+      "card_id": "cookbook/stream-file",
+      "group": "workspace",
+      "package": "sim-lib-stream-file",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "stream-file/01-basics/wav-smf",
+          "codec": "lisp",
+          "id": "wav-smf",
+          "package": "sim-lib-stream-file",
+          "recipe_toml": "crates/sim-lib-stream-file/recipes/01-basics/wav-smf/recipe.toml",
+          "title": "WAV and SMF descriptor"
+        }
+      ],
+      "summary": "Capability-gated WAV and SMF stream adapters.",
+      "title": "Stream File"
+    },
+    {
+      "book": "stream-midi",
+      "book_toml": "crates/sim-lib-stream-midi/recipes/book.toml",
+      "card_id": "cookbook/stream-midi",
+      "group": "workspace",
+      "package": "sim-lib-stream-midi",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "stream-midi/01-basics/packetize",
+          "codec": "lisp",
+          "id": "packetize",
+          "package": "sim-lib-stream-midi",
+          "recipe_toml": "crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml",
+          "title": "MIDI packet descriptor"
+        }
+      ],
+      "summary": "MIDI packetization and memory stream adapters.",
+      "title": "Stream MIDI"
+    }
   ]
 }
