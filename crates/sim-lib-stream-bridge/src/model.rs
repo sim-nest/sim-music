@@ -1,5 +1,5 @@
 use sim_citizen_derive::Citizen;
-use sim_kernel::{Diagnostic, Symbol};
+use sim_kernel::{Diagnostic, Error, Result, Symbol};
 use sim_lib_midi_core::DEFAULT_US_PER_QUARTER;
 use sim_lib_stream_core::StreamValue;
 
@@ -33,6 +33,39 @@ pub struct StreamBridgeRenderOptions {
     pub chunk_frames: usize,
 }
 
+impl StreamBridgeRenderOptions {
+    /// Builds render options and rejects values the renderer cannot honor.
+    pub fn new(sample_rate: u32, channels: u8, chunk_frames: usize) -> Result<Self> {
+        let options = Self {
+            sample_rate,
+            channels,
+            chunk_frames,
+        };
+        options.validate()?;
+        Ok(options)
+    }
+
+    /// Validates the public option fields before rendering.
+    pub fn validate(&self) -> Result<()> {
+        if self.sample_rate == 0 {
+            return Err(Error::Eval(
+                "stream/bridge render sample_rate must be greater than zero".to_owned(),
+            ));
+        }
+        if !(1..=2).contains(&self.channels) {
+            return Err(Error::Eval(
+                "stream/bridge render channels must be 1 or 2".to_owned(),
+            ));
+        }
+        if self.chunk_frames == 0 {
+            return Err(Error::Eval(
+                "stream/bridge render chunk_frames must be greater than zero".to_owned(),
+            ));
+        }
+        Ok(())
+    }
+}
+
 impl Default for StreamBridgeRenderOptions {
     fn default() -> Self {
         Self {
@@ -61,6 +94,49 @@ pub struct StreamBridgeLiftMidiOptions {
     pub hop_size: usize,
     /// Maximum number of MIDI events packed into a single stream packet.
     pub max_events_per_packet: usize,
+}
+
+impl StreamBridgeLiftMidiOptions {
+    /// Validates the public option fields before PCM-to-MIDI lifting.
+    pub fn validate(&self) -> Result<()> {
+        if self.sample_rate == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi sample_rate must be greater than zero".to_owned(),
+            ));
+        }
+        if self.tpq == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi tpq must be greater than zero".to_owned(),
+            ));
+        }
+        if self.us_per_quarter == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi us_per_quarter must be greater than zero".to_owned(),
+            ));
+        }
+        if !self.min_confidence.is_finite() || !(0.0..=1.0).contains(&self.min_confidence) {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi min_confidence must be between 0 and 1".to_owned(),
+            ));
+        }
+        if self.window_size == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi window_size must be greater than zero".to_owned(),
+            ));
+        }
+        if self.hop_size == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi hop_size must be greater than zero".to_owned(),
+            ));
+        }
+        if self.max_events_per_packet == 0 {
+            return Err(Error::Eval(
+                "stream/bridge lift-midi max_events_per_packet must be greater than zero"
+                    .to_owned(),
+            ));
+        }
+        Ok(())
+    }
 }
 
 impl Default for StreamBridgeLiftMidiOptions {

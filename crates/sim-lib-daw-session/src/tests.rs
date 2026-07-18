@@ -33,6 +33,15 @@ fn session_can_be_created_saved_loaded_and_rendered_offline() {
 }
 
 #[test]
+fn offline_render_rejects_frame_channel_overflow() {
+    let session = fixture_session();
+
+    let err = session.render_offline(usize::MAX).unwrap_err();
+
+    assert!(format!("{err}").contains("sample buffer is too large"));
+}
+
+#[test]
 fn plugin_chain_state_and_patch_metadata_roundtrip() {
     let mut state = PluginState::new();
     state.set_param(1, 0.75);

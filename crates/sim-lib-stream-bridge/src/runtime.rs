@@ -112,16 +112,16 @@ fn bridge_call(cx: &mut Cx, args: &[sim_kernel::Expr]) -> Result<Value> {
         match key.as_str() {
             "op" => op = Some(symbolish(&pair[1])?),
             "rate" | "sample-rate" => {
-                let value = usize_value(&pair[1])?;
-                render.sample_rate = value as u32;
-                lift.sample_rate = value as u32;
+                let value = u32_option(&pair[1], "sample-rate")?;
+                render.sample_rate = value;
+                lift.sample_rate = value;
             }
-            "channels" => render.channels = usize_value(&pair[1])? as u8,
+            "channels" => render.channels = u8_option(&pair[1], "channels")?,
             "chunk-frames" => render.chunk_frames = usize_value(&pair[1])?,
             "min-confidence" => lift.min_confidence = f64_value(&pair[1])?,
             "window" => lift.window_size = usize_value(&pair[1])?,
             "hop" => lift.hop_size = usize_value(&pair[1])?,
-            "tpq" => lift.tpq = usize_value(&pair[1])? as u16,
+            "tpq" => lift.tpq = u16_option(&pair[1], "tpq")?,
             "max-events" => lift.max_events_per_packet = usize_value(&pair[1])?,
             other => {
                 return Err(Error::Eval(format!(
@@ -216,6 +216,21 @@ fn usize_value(expr: &sim_kernel::Expr) -> Result<usize> {
     }
 }
 
+fn u32_option(expr: &sim_kernel::Expr, label: &str) -> Result<u32> {
+    u32::try_from(usize_value(expr)?)
+        .map_err(|_| Error::Eval(format!("stream/bridge {label} is out of range")))
+}
+
+fn u16_option(expr: &sim_kernel::Expr, label: &str) -> Result<u16> {
+    u16::try_from(usize_value(expr)?)
+        .map_err(|_| Error::Eval(format!("stream/bridge {label} is out of range")))
+}
+
+fn u8_option(expr: &sim_kernel::Expr, label: &str) -> Result<u8> {
+    u8::try_from(usize_value(expr)?)
+        .map_err(|_| Error::Eval(format!("stream/bridge {label} is out of range")))
+}
+
 fn f64_value(expr: &sim_kernel::Expr) -> Result<f64> {
     match unquote_ref(expr) {
         sim_kernel::Expr::String(value) => value
@@ -241,5 +256,35 @@ fn unquote_ref(expr: &sim_kernel::Expr) -> &sim_kernel::Expr {
             expr,
         } => expr,
         other => other,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn integer_option_helpers_reject_narrowing_overflow() {
+        assert!(
+            u32_option(
+                &sim_kernel::Expr::String("4294967296".to_owned()),
+                "sample-rate"
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("out of range")
+        );
+        assert!(
+            u16_option(&sim_kernel::Expr::String("65536".to_owned()), "tpq")
+                .unwrap_err()
+                .to_string()
+                .contains("out of range")
+        );
+        assert!(
+            u8_option(&sim_kernel::Expr::String("256".to_owned()), "channels")
+                .unwrap_err()
+                .to_string()
+                .contains("out of range")
+        );
     }
 }
