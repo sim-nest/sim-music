@@ -1,4 +1,4 @@
-use sim_kernel::{Expr, Symbol};
+use sim_kernel::{CapabilityName, Expr, Symbol};
 use sim_lib_topology::{Edge, Graph, GraphTest, Node, PortRef, TopologyPackage};
 use sim_value::build::uint;
 
@@ -53,7 +53,34 @@ pub fn daw_session_topology_package(session: &DawSession) -> TopologyPackage {
     TopologyPackage {
         tests: graph.tests.clone(),
         metadata: graph.metadata.clone(),
-        capabilities: graph.capabilities.clone(),
+        capabilities: graph_package_capabilities(&graph),
         graph,
     }
+}
+
+trait PackageCapability: Sized {
+    fn from_graph_symbol(capability: &Symbol) -> Self;
+}
+
+impl PackageCapability for Symbol {
+    fn from_graph_symbol(capability: &Symbol) -> Self {
+        capability.clone()
+    }
+}
+
+impl PackageCapability for CapabilityName {
+    fn from_graph_symbol(capability: &Symbol) -> Self {
+        CapabilityName::new(capability.as_qualified_str())
+    }
+}
+
+fn graph_package_capabilities<C>(graph: &Graph) -> Vec<C>
+where
+    C: PackageCapability,
+{
+    graph
+        .capabilities
+        .iter()
+        .map(PackageCapability::from_graph_symbol)
+        .collect()
 }
