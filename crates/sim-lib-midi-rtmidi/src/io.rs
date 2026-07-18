@@ -119,6 +119,19 @@ pub fn payload_from_bytes(bytes: &[u8]) -> Result<MidiPayload> {
     let Some((&status, data)) = bytes.split_first() else {
         return Err(Error::Eval("RtMidi event had no status byte".to_owned()));
     };
+    match status {
+        0xf0 => {
+            return Ok(MidiPayload::SysEx(SysExEvent::F0 {
+                data: data.to_vec(),
+            }));
+        }
+        0xf7 => {
+            return Ok(MidiPayload::SysEx(SysExEvent::F7 {
+                data: data.to_vec(),
+            }));
+        }
+        _ => {}
+    }
     // A live port may deliver a truncated or non-channel buffer; keep those as
     // raw bytes rather than failing, and decode only complete channel messages
     // through the shared `wire::decode_channel`.

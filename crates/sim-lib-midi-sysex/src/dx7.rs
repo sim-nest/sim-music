@@ -269,14 +269,17 @@ impl Dx7Voice {
     /// Returns all six operators as decoded structures.
     pub fn operators(&self) -> Vec<Dx7Operator> {
         (0..DX7_OPERATOR_COUNT)
-            .map(|index| self.operator(index))
+            .filter_map(|index| self.operator(index))
             .collect()
     }
 
     /// Decodes the operator at `index` (0-based) from the edit buffer.
-    pub fn operator(&self, index: usize) -> Dx7Operator {
+    pub fn operator(&self, index: usize) -> Option<Dx7Operator> {
+        if index >= DX7_OPERATOR_COUNT {
+            return None;
+        }
         let base = index * DX7_OPERATOR_EDIT_BYTE_COUNT;
-        Dx7Operator {
+        Some(Dx7Operator {
             rates: array4(&self.edit_buffer[base..base + 4]),
             levels: array4(&self.edit_buffer[base + 4..base + 8]),
             breakpoint: self.edit_buffer[base + 8],
@@ -292,7 +295,7 @@ impl Dx7Voice {
             frequency_coarse: self.edit_buffer[base + 18],
             frequency_fine: self.edit_buffer[base + 19],
             detune: self.edit_buffer[base + 20],
-        }
+        })
     }
 
     /// Decodes the voice-wide (common) parameters from the edit buffer.

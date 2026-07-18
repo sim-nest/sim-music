@@ -1,9 +1,9 @@
 use sim_lib_midi_core::SysExEvent;
 
 use crate::{
-    DX7_BANK_VOICE_COUNT, DX7_SINGLE_VOICE_FORMAT, DX7_VOICE_BANK_FORMAT, Dx7Bulk, Dx7Voice,
-    Dx7VoiceBank, MIDI_TUNING_STANDARD_SUB_ID, MtsMessage, MtsMessageKind, SysExViewError,
-    UniversalRealm, UniversalSysEx, YAMAHA_MANUFACTURER_ID, YamahaSysEx,
+    DX7_BANK_VOICE_COUNT, DX7_OPERATOR_COUNT, DX7_SINGLE_VOICE_FORMAT, DX7_VOICE_BANK_FORMAT,
+    Dx7Bulk, Dx7Voice, Dx7VoiceBank, MIDI_TUNING_STANDARD_SUB_ID, MtsMessage, MtsMessageKind,
+    SysExViewError, UniversalRealm, UniversalSysEx, YAMAHA_MANUFACTURER_ID, YamahaSysEx,
 };
 
 #[test]
@@ -145,6 +145,14 @@ fn dx7_packed_voice_round_trip_preserves_operator_order() {
             .collect::<Vec<_>>(),
         vec![70, 71, 72, 73, 74, 75]
     );
+}
+
+#[test]
+fn dx7_operator_rejects_out_of_range_index() {
+    let voice = Dx7Voice::from_edit_buffer(synthetic_edit_voice("SIMDX7A06")).expect("dx7 voice");
+
+    assert!(voice.operator(DX7_OPERATOR_COUNT).is_none());
+    assert_eq!(voice.operators().len(), DX7_OPERATOR_COUNT);
 }
 
 #[test]

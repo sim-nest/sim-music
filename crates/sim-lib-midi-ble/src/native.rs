@@ -114,13 +114,7 @@ impl BleMidiDiscoveryProvider for BluezBleMidiProvider {
         let _ = self.config;
         #[cfg(target_os = "linux")]
         {
-            let devices = discover_bluez_dbus().unwrap_or_default();
-            let cards = if devices.is_empty() {
-                vec![missing_bluez_dependency_card()]
-            } else {
-                Vec::new()
-            };
-            Ok(BleMidiDiscoveryReport::new(devices, cards))
+            bluez_discovery_report(discover_bluez_dbus())
         }
         #[cfg(not(target_os = "linux"))]
         {
@@ -129,6 +123,18 @@ impl BleMidiDiscoveryProvider for BluezBleMidiProvider {
             ))
         }
     }
+}
+
+pub(crate) fn bluez_discovery_report(
+    devices: Result<Vec<BleMidiDevice>>,
+) -> Result<BleMidiDiscoveryReport> {
+    let devices = devices?;
+    let cards = if devices.is_empty() {
+        vec![missing_bluez_dependency_card()]
+    } else {
+        Vec::new()
+    };
+    Ok(BleMidiDiscoveryReport::new(devices, cards))
 }
 
 /// Open BLE-MIDI GATT I/O characteristic session.

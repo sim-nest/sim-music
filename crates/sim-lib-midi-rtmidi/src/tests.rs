@@ -1,6 +1,6 @@
 use sim_kernel::{Expr, Symbol};
 use sim_lib_midi_core::{
-    Channel, ChannelMessage, MetaEvent, MidiPayload, MidiSink, MidiSource, RawBytes,
+    Channel, ChannelMessage, MetaEvent, MidiPayload, MidiSink, MidiSource, RawBytes, SysExEvent,
 };
 use sim_lib_stream_core::{BufferPolicy, StreamMedia};
 use sim_lib_stream_host::{HostBackend, HostDirection, HostStreamConfigRequest};
@@ -113,6 +113,21 @@ fn rtmidi_payload_encoder_emits_channel_and_raw_bytes() {
         data: vec![1, 2],
     });
     assert_eq!(bytes_from_payload(&raw).unwrap(), vec![0xf2, 1, 2]);
+}
+
+#[test]
+fn rtmidi_sysex_round_trips_as_sysex_payload() {
+    let f0 = MidiPayload::SysEx(SysExEvent::F0 {
+        data: vec![0x7e, 0x7f],
+    });
+    let f0_bytes = bytes_from_payload(&f0).unwrap();
+    assert_eq!(payload_from_bytes(&f0_bytes).unwrap(), f0);
+
+    let f7 = MidiPayload::SysEx(SysExEvent::F7 {
+        data: vec![0x01, 0x02],
+    });
+    let f7_bytes = bytes_from_payload(&f7).unwrap();
+    assert_eq!(payload_from_bytes(&f7_bytes).unwrap(), f7);
 }
 
 #[test]
