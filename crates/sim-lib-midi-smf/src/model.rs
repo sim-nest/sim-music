@@ -87,7 +87,9 @@ impl<'a> Iterator for SmfMergeCursor<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         let mut best: Option<(usize, &MidiEvent)> = None;
         for (track_idx, track) in self.file.tracks.iter().enumerate() {
-            let event = track.events.get(self.next_index[track_idx])?;
+            let Some(event) = track.events.get(self.next_index[track_idx]) else {
+                continue;
+            };
             match best {
                 None => best = Some((track_idx, event)),
                 Some((best_track, best_event)) => {

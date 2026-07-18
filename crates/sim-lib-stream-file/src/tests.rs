@@ -244,6 +244,52 @@ fn compatibility_stream_file_capability_aliases_are_accepted() {
     assert_eq!(sink.events(), events.as_slice());
 }
 
+#[test]
+fn directory_aliases_do_not_authorize_file_writes() {
+    for alias in ["table.fs.mkdir", "table.fs.rmdir"] {
+        let suffix = format!("directory-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events);
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/dir-alias-write")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias)]);
+
+        let err = match write_smf_stream(&mut cx, temp.path(), &stream, 480) {
+            Ok(_) => panic!("{alias} unexpectedly authorized an SMF file write"),
+            Err(err) => err,
+        };
+
+        assert!(matches!(
+            err,
+            Error::CapabilityDenied { capability } if capability == stream_file_write_capability()
+        ));
+        assert!(!temp.path().exists());
+    }
+}
+
+#[test]
+fn compatibility_file_write_aliases_are_accepted() {
+    for alias in ["table.fs.write", "file-write"] {
+        let suffix = format!("write-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events.clone());
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/write-alias")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias), stream_file_read_capability()]);
+
+        write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+        let read_back =
+            read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/read-alias")).unwrap();
+        let mut sink = MemoryMidiSink::new(480);
+        let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+        assert_eq!(read_count, events.len());
+        assert_eq!(sink.events(), events.as_slice());
+    }
+}
+
 fn cx(capabilities: &[CapabilityName]) -> Cx {
     let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
     for capability in capabilities {

@@ -55,6 +55,12 @@ pub enum SmfError {
     /// format 0 with more than one track).
     #[error("SMF format/track count mismatch")]
     FormatTrackMismatch,
+    /// The track count cannot be represented in the SMF header.
+    #[error("SMF track count {0} is outside 0..=65535")]
+    TrackCountOutOfRange(usize),
+    /// The ticks-per-quarter value cannot be represented as metrical SMF TPQ.
+    #[error("SMF ticks-per-quarter {0} cannot be written as metrical TPQ")]
+    TpqOutOfRange(u32),
     /// An event time could not be represented exactly at the file resolution.
     #[error("event time cannot be represented exactly at target TPQ")]
     InexactEventTime,
@@ -62,4 +68,14 @@ pub enum SmfError {
     /// delta.
     #[error("track events are not monotonic in absolute time")]
     NegativeDelta,
+    /// A track delta cannot be represented as an SMF four-byte VLQ.
+    #[error("SMF delta {0} exceeds the four-byte VLQ limit")]
+    DeltaOutOfRange(i64),
+    /// A track chunk body cannot be represented in the SMF chunk length field.
+    #[error("SMF chunk length {0} exceeds u32::MAX")]
+    ChunkTooLarge(usize),
+    /// A meta or SysEx payload length cannot be represented as an SMF four-byte
+    /// VLQ.
+    #[error("SMF payload length {0} exceeds the four-byte VLQ limit")]
+    PayloadTooLarge(usize),
 }

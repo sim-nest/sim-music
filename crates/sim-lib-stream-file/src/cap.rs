@@ -37,13 +37,7 @@ fn fs_read_aliases() -> &'static [&'static str] {
 }
 
 fn fs_write_aliases() -> &'static [&'static str] {
-    &[
-        "table.fs.write",
-        "table.fs.mkdir",
-        "table.fs.rmdir",
-        "stream.file.write",
-        "file-write",
-    ]
+    &["table.fs.write", "stream.file.write", "file-write"]
 }
 
 fn granted_capability_or_alias(
