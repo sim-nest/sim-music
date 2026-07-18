@@ -98,7 +98,9 @@ impl QuadNotePitchRange {
     }
 
     fn choose_scale(self, scale: Scale, degree: usize, score: u64) -> Pitch {
-        let target_class = scale.pitch_at_degree(degree);
+        let target_class = scale
+            .pitch_at_degree(degree)
+            .expect("quad-note scale degree is one-based");
         let candidates = self.scale_candidates(scale);
         let matching = candidates
             .iter()

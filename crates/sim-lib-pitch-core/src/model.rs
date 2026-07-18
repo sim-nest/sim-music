@@ -31,7 +31,7 @@ pub enum PitchError {
 /// assert_eq!(PitchClass::E.interval_class(PitchClass::C), 4);
 /// ```
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct PitchClass(pub u8);
+pub struct PitchClass(u8);
 
 impl PitchClass {
     /// The pitch class C (0).
@@ -66,6 +66,11 @@ impl PitchClass {
         } else {
             Err(PitchError::InvalidPitchClass(value))
         }
+    }
+
+    /// Returns the raw mod-12 pitch-class value.
+    pub const fn value(self) -> u8 {
+        self.0
     }
 
     /// Returns this pitch class shifted up by `semitones` (or down if negative),
@@ -123,7 +128,7 @@ pub struct Pitch {
 impl Pitch {
     /// Returns the absolute semitone index of this pitch, where MIDI 60 (`C4`) is 60.
     pub fn semitone(self) -> i32 {
-        (self.octave as i32 + 1) * 12 + self.class.0 as i32
+        (i32::from(self.octave) + 1) * 12 + i32::from(self.class.value())
     }
 
     /// Constructs a pitch from an absolute semitone index, the inverse of

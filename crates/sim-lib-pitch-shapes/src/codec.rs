@@ -70,7 +70,7 @@ pub fn decode_interval(value: &str) -> Result<Interval, PitchShapeError> {
 /// Encodes a [`PitchClassMask`] as a `#(PitchClassMask bits)` form using its low
 /// twelve bits.
 pub fn encode_pitch_class_mask(mask: PitchClassMask) -> String {
-    format!("#(PitchClassMask {})", mask.0 & 0x0fff)
+    format!("#(PitchClassMask {})", mask.bits())
 }
 
 /// Decodes a `#(PitchClassMask bits)` form into a [`PitchClassMask`].
@@ -80,7 +80,7 @@ pub fn decode_pitch_class_mask(value: &str) -> Result<PitchClassMask, PitchShape
         .and_then(|rest| rest.strip_suffix(')'))
         .ok_or(PitchShapeError::InvalidPitchClassMask)?;
     let bits = u16::from_str(inner).map_err(|_| PitchShapeError::InvalidPitchClassMask)?;
-    Ok(PitchClassMask(bits & 0x0fff))
+    PitchClassMask::new(bits).map_err(|_| PitchShapeError::InvalidPitchClassMask)
 }
 
 /// Encodes a [`Mode`] as its canonical name (for example `"dorian"`).

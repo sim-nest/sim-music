@@ -310,7 +310,11 @@ impl BasslinePlayer {
             .unwrap_or(1);
         let offset = melodic_offset(step, score);
         Pitch {
-            class: self.config.scale.pitch_at_degree(root_degree + offset),
+            class: self
+                .config
+                .scale
+                .pitch_at_degree(root_degree + offset)
+                .expect("bassline scale degree is one-based"),
             octave: self.config.octave_range.choose(score >> 8),
         }
     }

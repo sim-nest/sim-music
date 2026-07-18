@@ -68,7 +68,7 @@ impl TransposeTransform {
                         TransformDiagnostic::new(
                             TransformDiagnosticCode::PitchOutOfScale,
                             "transpose",
-                            format!("pitch class {} is not in the scale", pitch.class.0),
+                            format!("pitch class {} is not in the scale", pitch.class.value()),
                         )
                     })
                 })
@@ -405,8 +405,8 @@ fn resolve_axis(axis: &PitchAxis) -> Option<Pitch> {
             scale,
             degree,
             octave,
-        } => (*degree > 0).then(|| Pitch {
-            class: scale.pitch_at_degree(*degree),
+        } => scale.pitch_at_degree(*degree).ok().map(|class| Pitch {
+            class,
             octave: *octave,
         }),
         PitchAxis::ChordRoot(chord) => chord.notes.first().copied(),

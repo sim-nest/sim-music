@@ -102,7 +102,7 @@ fn tuning_value_spec(symbol: Symbol) -> SurfaceValueSpec {
             format!(
                 "{:?}",
                 TuningDescriptor::JustIntonation {
-                    root: just.root.0,
+                    root: just.root.value(),
                     ratios: just.ratios,
                     reference_midi: 69,
                     reference_hz: 440.0,

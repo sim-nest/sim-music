@@ -5,9 +5,9 @@ use crate::{FORTE_TABLE, lookup_forte_label};
 #[test]
 fn vendored_prime_forms_all_label() {
     for entry in FORTE_TABLE {
-        assert_eq!(lookup_forte_label(entry.mask), Some(entry.label));
+        assert_eq!(lookup_forte_label(entry.mask()), Some(entry.label));
         assert_eq!(
-            lookup_forte_label(entry.mask.normalize()),
+            lookup_forte_label(entry.mask().normalize()),
             Some(entry.label)
         );
     }
@@ -15,5 +15,8 @@ fn vendored_prime_forms_all_label() {
 
 #[test]
 fn unknown_mask_is_unlabeled() {
-    assert_eq!(lookup_forte_label(PitchClassMask(0b1111_1111_1111)), None);
+    assert_eq!(
+        lookup_forte_label(PitchClassMask::new(0b1111_1111_1111).unwrap()),
+        None
+    );
 }

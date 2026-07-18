@@ -8,6 +8,9 @@ pub enum PitchSetError {
     /// A MIDI key outside the valid `0..128` range was supplied.
     #[error("invalid MIDI key {0}")]
     InvalidMidiKey(u8),
+    /// A pitch-class mask used bits outside the low twelve pitch-class bits.
+    #[error("invalid pitch-class mask {0}")]
+    InvalidPitchClassMask(u16),
     /// A third-stack bit pattern could not be decoded into a valid signature.
     #[error("invalid third stack encoding")]
     InvalidThirdStackEncoding,
@@ -19,7 +22,7 @@ pub enum PitchSetError {
 /// A bitmask over the twelve pitch classes, with bit `n` set when pitch class `n`
 /// is present.
 ///
-/// The low twelve bits of the inner `u16` represent pitch classes C through B.
+/// The low twelve bits represent pitch classes C through B.
 ///
 /// # Examples
 ///
@@ -31,14 +34,30 @@ pub enum PitchSetError {
 /// assert_eq!(triad.count_bits(), 3);
 /// ```
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Default)]
-pub struct PitchClassMask(pub u16);
+pub struct PitchClassMask(u16);
 
 impl PitchClassMask {
+    const VALID_BITS: u16 = 0x0fff;
+
+    /// Builds a pitch-class mask, rejecting any bits outside the low twelve.
+    pub fn new(bits: u16) -> Result<Self, PitchSetError> {
+        if bits & !Self::VALID_BITS == 0 {
+            Ok(Self(bits))
+        } else {
+            Err(PitchSetError::InvalidPitchClassMask(bits))
+        }
+    }
+
+    /// Returns the raw low-twelve pitch-class bits.
+    pub const fn bits(self) -> u16 {
+        self.0
+    }
+
     /// Builds a mask from a slice of pitch classes; duplicates collapse to one bit.
     pub fn from_pitch_classes(pitch_classes: &[PitchClass]) -> Self {
         let mut bits = 0u16;
         for pitch_class in pitch_classes {
-            bits |= 1u16 << pitch_class.0;
+            bits |= 1u16 << pitch_class.value();
         }
         Self(bits)
     }
@@ -47,22 +66,22 @@ impl PitchClassMask {
     pub fn pitch_classes(self) -> Vec<PitchClass> {
         (0..12)
             .filter(|bit| self.0 & (1u16 << bit) != 0)
-            .map(|bit| PitchClass(bit as u8))
+            .map(|bit| PitchClass::new(bit).expect("mask iteration yields valid pitch classes"))
             .collect()
     }
 
     /// Returns this mask transposed by `semitones`, wrapping within the octave.
     pub fn rotate(self, semitones: i32) -> Self {
         let shift = semitones.rem_euclid(12) as u32;
-        let bits = self.0 & 0x0fff;
-        Self(((bits << shift) | (bits >> (12 - shift))) & 0x0fff)
+        let bits = self.0;
+        Self(((bits << shift) | (bits >> (12 - shift))) & Self::VALID_BITS)
     }
 
     /// Returns this mask inverted about `axis`.
     pub fn invert(self, axis: PitchClass) -> Self {
         let mut out = 0u16;
         for pitch_class in self.pitch_classes() {
-            out |= 1u16 << pitch_class.invert(axis).0;
+            out |= 1u16 << pitch_class.invert(axis).value();
         }
         Self(out)
     }
@@ -72,7 +91,7 @@ impl PitchClassMask {
     pub fn normalize(self) -> Self {
         (0..12)
             .map(|shift| self.rotate(-shift))
-            .min_by_key(|mask| mask.0)
+            .min_by_key(|mask| mask.bits())
             .unwrap_or(self)
     }
 
@@ -238,9 +257,13 @@ impl ThirdStackSignature {
     /// Encodes this signature into a compact `u32`, validating it first.
     pub fn encode(&self) -> Result<u32, PitchSetError> {
         self.validate()?;
-        let mut encoded = self.root.0 as u32;
+        let mut encoded = u32::from(self.root.value());
         for (index, step) in self.steps.iter().enumerate() {
-            let bit = matches!(step, ThirdStep::Major) as u32;
+            let bit = if matches!(step, ThirdStep::Major) {
+                1u32
+            } else {
+                0u32
+            };
             encoded |= bit << (4 + index);
         }
         if self.guard {
@@ -252,7 +275,9 @@ impl ThirdStackSignature {
     /// Decodes a `u32` produced by [`ThirdStackSignature::encode`] back into a
     /// validated signature.
     pub fn decode(encoded: u32) -> Result<Self, PitchSetError> {
-        let root = PitchClass((encoded & 0x0f) as u8);
+        let root =
+            PitchClass::new(u8::try_from(encoded & 0x0f).expect("third-stack root nibble fits u8"))
+                .map_err(|_| PitchSetError::InvalidThirdStackEncoding)?;
         let mut steps = Vec::new();
         let mut index = 4u32;
         let mut guard = false;

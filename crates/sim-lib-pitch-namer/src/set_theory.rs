@@ -5,7 +5,7 @@ pub fn label_mask(mask: PitchClassMask) -> String {
         .normalize()
         .pitch_classes()
         .into_iter()
-        .map(|pc| pc.0.to_string())
+        .map(|pc| pc.value().to_string())
         .collect::<Vec<_>>()
         .join(",");
     format!("set:[{pcs}]")

@@ -110,7 +110,7 @@ pub trait Tuning: Send + Sync {
     /// Returns the tuning degree corresponding to `pitch`.
     fn degree_of_pitch(&self, pitch: Pitch) -> Result<PitchClassN, SoundTuningError> {
         if self.divisions() == 12 {
-            PitchClassN::new(12, pitch.class.0 as u32)
+            PitchClassN::new(12, u32::from(pitch.class.value()))
         } else {
             PitchClassN::new(
                 self.divisions(),
@@ -433,7 +433,7 @@ impl Tuning for ScalaScl {
 }
 
 fn map_pitch_class_to_degree(divisions: u32, class: PitchClass) -> u32 {
-    (((class.0 as f64 / 12.0) * divisions as f64).round() as u32) % divisions
+    (((f64::from(class.value()) / 12.0) * f64::from(divisions)).round() as u32) % divisions
 }
 
 fn parse_scala_step(value: &str) -> Result<f64, SoundTuningError> {
@@ -452,7 +452,7 @@ fn parse_scala_step(value: &str) -> Result<f64, SoundTuningError> {
 fn just_intonation_cents(root: PitchClass, ratios: &[f64; 12]) -> [f64; 12] {
     let mut table = [0.0; 12];
     for (semitone, value) in table.iter_mut().enumerate() {
-        let offset = (semitone + 12 - root.0 as usize) % 12;
+        let offset = (semitone + 12 - usize::from(root.value())) % 12;
         *value = 1200.0 * ratios[offset].log2();
     }
     normalize_monotonic(&mut table);
@@ -474,9 +474,10 @@ fn frequency_from_cents_table(
     pitch: Pitch,
     table: &[f64; 12],
 ) -> Frequency {
-    let absolute = (pitch.octave as f64 + 1.0) * 1200.0 + table[pitch.class.0 as usize];
-    let reference_absolute =
-        (reference.0.octave as f64 + 1.0) * 1200.0 + table[reference.0.class.0 as usize];
+    let absolute =
+        (f64::from(pitch.octave) + 1.0) * 1200.0 + table[usize::from(pitch.class.value())];
+    let reference_absolute = (f64::from(reference.0.octave) + 1.0) * 1200.0
+        + table[usize::from(reference.0.class.value())];
     reference.1.shift_cents(absolute - reference_absolute)
 }
 

@@ -30,8 +30,8 @@ use sim_lib_pitch_set::PitchClassMask;
 /// ```
 pub fn label_riemann(mask: PitchClassMask, root: Option<PitchClass>) -> Option<String> {
     let root = root.or_else(|| mask.pitch_classes().into_iter().next())?;
-    let normalized = mask.rotate(-(root.0 as i32));
-    let quality = match normalized.0 & 0x0fff {
+    let normalized = mask.rotate(-i32::from(root.value()));
+    let quality = match normalized.bits() {
         0b0000_1001_0001 => "T",
         0b0000_1000_1001 => "t",
         _ => return None,

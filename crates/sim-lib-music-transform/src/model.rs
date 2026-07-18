@@ -8,7 +8,7 @@ use sim_lib_music_core::{
     Time, TimedNote,
 };
 use sim_lib_pitch_core::{Pitch, PitchClass};
-use sim_lib_pitch_scale::{Key, Mode, Scale};
+use sim_lib_pitch_scale::{Key, Mode, PitchScaleError, Scale};
 
 /// Error returned by transforms that reject invalid scaling factors.
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
@@ -86,11 +86,16 @@ impl FunctionMap {
     }
 
     /// Resolves a scale degree to a concrete pitch at the given octave.
-    pub fn degree_to_pitch(&self, degree: usize, key: &Key, octave: i16) -> Pitch {
-        Pitch {
-            class: self.scale_for_key(key).pitch_at_degree(degree),
+    pub fn degree_to_pitch(
+        &self,
+        degree: usize,
+        key: &Key,
+        octave: i16,
+    ) -> Result<Pitch, PitchScaleError> {
+        Ok(Pitch {
+            class: self.scale_for_key(key).pitch_at_degree(degree)?,
             octave,
-        }
+        })
     }
 }
 
@@ -303,7 +308,9 @@ pub fn map_to_function(object: &dyn MusicObject, key: &Key, fmap: &FunctionMap) 
     map_notes(object, |note| {
         match source_scale.degree_of(note.pitch.class) {
             Some(degree) => Note {
-                pitch: fmap.degree_to_pitch(degree, key, note.pitch.octave),
+                pitch: fmap
+                    .degree_to_pitch(degree, key, note.pitch.octave)
+                    .unwrap_or(note.pitch),
                 ..note
             },
             None => note,

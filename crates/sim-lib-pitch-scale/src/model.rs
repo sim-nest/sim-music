@@ -15,6 +15,9 @@ pub enum PitchScaleError {
     /// A custom scale interval fell outside the valid `0..12` semitone range.
     #[error("scale interval {0} is outside 0..12")]
     InvalidScaleInterval(u8),
+    /// A one-based scale degree was zero or otherwise unsupported.
+    #[error("invalid scale degree {0}")]
+    InvalidScaleDegree(usize),
 }
 
 /// A scale mode, defined by its semitone interval pattern from the tonic.
@@ -198,10 +201,19 @@ impl Scale {
     }
 
     /// Returns the pitch class at the one-based `degree`, wrapping past the octave.
-    pub fn pitch_at_degree(self, degree: usize) -> PitchClass {
+    pub fn pitch_at_degree(self, degree: usize) -> Result<PitchClass, PitchScaleError> {
+        self.try_pitch_at_degree(degree)
+    }
+
+    /// Returns the pitch class at the one-based `degree`, wrapping past the octave.
+    pub fn try_pitch_at_degree(self, degree: usize) -> Result<PitchClass, PitchScaleError> {
+        let index = degree
+            .checked_sub(1)
+            .ok_or(PitchScaleError::InvalidScaleDegree(degree))?;
         let intervals = self.mode.intervals();
-        let index = degree.saturating_sub(1) % intervals.len();
-        self.tonic.transpose(i32::from(intervals[index]))
+        Ok(self
+            .tonic
+            .transpose(i32::from(intervals[index % intervals.len()])))
     }
 
     /// Transposes `pitch` by `steps` scale degrees, staying within the scale and
@@ -212,7 +224,7 @@ impl Scale {
     pub fn transpose_diatonic(self, pitch: Pitch, steps: i32) -> Result<Pitch, PitchScaleError> {
         let degree = self
             .degree_of(pitch.class)
-            .ok_or(PitchScaleError::PitchClassOutOfScale(pitch.class.0))?;
+            .ok_or(PitchScaleError::PitchClassOutOfScale(pitch.class.value()))?;
         let intervals = self.mode.intervals();
         let start = degree as i32 - 1;
         let target = start + steps;
@@ -226,13 +238,22 @@ impl Scale {
 
     /// Maps a one-based chord-tone index (root, third, fifth, ...) to the
     /// one-based scale degree it occupies in tertian stacking.
-    pub fn chord_tone_to_scale_tone(chord_tone: usize) -> usize {
-        1 + chord_tone.saturating_sub(1) * 2
+    pub fn chord_tone_to_scale_tone(chord_tone: usize) -> Result<usize, PitchScaleError> {
+        let offset = chord_tone
+            .checked_sub(1)
+            .ok_or(PitchScaleError::InvalidScaleDegree(chord_tone))?;
+        offset
+            .checked_mul(2)
+            .and_then(|value| value.checked_add(1))
+            .ok_or(PitchScaleError::InvalidScaleDegree(chord_tone))
     }
 
     /// Maps a one-based scale degree to its zero-based diatonic step offset from
     /// the tonic.
-    pub fn scale_tone_to_diatonic(scale_tone: usize) -> i32 {
-        scale_tone.saturating_sub(1) as i32
+    pub fn scale_tone_to_diatonic(scale_tone: usize) -> Result<i32, PitchScaleError> {
+        let offset = scale_tone
+            .checked_sub(1)
+            .ok_or(PitchScaleError::InvalidScaleDegree(scale_tone))?;
+        i32::try_from(offset).map_err(|_| PitchScaleError::InvalidScaleDegree(scale_tone))
     }
 }

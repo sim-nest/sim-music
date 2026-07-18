@@ -112,7 +112,7 @@ fn encode_placement_transform(transform: &PlacementTransform) -> String {
         PlacementTransform::InvertAroundPitchClass(axis) => {
             format!(
                 "#(PlacementTransform kind=invert-pitch-class value={})",
-                axis.0
+                axis.value()
             )
         }
         PlacementTransform::Retrograde => "#(PlacementTransform kind=retrograde)".to_owned(),
@@ -126,7 +126,11 @@ fn encode_pitch_remap(remap: &PitchRemap) -> String {
             format!("#(PitchRemap kind=chromatic value={semitones})")
         }
         PitchRemap::PitchClass { from, to } => {
-            format!("#(PitchRemap kind=pitch-class from={} to={})", from.0, to.0)
+            format!(
+                "#(PitchRemap kind=pitch-class from={} to={})",
+                from.value(),
+                to.value()
+            )
         }
         PitchRemap::DrumKey(items) => format!(
             "#(PitchRemap kind=drum-key items=[{}])",

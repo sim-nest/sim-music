@@ -33,3 +33,9 @@ fn reader_sugar_uses_canonical_sharps() {
     assert_eq!(parse_pitch("Cs4").unwrap().class, PitchClass::CS);
     assert_eq!(parse_interval("TT").unwrap(), Interval::TRITONE);
 }
+
+#[test]
+fn pitch_class_constructor_rejects_invalid_values() {
+    assert_eq!(PitchClass::new(12), Err(PitchError::InvalidPitchClass(12)));
+    assert_eq!(PitchClass::B.value(), 11);
+}

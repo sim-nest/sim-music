@@ -18,7 +18,7 @@ pub(super) fn op_wire(op: &MutationOp) -> String {
         MutationOp::VelocityRemap { low, high } => format!("velocity:{low}:{high}"),
         MutationOp::RhythmDisplace { offset } => format!("rhythm:{}", time_wire(*offset)),
         MutationOp::ScaleConform { scale } => {
-            format!("scale:{}:{}", scale.tonic.0, scale.mode.name())
+            format!("scale:{}:{}", scale.tonic.value(), scale.mode.name())
         }
     }
 }

@@ -142,9 +142,16 @@ impl Chord {
 
     /// Builds the diatonic triad rooted on `degree` of `scale`, at `root_octave`,
     /// by stacking diatonic thirds.
-    pub fn chord_tones_in(scale: Scale, degree: usize, root_octave: i16) -> Self {
+    pub fn chord_tones_in(
+        scale: Scale,
+        degree: usize,
+        root_octave: i16,
+    ) -> Result<Self, PitchChordError> {
+        let class = scale
+            .pitch_at_degree(degree)
+            .map_err(|_| PitchChordError::InvalidScaleDegree(degree))?;
         let root = Pitch {
-            class: scale.pitch_at_degree(degree),
+            class,
             octave: root_octave,
         };
         let third = scale
@@ -153,7 +160,7 @@ impl Chord {
         let fifth = scale
             .transpose_diatonic(root, 4)
             .unwrap_or(root.transpose(7));
-        Self::new(vec![root, third, fifth])
+        Ok(Self::new(vec![root, third, fifth]))
     }
 }
 

@@ -254,7 +254,9 @@ impl PlacementTransform {
                 ("kind", tag_expr("invert-pitch")),
                 ("value", pitch_expr(*axis)),
             ]),
-            Self::InvertAroundPitchClass(axis) => value_transform("invert-pitch-class", axis.0),
+            Self::InvertAroundPitchClass(axis) => {
+                value_transform("invert-pitch-class", axis.value())
+            }
             Self::Retrograde => map(vec![
                 ("tag", tag_expr("transform")),
                 ("kind", tag_expr("retrograde")),
@@ -300,8 +302,8 @@ impl PitchRemap {
             Self::PitchClass { from, to } => map(vec![
                 ("tag", tag_expr("pitch-remap")),
                 ("kind", tag_expr("pitch-class")),
-                ("from", Expr::String(from.0.to_string())),
-                ("to", Expr::String(to.0.to_string())),
+                ("from", Expr::String(from.value().to_string())),
+                ("to", Expr::String(to.value().to_string())),
             ]),
             Self::DrumKey(items) => map(vec![
                 ("tag", tag_expr("pitch-remap")),

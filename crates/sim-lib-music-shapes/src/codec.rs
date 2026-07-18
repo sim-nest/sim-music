@@ -392,7 +392,7 @@ pub fn encode_chord_window(window: &ChordWindow) -> String {
         encode_time(window.until),
         mode,
         window.range_mask.bits,
-        window.pitch_class_mask.0,
+        window.pitch_class_mask.bits(),
         root,
     )
 }

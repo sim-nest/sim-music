@@ -163,7 +163,7 @@ impl PitchRemap {
             }),
             Self::ChordTone { scale, degree } => {
                 map_pitches_with_diagnostics(object, "pitch-remap", |pitch| {
-                    Ok(nearest_pitch_in_chord(pitch, *scale, *degree))
+                    nearest_pitch_in_chord(pitch, *scale, *degree)
                 })
             }
             Self::Tuning(tuning) => TransformReport::clean(crate::map_notes(object, |note| {
@@ -236,15 +236,36 @@ fn matrix_remap(
             "matrix remap produced an octave outside the supported range",
         )
     })?;
-    Ok(Pitch {
-        class: scale.pitch_at_degree(target_degree as usize),
-        octave,
-    })
+    let target_degree = usize::try_from(target_degree).map_err(|_| {
+        TransformDiagnostic::new(
+            TransformDiagnosticCode::InvalidMatrix,
+            "pitch-remap",
+            "matrix remap produced a scale degree outside the supported range",
+        )
+    })?;
+    let class = scale.pitch_at_degree(target_degree).map_err(|_| {
+        TransformDiagnostic::new(
+            TransformDiagnosticCode::InvalidMatrix,
+            "pitch-remap",
+            "matrix remap produced a non-positive scale degree",
+        )
+    })?;
+    Ok(Pitch { class, octave })
 }
 
-fn nearest_pitch_in_chord(pitch: Pitch, scale: Scale, degree: usize) -> Pitch {
-    let chord = Chord::chord_tones_in(scale, degree, pitch.octave);
-    chord
+fn nearest_pitch_in_chord(
+    pitch: Pitch,
+    scale: Scale,
+    degree: usize,
+) -> Result<Pitch, TransformDiagnostic> {
+    let chord = Chord::chord_tones_in(scale, degree, pitch.octave).map_err(|_| {
+        TransformDiagnostic::new(
+            TransformDiagnosticCode::UnsupportedMapping,
+            "pitch-remap",
+            "chord-tone remap needs a one-based scale degree",
+        )
+    })?;
+    Ok(chord
         .pitches()
         .into_iter()
         .min_by_key(|candidate| {
@@ -253,7 +274,7 @@ fn nearest_pitch_in_chord(pitch: Pitch, scale: Scale, degree: usize) -> Pitch {
                 candidate.semitone(),
             )
         })
-        .unwrap_or_else(|| nearest_pitch_in_scale(pitch, &scale))
+        .unwrap_or_else(|| nearest_pitch_in_scale(pitch, &scale)))
 }
 
 fn out_of_scale_diagnostic(
@@ -264,7 +285,7 @@ fn out_of_scale_diagnostic(
     TransformDiagnostic::new(
         TransformDiagnosticCode::PitchOutOfScale,
         transform,
-        format!("{action} cannot place pitch class {}", pitch.class.0),
+        format!("{action} cannot place pitch class {}", pitch.class.value()),
     )
 }
 

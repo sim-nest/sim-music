@@ -91,7 +91,7 @@ pub(crate) fn spell_pitch_in_key(
         KeyFlavor::Sharps | KeyFlavor::Neutral => SHARP_SPELLINGS,
         KeyFlavor::Flats => FLAT_SPELLINGS,
     };
-    let (letter, accidental) = table[pitch.class.0 as usize];
+    let (letter, accidental) = table[usize::from(pitch.class.value())];
     Ok(SpelledPitch {
         letter,
         accidental,
