@@ -14,7 +14,7 @@ use sim_lib_midi_core::{
 use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
 use sim_lib_stream_core::{
-    BufferPolicy, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
+    BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
     StreamPacket, StreamValue, TransportProfile,
 };
 use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
@@ -267,7 +267,7 @@ fn pcm_metadata(id: &str) -> StreamMetadata {
         Symbol::new(id),
         StreamMedia::Pcm,
         StreamDirection::Source,
-        Symbol::qualified("clock", "pcm"),
+        ClockDomain::Sample.symbol(),
         BufferPolicy::bounded(16).unwrap(),
     )
 }
@@ -277,7 +277,7 @@ fn data_metadata(id: &str) -> StreamMetadata {
         Symbol::new(id),
         StreamMedia::Data,
         StreamDirection::Source,
-        Symbol::qualified("clock", "data"),
+        ClockDomain::ServerFrame.symbol(),
         BufferPolicy::bounded(16).unwrap(),
     )
 }
