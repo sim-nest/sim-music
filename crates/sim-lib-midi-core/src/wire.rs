@@ -1,8 +1,7 @@
 //! Canonical MIDI channel-message wire bytes.
 //!
 //! The status-nibble + data-byte layout of a [`ChannelMessage`] is fixed by the
-//! MIDI spec; the SMF writer and the wasm frame model each hand-rolled the same
-//! `match`. This is the one home for it (OVERLAP6.14).
+//! MIDI spec; SMF writing and wasm frame encoding share this implementation.
 
 use crate::{Channel, ChannelMessage, MidiError, U7, U14};
 

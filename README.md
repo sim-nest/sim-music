@@ -185,10 +185,22 @@ audio into pitched note candidates that feed the music layer.
 
 ## Validation
 
-These commands run in the constellation workspace; only `sim-kernel` builds from a lone clone today (see `DEVELOPING.md` in `sim-sdk`). A single-repo build lands with the first crates.io publish.
+Install the native MIDI build metadata before running the full all-features
+gate. On Debian or Ubuntu:
 
-```bash
-cargo fmt --check && cargo test --workspace && cargo clippy --workspace -- -D warnings && cargo doc --workspace --no-deps
+```sh
+sudo apt-get install -y pkg-config libasound2-dev
+```
+
+Run the same gates as CI:
+
+```sh
+cargo fmt --all --check
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+cargo doc --workspace --no-deps
+cargo clippy --workspace --all-features --all-targets -- -D warnings
+cargo test --workspace --all-features
 cargo run -p xtask -- simdoc --check
 ```
 

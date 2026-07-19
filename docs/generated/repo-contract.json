@@ -16,19 +16,19 @@
     {
       "id": "cookbook/audio-synth-ps3300",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata."
     },
     {
       "id": "cookbook/audio-synth-system55",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence."
     },
     {
       "id": "cookbook/audio-synth-system700",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "System 700 module ids, main-console patch rendering, and synthetic fixtures."
     },
     {
@@ -3425,10 +3425,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "beeb21c74fe2e080e536fb4f1efdddafb700e226",
+    "git_commit": "04dd8268c92515b3f3a858013debfb8f0e157fad",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "beeb21c74fe2e080e536fb4f1efdddafb700e226",
+    "source_commit": "04dd8268c92515b3f3a858013debfb8f0e157fad",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3441,7 +3441,7 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "b4366ec47b86cb84",
+    "workspace_hash": "47cdacd8fa0f1c25",
     "workspace_hash_algorithm": "fnv1a64",
     "workspace_hash_input_count": 626,
     "workspace_hash_inputs": [
@@ -4627,8 +4627,8 @@
       "book": "audio-synth-ps3300",
       "book_toml": "crates/sim-lib-music-synth/recipes/ps3300/book.toml",
       "card_id": "cookbook/audio-synth-ps3300",
-      "group": "",
-      "package": "recipes",
+      "group": "workspace",
+      "package": "sim-lib-music-synth",
       "recipe_count": 0,
       "recipes": [],
       "summary": "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata.",
@@ -4638,8 +4638,8 @@
       "book": "audio-synth-system55",
       "book_toml": "crates/sim-lib-music-synth/recipes/system55/book.toml",
       "card_id": "cookbook/audio-synth-system55",
-      "group": "",
-      "package": "recipes",
+      "group": "workspace",
+      "package": "sim-lib-music-synth",
       "recipe_count": 0,
       "recipes": [],
       "summary": "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence.",
@@ -4649,8 +4649,8 @@
       "book": "audio-synth-system700",
       "book_toml": "crates/sim-lib-music-synth/recipes/system700/book.toml",
       "card_id": "cookbook/audio-synth-system700",
-      "group": "",
-      "package": "recipes",
+      "group": "workspace",
+      "package": "sim-lib-music-synth",
       "recipe_count": 0,
       "recipes": [],
       "summary": "System 700 module ids, main-console patch rendering, and synthetic fixtures.",

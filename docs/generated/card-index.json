@@ -16,19 +16,19 @@
     {
       "id": "cookbook/audio-synth-ps3300",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "PS-3300 wrapper, synthetic polyphonic patch, render fixtures, and pin-matrix metadata."
     },
     {
       "id": "cookbook/audio-synth-system55",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "System 55 module ids, synthetic voice fixtures, patch metadata, and S-trigger fit evidence."
     },
     {
       "id": "cookbook/audio-synth-system700",
       "kind": "cookbook-recipe",
-      "owner": "recipes",
+      "owner": "sim-lib-music-synth",
       "summary": "System 700 module ids, main-console patch rendering, and synthetic fixtures."
     },
     {
