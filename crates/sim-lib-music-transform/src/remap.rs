@@ -6,8 +6,8 @@ use sim_lib_pitch_core::{Pitch, PitchClass};
 use sim_lib_pitch_scale::Scale;
 
 use crate::{
-    CallablePitchMap, TransformDiagnostic, TransformDiagnosticCode, TransformReport,
-    map_pitches_with_diagnostics, nearest_pitch_in_scale, note_with_pitch,
+    CallablePitchMap, TransformDiagnostic, TransformDiagnosticCode, TransformError,
+    TransformReport, map_pitches_with_diagnostics, nearest_pitch_in_scale, note_with_pitch,
 };
 
 /// Microtonal tuning offset expressed in cents.
@@ -115,18 +115,21 @@ pub enum PitchRemap {
 
 impl PitchRemap {
     /// Applies the remap and returns just the music, discarding diagnostics.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
-        self.apply_report(object).music
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
+        Ok(self.apply_report(object)?.music)
     }
 
     /// Applies the remap, returning the music together with any diagnostics.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
         match self {
             Self::Chromatic(semitones) => {
-                TransformReport::clean(crate::map_notes(object, |note| {
+                Ok(TransformReport::clean(crate::map_notes(object, |note| {
                     let pitch = note.pitch.transpose(*semitones);
                     note_with_pitch(note, pitch)
-                }))
+                })?))
             }
             Self::ScaleDegree { scale, steps } => {
                 map_pitches_with_diagnostics(object, "pitch-remap", |pitch| {
@@ -136,7 +139,7 @@ impl PitchRemap {
                 })
             }
             Self::PitchClass { from, to } => {
-                TransformReport::clean(crate::map_notes(object, |note| {
+                Ok(TransformReport::clean(crate::map_notes(object, |note| {
                     let pitch = if note.pitch.class == *from {
                         Pitch {
                             class: *to,
@@ -146,7 +149,7 @@ impl PitchRemap {
                         note.pitch
                     };
                     note_with_pitch(note, pitch)
-                }))
+                })?))
             }
             Self::DrumKey(map) => map_pitches_with_diagnostics(object, "pitch-remap", |pitch| {
                 let Some(key) = pitch.to_midi() else {
@@ -166,10 +169,10 @@ impl PitchRemap {
                     nearest_pitch_in_chord(pitch, *scale, *degree)
                 })
             }
-            Self::Tuning(tuning) => TransformReport::clean(crate::map_notes(object, |note| {
+            Self::Tuning(tuning) => Ok(TransformReport::clean(crate::map_notes(object, |note| {
                 let pitch = note.pitch.transpose(tuning.semitone_delta());
                 note_with_pitch(note, pitch)
-            })),
+            })?)),
             Self::Vector { scale, offsets } => {
                 map_pitches_with_diagnostics(object, "pitch-remap", |pitch| {
                     vector_remap(pitch, *scale, offsets)
@@ -180,10 +183,10 @@ impl PitchRemap {
                     matrix_remap(pitch, *scale, matrix)
                 })
             }
-            Self::Callable(map) => TransformReport::clean(crate::map_notes(object, |note| {
+            Self::Callable(map) => Ok(TransformReport::clean(crate::map_notes(object, |note| {
                 let pitch = map.map_pitch(note.pitch);
                 note_with_pitch(note, pitch)
-            })),
+            })?)),
         }
     }
 }

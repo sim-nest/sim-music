@@ -1,6 +1,6 @@
 use sim_lib_music_core::{Music, MusicObject};
 
-use crate::PatternMutatorConfig;
+use crate::{PatternMutatorConfig, TransformError};
 
 /// Player that applies a [`PatternMutatorConfig`] to incoming material.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -16,7 +16,7 @@ impl PatternMutatorPlayer {
     }
 
     /// Applies the configured mutation to the input and returns the result.
-    pub fn play(&self, input: &dyn MusicObject) -> Music {
+    pub fn play(&self, input: &dyn MusicObject) -> Result<Music, TransformError> {
         self.config.apply(input)
     }
 

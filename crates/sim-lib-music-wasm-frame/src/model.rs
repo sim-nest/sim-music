@@ -99,13 +99,7 @@ pub fn analyze_smf_bytes(bytes: &[u8]) -> Result<MusicDemoReport, MusicWasmError
     let piano_roll = lift_to_piano_roll(&file)?;
     let diff_roll = lift_to_diff_roll(&file)?;
     let score = score_from_counterpoint(&counterpoint)?;
-    Ok(report(
-        progression,
-        counterpoint,
-        piano_roll,
-        diff_roll,
-        score,
-    ))
+    report(progression, counterpoint, piano_roll, diff_roll, score)
 }
 
 /// Decodes a music-file surface, lowers it to MIDI, and analyzes the result.
@@ -127,7 +121,7 @@ pub fn lift_frames_to_music_file(frames: &[MidiEventFrame]) -> Result<String, Mu
     let file = frame_array_to_smf(frames, SmfFormat::SingleTrack)?;
     let counterpoint = lift_to_counterpoint(&file, CounterpointLiftOpts::default())?;
     let score = score_from_counterpoint(&counterpoint)?;
-    Ok(score_citizen_text(&score))
+    Ok(score_citizen_text(&score)?)
 }
 
 fn report(
@@ -136,14 +130,14 @@ fn report(
     piano_roll: PianoRoll,
     diff_roll: DiffRoll,
     score: Score,
-) -> MusicDemoReport {
-    MusicDemoReport {
+) -> Result<MusicDemoReport, MusicWasmError> {
+    Ok(MusicDemoReport {
         progression: encode_progression(&progression),
         counterpoint: encode_counterpoint(&counterpoint),
         piano_roll: encode_piano_roll(&piano_roll),
         diff_roll: encode_diff_roll(&diff_roll),
-        music_file: score_citizen_text(&score),
-    }
+        music_file: score_citizen_text(&score)?,
+    })
 }
 
 fn score_from_counterpoint(counterpoint: &Counterpoint) -> Result<Score, MusicWasmError> {
@@ -155,11 +149,11 @@ fn score_from_counterpoint(counterpoint: &Counterpoint) -> Result<Score, MusicWa
     )?)
 }
 
-fn score_citizen_text(score: &Score) -> String {
-    let form = encode_music_file(score);
-    format!(
+fn score_citizen_text(score: &Score) -> Result<String, MusicShapeError> {
+    let form = encode_music_file(score)?;
+    Ok(format!(
         "#({} v1 {})",
         music_score_class_symbol(),
         encode_string_literal(&form)
-    )
+    ))
 }

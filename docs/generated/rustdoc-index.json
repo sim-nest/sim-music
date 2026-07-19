@@ -321,7 +321,7 @@
       "group": "workspace",
       "manifest": "xtask/Cargo.toml",
       "package": "xtask",
-      "summary": "SIM workspace package for xtask."
+      "summary": "Repository maintenance tasks for sim-music validation and generated docs."
     }
   ]
 }

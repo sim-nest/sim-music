@@ -25,7 +25,7 @@ fn lower_music_file_to_frames_round_trips() {
         ),
     )
     .unwrap();
-    let music = sim_lib_music_shapes::encode_music_file(&score);
+    let music = sim_lib_music_shapes::encode_music_file(&score).unwrap();
     let frames = lower_music_file_to_frames(&music).unwrap();
     let lifted = lift_frames_to_music_file(&frames).unwrap();
     assert!(lifted.starts_with("#(music/Score v1 "));

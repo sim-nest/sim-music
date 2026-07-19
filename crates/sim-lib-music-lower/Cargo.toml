@@ -3,7 +3,7 @@ name = "sim-lib-music-lower"
 version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib music lower."
+description = "Lowering from structured SIM music objects into MIDI tracks and SMF-ready events."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -20,4 +20,3 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

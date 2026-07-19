@@ -5,7 +5,7 @@ use sim_lib_pitch_core::Pitch;
 use sim_lib_pitch_scale::Scale;
 use thiserror::Error;
 
-use crate::{canonical_roll, to_piano_roll};
+use crate::{TransformError, canonical_roll, to_piano_roll};
 
 mod ops;
 mod rng;
@@ -154,7 +154,7 @@ impl PatternMutatorConfig {
     }
 
     /// Applies the configured mutations to the input and returns the result.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
         mutate_pattern(object, self)
     }
 
@@ -236,8 +236,11 @@ impl PatternMutatorConfig {
 }
 
 /// Applies a [`PatternMutatorConfig`] to material and returns the mutated music.
-pub fn mutate_pattern(object: &dyn MusicObject, config: &PatternMutatorConfig) -> Music {
-    let original = to_piano_roll(object)
+pub fn mutate_pattern(
+    object: &dyn MusicObject,
+    config: &PatternMutatorConfig,
+) -> Result<Music, TransformError> {
+    let original = to_piano_roll(object)?
         .items
         .into_iter()
         .enumerate()
@@ -255,13 +258,13 @@ pub fn mutate_pattern(object: &dyn MusicObject, config: &PatternMutatorConfig) -
             &config.locks,
             &mut rng,
             &mut next_source_index,
-        );
+        )?;
         restore_locks(&mut notes, &original, &config.locks);
     }
 
-    Music::PianoRoll(canonical_roll(
+    Ok(Music::PianoRoll(canonical_roll(
         notes.into_iter().map(|note| note.item).collect(),
-    ))
+    )?))
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

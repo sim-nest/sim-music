@@ -24,7 +24,7 @@ fn render_music_file_produces_audio_and_tables() {
         ),
     )
     .unwrap();
-    let text = sim_lib_music_shapes::encode_music_file(&score);
+    let text = sim_lib_music_shapes::encode_music_file(&score).unwrap();
     let report = render_music_file(&text).unwrap();
     assert!(!report.audio.wav.is_empty());
     assert!(!report.intervals.is_empty());
