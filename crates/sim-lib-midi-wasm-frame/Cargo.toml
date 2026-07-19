@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-wasm-frame"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 license = "MPL-2.0"
 description = "MIDI binary-frame facade descriptors."
@@ -18,9 +18,8 @@ model = []
 sim-cookbook = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
-sim-wasm-abi = { version = "0.1.0" }
+sim-wasm-abi = { version = "0.1.1" }
 thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-
