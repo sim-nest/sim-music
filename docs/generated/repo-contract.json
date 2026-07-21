@@ -3425,10 +3425,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "20612c592417a6728871ad706cc2043d155c54af",
+    "git_commit": "6c1fd92dcced8bd933d353a309ec5c0275326853",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "20612c592417a6728871ad706cc2043d155c54af",
+    "source_commit": "6c1fd92dcced8bd933d353a309ec5c0275326853",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3441,9 +3441,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "24939c5828303d78",
+    "workspace_hash": "5e448b0363eccf6d",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 626,
+    "workspace_hash_input_count": 627,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4070,6 +4070,7 @@
       "crates/sim-lib-stream-midi/src/spine.rs",
       "crates/sim-lib-stream-midi/src/tests.rs",
       "crates/sim-lib-stream-midi/src/tracked.rs",
+      "features.toml",
       "xtask/Cargo.toml"
     ]
   },

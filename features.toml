@@ -1,0 +1,69 @@
+schema = "sim.features"
+
+[enforcement.audience]
+user = "strict"
+code = "advisory"
+framework = "advisory"
+
+[enforcement.surface]
+cli = "strict"
+docs = "advisory"
+
+[enforcement.route]
+major_entrypoints = "advisory"
+frameworks = "advisory"
+
+[[feature]]
+id = "feature/sim-music/generated-docs"
+title = "Repository documentation surface"
+summary = "Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates."
+owner = "crate/xtask"
+audiences = ["code"]
+guidance = "Use this row when checking the generated documentation and index lane for the music repo."
+claims_anchors = [
+  "anchor/cli/xtask",
+  "anchor/doc/generated/feature-map",
+  "anchor/doc/generated/sim-index-fragment",
+]
+claims_surfaces = [
+  "cli/xtask",
+  "docs/sim-music/generated",
+]
+
+[[feature]]
+id = "feature/sim-music/synth-performance-workbench"
+title = "Synth performance workbench"
+summary = "Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance."
+owner = "crate/sim-lib-music-synth"
+audiences = ["user", "code"]
+guidance = "Use this row when building a playable synth fixture or comparing a placement route."
+claims_anchors = [
+  "anchor/export/sim-lib-music-synth/view/component",
+]
+
+[[feature]]
+id = "feature/sim-music/midi-notation-workflows"
+title = "MIDI and notation workflows"
+summary = "Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms."
+owner = "crate/sim-lib-midi-core"
+audiences = ["user", "code"]
+guidance = "Use this row when moving a musical phrase between MIDI, notation, and SIM music descriptors."
+
+[[feature]]
+id = "feature/sim-music/pitch-and-sound-vocabulary"
+title = "Pitch and sound vocabulary"
+summary = "Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors."
+owner = "crate/sim-lib-pitch-core"
+audiences = ["user", "code"]
+guidance = "Use this row when explaining the musical vocabulary that supports synth and MIDI workflows."
+
+[[route]]
+id = "route/build-music-performance"
+task = "Build a music performance"
+audiences = ["user", "code"]
+steps = [
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row supplies pitch and sound descriptors." },
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row moves material into and out of performance formats." },
+  { feature = "feature/sim-music/synth-performance-workbench", why = "The synth row turns that material into local or browser-backed sound." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-synth/01-basics/subtractive-preset", why = "The preset recipe is the smallest synth example." },
+]
