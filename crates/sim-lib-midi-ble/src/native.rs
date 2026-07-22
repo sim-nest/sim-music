@@ -7,7 +7,7 @@ pub use packet::{decode_ble_midi_packet, encode_ble_midi_event};
 use sim_lib_midi_core::{MidiEvent, MidiSink, MidiSource};
 use sim_lib_midi_live::{LiveMidiError, RingMidiBuffer};
 use sim_lib_stream_host::{
-    DeviceDirection, DeviceKind, DeviceProvider, DeviceRecord, Placement, StreamEvalSite,
+    CatalogDeviceProvider, DeviceDirection, DeviceKind, DeviceRecord, Placement, StreamEvalSite,
 };
 
 use bluez::{discover_bluez_dbus, write_bluez_characteristic};
@@ -358,7 +358,7 @@ impl BleMidiProvider {
     }
 }
 
-impl DeviceProvider for BleMidiProvider {
+impl CatalogDeviceProvider for BleMidiProvider {
     fn enumerate(&self) -> Result<Vec<DeviceRecord>> {
         Ok(self.devices.iter().map(Self::record).collect())
     }

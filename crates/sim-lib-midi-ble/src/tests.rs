@@ -9,7 +9,7 @@ use sim_lib_midi_core::{
 use sim_lib_midi_rtmidi::RtmidiPort;
 use sim_lib_stream_host::HostReconnectPolicy;
 #[cfg(feature = "ble-midi-hardware")]
-use sim_lib_stream_host::{DeviceDirection, DeviceKind, DeviceProvider, Placement};
+use sim_lib_stream_host::{CatalogDeviceProvider, DeviceDirection, DeviceKind, Placement};
 
 use crate::{
     BLE_MIDI_IO_CHARACTERISTIC_UUID, BLE_MIDI_SERVICE_UUID, BleMidiDevice, BluezDeviceFixture,

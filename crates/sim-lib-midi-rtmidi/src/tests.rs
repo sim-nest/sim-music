@@ -17,7 +17,7 @@ use crate::{
     RtmidiInputSource, RtmidiOutputSink, RtmidiPort, RtmidiProvider, WinMmProvider, input_ring,
 };
 #[cfg(feature = "rtmidi-hardware")]
-use sim_lib_stream_host::{DeviceKind, DeviceProvider, Placement};
+use sim_lib_stream_host::{CatalogDeviceProvider, DeviceKind, Placement};
 
 #[test]
 fn rtmidi_lists_and_opens_fake_ports_without_hardware() {
@@ -283,7 +283,7 @@ fn fixture_provider(id_transport: &str, label: &str) -> FixtureRtmidiProvider {
 }
 
 #[cfg(feature = "rtmidi-hardware")]
-fn assert_hardware_provider(provider: &dyn DeviceProvider, transport: &str) {
+fn assert_hardware_provider(provider: &dyn CatalogDeviceProvider, transport: &str) {
     let records = provider.enumerate().unwrap();
 
     assert_eq!(records.len(), 2);
@@ -299,7 +299,11 @@ fn assert_hardware_provider(provider: &dyn DeviceProvider, transport: &str) {
 }
 
 #[cfg(feature = "rtmidi-hardware")]
-fn assert_hardware_provider_opens(provider: &dyn DeviceProvider, id_transport: &str, label: &str) {
+fn assert_hardware_provider_opens(
+    provider: &dyn CatalogDeviceProvider,
+    id_transport: &str,
+    label: &str,
+) {
     let input_id = Symbol::new(format!("rtmidi/{id_transport}/in-0"));
     let output_id = Symbol::new(format!("rtmidi/{id_transport}/out-0"));
     let input = provider.open(&input_id).unwrap();
