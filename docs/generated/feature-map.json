@@ -1,5 +1,398 @@
 {
-  "schema": "sim.feature-map.v1",
-  "repo": "sim-music",
-  "packages": []
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-daw-session"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "dep:sim-lib-midi-live",
+            "dep:zbus"
+          ],
+          "name": "ble-midi-hardware",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-midi-live"
+            }
+          ]
+        },
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-midi-ble"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-midi-core"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-midi-live"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:midir",
+            "dep:sim-lib-midi-live"
+          ],
+          "name": "rtmidi-hardware",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-midi-live"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-midi-rtmidi"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-midi-shapes"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-midi-smf"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-midi-sysex"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-midi-wasm-frame"
+    },
+    {
+      "features": [
+        {
+          "edges": [],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-discrete-spectral"
+          ],
+          "name": "discrete-fwht",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-music-analysis"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-combinators"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-core"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-lift"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-lower"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-notation"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-shapes"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-synth"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-music-transform"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-music-wasm-frame"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-chord"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-core"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-dissonance"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-forte"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-jazz"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-riemann"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-namer-roman"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-scale"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-set"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-pitch-shapes"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-pitch-wasm-frame"
+    },
+    {
+      "features": [
+        {
+          "edges": [],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-music-core",
+            "dep:sim-lib-music-analysis"
+          ],
+          "name": "sound-music",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-music-core"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-analysis"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-sound-audio-lift"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-bridge"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-core"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-dissonance"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-gm"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-render"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-shapes"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-spectrum"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-timbre"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-sound-tuning"
+    },
+    {
+      "features": [
+        {
+          "edges": [
+            "sound-music",
+            "model"
+          ],
+          "name": "default",
+          "workspace_edges": []
+        },
+        {
+          "edges": [],
+          "name": "model",
+          "workspace_edges": []
+        },
+        {
+          "edges": [
+            "dep:sim-lib-music-core",
+            "dep:sim-lib-music-lower",
+            "dep:sim-lib-music-shapes"
+          ],
+          "name": "sound-music",
+          "workspace_edges": [
+            {
+              "feature": null,
+              "package": "sim-lib-music-core"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-lower"
+            },
+            {
+              "feature": null,
+              "package": "sim-lib-music-shapes"
+            }
+          ]
+        }
+      ],
+      "group": "workspace",
+      "package": "sim-lib-sound-wasm-frame"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-stream-bridge"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-stream-file"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-stream-midi"
+    },
+    {
+      "features": [],
+      "group": "workspace",
+      "package": "xtask"
+    }
+  ]
 }

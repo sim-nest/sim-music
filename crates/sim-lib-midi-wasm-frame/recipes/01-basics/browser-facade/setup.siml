@@ -1,1 +1,1 @@
-(quote (midi-wasm facade smf event frame-safe))
+"midi-wasm descriptor: browser-safe SMF and event frame facade"

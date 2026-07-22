@@ -5,7 +5,7 @@ use sim_kernel::{DefaultFactory, EagerPolicy};
 use sim_lib_sound_bridge::ScheduledTone;
 use sim_lib_sound_core::{Frequency, Tone};
 
-use crate::{PcmRenderer, RendererOptions, install_sound_render_lib};
+use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
 
 #[test]
 fn render_tone_produces_non_zero_samples_for_sine() {
@@ -23,6 +23,32 @@ fn write_wav_emits_valid_riff_wave_header() {
     let wav = renderer.write_wav(&rendered, Vec::new()).unwrap();
     assert_eq!(&wav[0..4], b"RIFF");
     assert_eq!(&wav[8..12], b"WAVE");
+}
+
+#[test]
+fn write_wav_rejects_channel_misaligned_samples() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+
+    let err = renderer.write_wav(&[0.0], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::ChannelMisalignedSamples);
+}
+
+#[test]
+fn write_wav_uses_checked_header_arithmetic() {
+    let renderer = PcmRenderer::new(RendererOptions::new(u32::MAX, 2).unwrap()).unwrap();
+
+    let err = renderer.write_wav(&[], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::BufferTooLarge);
+}
+
+#[test]
+fn pcm_renderer_exposes_validated_options_through_accessors() {
+    let renderer = PcmRenderer::new(RendererOptions::new(22_050, 1).unwrap()).unwrap();
+
+    assert_eq!(renderer.sample_rate(), 22_050);
+    assert_eq!(renderer.channels(), 1);
 }
 
 #[test]

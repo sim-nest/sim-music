@@ -53,6 +53,9 @@ pub enum MusicShapeError {
     /// A token in the form text was malformed.
     #[error("invalid token in music shape")]
     InvalidToken,
+    /// A public `MusicObject` could not be represented by the music shape codec.
+    #[error("unsupported music object: {0}")]
+    UnsupportedMusicObject(&'static str),
     /// A construction error surfaced from `sim-lib-music-core`.
     #[error(transparent)]
     Music(#[from] MusicError),
@@ -90,27 +93,23 @@ pub fn encode_rest(rest: &Rest) -> String {
 }
 
 /// Encodes a `Par` parallel composition as its `#(Par ...)` form.
-pub fn encode_par(par: &Par) -> String {
-    format!(
-        "#(Par children=[{}])",
-        par.children
-            .iter()
-            .map(|child| encode_music_object(child.as_ref()))
-            .collect::<Vec<_>>()
-            .join(",")
-    )
+pub fn encode_par(par: &Par) -> Result<String, MusicShapeError> {
+    let children = par
+        .children
+        .iter()
+        .map(|child| encode_music_object(child.as_ref()))
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(format!("#(Par children=[{}])", children.join(",")))
 }
 
 /// Encodes a `Seq` sequential composition as its `#(Seq ...)` form.
-pub fn encode_seq(seq: &Seq) -> String {
-    format!(
-        "#(Seq children=[{}])",
-        seq.children
-            .iter()
-            .map(|child| encode_music_object(child.as_ref()))
-            .collect::<Vec<_>>()
-            .join(",")
-    )
+pub fn encode_seq(seq: &Seq) -> Result<String, MusicShapeError> {
+    let children = seq
+        .children
+        .iter()
+        .map(|child| encode_music_object(child.as_ref()))
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(format!("#(Seq children=[{}])", children.join(",")))
 }
 
 /// Encodes a `Chord` as its `#(Chord ...)` form.
@@ -194,8 +193,13 @@ pub fn encode_piano_roll(roll: &PianoRoll) -> String {
 }
 
 /// Encodes an `Arranger` as its `#(Arranger ...)` form.
-pub fn encode_arranger(arranger: &Arranger) -> String {
-    format!(
+pub fn encode_arranger(arranger: &Arranger) -> Result<String, MusicShapeError> {
+    let placements = arranger
+        .placements
+        .iter()
+        .map(encode_arranger_placement)
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(format!(
         "#(Arranger lanes=[{}] placements=[{}])",
         arranger
             .lanes
@@ -203,13 +207,8 @@ pub fn encode_arranger(arranger: &Arranger) -> String {
             .map(|lane| encode_string(&lane.0))
             .collect::<Vec<_>>()
             .join(","),
-        arranger
-            .placements
-            .iter()
-            .map(encode_arranger_placement)
-            .collect::<Vec<_>>()
-            .join(",")
-    )
+        placements.join(",")
+    ))
 }
 
 /// Encodes a `MidiTrackObj` as its `#(MidiTrackObj ...)` form.
@@ -239,42 +238,42 @@ pub fn encode_midi_file(file: &MidiFileObj) -> String {
 }
 
 /// Encodes a `Score` as its `#(Score ...)` root form.
-pub fn encode_score(score: &Score) -> String {
+pub fn encode_score(score: &Score) -> Result<String, MusicShapeError> {
     let key = score
         .key
         .as_deref()
         .map(encode_string)
         .unwrap_or_else(|| "none".to_owned());
-    format!(
+    Ok(format!(
         "#(Score tempo={} time_sig={}/{} key={} body={})",
         score.tempo_bpm,
         score.time_signature.0,
         score.time_signature.1,
         key,
-        encode_music(&score.body),
-    )
+        encode_music(&score.body)?,
+    ))
 }
 
 /// Encodes any `Music` variant by dispatching to the matching `encode_*` form.
-pub fn encode_music(music: &Music) -> String {
-    match music {
+pub fn encode_music(music: &Music) -> Result<String, MusicShapeError> {
+    Ok(match music {
         Music::Note(note) => encode_note(note),
         Music::Rest(rest) => encode_rest(rest),
-        Music::Par(par) => encode_par(par),
-        Music::Seq(seq) => encode_seq(seq),
+        Music::Par(par) => encode_par(par)?,
+        Music::Seq(seq) => encode_seq(seq)?,
         Music::Chord(chord) => encode_chord(chord),
         Music::Melody(melody) => encode_melody(melody),
         Music::Progression(progression) => encode_progression(progression),
         Music::Counterpoint(counterpoint) => encode_counterpoint(counterpoint),
         Music::PianoRoll(roll) => encode_piano_roll(roll),
-        Music::Arranger(arranger) => encode_arranger(arranger),
+        Music::Arranger(arranger) => encode_arranger(arranger)?,
         Music::MidiTrack(track) => encode_midi_track(track),
         Music::MidiFile(file) => encode_midi_file(file),
-    }
+    })
 }
 
 /// Encodes a top-level music file, which is a `Score`, to its root form.
-pub fn encode_music_file(score: &Score) -> String {
+pub fn encode_music_file(score: &Score) -> Result<String, MusicShapeError> {
     encode_score(score)
 }
 
@@ -392,20 +391,20 @@ pub fn encode_chord_window(window: &ChordWindow) -> String {
         encode_time(window.until),
         mode,
         window.range_mask.bits,
-        window.pitch_class_mask.0,
+        window.pitch_class_mask.bits(),
         root,
     )
 }
 
-pub(crate) fn encode_music_object(value: &dyn MusicObject) -> String {
+pub(crate) fn encode_music_object(value: &dyn MusicObject) -> Result<String, MusicShapeError> {
     if let Some(music) = value.as_any().downcast_ref::<Music>() {
         return encode_music(music);
     }
     if let Some(note) = value.as_any().downcast_ref::<Note>() {
-        return encode_note(note);
+        return Ok(encode_note(note));
     }
     if let Some(rest) = value.as_any().downcast_ref::<Rest>() {
-        return encode_rest(rest);
+        return Ok(encode_rest(rest));
     }
     if let Some(par) = value.as_any().downcast_ref::<Par>() {
         return encode_par(par);
@@ -414,39 +413,39 @@ pub(crate) fn encode_music_object(value: &dyn MusicObject) -> String {
         return encode_seq(seq);
     }
     if let Some(chord) = value.as_any().downcast_ref::<Chord>() {
-        return encode_chord(chord);
+        return Ok(encode_chord(chord));
     }
     if let Some(melody) = value.as_any().downcast_ref::<Melody>() {
-        return encode_melody(melody);
+        return Ok(encode_melody(melody));
     }
     if let Some(progression) = value.as_any().downcast_ref::<Progression>() {
-        return encode_progression(progression);
+        return Ok(encode_progression(progression));
     }
     if let Some(counterpoint) = value.as_any().downcast_ref::<Counterpoint>() {
-        return encode_counterpoint(counterpoint);
+        return Ok(encode_counterpoint(counterpoint));
     }
     if let Some(roll) = value.as_any().downcast_ref::<PianoRoll>() {
-        return encode_piano_roll(roll);
+        return Ok(encode_piano_roll(roll));
     }
     if let Some(arranger) = value.as_any().downcast_ref::<Arranger>() {
         return encode_arranger(arranger);
     }
     if let Some(track) = value.as_any().downcast_ref::<MidiTrackObj>() {
-        return encode_midi_track(track);
+        return Ok(encode_midi_track(track));
     }
     if let Some(file) = value.as_any().downcast_ref::<MidiFileObj>() {
-        return encode_midi_file(file);
+        return Ok(encode_midi_file(file));
     }
     let mut atoms = Vec::new();
     value.voices(Time::from_integer(0), &mut atoms);
     if let Some(atom) = atoms.first() {
         return match &atom.atom {
-            AtomRef::Note(note) => encode_note(note),
-            AtomRef::Rest(rest) => encode_rest(rest),
-            AtomRef::Phantom(_) => panic!("unsupported phantom music object {}", value.kind()),
+            AtomRef::Note(note) => Ok(encode_note(note)),
+            AtomRef::Rest(rest) => Ok(encode_rest(rest)),
+            AtomRef::Phantom(_) => Err(MusicShapeError::UnsupportedMusicObject(value.kind())),
         };
     }
-    panic!("unsupported music object {}", value.kind());
+    Err(MusicShapeError::UnsupportedMusicObject(value.kind()))
 }
 
 pub(crate) fn encode_articulation(articulation: Articulation) -> &'static str {

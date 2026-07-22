@@ -153,7 +153,7 @@ fn every_public_type_round_trips() {
 
     let just = default_just_intonation();
     let tuning = TuningDescriptor::JustIntonation {
-        root: just.root.0,
+        root: just.root.value(),
         ratios: just.ratios,
         reference_midi: 69,
         reference_hz: 440.0,

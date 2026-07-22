@@ -20,6 +20,17 @@ fn interval_vector_is_invariant_under_transposition() {
 }
 
 #[test]
+fn pitch_class_mask_rejects_high_bits() {
+    assert_eq!(
+        PitchClassMask::new(0x1000),
+        Err(PitchSetError::InvalidPitchClassMask(0x1000))
+    );
+    let mask = PitchClassMask::new(0x0fff).unwrap();
+    assert_eq!(mask.count_bits(), 12);
+    assert_eq!(mask.bits(), 0x0fff);
+}
+
+#[test]
 fn pitch_range_represents_full_midi_space() {
     let mut mask = PitchRangeMask::default();
     for key in 0..=127u8 {
@@ -38,4 +49,14 @@ fn third_stack_round_trip() {
     let encoded = signature.encode().unwrap();
     let decoded = ThirdStackSignature::decode(encoded).unwrap();
     assert_eq!(decoded.root, signature.root);
+}
+
+#[test]
+fn third_stack_decode_rejects_invalid_root_nibble() {
+    for root in 12..=15 {
+        assert_eq!(
+            ThirdStackSignature::decode(root).unwrap_err(),
+            PitchSetError::InvalidThirdStackEncoding
+        );
+    }
 }

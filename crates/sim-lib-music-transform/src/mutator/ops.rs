@@ -3,7 +3,8 @@ use std::collections::BTreeMap;
 use sim_lib_music_core::{Music, MusicObject, Time, TimedNote};
 
 use crate::{
-    RetrogradeMode, canonical_roll, chord_tones_in, pitch_invert, retrograde_with_mode, transpose,
+    RetrogradeMode, TransformError, canonical_roll, chord_tones_in, pitch_invert,
+    retrograde_with_mode, transpose,
 };
 
 use super::{MutationOp, PatternLockSet, PatternNote, PatternRng};
@@ -15,25 +16,25 @@ pub(super) fn apply_op(
     locks: &PatternLockSet,
     rng: &mut PatternRng,
     next_source_index: &mut usize,
-) {
+) -> Result<(), TransformError> {
     if amount == 0 && !matches!(op, MutationOp::Thin { .. }) {
-        return;
+        return Ok(());
     }
     match op {
-        MutationOp::Reverse => apply_reverse(notes, locks),
+        MutationOp::Reverse => apply_reverse(notes, locks)?,
         MutationOp::Rotate { steps } => apply_rotate(notes, scaled_i32(*steps, amount), locks),
         MutationOp::Transpose { semitones } => {
             let semitones = scaled_i32(*semitones, amount);
             if semitones != 0 {
                 transform_unlocked(notes, locks, |item| {
-                    transform_single(item, |object| transpose(object, semitones))
-                });
+                    transform_single(item, "transpose", |object| transpose(object, semitones))
+                })?;
             }
         }
         MutationOp::Invert { axis } => {
             transform_unlocked(notes, locks, |item| {
-                transform_single(item, |object| pitch_invert(object, *axis))
-            });
+                transform_single(item, "pitch-invert", |object| pitch_invert(object, *axis))
+            })?;
         }
         MutationOp::ShuffleWithinBeat { beat } => {
             if *beat > Time::from_integer(0) {
@@ -46,7 +47,7 @@ pub(super) fn apply_op(
         MutationOp::Thicken { semitones } => {
             let semitones = scaled_i32(*semitones, amount);
             if semitones != 0 {
-                apply_thicken(notes, semitones, amount, locks, rng, next_source_index);
+                apply_thicken(notes, semitones, amount, locks, rng, next_source_index)?;
             }
         }
         MutationOp::VelocityRemap { low, high } => {
@@ -60,20 +61,24 @@ pub(super) fn apply_op(
         }
         MutationOp::ScaleConform { scale } => {
             transform_unlocked(notes, locks, |item| {
-                transform_single(item, |object| chord_tones_in(object, scale))
-            });
+                transform_single(item, "chord-tones-in", |object| {
+                    chord_tones_in(object, scale)
+                })
+            })?;
         }
     }
+    Ok(())
 }
 
-fn apply_reverse(notes: &mut [PatternNote], locks: &PatternLockSet) {
+fn apply_reverse(notes: &mut [PatternNote], locks: &PatternLockSet) -> Result<(), TransformError> {
     let span = pattern_span(notes);
-    let _algebra = retrograde_with_mode(&pattern_music(notes), RetrogradeMode::Cutout);
+    let _algebra = retrograde_with_mode(&pattern_music(notes)?, RetrogradeMode::Cutout)?;
     for note in notes {
         if !locks.contains(note.source_index) {
             note.item.onset = span - note.item.onset - note.item.note.duration;
         }
     }
+    Ok(())
 }
 
 fn apply_rotate(notes: &mut [PatternNote], steps: i32, locks: &PatternLockSet) {
@@ -145,13 +150,15 @@ fn apply_thicken(
     locks: &PatternLockSet,
     rng: &mut PatternRng,
     next_source_index: &mut usize,
-) {
+) -> Result<(), TransformError> {
     let mut extras = Vec::new();
     for note in notes.iter() {
         if locks.contains(note.source_index) || !rng.chance(amount) {
             continue;
         }
-        let item = transform_single(note.item.clone(), |object| transpose(object, semitones));
+        let item = transform_single(note.item.clone(), "transpose", |object| {
+            transpose(object, semitones)
+        })?;
         extras.push(PatternNote {
             source_index: *next_source_index,
             item,
@@ -159,6 +166,7 @@ fn apply_thicken(
         *next_source_index += 1;
     }
     notes.extend(extras);
+    Ok(())
 }
 
 fn apply_velocity_remap(
@@ -206,13 +214,14 @@ fn apply_rhythm_displace(
 fn transform_unlocked(
     notes: &mut [PatternNote],
     locks: &PatternLockSet,
-    mut transform: impl FnMut(TimedNote) -> TimedNote,
-) {
+    mut transform: impl FnMut(TimedNote) -> Result<TimedNote, TransformError>,
+) -> Result<(), TransformError> {
     for note in notes {
         if !locks.contains(note.source_index) {
-            note.item = transform(note.item.clone());
+            note.item = transform(note.item.clone())?;
         }
     }
+    Ok(())
 }
 
 pub(super) fn restore_locks(
@@ -236,19 +245,29 @@ pub(super) fn restore_locks(
 
 fn transform_single(
     item: TimedNote,
-    transform: impl FnOnce(&dyn MusicObject) -> Music,
-) -> TimedNote {
-    let music = Music::PianoRoll(canonical_roll(vec![item]));
-    let Music::PianoRoll(mut roll) = transform(&music) else {
-        unreachable!("music transform returns a piano roll")
+    transform_name: &'static str,
+    transform: impl FnOnce(&dyn MusicObject) -> Result<Music, TransformError>,
+) -> Result<TimedNote, TransformError> {
+    let music = Music::PianoRoll(canonical_roll(vec![item])?);
+    let Music::PianoRoll(mut roll) = transform(&music)? else {
+        return Err(TransformError::InvalidTransformOutput {
+            transform: transform_name,
+            reason: "expected a piano roll",
+        });
     };
-    roll.items.remove(0)
+    if roll.items.is_empty() {
+        return Err(TransformError::InvalidTransformOutput {
+            transform: transform_name,
+            reason: "expected at least one note",
+        });
+    }
+    Ok(roll.items.remove(0))
 }
 
-fn pattern_music(notes: &[PatternNote]) -> Music {
-    Music::PianoRoll(canonical_roll(
+fn pattern_music(notes: &[PatternNote]) -> Result<Music, TransformError> {
+    Ok(Music::PianoRoll(canonical_roll(
         notes.iter().map(|note| note.item.clone()).collect(),
-    ))
+    )?))
 }
 
 fn pattern_span(notes: &[PatternNote]) -> Time {

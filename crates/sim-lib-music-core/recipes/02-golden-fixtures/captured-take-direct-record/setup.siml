@@ -1,6 +1,1 @@
-(quote
-  (recipe captured-take-direct-record
-    (capture (keyboard note-on C4 108 at 0) (keyboard note-off C4 at 240))
-    (cassette keyboard-direct-record)
-    (direct-record (piano-roll :lane keyboard))
-    (golden player-recipe-captured-take)))
+"music-core descriptor: capture C4 keyboard take and direct-record it to a piano roll"

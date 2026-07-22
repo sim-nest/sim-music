@@ -26,7 +26,7 @@ fn subset_chord_symbol_parser_handles_slash_bass() {
 
 #[test]
 fn chord_tones_follow_scale() {
-    let chord = Chord::chord_tones_in(Scale::major(PitchClass::C), 2, 4);
+    let chord = Chord::chord_tones_in(Scale::major(PitchClass::C), 2, 4).unwrap();
     assert_eq!(
         chord
             .pitches()

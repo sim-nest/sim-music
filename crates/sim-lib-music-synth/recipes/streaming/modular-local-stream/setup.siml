@@ -1,1 +1,1 @@
-(quote (instrument-stream modular patch stream/live/modular-patch midi stream/live/midi control stream/live/parameter audio stream/live/audio-output preview stream/live/preview trace stream/live/diagnostic latency local-sample-exact remote-hard-realtime refused artifacts modular-local-stream.report.json modular-local-stream.streams.l8b modular-local-stream.preview.sha256 modular-local-stream.trace.jsonl))
+audio-synth/InstrumentStreamRecipeSpec

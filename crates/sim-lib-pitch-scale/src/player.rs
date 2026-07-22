@@ -80,9 +80,18 @@ impl PlayerScale {
     }
 
     /// Returns the pitch class at the one-based `degree`, wrapping past the octave.
-    pub fn pitch_at_degree(&self, degree: usize) -> PitchClass {
-        let index = degree.saturating_sub(1) % self.intervals.len();
-        self.tonic.transpose(i32::from(self.intervals[index]))
+    pub fn pitch_at_degree(&self, degree: usize) -> Result<PitchClass, PitchScaleError> {
+        self.try_pitch_at_degree(degree)
+    }
+
+    /// Returns the pitch class at the one-based `degree`, wrapping past the octave.
+    pub fn try_pitch_at_degree(&self, degree: usize) -> Result<PitchClass, PitchScaleError> {
+        let index = degree
+            .checked_sub(1)
+            .ok_or(PitchScaleError::InvalidScaleDegree(degree))?;
+        Ok(self
+            .tonic
+            .transpose(i32::from(self.intervals[index % self.intervals.len()])))
     }
 
     /// Returns the in-scale pitch nearest to `pitch`, breaking ties upward.
@@ -106,10 +115,12 @@ impl PlayerScale {
     /// Remaps `pitch` onto the scale by treating its chromatic offset from the
     /// tonic as a scale degree, preserving the octave.
     pub fn remap_pitch(&self, pitch: Pitch) -> Pitch {
-        let offset = (i32::from(pitch.class.0) - i32::from(self.tonic.0)).rem_euclid(12);
-        let degree = offset as usize % self.intervals.len() + 1;
+        let offset =
+            (i32::from(pitch.class.value()) - i32::from(self.tonic.value())).rem_euclid(12);
+        let index =
+            usize::try_from(offset).expect("mod-12 offset fits usize") % self.intervals.len();
         Pitch {
-            class: self.pitch_at_degree(degree),
+            class: self.tonic.transpose(i32::from(self.intervals[index])),
             octave: pitch.octave,
         }
     }

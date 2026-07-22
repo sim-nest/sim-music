@@ -1,1 +1,1 @@
-(quote (pitch-scale key C major degrees I IV V))
+"pitch-scale descriptor: C major exposes I, IV, and V degrees"

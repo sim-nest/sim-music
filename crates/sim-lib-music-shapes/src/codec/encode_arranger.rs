@@ -3,9 +3,11 @@ use sim_lib_music_core::{
     StretchPolicy, TracePolicy,
 };
 
-use super::{encode_music, encode_pitch, encode_string, encode_time};
+use super::{MusicShapeError, encode_music, encode_pitch, encode_string, encode_time};
 
-pub(super) fn encode_arranger_placement(placement: &ArrangerPlacement) -> String {
+pub(super) fn encode_arranger_placement(
+    placement: &ArrangerPlacement,
+) -> Result<String, MusicShapeError> {
     let duration = placement
         .duration
         .map(encode_time)
@@ -19,13 +21,13 @@ pub(super) fn encode_arranger_placement(placement: &ArrangerPlacement) -> String
         .as_ref()
         .map(encode_filter_ref)
         .unwrap_or_else(|| "none".to_owned());
-    format!(
+    Ok(format!(
         "#(ArrangerPlacement id={} at={} duration={} lane={} playable={} targets=[{}] stretch={} transforms=[{}] remap={} filter={} seed={} trace={})",
         encode_string(&placement.id.as_qualified_str()),
         encode_time(placement.at),
         duration,
         encode_string(&placement.lane.0),
-        encode_playable_ref(&placement.playable),
+        encode_playable_ref(&placement.playable)?,
         placement
             .targets
             .iter()
@@ -43,18 +45,16 @@ pub(super) fn encode_arranger_placement(placement: &ArrangerPlacement) -> String
         filter,
         seed,
         encode_trace_policy(placement.trace),
-    )
+    ))
 }
 
-fn encode_playable_ref(playable: &PlayableRef) -> String {
+fn encode_playable_ref(playable: &PlayableRef) -> Result<String, MusicShapeError> {
     match playable {
         PlayableRef::Inline(music) => encode_music(music),
-        PlayableRef::Symbol(symbol) => {
-            format!(
-                "#(PlayableRef kind=symbol symbol={})",
-                encode_string(&symbol.as_qualified_str())
-            )
-        }
+        PlayableRef::Symbol(symbol) => Ok(format!(
+            "#(PlayableRef kind=symbol symbol={})",
+            encode_string(&symbol.as_qualified_str())
+        )),
     }
 }
 
@@ -112,7 +112,7 @@ fn encode_placement_transform(transform: &PlacementTransform) -> String {
         PlacementTransform::InvertAroundPitchClass(axis) => {
             format!(
                 "#(PlacementTransform kind=invert-pitch-class value={})",
-                axis.0
+                axis.value()
             )
         }
         PlacementTransform::Retrograde => "#(PlacementTransform kind=retrograde)".to_owned(),
@@ -126,7 +126,11 @@ fn encode_pitch_remap(remap: &PitchRemap) -> String {
             format!("#(PitchRemap kind=chromatic value={semitones})")
         }
         PitchRemap::PitchClass { from, to } => {
-            format!("#(PitchRemap kind=pitch-class from={} to={})", from.0, to.0)
+            format!(
+                "#(PitchRemap kind=pitch-class from={} to={})",
+                from.value(),
+                to.value()
+            )
         }
         PitchRemap::DrumKey(items) => format!(
             "#(PitchRemap kind=drum-key items=[{}])",

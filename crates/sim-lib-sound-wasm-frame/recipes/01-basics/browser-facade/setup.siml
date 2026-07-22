@@ -1,1 +1,1 @@
-(quote (sound-wasm facade render music-file frame-safe))
+"sound-wasm descriptor: render and music-file frame facade for browser guests"

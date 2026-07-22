@@ -86,7 +86,8 @@ pub fn decode_chord_window(value: &str) -> Result<ChordWindow, MusicShapeError> 
     let range_mask = PitchRangeMask {
         bits: parse_u128(&field_atom(&node, "range")?)?,
     };
-    let pitch_class_mask = PitchClassMask(parse_u16(&field_atom(&node, "pitch_classes")?)?);
+    let pitch_class_mask = PitchClassMask::new(parse_u16(&field_atom(&node, "pitch_classes")?)?)
+        .map_err(|_| MusicShapeError::InvalidMusic)?;
     let root = match field_atom(&node, "root")?.as_str() {
         "none" => None,
         value => Some(

@@ -7,7 +7,7 @@ pub use packet::{decode_ble_midi_packet, encode_ble_midi_event};
 use sim_lib_midi_core::{MidiEvent, MidiSink, MidiSource};
 use sim_lib_midi_live::{LiveMidiError, RingMidiBuffer};
 use sim_lib_stream_host::{
-    DeviceDirection, DeviceKind, DeviceProvider, DeviceRecord, Placement, StreamEvalSite,
+    CatalogDeviceProvider, DeviceDirection, DeviceKind, DeviceRecord, Placement, StreamEvalSite,
 };
 
 use bluez::{discover_bluez_dbus, write_bluez_characteristic};
@@ -114,13 +114,7 @@ impl BleMidiDiscoveryProvider for BluezBleMidiProvider {
         let _ = self.config;
         #[cfg(target_os = "linux")]
         {
-            let devices = discover_bluez_dbus().unwrap_or_default();
-            let cards = if devices.is_empty() {
-                vec![missing_bluez_dependency_card()]
-            } else {
-                Vec::new()
-            };
-            Ok(BleMidiDiscoveryReport::new(devices, cards))
+            bluez_discovery_report(discover_bluez_dbus())
         }
         #[cfg(not(target_os = "linux"))]
         {
@@ -129,6 +123,18 @@ impl BleMidiDiscoveryProvider for BluezBleMidiProvider {
             ))
         }
     }
+}
+
+pub(crate) fn bluez_discovery_report(
+    devices: Result<Vec<BleMidiDevice>>,
+) -> Result<BleMidiDiscoveryReport> {
+    let devices = devices?;
+    let cards = if devices.is_empty() {
+        vec![missing_bluez_dependency_card()]
+    } else {
+        Vec::new()
+    };
+    Ok(BleMidiDiscoveryReport::new(devices, cards))
 }
 
 /// Open BLE-MIDI GATT I/O characteristic session.
@@ -246,7 +252,10 @@ impl BleMidiInputSource {
         let events = decode_ble_midi_packet(packet, self.tpq)?;
         let count = events.len();
         for event in events {
-            self.ring.write(&event).map_err(|never| match never {})?;
+            match self.ring.write(&event) {
+                Ok(()) => {}
+                Err(never) => match never {},
+            }
         }
         Ok(count)
     }
@@ -265,7 +274,10 @@ impl MidiSource for BleMidiInputSource {
     }
 
     fn next(&mut self) -> std::result::Result<Option<MidiEvent>, Self::Err> {
-        self.ring.next().map_err(|never| match never {})
+        match self.ring.next() {
+            Ok(event) => Ok(event),
+            Err(never) => match never {},
+        }
     }
 }
 
@@ -352,7 +364,7 @@ impl BleMidiProvider {
     }
 }
 
-impl DeviceProvider for BleMidiProvider {
+impl CatalogDeviceProvider for BleMidiProvider {
     fn enumerate(&self) -> Result<Vec<DeviceRecord>> {
         Ok(self.devices.iter().map(Self::record).collect())
     }

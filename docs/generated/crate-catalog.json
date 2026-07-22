@@ -1,6 +1,6 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 47,
+  "package_count": 46,
   "packages": [
     {
       "description": "Headless DAW session surface for SIM audio graph workspaces.",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib midi core.",
+      "description": "Core MIDI event, channel, tick-time, device, and in-memory transport models.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-midi-core/Cargo.toml",
       "name": "sim-lib-midi-core",
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib midi live.",
+      "description": "In-memory live MIDI session descriptors and ring-buffer transport models.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-midi-live/Cargo.toml",
       "name": "sim-lib-midi-live",
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib midi shapes.",
+      "description": "Text codecs, citizen descriptors, and runtime shapes for MIDI events and files.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-midi-shapes/Cargo.toml",
       "name": "sim-lib-midi-shapes",
@@ -81,7 +81,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib midi smf.",
+      "description": "Standard MIDI File reader and writer helpers for deterministic SIM MIDI fixtures.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-midi-smf/Cargo.toml",
       "name": "sim-lib-midi-smf",
@@ -94,7 +94,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib midi sysex.",
+      "description": "System-exclusive MIDI message models, checksums, and device payload helpers.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-midi-sysex/Cargo.toml",
       "name": "sim-lib-midi-sysex",
@@ -120,7 +120,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music analysis.",
+      "description": "Chord windows, diff rolls, histograms, and analysis views over SIM music.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-analysis/Cargo.toml",
       "name": "sim-lib-music-analysis",
@@ -133,7 +133,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music combinators.",
+      "description": "Composable melody, rhythm, arpeggio, bassline, and pattern-building helpers.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-combinators/Cargo.toml",
       "name": "sim-lib-music-combinators",
@@ -146,7 +146,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music core.",
+      "description": "Core music object model for notes, rests, scores, rolls, players, and arrangers.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-core/Cargo.toml",
       "name": "sim-lib-music-core",
@@ -159,7 +159,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music lift.",
+      "description": "Lifts MIDI files and tracks into progression, counterpoint, piano-roll, and diff views.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-lift/Cargo.toml",
       "name": "sim-lib-music-lift",
@@ -172,7 +172,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music lower.",
+      "description": "Lowering from structured SIM music objects into MIDI tracks and SMF-ready events.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-lower/Cargo.toml",
       "name": "sim-lib-music-lower",
@@ -185,7 +185,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music notation.",
+      "description": "LilyPond subset import and export helpers for SIM score and melody objects.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-notation/Cargo.toml",
       "name": "sim-lib-music-notation",
@@ -198,7 +198,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music shapes.",
+      "description": "Text codecs, citizen descriptors, and runtime shapes for SIM music objects.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-shapes/Cargo.toml",
       "name": "sim-lib-music-shapes",
@@ -224,7 +224,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib music transform.",
+      "description": "Pitch, time, pattern, and diagnostic transforms over canonical SIM music objects.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-transform/Cargo.toml",
       "name": "sim-lib-music-transform",
@@ -250,7 +250,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch chord.",
+      "description": "Chord models, voicing helpers, and scale-aware pitch collections for SIM music.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-chord/Cargo.toml",
       "name": "sim-lib-pitch-chord",
@@ -263,7 +263,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch core.",
+      "description": "Pitch classes, octave-aware pitches, intervals, and MIDI conversion helpers for SIM music crates.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-core/Cargo.toml",
       "name": "sim-lib-pitch-core",
@@ -276,7 +276,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch dissonance.",
+      "description": "Pitch-domain dissonance and interval-density scoring over chord material.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-dissonance/Cargo.toml",
       "name": "sim-lib-pitch-dissonance",
@@ -289,7 +289,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch namer forte.",
+      "description": "Forte-number labels and prime-form lookup for pitch-class sets.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-namer-forte/Cargo.toml",
       "name": "sim-lib-pitch-namer-forte",
@@ -302,7 +302,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch namer jazz.",
+      "description": "Jazz chord-symbol labels and quality detection for pitch chords.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-namer-jazz/Cargo.toml",
       "name": "sim-lib-pitch-namer-jazz",
@@ -315,7 +315,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch namer riemann.",
+      "description": "Riemannian harmonic function labels for triads and tonal contexts.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-namer-riemann/Cargo.toml",
       "name": "sim-lib-pitch-namer-riemann",
@@ -328,7 +328,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch namer roman.",
+      "description": "Roman-numeral harmonic labels over scale keys and pitch chords.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-namer-roman/Cargo.toml",
       "name": "sim-lib-pitch-namer-roman",
@@ -341,7 +341,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch namer.",
+      "description": "Shared naming registry for chord, pitch-class set, and harmonic label systems.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-namer/Cargo.toml",
       "name": "sim-lib-pitch-namer",
@@ -354,7 +354,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch scale.",
+      "description": "Scale, key, mode, and degree mapping helpers for pitch-domain transforms.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-scale/Cargo.toml",
       "name": "sim-lib-pitch-scale",
@@ -367,7 +367,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch set.",
+      "description": "Pitch-class set masks, normal forms, interval vectors, and set operations.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-set/Cargo.toml",
       "name": "sim-lib-pitch-set",
@@ -380,7 +380,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib pitch shapes.",
+      "description": "Text codecs, citizen descriptors, and runtime shapes for pitch-domain values.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-shapes/Cargo.toml",
       "name": "sim-lib-pitch-shapes",
@@ -406,7 +406,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound audio lift.",
+      "description": "Lifts PCM and rendered audio artifacts into structured sound analysis descriptors.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-audio-lift/Cargo.toml",
       "name": "sim-lib-sound-audio-lift",
@@ -419,7 +419,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound bridge.",
+      "description": "Bridges MIDI events into sound-domain tones, timbres, and renderable note candidates.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-bridge/Cargo.toml",
       "name": "sim-lib-sound-bridge",
@@ -432,7 +432,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound core.",
+      "description": "Sound-domain frequency, envelope, partial, spectrum, tone, and sample models.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-core/Cargo.toml",
       "name": "sim-lib-sound-core",
@@ -445,7 +445,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound dissonance.",
+      "description": "Sound-domain dissonance registries and roughness models over rendered tones.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-dissonance/Cargo.toml",
       "name": "sim-lib-sound-dissonance",
@@ -458,7 +458,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound gm.",
+      "description": "General MIDI instrument and drum-kit descriptors for sound and MIDI bridges.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-gm/Cargo.toml",
       "name": "sim-lib-sound-gm",
@@ -471,7 +471,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound render.",
+      "description": "Offline PCM rendering, WAV encoding, and render diagnostics for sound objects.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-render/Cargo.toml",
       "name": "sim-lib-sound-render",
@@ -484,7 +484,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound shapes.",
+      "description": "Text codecs, citizen descriptors, and runtime shapes for sound-domain values.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-shapes/Cargo.toml",
       "name": "sim-lib-sound-shapes",
@@ -497,7 +497,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound spectrum.",
+      "description": "Partial lists, spectral centroids, and harmonic spectrum descriptors.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-spectrum/Cargo.toml",
       "name": "sim-lib-sound-spectrum",
@@ -510,7 +510,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound timbre.",
+      "description": "Timbre recipes, envelopes, filters, and named tone construction helpers.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-timbre/Cargo.toml",
       "name": "sim-lib-sound-timbre",
@@ -523,7 +523,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim lib sound tuning.",
+      "description": "Equal temperament, custom tuning, and pitch-to-frequency mapping descriptors.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-sound-tuning/Cargo.toml",
       "name": "sim-lib-sound-tuning",
@@ -588,19 +588,7 @@
       ]
     },
     {
-      "description": "SIM workspace package for sim table fs.",
-      "generated_readme": true,
-      "manifest": "crates/sim-table-fs/Cargo.toml",
-      "name": "sim-table-fs",
-      "publish": "true",
-      "readme": "crates/sim-table-fs/README.md",
-      "root": "crates/sim-table-fs",
-      "target_kinds": [
-        "lib"
-      ]
-    },
-    {
-      "description": "SIM workspace package for xtask.",
+      "description": "Repository maintenance tasks for sim-music validation and generated docs.",
       "generated_readme": true,
       "manifest": "xtask/Cargo.toml",
       "name": "xtask",

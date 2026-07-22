@@ -82,6 +82,67 @@ fn low_confidence_emits_diagnostics() {
 }
 
 #[test]
+fn bridge_render_options_reject_invalid_public_fields() {
+    assert!(StreamBridgeRenderOptions::new(0, 2, 512).is_err());
+    assert!(StreamBridgeRenderOptions::new(48_000, 3, 512).is_err());
+    assert!(StreamBridgeRenderOptions::new(48_000, 2, 0).is_err());
+}
+
+#[test]
+fn bridge_lift_options_reject_invalid_public_fields() {
+    let defaults = StreamBridgeLiftMidiOptions::default();
+
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            sample_rate: 0,
+            ..defaults.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            tpq: 0,
+            ..defaults.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            min_confidence: f64::NAN,
+            ..defaults.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            window_size: 0,
+            ..defaults.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            hop_size: 0,
+            ..defaults.clone()
+        }
+        .validate()
+        .is_err()
+    );
+    assert!(
+        StreamBridgeLiftMidiOptions {
+            max_events_per_packet: 0,
+            ..defaults
+        }
+        .validate()
+        .is_err()
+    );
+}
+
+#[test]
 fn bridge_media_adapters_reject_data_packets() {
     let render_err =
         match render_midi_stream_to_pcm(&data_stream(), StreamBridgeRenderOptions::default()) {

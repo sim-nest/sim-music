@@ -4,11 +4,11 @@ use num_rational::Ratio;
 use thiserror::Error;
 
 use sim_lib_music_core::{
-    Articulation, AtomRef, Channel, Melody, MelodyItem, Music, MusicObject, Note, PianoRoll, Rest,
-    Time, TimedNote,
+    Articulation, AtomRef, Channel, Melody, MelodyItem, Music, MusicError, MusicObject, Note,
+    PianoRoll, Rest, Time, TimedNote,
 };
 use sim_lib_pitch_core::{Pitch, PitchClass};
-use sim_lib_pitch_scale::{Key, Mode, Scale};
+use sim_lib_pitch_scale::{Key, Mode, PitchScaleError, Scale};
 
 /// Error returned by transforms that reject invalid scaling factors.
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
@@ -16,6 +16,17 @@ pub enum TransformError {
     /// The supplied time-scaling factor was zero or negative.
     #[error("transform factor must be positive")]
     InvalidFactor,
+    /// A music object or transform result violated model invariants.
+    #[error(transparent)]
+    InvalidMusic(#[from] MusicError),
+    /// A transform returned an output shape that the caller cannot use.
+    #[error("{transform} transform returned invalid output: {reason}")]
+    InvalidTransformOutput {
+        /// Name of the transform that produced the invalid output.
+        transform: &'static str,
+        /// Stable explanation of the invalid condition.
+        reason: &'static str,
+    },
 }
 
 /// Strategy for placing notes when reversing material in time.
@@ -86,11 +97,16 @@ impl FunctionMap {
     }
 
     /// Resolves a scale degree to a concrete pitch at the given octave.
-    pub fn degree_to_pitch(&self, degree: usize, key: &Key, octave: i16) -> Pitch {
-        Pitch {
-            class: self.scale_for_key(key).pitch_at_degree(degree),
+    pub fn degree_to_pitch(
+        &self,
+        degree: usize,
+        key: &Key,
+        octave: i16,
+    ) -> Result<Pitch, PitchScaleError> {
+        Ok(Pitch {
+            class: self.scale_for_key(key).pitch_at_degree(degree)?,
             octave,
-        }
+        })
     }
 }
 
@@ -150,13 +166,16 @@ pub fn diminish(object: &dyn MusicObject, factor: Time) -> Result<Music, Transfo
 }
 
 /// Reverses the material in time using the default [`RetrogradeMode::Cutout`].
-pub fn retrograde(object: &dyn MusicObject) -> Music {
+pub fn retrograde(object: &dyn MusicObject) -> Result<Music, TransformError> {
     retrograde_with_mode(object, RetrogradeMode::Cutout)
 }
 
 /// Reverses the material in time using the given [`RetrogradeMode`].
-pub fn retrograde_with_mode(object: &dyn MusicObject, mode: RetrogradeMode) -> Music {
-    let roll = to_piano_roll(object);
+pub fn retrograde_with_mode(
+    object: &dyn MusicObject,
+    mode: RetrogradeMode,
+) -> Result<Music, TransformError> {
+    let roll = to_piano_roll(object)?;
     let total = object.duration();
     let items = match mode {
         RetrogradeMode::Cutout => roll
@@ -178,14 +197,14 @@ pub fn retrograde_with_mode(object: &dyn MusicObject, mode: RetrogradeMode) -> M
                 .collect()
         }
     };
-    Music::PianoRoll(canonical_roll(items))
+    Ok(Music::PianoRoll(canonical_roll(items)?))
 }
 
 /// Mirrors note onsets about the total duration, then rebases to start at zero.
-pub fn time_invert(object: &dyn MusicObject) -> Music {
-    let roll = to_piano_roll(object);
+pub fn time_invert(object: &dyn MusicObject) -> Result<Music, TransformError> {
+    let roll = to_piano_roll(object)?;
     if roll.items.is_empty() {
-        return Music::PianoRoll(roll);
+        return Ok(Music::PianoRoll(roll));
     }
     let total = object.duration();
     let mut items: Vec<TimedNote> = roll
@@ -204,12 +223,12 @@ pub fn time_invert(object: &dyn MusicObject) -> Music {
     for item in &mut items {
         item.onset -= min_onset;
     }
-    Music::PianoRoll(canonical_roll(items))
+    Ok(Music::PianoRoll(canonical_roll(items)?))
 }
 
 /// Repeats the material `n` times back to back along the time axis.
-pub fn loop_n(object: &dyn MusicObject, n: usize) -> Music {
-    let roll = to_piano_roll(object);
+pub fn loop_n(object: &dyn MusicObject, n: usize) -> Result<Music, TransformError> {
+    let roll = to_piano_roll(object)?;
     let span = object.duration();
     let items = (0..n)
         .flat_map(|index| {
@@ -220,12 +239,12 @@ pub fn loop_n(object: &dyn MusicObject, n: usize) -> Music {
             })
         })
         .collect();
-    Music::PianoRoll(canonical_roll(items))
+    Ok(Music::PianoRoll(canonical_roll(items)?))
 }
 
 /// Extracts the `[start, end)` time window, clipping note spans to the bounds.
-pub fn slice(object: &dyn MusicObject, start: Time, end: Time) -> Music {
-    let roll = to_piano_roll(object);
+pub fn slice(object: &dyn MusicObject, start: Time, end: Time) -> Result<Music, TransformError> {
+    let roll = to_piano_roll(object)?;
     let items = roll
         .items
         .into_iter()
@@ -243,11 +262,11 @@ pub fn slice(object: &dyn MusicObject, start: Time, end: Time) -> Music {
             })
         })
         .collect();
-    Music::PianoRoll(canonical_roll(items))
+    Ok(Music::PianoRoll(canonical_roll(items)?))
 }
 
 /// Transposes every note chromatically by the given number of semitones.
-pub fn transpose(object: &dyn MusicObject, semitones: i32) -> Music {
+pub fn transpose(object: &dyn MusicObject, semitones: i32) -> Result<Music, TransformError> {
     map_notes(object, |note| Note {
         pitch: note.pitch.transpose(semitones),
         ..note
@@ -257,7 +276,11 @@ pub fn transpose(object: &dyn MusicObject, semitones: i32) -> Music {
 /// Transposes every note by `steps` scale degrees within the given scale.
 ///
 /// Notes outside the scale are left unchanged.
-pub fn transpose_diatonic(object: &dyn MusicObject, scale: &Scale, steps: i32) -> Music {
+pub fn transpose_diatonic(
+    object: &dyn MusicObject,
+    scale: &Scale,
+    steps: i32,
+) -> Result<Music, TransformError> {
     map_notes(object, |note| Note {
         pitch: scale
             .transpose_diatonic(note.pitch, steps)
@@ -267,7 +290,7 @@ pub fn transpose_diatonic(object: &dyn MusicObject, scale: &Scale, steps: i32) -
 }
 
 /// Inverts every note's pitch about the given axis pitch.
-pub fn pitch_invert(object: &dyn MusicObject, axis: Pitch) -> Music {
+pub fn pitch_invert(object: &dyn MusicObject, axis: Pitch) -> Result<Music, TransformError> {
     map_notes(object, |note| Note {
         pitch: note.pitch.invert(axis),
         ..note
@@ -275,12 +298,13 @@ pub fn pitch_invert(object: &dyn MusicObject, axis: Pitch) -> Music {
 }
 
 /// Applies [`pitch_invert`] then [`retrograde`] (retrograde inversion).
-pub fn retrograde_invert(object: &dyn MusicObject, axis: Pitch) -> Music {
-    retrograde(&pitch_invert(object, axis))
+pub fn retrograde_invert(object: &dyn MusicObject, axis: Pitch) -> Result<Music, TransformError> {
+    let inverted = pitch_invert(object, axis)?;
+    retrograde(&inverted)
 }
 
 /// Shifts every note by the given number of whole octaves.
-pub fn shift_octave(object: &dyn MusicObject, octaves: i16) -> Music {
+pub fn shift_octave(object: &dyn MusicObject, octaves: i16) -> Result<Music, TransformError> {
     map_notes(object, |note| Note {
         pitch: note.pitch.transpose(i32::from(octaves) * 12),
         ..note
@@ -288,7 +312,7 @@ pub fn shift_octave(object: &dyn MusicObject, octaves: i16) -> Music {
 }
 
 /// Snaps every note to the nearest pitch belonging to the given scale.
-pub fn chord_tones_in(object: &dyn MusicObject, scale: &Scale) -> Music {
+pub fn chord_tones_in(object: &dyn MusicObject, scale: &Scale) -> Result<Music, TransformError> {
     map_notes(object, |note| Note {
         pitch: nearest_pitch_in_scale(note.pitch, scale),
         ..note
@@ -298,12 +322,18 @@ pub fn chord_tones_in(object: &dyn MusicObject, scale: &Scale) -> Music {
 /// Remaps each in-key note to the same scale degree under another function.
 ///
 /// Notes whose pitch class is not a degree of `key` are passed through.
-pub fn map_to_function(object: &dyn MusicObject, key: &Key, fmap: &FunctionMap) -> Music {
+pub fn map_to_function(
+    object: &dyn MusicObject,
+    key: &Key,
+    fmap: &FunctionMap,
+) -> Result<Music, TransformError> {
     let source_scale = Scale::new(key.tonic, key.mode);
     map_notes(object, |note| {
         match source_scale.degree_of(note.pitch.class) {
             Some(degree) => Note {
-                pitch: fmap.degree_to_pitch(degree, key, note.pitch.octave),
+                pitch: fmap
+                    .degree_to_pitch(degree, key, note.pitch.octave)
+                    .unwrap_or(note.pitch),
                 ..note
             },
             None => note,
@@ -315,27 +345,33 @@ fn scale_time(object: &dyn MusicObject, factor: Time) -> Result<Music, Transform
     if factor <= Time::from_integer(0) {
         return Err(TransformError::InvalidFactor);
     }
-    Ok(map_roll(object, |mut item| {
+    map_roll(object, |mut item| {
         item.onset *= factor;
         item.note.duration *= factor;
         item
-    }))
+    })
 }
 
-pub(crate) fn map_notes(object: &dyn MusicObject, f: impl Fn(Note) -> Note) -> Music {
+pub(crate) fn map_notes(
+    object: &dyn MusicObject,
+    f: impl Fn(Note) -> Note,
+) -> Result<Music, TransformError> {
     map_roll(object, |mut item| {
         item.note = f(item.note);
         item
     })
 }
 
-pub(crate) fn map_roll(object: &dyn MusicObject, f: impl Fn(TimedNote) -> TimedNote) -> Music {
-    let roll = to_piano_roll(object);
+pub(crate) fn map_roll(
+    object: &dyn MusicObject,
+    f: impl Fn(TimedNote) -> TimedNote,
+) -> Result<Music, TransformError> {
+    let roll = to_piano_roll(object)?;
     let items = roll.items.into_iter().map(f).collect();
-    Music::PianoRoll(canonical_roll(items))
+    Ok(Music::PianoRoll(canonical_roll(items)?))
 }
 
-pub(crate) fn to_piano_roll(object: &dyn MusicObject) -> PianoRoll {
+pub(crate) fn to_piano_roll(object: &dyn MusicObject) -> Result<PianoRoll, TransformError> {
     let mut atoms = Vec::new();
     object.voices(Time::from_integer(0), &mut atoms);
     let items = atoms
@@ -351,8 +387,8 @@ pub(crate) fn to_piano_roll(object: &dyn MusicObject) -> PianoRoll {
     canonical_roll(items)
 }
 
-pub(crate) fn canonical_roll(items: Vec<TimedNote>) -> PianoRoll {
-    PianoRoll::new(items).expect("transform output is canonical")
+pub(crate) fn canonical_roll(items: Vec<TimedNote>) -> Result<PianoRoll, TransformError> {
+    Ok(PianoRoll::new(items)?)
 }
 
 pub(crate) fn nearest_pitch_in_scale(pitch: Pitch, scale: &Scale) -> Pitch {

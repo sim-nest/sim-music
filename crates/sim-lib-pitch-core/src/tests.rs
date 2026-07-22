@@ -1,5 +1,7 @@
 use super::*;
 
+// conformance: pitch and sound vocabulary exposes stable pitch descriptors.
+
 #[test]
 fn semitone_round_trip() {
     for semitone in -512..=512 {
@@ -32,4 +34,10 @@ fn reader_sugar_uses_canonical_sharps() {
     assert_eq!(parse_pitch("Eb5").unwrap(), Pitch::from_semitone(75));
     assert_eq!(parse_pitch("Cs4").unwrap().class, PitchClass::CS);
     assert_eq!(parse_interval("TT").unwrap(), Interval::TRITONE);
+}
+
+#[test]
+fn pitch_class_constructor_rejects_invalid_values() {
+    assert_eq!(PitchClass::new(12), Err(PitchError::InvalidPitchClass(12)));
+    assert_eq!(PitchClass::B.value(), 11);
 }

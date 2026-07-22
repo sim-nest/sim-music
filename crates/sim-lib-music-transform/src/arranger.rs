@@ -7,7 +7,8 @@ use sim_lib_pitch_scale::Scale;
 
 use crate::{
     CallablePitchMap, PitchRemap, RetrogradeMode, TransformDiagnostic, TransformDiagnosticCode,
-    TransformReport, canonical_roll, map_notes, retrograde_with_mode, to_piano_roll,
+    TransformError, TransformReport, canonical_roll, map_notes, retrograde_with_mode,
+    to_piano_roll,
 };
 
 /// Amount and kind of pitch displacement for a transpose transform.
@@ -44,23 +45,28 @@ impl TransposeTransform {
     }
 
     /// Applies the transpose and returns just the music.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
-        self.apply_report(object).music
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
+        Ok(self.apply_report(object)?.music)
     }
 
     /// Applies the transpose, returning the music and any diagnostics.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
         match &self.by {
-            PitchDelta::Semitones(semitones) => TransformReport::clean(map_notes(object, |note| {
-                let pitch = note.pitch.transpose(*semitones);
-                note_with_pitch(note, pitch)
-            })),
+            PitchDelta::Semitones(semitones) => {
+                Ok(TransformReport::clean(map_notes(object, |note| {
+                    let pitch = note.pitch.transpose(*semitones);
+                    note_with_pitch(note, pitch)
+                })?))
+            }
             PitchDelta::Octaves(octaves) => {
                 let semitones = i32::from(*octaves) * 12;
-                TransformReport::clean(map_notes(object, |note| {
+                Ok(TransformReport::clean(map_notes(object, |note| {
                     let pitch = note.pitch.transpose(semitones);
                     note_with_pitch(note, pitch)
-                }))
+                })?))
             }
             PitchDelta::ScaleDegrees { scale, steps } => {
                 map_pitches_with_diagnostics(object, "transpose", |pitch| {
@@ -68,29 +74,29 @@ impl TransposeTransform {
                         TransformDiagnostic::new(
                             TransformDiagnosticCode::PitchOutOfScale,
                             "transpose",
-                            format!("pitch class {} is not in the scale", pitch.class.0),
+                            format!("pitch class {} is not in the scale", pitch.class.value()),
                         )
                     })
                 })
             }
             PitchDelta::FrequencyRatio(ratio) => match ratio_to_semitones(ratio) {
-                Some(semitones) => TransformReport::clean(map_notes(object, |note| {
+                Some(semitones) => Ok(TransformReport::clean(map_notes(object, |note| {
                     let pitch = note.pitch.transpose(semitones);
                     note_with_pitch(note, pitch)
-                })),
-                None => TransformReport::with_diagnostic(
-                    Music::PianoRoll(to_piano_roll(object)),
+                })?)),
+                None => Ok(TransformReport::with_diagnostic(
+                    Music::PianoRoll(to_piano_roll(object)?),
                     TransformDiagnostic::new(
                         TransformDiagnosticCode::InvalidRatio,
                         "transpose",
                         "frequency ratio must be positive",
                     ),
-                ),
+                )),
             },
-            PitchDelta::Custom(map) => TransformReport::clean(map_notes(object, |note| {
+            PitchDelta::Custom(map) => Ok(TransformReport::clean(map_notes(object, |note| {
                 let pitch = map.map_pitch(note.pitch);
                 note_with_pitch(note, pitch)
-            })),
+            })?)),
         }
     }
 }
@@ -152,33 +158,36 @@ impl InvertTransform {
     }
 
     /// Applies the inversion and returns just the music.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
-        self.apply_report(object).music
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
+        Ok(self.apply_report(object)?.music)
     }
 
     /// Applies the inversion, returning the music and any diagnostics.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
         match &self.axis {
-            PitchAxis::PitchClass(axis) => TransformReport::clean(map_notes(object, |note| {
+            PitchAxis::PitchClass(axis) => Ok(TransformReport::clean(map_notes(object, |note| {
                 let pitch = Pitch {
                     class: note.pitch.class.invert(*axis),
                     octave: note.pitch.octave,
                 };
                 note_with_pitch(note, pitch)
-            })),
+            })?)),
             axis => match resolve_axis(axis) {
-                Some(resolved) => TransformReport::clean(map_notes(object, |note| {
+                Some(resolved) => Ok(TransformReport::clean(map_notes(object, |note| {
                     let pitch = note.pitch.invert(resolved);
                     note_with_pitch(note, pitch)
-                })),
-                None => TransformReport::with_diagnostic(
-                    Music::PianoRoll(to_piano_roll(object)),
+                })?)),
+                None => Ok(TransformReport::with_diagnostic(
+                    Music::PianoRoll(to_piano_roll(object)?),
                     TransformDiagnostic::new(
                         TransformDiagnosticCode::InvalidAxis,
                         "invert",
                         "inversion axis cannot be resolved",
                     ),
-                ),
+                )),
             },
         }
     }
@@ -198,13 +207,16 @@ impl RetrogradeTransform {
     }
 
     /// Reverses the material and returns the music.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
         retrograde_with_mode(object, self.mode)
     }
 
     /// Reverses the material, returning a clean report (no diagnostics).
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
-        TransformReport::clean(self.apply(object))
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
+        Ok(TransformReport::clean(self.apply(object)?))
     }
 }
 
@@ -265,12 +277,15 @@ pub enum StretchPolicy {
 
 impl StretchPolicy {
     /// Applies the stretch and returns just the music.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
-        self.apply_report(object).music
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
+        Ok(self.apply_report(object)?.music)
     }
 
     /// Applies the stretch, returning the music and any diagnostics.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
         match self {
             Self::TempoRatio(ratio) => match positive_ratio(*ratio) {
                 Some(factor) => stretch_by_factor(object, factor.recip()),
@@ -321,7 +336,10 @@ pub enum TransformStep {
 
 impl TransformStep {
     /// Applies this step, returning the music and any diagnostics.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
         match self {
             Self::Transpose(transform) => transform.apply_report(object),
             Self::Invert(transform) => transform.apply_report(object),
@@ -346,23 +364,26 @@ impl TransformChain {
     }
 
     /// Applies the whole chain and returns just the music.
-    pub fn apply(&self, object: &dyn MusicObject) -> Music {
-        self.apply_report(object).music
+    pub fn apply(&self, object: &dyn MusicObject) -> Result<Music, TransformError> {
+        Ok(self.apply_report(object)?.music)
     }
 
     /// Applies the whole chain, accumulating diagnostics from every step.
-    pub fn apply_report(&self, object: &dyn MusicObject) -> TransformReport {
-        let mut current = Music::PianoRoll(to_piano_roll(object));
+    pub fn apply_report(
+        &self,
+        object: &dyn MusicObject,
+    ) -> Result<TransformReport, TransformError> {
+        let mut current = Music::PianoRoll(to_piano_roll(object)?);
         let mut diagnostics = Vec::new();
         for step in &self.steps {
-            let report = step.apply_report(&current);
+            let report = step.apply_report(&current)?;
             current = report.music;
             diagnostics.extend(report.diagnostics);
         }
-        TransformReport {
+        Ok(TransformReport {
             music: current,
             diagnostics,
-        }
+        })
     }
 }
 
@@ -370,8 +391,8 @@ pub(crate) fn map_pitches_with_diagnostics(
     object: &dyn MusicObject,
     transform: &'static str,
     mut map: impl FnMut(Pitch) -> Result<Pitch, TransformDiagnostic>,
-) -> TransformReport {
-    let roll = to_piano_roll(object);
+) -> Result<TransformReport, TransformError> {
+    let roll = to_piano_roll(object)?;
     let mut diagnostics = Vec::new();
     let items = roll
         .items
@@ -387,10 +408,10 @@ pub(crate) fn map_pitches_with_diagnostics(
             item
         })
         .collect();
-    TransformReport {
-        music: Music::PianoRoll(canonical_roll(items)),
+    Ok(TransformReport {
+        music: Music::PianoRoll(canonical_roll(items)?),
         diagnostics,
-    }
+    })
 }
 
 pub(crate) fn note_with_pitch(note: Note, pitch: Pitch) -> Note {
@@ -405,8 +426,8 @@ fn resolve_axis(axis: &PitchAxis) -> Option<Pitch> {
             scale,
             degree,
             octave,
-        } => (*degree > 0).then(|| Pitch {
-            class: scale.pitch_at_degree(*degree),
+        } => scale.pitch_at_degree(*degree).ok().map(|class| Pitch {
+            class,
             octave: *octave,
         }),
         PitchAxis::ChordRoot(chord) => chord.notes.first().copied(),
@@ -430,16 +451,19 @@ fn invalid_ratio_report(
     object: &dyn MusicObject,
     transform: &'static str,
     message: &'static str,
-) -> TransformReport {
-    TransformReport::with_diagnostic(
-        Music::PianoRoll(to_piano_roll(object)),
+) -> Result<TransformReport, TransformError> {
+    Ok(TransformReport::with_diagnostic(
+        Music::PianoRoll(to_piano_roll(object)?),
         TransformDiagnostic::new(TransformDiagnosticCode::InvalidRatio, transform, message),
-    )
+    ))
 }
 
-fn stretch_by_factor(object: &dyn MusicObject, factor: Time) -> TransformReport {
-    TransformReport::clean(Music::PianoRoll(canonical_roll(
-        to_piano_roll(object)
+fn stretch_by_factor(
+    object: &dyn MusicObject,
+    factor: Time,
+) -> Result<TransformReport, TransformError> {
+    Ok(TransformReport::clean(Music::PianoRoll(canonical_roll(
+        to_piano_roll(object)?
             .items
             .into_iter()
             .map(|mut item| {
@@ -448,27 +472,31 @@ fn stretch_by_factor(object: &dyn MusicObject, factor: Time) -> TransformReport 
                 item
             })
             .collect(),
-    )))
+    )?)))
 }
 
-fn stretch_with_time_map(object: &dyn MusicObject, points: &[TimeMapPoint]) -> TransformReport {
+fn stretch_with_time_map(
+    object: &dyn MusicObject,
+    points: &[TimeMapPoint],
+) -> Result<TransformReport, TransformError> {
     match validate_time_map(points) {
         Ok(()) => {
-            let roll = to_piano_roll(object);
+            let roll = to_piano_roll(object)?;
             let mut diagnostics = Vec::new();
             let items = roll
                 .items
                 .into_iter()
                 .map(|item| remap_timed_note(item, points, &mut diagnostics))
                 .collect();
-            TransformReport {
-                music: Music::PianoRoll(canonical_roll(items)),
+            Ok(TransformReport {
+                music: Music::PianoRoll(canonical_roll(items)?),
                 diagnostics,
-            }
+            })
         }
-        Err(diagnostic) => {
-            TransformReport::with_diagnostic(Music::PianoRoll(to_piano_roll(object)), diagnostic)
-        }
+        Err(diagnostic) => Ok(TransformReport::with_diagnostic(
+            Music::PianoRoll(to_piano_roll(object)?),
+            diagnostic,
+        )),
     }
 }
 

@@ -204,14 +204,14 @@ fn canonical_note(value: &str) -> Result<String> {
 
 fn canonical_seq(value: &str) -> Result<String> {
     match decode_music(value).map_err(codec_error)? {
-        Music::Seq(seq) => Ok(encode_seq(&seq)),
+        Music::Seq(seq) => encode_seq(&seq).map_err(codec_error),
         _ => Err(wrong_variant("Seq")),
     }
 }
 
 fn canonical_par(value: &str) -> Result<String> {
     match decode_music(value).map_err(codec_error)? {
-        Music::Par(par) => Ok(encode_par(&par)),
+        Music::Par(par) => encode_par(&par).map_err(codec_error),
         _ => Err(wrong_variant("Par")),
     }
 }
@@ -229,9 +229,8 @@ fn canonical_melody(value: &str) -> Result<String> {
 }
 
 fn canonical_score(value: &str) -> Result<String> {
-    decode_score(value)
-        .map(|score| encode_score(&score))
-        .map_err(codec_error)
+    let score = decode_score(value).map_err(codec_error)?;
+    encode_score(&score).map_err(codec_error)
 }
 
 fn codec_error(error: MusicShapeError) -> Error {

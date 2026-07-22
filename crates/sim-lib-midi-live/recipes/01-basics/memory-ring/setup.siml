@@ -1,1 +1,1 @@
-(quote (midi-live ring source sink deterministic-memory no-device))
+midi/MidiLiveRegistry

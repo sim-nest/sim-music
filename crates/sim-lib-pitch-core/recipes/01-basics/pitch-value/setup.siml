@@ -1,1 +1,1 @@
-(quote (pitch-core pitch C4 midi 60 hz 261.6256))
+"pitch-core descriptor: C4 has MIDI note 60 at 261.6256 Hz"

@@ -1,1 +1,1 @@
-(quote (midi-rtmidi alsa-seq smoke input rtmidi/alsa/in-0 output rtmidi/alsa/out-0 hardware-gated))
+midi/RtMidiMissingDependency

@@ -1,5 +1,7 @@
 use std::path::Path;
 
+// conformance: synth performance workbench renders checked DAW descriptors.
+
 use sim_lib_audio_graph_live::LiveStreamLane;
 
 use crate::daw::{

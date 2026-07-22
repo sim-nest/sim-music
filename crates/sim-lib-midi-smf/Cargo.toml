@@ -3,7 +3,7 @@ name = "sim-lib-midi-smf"
 version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib midi smf."
+description = "Standard MIDI File reader and writer helpers for deterministic SIM MIDI fixtures."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -16,4 +16,3 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

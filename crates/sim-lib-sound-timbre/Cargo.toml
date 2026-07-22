@@ -3,7 +3,7 @@ name = "sim-lib-sound-timbre"
 version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib sound timbre."
+description = "Timbre recipes, envelopes, filters, and named tone construction helpers."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -17,4 +17,3 @@ sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

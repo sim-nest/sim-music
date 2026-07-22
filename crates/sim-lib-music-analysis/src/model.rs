@@ -120,7 +120,7 @@ pub fn chord_windows_from_diff_roll(diff: &DiffRoll, mode: ChordWindowMode) -> V
                 ChordWindowMode::StartingNotes => frame.started,
             };
             let pitch_class_mask = pitch_class_mask(range_mask);
-            (pitch_class_mask.0 != 0).then(|| ChordWindow {
+            (pitch_class_mask.bits() != 0).then(|| ChordWindow {
                 at: frame.at,
                 until: pair[1].at,
                 mode,

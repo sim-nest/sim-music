@@ -210,7 +210,7 @@ pub fn render_score_demo(
     let mut bridge = MidiToSoundBridge::new(
         smf.tpq,
         bank.clone(),
-        Box::new(FrozenTuning::from_tuning(tuning)),
+        Box::new(FrozenTuning::from_tuning(tuning)?),
         BridgeOptions::default(),
     )?;
     let _ = pump(&mut source, &mut bridge).map_err(|_| SoundWasmError::Pump)?;
@@ -220,9 +220,9 @@ pub fn render_score_demo(
     Ok(SoundDemoReport {
         audio: RenderedAudioView {
             wav,
-            sample_rate: renderer.sample_rate,
-            channels: renderer.channels,
-            frame_count: samples.len() / usize::from(renderer.channels),
+            sample_rate: renderer.sample_rate(),
+            channels: renderer.channels(),
+            frame_count: samples.len() / usize::from(renderer.channels()),
         },
         dissonance: tone_dissonance(&tones),
         intervals: tuning_table(tuning)?,
@@ -284,20 +284,42 @@ fn score_view(score: DissonanceScore) -> DissonanceModelView {
 struct FrozenTuning {
     reference: (Pitch, Frequency),
     divisions: u32,
+    frequencies: Vec<Frequency>,
 }
 
 impl FrozenTuning {
-    fn from_tuning(tuning: &dyn Tuning) -> Self {
-        Self {
-            reference: tuning.reference(),
-            divisions: tuning.divisions(),
+    fn from_tuning(tuning: &dyn Tuning) -> Result<Self, SoundTuningError> {
+        let reference = tuning.reference();
+        let divisions = tuning.divisions();
+        if divisions == 0 {
+            return Err(SoundTuningError::InvalidDivisions);
         }
+        let frequencies = (0..divisions)
+            .map(|degree| {
+                tuning.frequency_of_degree(PitchClassN::new(divisions, degree)?, reference.0.octave)
+            })
+            .collect::<Result<Vec<_>, _>>()?;
+        Ok(Self {
+            reference,
+            divisions,
+            frequencies,
+        })
+    }
+
+    fn degree_for_pitch(&self, pitch: Pitch) -> PitchClassN {
+        let index = if self.divisions == 12 {
+            u32::from(pitch.class.value())
+        } else {
+            (((f64::from(pitch.class.value()) / 12.0) * f64::from(self.divisions)).round() as u32)
+                % self.divisions
+        };
+        PitchClassN::new(self.divisions, index).expect("mapped pitch degree is in range")
     }
 }
 
 impl Tuning for FrozenTuning {
     fn name(&self) -> &'static str {
-        "frozen-equal-temperament"
+        "frozen-tuning"
     }
 
     fn reference(&self) -> (Pitch, Frequency) {
@@ -305,15 +327,23 @@ impl Tuning for FrozenTuning {
     }
 
     fn frequency_of(&self, pitch: Pitch) -> Frequency {
-        EqualTemperament::new(self.divisions, self.reference)
-            .unwrap_or_default()
-            .frequency_of(pitch)
+        let degree = self.degree_for_pitch(pitch);
+        self.frequency_of_degree(degree, pitch.octave)
+            .expect("mapped pitch degree is valid")
     }
 
     fn pitch_of(&self, frequency: Frequency) -> Pitch {
-        EqualTemperament::new(self.divisions, self.reference)
-            .unwrap_or_default()
-            .pitch_of(frequency)
+        let mut best = self.reference.0;
+        let mut best_distance = f64::INFINITY;
+        for semitone in -120..=120 {
+            let pitch = self.reference.0.transpose(semitone);
+            let distance = self.frequency_of(pitch).cents_above(frequency).abs();
+            if distance < best_distance {
+                best = pitch;
+                best_distance = distance;
+            }
+        }
+        best
     }
 
     fn divisions(&self) -> u32 {
@@ -325,8 +355,49 @@ impl Tuning for FrozenTuning {
         degree: PitchClassN,
         octave: i16,
     ) -> Result<Frequency, SoundTuningError> {
-        EqualTemperament::new(self.divisions, self.reference)
-            .unwrap_or_default()
-            .frequency_of_degree(degree, octave)
+        if degree.divisions != self.divisions || degree.index as usize >= self.frequencies.len() {
+            return Err(SoundTuningError::InvalidPitchClassN {
+                divisions: self.divisions,
+                index: degree.index,
+            });
+        }
+        let octave_delta = octave as i32 - self.reference.0.octave as i32;
+        Ok(Frequency(
+            self.frequencies[degree.index as usize].0 * 2.0_f64.powi(octave_delta),
+        ))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use sim_lib_music_core::PitchClass;
+    use sim_lib_sound_tuning::JustIntonation;
+
+    #[test]
+    fn frozen_tuning_preserves_non_equal_frequency_table() {
+        let tuning = JustIntonation {
+            root: PitchClass::new(0).unwrap(),
+            ratios: [
+                1.0,
+                16.0 / 15.0,
+                9.0 / 8.0,
+                6.0 / 5.0,
+                5.0 / 4.0,
+                4.0 / 3.0,
+                45.0 / 32.0,
+                3.0 / 2.0,
+                8.0 / 5.0,
+                5.0 / 3.0,
+                9.0 / 5.0,
+                15.0 / 8.0,
+            ],
+            reference: (Pitch::from_midi(60), Frequency(261.6255653005986)),
+        };
+        let frozen = FrozenTuning::from_tuning(&tuning).unwrap();
+        let pitch = Pitch::from_midi(61);
+
+        assert_eq!(frozen.frequency_of(pitch), tuning.frequency_of(pitch));
     }
 }

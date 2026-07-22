@@ -5,6 +5,7 @@ use sim_lib_midi_core::{
     U7, U14, synthetic_origin,
 };
 
+use crate::writer::{MAX_SMF_VLQ, checked_chunk_len, checked_payload_len};
 use crate::{
     SmfError, SmfFile, SmfFormat, SmfTrack, SmfWriteOptions, decode_vlq, encode_vlq, read_smf,
     write_smf_with_options,
@@ -118,6 +119,120 @@ fn multi_track_reader_emits_time_sorted_events_and_preserves_last_track() {
     assert_eq!(pairs[2].0, 0);
     assert_eq!(pairs[3].0, 1);
     assert!(pairs.windows(2).all(|window| window[0].1 <= window[1].1));
+}
+
+#[test]
+fn merge_cursor_skips_exhausted_earlier_tracks() {
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        tpq: 480,
+        tracks: vec![
+            SmfTrack {
+                events: vec![MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Meta(MetaEvent::Tempo {
+                        us_per_quarter: 500_000,
+                    }),
+                }],
+            },
+            SmfTrack {
+                events: vec![
+                    MidiEvent {
+                        time: TickTime::new(120, 480).unwrap(),
+                        origin: synthetic_origin(),
+                        payload: MidiPayload::Channel(ChannelMessage::NoteOn {
+                            ch: Channel::new(1).unwrap(),
+                            key: U7(64),
+                            vel: U7(90),
+                        }),
+                    },
+                    MidiEvent {
+                        time: TickTime::new(240, 480).unwrap(),
+                        origin: synthetic_origin(),
+                        payload: MidiPayload::Channel(ChannelMessage::NoteOff {
+                            ch: Channel::new(1).unwrap(),
+                            key: U7(64),
+                            vel: U7(0),
+                        }),
+                    },
+                ],
+            },
+        ],
+    };
+
+    let merged = file.merged_events();
+    let pairs = merged
+        .iter()
+        .map(|tracked| (tracked.last_track, tracked.event.time.ticks))
+        .collect::<Vec<_>>();
+
+    assert_eq!(pairs, vec![(0, 0), (1, 120), (1, 240)]);
+}
+
+#[test]
+fn writer_rejects_tpq_with_smpte_high_bit() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        tpq: 0x8000,
+        tracks: vec![minimal_track(480)],
+    };
+
+    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+
+    assert_eq!(error, SmfError::TpqOutOfRange(0x8000));
+}
+
+#[test]
+fn writer_rejects_too_many_tracks() {
+    let tracks = (0..=u16::MAX)
+        .map(|_| minimal_track(480))
+        .collect::<Vec<_>>();
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        tpq: 480,
+        tracks,
+    };
+
+    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+
+    assert_eq!(error, SmfError::TrackCountOutOfRange(65_536));
+}
+
+#[test]
+fn writer_rejects_delta_above_four_byte_vlq_limit() {
+    let delta = i64::from(MAX_SMF_VLQ) + 1;
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        tpq: 480,
+        tracks: vec![SmfTrack {
+            events: vec![MidiEvent {
+                time: TickTime::new(delta, 480).unwrap(),
+                origin: synthetic_origin(),
+                payload: MidiPayload::Meta(MetaEvent::EndOfTrack),
+            }],
+        }],
+    };
+
+    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+
+    assert_eq!(error, SmfError::DeltaOutOfRange(delta));
+}
+
+#[test]
+fn writer_length_guards_reject_unrepresentable_lengths() {
+    if let Some(chunk_len) = usize::try_from(u32::MAX).unwrap().checked_add(1) {
+        assert_eq!(
+            checked_chunk_len(chunk_len),
+            Err(SmfError::ChunkTooLarge(chunk_len))
+        );
+    }
+
+    let payload_len = usize::try_from(MAX_SMF_VLQ).unwrap() + 1;
+    assert_eq!(
+        checked_payload_len(payload_len),
+        Err(SmfError::PayloadTooLarge(payload_len))
+    );
 }
 
 #[test]

@@ -46,9 +46,9 @@ impl Default for RendererOptions {
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct PcmRenderer {
     /// Output sample rate, in hertz.
-    pub sample_rate: u32,
+    sample_rate: u32,
     /// Output channel count (1 for mono, 2 for stereo).
-    pub channels: u8,
+    channels: u8,
 }
 
 impl PcmRenderer {
@@ -59,6 +59,16 @@ impl PcmRenderer {
             sample_rate: options.sample_rate,
             channels: options.channels,
         })
+    }
+
+    /// Returns the output sample rate, in hertz.
+    pub fn sample_rate(self) -> u32 {
+        self.sample_rate
+    }
+
+    /// Returns the output channel count.
+    pub fn channels(self) -> u8 {
+        self.channels
     }
 
     /// Renders a single tone to interleaved PCM samples, centered in the
@@ -111,13 +121,26 @@ impl PcmRenderer {
         samples: &[f32],
         mut writer: W,
     ) -> Result<W, SoundRenderError> {
+        let channels = usize::from(self.channels);
+        if channels == 0 || !samples.len().is_multiple_of(channels) {
+            return Err(SoundRenderError::ChannelMisalignedSamples);
+        }
         let sample_count =
             u32::try_from(samples.len()).map_err(|_| SoundRenderError::BufferTooLarge)?;
         let bytes_per_sample = 2_u16;
-        let block_align = self.channels as u16 * bytes_per_sample;
-        let byte_rate = self.sample_rate * u32::from(block_align);
-        let data_size = sample_count * u32::from(bytes_per_sample);
-        let riff_size = 36_u32 + data_size;
+        let block_align = u16::from(self.channels)
+            .checked_mul(bytes_per_sample)
+            .ok_or(SoundRenderError::BufferTooLarge)?;
+        let byte_rate = self
+            .sample_rate
+            .checked_mul(u32::from(block_align))
+            .ok_or(SoundRenderError::BufferTooLarge)?;
+        let data_size = sample_count
+            .checked_mul(u32::from(bytes_per_sample))
+            .ok_or(SoundRenderError::BufferTooLarge)?;
+        let riff_size = 36_u32
+            .checked_add(data_size)
+            .ok_or(SoundRenderError::BufferTooLarge)?;
         writer
             .write_all(b"RIFF")
             .map_err(|_| SoundRenderError::BufferTooLarge)?;
@@ -137,7 +160,7 @@ impl PcmRenderer {
             .write_all(&1_u16.to_le_bytes())
             .map_err(|_| SoundRenderError::BufferTooLarge)?;
         writer
-            .write_all(&(self.channels as u16).to_le_bytes())
+            .write_all(&u16::from(self.channels).to_le_bytes())
             .map_err(|_| SoundRenderError::BufferTooLarge)?;
         writer
             .write_all(&self.sample_rate.to_le_bytes())

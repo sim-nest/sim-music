@@ -35,21 +35,7 @@ pub fn lift_pcm_items_to_midi(
     items: Vec<StreamItem>,
     options: StreamBridgeLiftMidiOptions,
 ) -> Result<BridgeOutput> {
-    if options.sample_rate == 0 {
-        return Err(Error::Eval(
-            "stream/bridge lift-midi sample_rate must be greater than zero".to_owned(),
-        ));
-    }
-    if options.tpq == 0 {
-        return Err(Error::Eval(
-            "stream/bridge lift-midi tpq must be greater than zero".to_owned(),
-        ));
-    }
-    if options.max_events_per_packet == 0 {
-        return Err(Error::Eval(
-            "stream/bridge lift-midi max_events_per_packet must be greater than zero".to_owned(),
-        ));
-    }
+    options.validate()?;
     let samples = downmixed_pcm(items)?;
     let lifter = HarmonicCombLifter {
         opts: AudioLiftOptions {

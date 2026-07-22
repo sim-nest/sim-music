@@ -17,16 +17,28 @@ fn c_major_scale_degrees_match_expected_pitch_classes() {
         ]
     );
     assert_eq!(scale.degree_of(PitchClass::G), Some(5));
-    assert_eq!(scale.pitch_at_degree(7), PitchClass::B);
+    assert_eq!(scale.pitch_at_degree(7), Ok(PitchClass::B));
 }
 
 #[test]
-fn pitch_at_degree_zero_does_not_underflow() {
-    // A zero degree must not underflow the one-based index arithmetic; it
-    // saturates to the tonic (degree one) rather than panicking.
+fn degree_zero_is_rejected() {
     let scale = Scale::major(PitchClass::C);
-    assert_eq!(scale.pitch_at_degree(0), scale.pitch_at_degree(1));
-    assert_eq!(scale.pitch_at_degree(0), PitchClass::C);
+    assert_eq!(
+        scale.pitch_at_degree(0),
+        Err(PitchScaleError::InvalidScaleDegree(0))
+    );
+    assert_eq!(
+        PlayerScale::from_scale(scale).pitch_at_degree(0),
+        Err(PitchScaleError::InvalidScaleDegree(0))
+    );
+    assert_eq!(
+        Scale::chord_tone_to_scale_tone(0),
+        Err(PitchScaleError::InvalidScaleDegree(0))
+    );
+    assert_eq!(
+        Scale::scale_tone_to_diatonic(0),
+        Err(PitchScaleError::InvalidScaleDegree(0))
+    );
 }
 
 #[test]

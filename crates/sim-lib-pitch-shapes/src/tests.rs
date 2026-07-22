@@ -23,11 +23,19 @@ fn interval_round_trip() {
 
 #[test]
 fn pitch_class_mask_round_trip() {
-    let mask = PitchClassMask(145);
+    let mask = PitchClassMask::new(145).unwrap();
     assert_eq!(
         decode_pitch_class_mask(&encode_pitch_class_mask(mask)).unwrap(),
         mask
     );
+}
+
+#[test]
+fn pitch_class_mask_decode_rejects_high_bits() {
+    assert!(matches!(
+        decode_pitch_class_mask("#(PitchClassMask 4096)"),
+        Err(PitchShapeError::InvalidPitchClassMask)
+    ));
 }
 
 #[test]

@@ -1,1 +1,1 @@
-(quote (pitch-set mask C E G rotate invert normal-form))
+"pitch-set descriptor: C-E-G triad mask supports rotate, invert, and normal-form views"

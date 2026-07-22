@@ -4,7 +4,7 @@ In one line: Fast in-and-out buffers that let live MIDI flow through your setup 
 
 ## What it gives you
 
-This gives you fixed-size ring buffers that sit between real-time MIDI coming in and the tools that consume it. One buffer acts as both a place to write events and a place to read them back in order; another tags each event with the track it belongs to. If a consumer falls behind and a buffer fills, the oldest event is dropped and counted rather than blocking the live input, so a slow reader never freezes a live player.
+This gives you fixed-size ring buffers that sit between incoming real-time MIDI and the tools that consume it. One buffer acts as both a place to write events and a place to read them back in order; another tags each event with the track it belongs to. If a consumer falls behind and a buffer fills, the oldest event is dropped and counted rather than blocking the live input, so a slow reader never freezes a live player.
 
 ## Why you will be glad
 

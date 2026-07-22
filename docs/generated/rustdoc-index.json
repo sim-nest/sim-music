@@ -1,5 +1,327 @@
 {
-  "schema": "sim.rustdoc-index.v1",
-  "repo": "sim-music",
-  "target_doc": "target/doc/"
+  "generator": "xtask repo-contract v1",
+  "packages": [
+    {
+      "crate_name": "sim_lib_daw_session",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-daw-session/Cargo.toml",
+      "package": "sim-lib-daw-session",
+      "summary": "Headless DAW session surface for SIM audio graph workspaces."
+    },
+    {
+      "crate_name": "sim_lib_midi_ble",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-ble/Cargo.toml",
+      "package": "sim-lib-midi-ble",
+      "summary": "BLE-MIDI discovery, packet framing, and stream-host placement support."
+    },
+    {
+      "crate_name": "sim_lib_midi_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-core/Cargo.toml",
+      "package": "sim-lib-midi-core",
+      "summary": "Core MIDI data model and in-memory I/O for the SIM music stack."
+    },
+    {
+      "crate_name": "sim_lib_midi_live",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-live/Cargo.toml",
+      "package": "sim-lib-midi-live",
+      "summary": "Real-time MIDI buffering for the SIM music stack."
+    },
+    {
+      "crate_name": "sim_lib_midi_rtmidi",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-rtmidi/Cargo.toml",
+      "package": "sim-lib-midi-rtmidi",
+      "summary": "RtMidi MIDI adapter surface for SIM."
+    },
+    {
+      "crate_name": "sim_lib_midi_shapes",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-shapes/Cargo.toml",
+      "package": "sim-lib-midi-shapes",
+      "summary": "Shape and citizen surfaces that expose the MIDI model to the SIM runtime."
+    },
+    {
+      "crate_name": "sim_lib_midi_smf",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-smf/Cargo.toml",
+      "package": "sim-lib-midi-smf",
+      "summary": "Standard MIDI File (SMF) reading and writing for the SIM music stack."
+    },
+    {
+      "crate_name": "sim_lib_midi_sysex",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-sysex/Cargo.toml",
+      "package": "sim-lib-midi-sysex",
+      "summary": "Typed views over MIDI system-exclusive (SysEx) messages."
+    },
+    {
+      "crate_name": "sim_lib_midi_wasm_frame",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-midi-wasm-frame/Cargo.toml",
+      "package": "sim-lib-midi-wasm-frame",
+      "summary": "MIDI binary-frame facade descriptors."
+    },
+    {
+      "crate_name": "sim_lib_music_analysis",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-analysis/Cargo.toml",
+      "package": "sim-lib-music-analysis",
+      "summary": "Analysis of musical material for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_music_combinators",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-combinators/Cargo.toml",
+      "package": "sim-lib-music-combinators",
+      "summary": "Composable music-transform combinators for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_music_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-core/Cargo.toml",
+      "package": "sim-lib-music-core",
+      "summary": "Core music model layer for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_music_lift",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-lift/Cargo.toml",
+      "package": "sim-lib-music-lift",
+      "summary": "Lifts music from lower-level representations to higher-level ones."
+    },
+    {
+      "crate_name": "sim_lib_music_lower",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-lower/Cargo.toml",
+      "package": "sim-lib-music-lower",
+      "summary": "Lowers music from higher-level representations to renderable ones."
+    },
+    {
+      "crate_name": "sim_lib_music_notation",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-notation/Cargo.toml",
+      "package": "sim-lib-music-notation",
+      "summary": "Score and notation model for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_music_shapes",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-shapes/Cargo.toml",
+      "package": "sim-lib-music-shapes",
+      "summary": "Shape protocol surfaces for SIM music types."
+    },
+    {
+      "crate_name": "sim_lib_music_synth",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-synth/Cargo.toml",
+      "package": "sim-lib-music-synth",
+      "summary": "Playable pure-Rust software synthesizer primitives for the SIM audio graph."
+    },
+    {
+      "crate_name": "sim_lib_music_transform",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-transform/Cargo.toml",
+      "package": "sim-lib-music-transform",
+      "summary": "Music transformation layer for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_music_wasm_frame",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-wasm-frame/Cargo.toml",
+      "package": "sim-lib-music-wasm-frame",
+      "summary": "Music binary-frame facade descriptors."
+    },
+    {
+      "crate_name": "sim_lib_pitch_chord",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-chord/Cargo.toml",
+      "package": "sim-lib-pitch-chord",
+      "summary": "Chords, voicings, and harmonic sequencing for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-core/Cargo.toml",
+      "package": "sim-lib-pitch-core",
+      "summary": "Core pitch theory primitives for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_dissonance",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-dissonance/Cargo.toml",
+      "package": "sim-lib-pitch-dissonance",
+      "summary": "Dissonance and harmonic-complexity scoring for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer/Cargo.toml",
+      "package": "sim-lib-pitch-namer",
+      "summary": "Multi-school cluster naming for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_forte",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-forte/Cargo.toml",
+      "package": "sim-lib-pitch-namer-forte",
+      "summary": "Forte set-class naming for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_jazz",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-jazz/Cargo.toml",
+      "package": "sim-lib-pitch-namer-jazz",
+      "summary": "Jazz chord-symbol naming for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_riemann",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-riemann/Cargo.toml",
+      "package": "sim-lib-pitch-namer-riemann",
+      "summary": "Neo-Riemannian / functional triad naming for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_namer_roman",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-namer-roman/Cargo.toml",
+      "package": "sim-lib-pitch-namer-roman",
+      "summary": "Roman-numeral harmonic analysis for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_scale",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-scale/Cargo.toml",
+      "package": "sim-lib-pitch-scale",
+      "summary": "Scales, modes, and scale-locking for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_set",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-set/Cargo.toml",
+      "package": "sim-lib-pitch-set",
+      "summary": "Pitch-class set representations and operations for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_shapes",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-shapes/Cargo.toml",
+      "package": "sim-lib-pitch-shapes",
+      "summary": "Citizen descriptors, text codecs, and runtime shapes for SIM pitch types."
+    },
+    {
+      "crate_name": "sim_lib_pitch_wasm_frame",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-wasm-frame/Cargo.toml",
+      "package": "sim-lib-pitch-wasm-frame",
+      "summary": "Pitch binary-frame facade descriptors."
+    },
+    {
+      "crate_name": "sim_lib_sound_audio_lift",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-audio-lift/Cargo.toml",
+      "package": "sim-lib-sound-audio-lift",
+      "summary": "Audio-to-notes lifting for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_bridge",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-bridge/Cargo.toml",
+      "package": "sim-lib-sound-bridge",
+      "summary": "MIDI-to-sound bridging for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-core/Cargo.toml",
+      "package": "sim-lib-sound-core",
+      "summary": "Core sound primitives for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_dissonance",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-dissonance/Cargo.toml",
+      "package": "sim-lib-sound-dissonance",
+      "summary": "Psychoacoustic dissonance models for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_gm",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-gm/Cargo.toml",
+      "package": "sim-lib-sound-gm",
+      "summary": "General MIDI sound set for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_render",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-render/Cargo.toml",
+      "package": "sim-lib-sound-render",
+      "summary": "Sound rendering for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_shapes",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-shapes/Cargo.toml",
+      "package": "sim-lib-sound-shapes",
+      "summary": "Sound-shape codec surface for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_spectrum",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-spectrum/Cargo.toml",
+      "package": "sim-lib-sound-spectrum",
+      "summary": "Spectral analysis for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_timbre",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-timbre/Cargo.toml",
+      "package": "sim-lib-sound-timbre",
+      "summary": "Timbre models and spectral filters for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_tuning",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-tuning/Cargo.toml",
+      "package": "sim-lib-sound-tuning",
+      "summary": "Tuning systems and temperaments for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_sound_wasm_frame",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-sound-wasm-frame/Cargo.toml",
+      "package": "sim-lib-sound-wasm-frame",
+      "summary": "Sound binary-frame facade descriptors."
+    },
+    {
+      "crate_name": "sim_lib_stream_bridge",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-bridge/Cargo.toml",
+      "package": "sim-lib-stream-bridge",
+      "summary": "MIDI/audio bridge helpers for STREAM 6."
+    },
+    {
+      "crate_name": "sim_lib_stream_file",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-file/Cargo.toml",
+      "package": "sim-lib-stream-file",
+      "summary": "File-backed source and sink adapters for STREAM 6."
+    },
+    {
+      "crate_name": "sim_lib_stream_midi",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-stream-midi/Cargo.toml",
+      "package": "sim-lib-stream-midi",
+      "summary": "MIDI source, sink, and stream-spine adapters."
+    },
+    {
+      "crate_name": "xtask",
+      "group": "workspace",
+      "manifest": "xtask/Cargo.toml",
+      "package": "xtask",
+      "summary": "Repository maintenance tasks for sim-music validation and generated docs."
+    }
+  ]
 }

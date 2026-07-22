@@ -3,7 +3,7 @@ name = "sim-lib-pitch-scale"
 version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib pitch scale."
+description = "Scale, key, mode, and degree mapping helpers for pitch-domain transforms."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -17,4 +17,3 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

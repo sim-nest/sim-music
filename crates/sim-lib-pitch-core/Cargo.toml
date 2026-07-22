@@ -3,7 +3,7 @@ name = "sim-lib-pitch-core"
 version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib pitch core."
+description = "Pitch classes, octave-aware pitches, intervals, and MIDI conversion helpers for SIM music crates."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -15,4 +15,3 @@ sim-cookbook = { version = "0.1.0" }
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

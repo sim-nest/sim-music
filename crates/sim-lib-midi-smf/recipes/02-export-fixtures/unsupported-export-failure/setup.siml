@@ -1,4 +1,1 @@
-(quote
-  (recipe unsupported-export-failure
-    (export (smf :format 0 :tracks 2))
-    (expect-error "format track mismatch")))
+"midi-smf descriptor: format-0 export rejects two-track input"

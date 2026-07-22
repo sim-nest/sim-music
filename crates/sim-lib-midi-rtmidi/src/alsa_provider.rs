@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use sim_kernel::{Error, Result, Symbol};
 use sim_lib_stream_host::{
-    DeviceDirection, DeviceKind, DeviceProvider, DeviceRecord, HostDirection, Placement,
+    CatalogDeviceProvider, DeviceDirection, DeviceKind, DeviceRecord, HostDirection, Placement,
     StreamEvalSite,
 };
 
@@ -63,7 +63,7 @@ macro_rules! native_midi_provider {
             }
         }
 
-        impl DeviceProvider for $provider {
+        impl CatalogDeviceProvider for $provider {
             fn enumerate(&self) -> Result<Vec<DeviceRecord>> {
                 Ok(self.backend.list_ports().iter().map(Self::record).collect())
             }

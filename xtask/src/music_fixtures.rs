@@ -1,9 +1,7 @@
 //! Regenerates the synth render-fixture manifests.
 //!
-//! These were standalone `src/bin/*-fixtures.rs` targets in the published
-//! `sim-lib-music-synth` crate; they are maintainer codegen tools, not product
-//! binaries, so they live here in `xtask` (which never ships) instead of leaking onto
-//! the crate's published binary surface. Run with
+//! These maintainer codegen tools live in `xtask` so fixture refresh stays out
+//! of product binary surfaces. Run with
 //! `cargo run -p xtask -- music-fixtures <dx7|ps3300|system55|system700>`.
 
 use std::fs;

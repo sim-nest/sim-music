@@ -1,1 +1,1 @@
-(quote (pitch-wasm facade pitch-tools frame-safe))
+"pitch-wasm descriptor: pitch-tools frame facade for browser guests"

@@ -1,4 +1,5 @@
 use num_rational::Ratio;
+use std::any::Any;
 use std::sync::Arc;
 
 mod custom_filter;
@@ -11,8 +12,8 @@ use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack};
 use sim_lib_music_analysis::{ChordWindowMode, DiffRoll, chord_windows_from_piano_roll};
 use sim_lib_music_core::{
     Arranger, ArrangerPlacement, Articulation, Chord, Counterpoint, LaneId, Melody, MelodyItem,
-    MidiFileObj, MidiTrackObj, Music, Note, Par, PianoRoll, PitchRemap, PlayableRef, Progression,
-    Rest, Score, Seq, StretchPolicy, TimedNote,
+    MidiFileObj, MidiTrackObj, Music, MusicObject, Note, Par, PianoRoll, PitchRemap, PlayableRef,
+    Progression, Rest, Score, Seq, StretchPolicy, TimedNote,
 };
 use sim_lib_music_lift::{
     CounterpointLiftOpts, LabelStrategy, ProgressionLiftOpts, VoiceAssignment,
@@ -22,19 +23,20 @@ use sim_lib_pitch_scale::{Mode, Scale};
 
 use crate::{
     MusicChordDescriptor, MusicMelodyDescriptor, MusicNoteDescriptor, MusicParDescriptor,
-    MusicScoreDescriptor, MusicSeqDescriptor, decode_arranger, decode_chord, decode_chord_window,
-    decode_chord_window_mode, decode_counterpoint, decode_counterpoint_lift_opts, decode_diff_roll,
-    decode_function_map, decode_label_strategy, decode_melody, decode_midi_file, decode_midi_track,
-    decode_music, decode_music_file, decode_note, decode_piano_roll, decode_progression,
-    decode_progression_lift_opts, decode_rest, decode_retrograde_mode, decode_score,
-    decode_voice_assignment, encode_arranger, encode_chord, encode_chord_window,
-    encode_chord_window_mode, encode_counterpoint, encode_counterpoint_lift_opts, encode_diff_roll,
-    encode_function_map, encode_label_strategy, encode_melody, encode_midi_file, encode_midi_track,
-    encode_music, encode_music_file, encode_note, encode_par, encode_piano_roll,
-    encode_progression, encode_progression_lift_opts, encode_rest, encode_retrograde_mode,
-    encode_score, encode_seq, encode_voice_assignment, install_music_shapes_lib,
-    music_chord_class_symbol, music_melody_class_symbol, music_note_class_symbol,
-    music_par_class_symbol, music_score_class_symbol, music_seq_class_symbol,
+    MusicScoreDescriptor, MusicSeqDescriptor, MusicShapeError, decode_arranger, decode_chord,
+    decode_chord_window, decode_chord_window_mode, decode_counterpoint,
+    decode_counterpoint_lift_opts, decode_diff_roll, decode_function_map, decode_label_strategy,
+    decode_melody, decode_midi_file, decode_midi_track, decode_music, decode_music_file,
+    decode_note, decode_piano_roll, decode_progression, decode_progression_lift_opts, decode_rest,
+    decode_retrograde_mode, decode_score, decode_voice_assignment, encode_arranger, encode_chord,
+    encode_chord_window, encode_chord_window_mode, encode_counterpoint,
+    encode_counterpoint_lift_opts, encode_diff_roll, encode_function_map, encode_label_strategy,
+    encode_melody, encode_midi_file, encode_midi_track, encode_music, encode_music_file,
+    encode_note, encode_par, encode_piano_roll, encode_progression, encode_progression_lift_opts,
+    encode_rest, encode_retrograde_mode, encode_score, encode_seq, encode_voice_assignment,
+    install_music_shapes_lib, music_chord_class_symbol, music_melody_class_symbol,
+    music_note_class_symbol, music_par_class_symbol, music_score_class_symbol,
+    music_seq_class_symbol,
 };
 
 fn quarter() -> Ratio<i64> {
@@ -50,6 +52,30 @@ fn note(midi: u8) -> Note {
         Articulation::Normal,
     )
     .expect("note")
+}
+
+fn encoded_arranger(arranger: &Arranger) -> String {
+    encode_arranger(arranger).expect("encode arranger")
+}
+
+fn encoded_music(music: &Music) -> String {
+    encode_music(music).expect("encode music")
+}
+
+fn encoded_music_file(score: &Score) -> String {
+    encode_music_file(score).expect("encode music file")
+}
+
+fn encoded_par(par: &Par) -> String {
+    encode_par(par).expect("encode par")
+}
+
+fn encoded_score(score: &Score) -> String {
+    encode_score(score).expect("encode score")
+}
+
+fn encoded_seq(seq: &Seq) -> String {
+    encode_seq(seq).expect("encode seq")
 }
 
 #[test]
@@ -131,6 +157,46 @@ fn structured_music_objects_round_trip() {
     );
 }
 
+#[derive(Clone)]
+struct UnsupportedMusicObject;
+
+impl MusicObject for UnsupportedMusicObject {
+    fn kind(&self) -> &'static str {
+        "unsupported-test"
+    }
+
+    fn duration(&self) -> Ratio<i64> {
+        Ratio::from_integer(0)
+    }
+
+    fn voices<'a>(
+        &'a self,
+        _offset: Ratio<i64>,
+        _out: &mut Vec<sim_lib_music_core::TimedAtom<'a>>,
+    ) {
+    }
+
+    fn clone_box(&self) -> Box<dyn MusicObject> {
+        Box::new(self.clone())
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+}
+
+#[test]
+fn composite_encoder_rejects_unsupported_public_music_object() {
+    let par = Par {
+        children: vec![Box::new(UnsupportedMusicObject)],
+    };
+
+    assert!(matches!(
+        encode_par(&par),
+        Err(MusicShapeError::UnsupportedMusicObject("unsupported-test"))
+    ));
+}
+
 #[test]
 fn midi_wrappers_round_trip() {
     let track = MidiTrackObj::new(
@@ -175,22 +241,22 @@ fn par_seq_music_and_score_round_trip_via_canonical_text() {
         ],
     });
     assert_eq!(
-        encode_music(&decode_music(&encode_music(&par_value)).expect("par")),
-        encode_music(&par_value)
+        encoded_music(&decode_music(&encoded_music(&par_value)).expect("par")),
+        encoded_music(&par_value)
     );
     assert_eq!(
-        encode_music(&decode_music(&encode_music(&seq_value)).expect("seq")),
-        encode_music(&seq_value)
+        encoded_music(&decode_music(&encoded_music(&seq_value)).expect("seq")),
+        encoded_music(&seq_value)
     );
 
     let score = Score::new(120, (4, 4), Some("C-major".to_owned()), par_value).expect("score");
     assert_eq!(
-        encode_score(&decode_score(&encode_score(&score)).expect("score")),
-        encode_score(&score)
+        encoded_score(&decode_score(&encoded_score(&score)).expect("score")),
+        encoded_score(&score)
     );
     assert_eq!(
-        encode_music_file(&decode_music_file(&encode_music_file(&score)).expect("music file")),
-        encode_music_file(&score)
+        encoded_music_file(&decode_music_file(&encoded_music_file(&score)).expect("music file")),
+        encoded_music_file(&score)
     );
 }
 
@@ -214,12 +280,12 @@ fn arranger_round_trips_via_canonical_text() {
     .expect("arranger");
 
     assert_eq!(
-        encode_arranger(&decode_arranger(&encode_arranger(&arranger)).expect("arranger")),
-        encode_arranger(&arranger)
+        encoded_arranger(&decode_arranger(&encoded_arranger(&arranger)).expect("arranger")),
+        encoded_arranger(&arranger)
     );
     assert_eq!(
-        encode_music(&decode_music(&encode_music(&Music::Arranger(arranger.clone()))).unwrap()),
-        encode_music(&Music::Arranger(arranger))
+        encoded_music(&decode_music(&encoded_music(&Music::Arranger(arranger.clone()))).unwrap()),
+        encoded_music(&Music::Arranger(arranger))
     );
 }
 
@@ -274,7 +340,7 @@ fn music_runtime_shapes_reject_bad_domain_forms() {
 
     let score = Score::new(120, (4, 4), None, Music::Note(note_value)).expect("score");
     let score_shape = registered_music_shape(&cx, "Score");
-    assert_shape_accepts(&mut cx, &score_shape, &encode_score(&score));
+    assert_shape_accepts(&mut cx, &score_shape, &encoded_score(&score));
     assert_shape_rejects(
         &mut cx,
         &score_shape,
@@ -302,12 +368,12 @@ fn music_citizens_accept_legacy_text_and_read_construct() {
     let seq_text =
         "#(Seq children=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)])";
     let seq = read_construct::<MusicSeqDescriptor>(&mut cx, music_seq_class_symbol(), seq_text);
-    assert_eq!(seq.as_text(), encode_seq(&seq.seq().unwrap()));
+    assert_eq!(seq.as_text(), encoded_seq(&seq.seq().unwrap()));
 
     let par_text =
         "#(Par children=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)])";
     let par = read_construct::<MusicParDescriptor>(&mut cx, music_par_class_symbol(), par_text);
-    assert_eq!(par.as_text(), encode_par(&par.par().unwrap()));
+    assert_eq!(par.as_text(), encoded_par(&par.par().unwrap()));
 
     let chord_text = "#(Chord dur=1/4 symbol=\"C\" pitches=[C4,E4,G4] vel=100 channel=0)";
     let chord =
@@ -327,8 +393,8 @@ fn music_citizens_accept_legacy_text_and_read_construct() {
     let score =
         read_construct::<MusicScoreDescriptor>(&mut cx, music_score_class_symbol(), score_text);
     assert_eq!(
-        encode_score(&score.score().unwrap()),
-        encode_score(&decode_score(score_text).unwrap())
+        encoded_score(&score.score().unwrap()),
+        encoded_score(&decode_score(score_text).unwrap())
     );
 }
 

@@ -6,7 +6,7 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol, effect};
+use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol};
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
     TickTime, U7, synthetic_origin,
@@ -14,11 +14,12 @@ use sim_lib_midi_core::{
 use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
 use sim_lib_stream_core::{
-    BufferPolicy, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
+    BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
     StreamPacket, StreamValue, TransportProfile,
 };
 use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
 
+use crate::cap::stream_file_filesystem_effect_kind;
 use crate::{
     cassette_expr_to_stream, pcm_buffers_to_wav_bytes, read_smf_stream, read_wav_stream,
     stream_file_read_capability, stream_file_write_capability, stream_to_cassette,
@@ -199,7 +200,7 @@ fn file_effects_and_capabilities_are_recorded() {
     assert_eq!(records.len(), 1);
     assert!(!records[0].aborted);
     let recorded = write_cx.effect_ledger().effect(&records[0].effect).unwrap();
-    assert_eq!(recorded.kind, effect::effect_filesystem_kind());
+    assert_eq!(recorded.kind, stream_file_filesystem_effect_kind());
     assert!(recorded.requires.contains(&stream_file_write_capability()));
 
     let mut read_cx = cx(&[]);
@@ -219,6 +220,74 @@ fn file_effects_and_capabilities_are_recorded() {
     let denied = read_cx.effect_ledger().records();
     assert_eq!(denied.len(), 1);
     assert!(denied[0].aborted);
+}
+
+#[test]
+fn compatibility_stream_file_capability_aliases_are_accepted() {
+    let temp = TempPath::new("compat-caps.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/compat-write")).unwrap();
+    let mut cx = cx(&[
+        CapabilityName::new("stream.file.write"),
+        CapabilityName::new("stream.file.read"),
+    ]);
+
+    write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/compat-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn directory_aliases_do_not_authorize_file_writes() {
+    for alias in ["table.fs.mkdir", "table.fs.rmdir"] {
+        let suffix = format!("directory-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events);
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/dir-alias-write")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias)]);
+
+        let err = match write_smf_stream(&mut cx, temp.path(), &stream, 480) {
+            Ok(_) => panic!("{alias} unexpectedly authorized an SMF file write"),
+            Err(err) => err,
+        };
+
+        assert!(matches!(
+            err,
+            Error::CapabilityDenied { capability } if capability == stream_file_write_capability()
+        ));
+        assert!(!temp.path().exists());
+    }
+}
+
+#[test]
+fn compatibility_file_write_aliases_are_accepted() {
+    for alias in ["table.fs.write", "file-write"] {
+        let suffix = format!("write-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events.clone());
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/write-alias")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias), stream_file_read_capability()]);
+
+        write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+        let read_back =
+            read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/read-alias")).unwrap();
+        let mut sink = MemoryMidiSink::new(480);
+        let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+        assert_eq!(read_count, events.len());
+        assert_eq!(sink.events(), events.as_slice());
+    }
 }
 
 fn cx(capabilities: &[CapabilityName]) -> Cx {
@@ -244,7 +313,7 @@ fn pcm_metadata(id: &str) -> StreamMetadata {
         Symbol::new(id),
         StreamMedia::Pcm,
         StreamDirection::Source,
-        Symbol::qualified("clock", "pcm"),
+        ClockDomain::Sample.symbol(),
         BufferPolicy::bounded(16).unwrap(),
     )
 }
@@ -254,7 +323,7 @@ fn data_metadata(id: &str) -> StreamMetadata {
         Symbol::new(id),
         StreamMedia::Data,
         StreamDirection::Source,
-        Symbol::qualified("clock", "data"),
+        ClockDomain::ServerFrame.symbol(),
         BufferPolicy::bounded(16).unwrap(),
     )
 }

@@ -32,11 +32,7 @@ pub fn render_midi_items_to_pcm(
     items: Vec<StreamItem>,
     options: StreamBridgeRenderOptions,
 ) -> Result<BridgeOutput> {
-    if options.chunk_frames == 0 {
-        return Err(Error::Eval(
-            "stream/bridge render chunk_frames must be greater than zero".to_owned(),
-        ));
-    }
+    options.validate()?;
     let packets = midi_packets(items)?;
     let tpq = packets
         .first()

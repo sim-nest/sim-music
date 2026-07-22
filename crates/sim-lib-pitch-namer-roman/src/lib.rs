@@ -78,8 +78,8 @@ fn choose_root(mask: PitchClassMask) -> Option<PitchClass> {
 }
 
 fn chord_quality(mask: PitchClassMask, root: PitchClass) -> Option<&'static str> {
-    let normalized = mask.rotate(-(root.0 as i32));
-    match normalized.0 & 0x0fff {
+    let normalized = mask.rotate(-i32::from(root.value()));
+    match normalized.bits() {
         0b0000_1001_0001 => Some("maj"),
         0b0000_1000_1001 => Some("min"),
         0b0000_0100_1001 => Some("dim"),

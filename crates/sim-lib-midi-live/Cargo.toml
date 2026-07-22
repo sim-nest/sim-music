@@ -3,7 +3,7 @@ name = "sim-lib-midi-live"
 version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
-description = "SIM workspace package for sim lib midi live."
+description = "In-memory live MIDI session descriptors and ring-buffer transport models."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -18,4 +18,3 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

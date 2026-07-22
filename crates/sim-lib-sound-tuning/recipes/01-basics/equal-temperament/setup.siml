@@ -1,1 +1,1 @@
-(quote (sound-tuning equal-temperament twelve a4 440))
+sound/EqualTemperament

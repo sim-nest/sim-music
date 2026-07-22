@@ -253,7 +253,7 @@ fn substitution_candidates(degree: usize, root: PitchClass) -> Vec<SubstitutionC
 }
 
 fn diatonic_chord(scale: Scale, degree: usize) -> ChordSymbol {
-    let root = scale.pitch_at_degree(degree);
+    let root = pitch_at_known_degree(scale, degree);
     ChordSymbol {
         root,
         quality: triad_quality(scale, degree),
@@ -262,9 +262,9 @@ fn diatonic_chord(scale: Scale, degree: usize) -> ChordSymbol {
 }
 
 fn triad_quality(scale: Scale, degree: usize) -> &'static str {
-    let root = scale.pitch_at_degree(degree);
-    let third = scale.pitch_at_degree(degree + 2);
-    let fifth = scale.pitch_at_degree(degree + 4);
+    let root = pitch_at_known_degree(scale, degree);
+    let third = pitch_at_known_degree(scale, degree + 2);
+    let fifth = pitch_at_known_degree(scale, degree + 4);
     match (interval(root, third), interval(root, fifth)) {
         (4, 7) => "maj",
         (3, 7) => "m",
@@ -274,7 +274,14 @@ fn triad_quality(scale: Scale, degree: usize) -> &'static str {
 }
 
 fn interval(root: PitchClass, pitch: PitchClass) -> u8 {
-    (i32::from(pitch.0) - i32::from(root.0)).rem_euclid(12) as u8
+    u8::try_from((i32::from(pitch.value()) - i32::from(root.value())).rem_euclid(12))
+        .expect("mod-12 interval fits u8")
+}
+
+fn pitch_at_known_degree(scale: Scale, degree: usize) -> PitchClass {
+    scale
+        .pitch_at_degree(degree)
+        .expect("harmony degree candidates are one-based")
 }
 
 fn function_for_degree(degree: usize) -> HarmonicFunction {

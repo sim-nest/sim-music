@@ -9,7 +9,7 @@ use sim_lib_midi_core::{
 use sim_lib_midi_rtmidi::RtmidiPort;
 use sim_lib_stream_host::HostReconnectPolicy;
 #[cfg(feature = "ble-midi-hardware")]
-use sim_lib_stream_host::{DeviceDirection, DeviceKind, DeviceProvider, Placement};
+use sim_lib_stream_host::{CatalogDeviceProvider, DeviceDirection, DeviceKind, Placement};
 
 use crate::{
     BLE_MIDI_IO_CHARACTERISTIC_UUID, BLE_MIDI_SERVICE_UUID, BleMidiDevice, BluezDeviceFixture,
@@ -149,6 +149,40 @@ fn ble_midi_provider_fixture_enumerates_with_hardware_placement() {
 
 #[cfg(feature = "ble-midi-hardware")]
 #[test]
+fn bluez_discovery_preserves_empty_discovery_as_missing_dependency() {
+    let report = crate::native::bluez_discovery_report(Ok(Vec::new())).unwrap();
+
+    assert!(report.devices().is_empty());
+    assert_eq!(
+        field(report.cards().first().unwrap(), "kind"),
+        Some(&Expr::Symbol(Symbol::qualified(
+            "midi",
+            "ble-missing-dependency"
+        )))
+    );
+}
+
+#[cfg(feature = "ble-midi-hardware")]
+#[test]
+fn bluez_discovery_errors_are_not_collapsed_to_empty_discovery() {
+    let error = crate::native::bluez_discovery_report(Err(sim_kernel::Error::Eval(
+        "D-Bus permission denied".to_owned(),
+    )))
+    .unwrap_err();
+
+    assert!(format!("{error}").contains("D-Bus permission denied"));
+}
+
+#[cfg(feature = "ble-midi-hardware")]
+#[test]
+fn ble_midi_provider_surfaces_discovery_provider_errors() {
+    let error = BleMidiProvider::from_discovery(&FailingBleMidiProvider).unwrap_err();
+
+    assert!(format!("{error}").contains("provider unavailable"));
+}
+
+#[cfg(feature = "ble-midi-hardware")]
+#[test]
 fn ble_midi_provider_fixture_opens_duplex_eval_site() {
     let fixture = FixtureBleMidiProvider::new(vec![BleMidiDevice::fixture(
         "ble-midi/bluez-0",
@@ -205,5 +239,15 @@ fn note_on_event(ticks: i64) -> MidiEvent {
             key: U7(60),
             vel: U7(100),
         }),
+    }
+}
+
+#[cfg(feature = "ble-midi-hardware")]
+struct FailingBleMidiProvider;
+
+#[cfg(feature = "ble-midi-hardware")]
+impl crate::BleMidiDiscoveryProvider for FailingBleMidiProvider {
+    fn discover(&self) -> sim_kernel::Result<crate::BleMidiDiscoveryReport> {
+        Err(sim_kernel::Error::Eval("provider unavailable".to_owned()))
     }
 }

@@ -36,7 +36,10 @@ pub fn render_session_offline(session: &DawSession, frames: usize) -> Result<Daw
         .map(|bus| bus.channels() as usize)
         .unwrap_or(2)
         .max(1);
-    let mut samples = vec![0.0f32; frames * channels];
+    let sample_count = frames
+        .checked_mul(channels)
+        .ok_or_else(|| Error::Eval("DAW offline render sample buffer is too large".to_owned()))?;
+    let mut samples = vec![0.0f32; sample_count];
     let any_solo = session.tracks().iter().any(|track| track.is_solo());
     let mut tracks_rendered = 0;
     let mut clips_rendered = 0;
