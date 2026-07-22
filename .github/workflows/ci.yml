@@ -10,10 +10,10 @@ jobs:
     env:
       SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: sim-nest/sim-tooling
           path: sim-tooling
