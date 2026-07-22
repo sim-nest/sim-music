@@ -252,7 +252,10 @@ impl BleMidiInputSource {
         let events = decode_ble_midi_packet(packet, self.tpq)?;
         let count = events.len();
         for event in events {
-            self.ring.write(&event).map_err(|never| match never {})?;
+            match self.ring.write(&event) {
+                Ok(()) => {}
+                Err(never) => match never {},
+            }
         }
         Ok(count)
     }
@@ -271,7 +274,10 @@ impl MidiSource for BleMidiInputSource {
     }
 
     fn next(&mut self) -> std::result::Result<Option<MidiEvent>, Self::Err> {
-        self.ring.next().map_err(|never| match never {})
+        match self.ring.next() {
+            Ok(event) => Ok(event),
+            Err(never) => match never {},
+        }
     }
 }
 
