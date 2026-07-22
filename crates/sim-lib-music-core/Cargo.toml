@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-core"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 license = "MPL-2.0"
 description = "Core music object model for notes, rests, scores, rolls, players, and arrangers."
