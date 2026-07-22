@@ -7,10 +7,16 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: sim-nest/sim-tooling
+          path: sim-tooling
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
