@@ -22,7 +22,7 @@ sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
 sim-lib-midi-live = { version = "0.1.0", path = "../sim-lib-midi-live", optional = true }
-sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-core = { version = "0.1.2" }
 sim-lib-stream-host = { version = "0.1.4" }
 
 [build-dependencies]

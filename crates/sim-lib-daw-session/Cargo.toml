@@ -10,8 +10,8 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-citizen = { version = "0.1.0" }
-sim-citizen-derive = { version = "0.1.0" }
+sim-citizen = { version = "0.1.2" }
+sim-citizen-derive = { version = "0.1.3" }
 sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-audio-graph-core = { version = "0.1.0" }
@@ -20,7 +20,7 @@ sim-lib-core = { version = "0.1.0" }
 sim-lib-music-core = { version = "0.1.0" }
 sim-lib-plugin-core = { version = "0.1.0" }
 sim-lib-stream-audio = { version = "0.1.0" }
-sim-lib-stream-core = { version = "0.1.0" }
+sim-lib-stream-core = { version = "0.1.2" }
 sim-lib-stream-midi = { version = "0.1.0" }
 sim-lib-topology = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }
