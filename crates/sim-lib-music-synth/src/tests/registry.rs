@@ -182,33 +182,33 @@ fn registry_entry_serializes_generic_component_editor_descriptor() {
     let Expr::Map(entries) = &expr else {
         panic!("descriptor should serialize as a map");
     };
-    assert!(entries.iter().any(|(key, value)| key == &plain_field("tag")
+    assert!(entries.iter().any(|(key, value)| key == &plain_key("tag")
         && value
             == &Expr::Symbol(Symbol::qualified(
                 "audio-synth",
                 "component-editor-descriptor"
             ))));
     assert!(
-        entries.iter().any(
-            |(key, value)| key == &plain_field("trace-available") && value == &Expr::Bool(true)
-        )
+        entries
+            .iter()
+            .any(|(key, value)| key == &plain_key("trace-available") && value == &Expr::Bool(true))
     );
-    assert!(entries.iter().any(|(key, value)| key == &plain_field("specialized-view")
+    assert!(entries.iter().any(|(key, value)| key == &plain_key("specialized-view")
         && matches!(value, Expr::Symbol(symbol) if symbol.as_qualified_str() == "view/component/dx7")));
 
-    let groups = plain_field_value(&expr, "parameter-groups").expect("parameter groups");
+    let groups = plain_key_value(&expr, "parameter-groups").expect("parameter groups");
     let Expr::Vector(groups) = groups else {
         panic!("parameter groups should serialize as a vector");
     };
     assert!(!groups.is_empty());
 
-    let ports = plain_field_value(&expr, "ports").expect("ports");
+    let ports = plain_key_value(&expr, "ports").expect("ports");
     let Expr::Vector(ports) = ports else {
         panic!("ports should serialize as a vector");
     };
     assert!(!ports.is_empty());
 
-    let current = plain_field_value(&expr, "current-values").expect("current values");
+    let current = plain_key_value(&expr, "current-values").expect("current values");
     assert!(matches!(current, Expr::Map(entries) if !entries.is_empty()));
 }
 
@@ -216,17 +216,17 @@ fn field(name: &'static str) -> Expr {
     sim_value::build::qsym("audio-synth/inventory", name)
 }
 
-fn plain_field(name: &'static str) -> Expr {
+fn plain_key(name: &'static str) -> Expr {
     sim_value::build::sym(name)
 }
 
-fn plain_field_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
+fn plain_key_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
     let Expr::Map(entries) = expr else {
         return None;
     };
     entries
         .iter()
-        .find_map(|(key, value)| (key == &plain_field(name)).then_some(value))
+        .find_map(|(key, value)| (key == &plain_key(name)).then_some(value))
 }
 
 fn builder_field(name: &'static str) -> Expr {
