@@ -23,7 +23,7 @@ pub fn run_repo_tool(args: Vec<String>, command_name: &str) -> Result<(), String
     if command_name == "simdoc" {
         command.arg("--repo-root");
         command.arg(&root);
-    } else {
+    } else if !has_repo_arg(&args) {
         command.arg("--repo");
         command.arg(&root);
     }
@@ -41,6 +41,12 @@ pub fn run_repo_tool(args: Vec<String>, command_name: &str) -> Result<(), String
             "shared {command_name} tool failed with status {status}"
         ))
     }
+}
+
+fn has_repo_arg(args: &[String]) -> bool {
+    args.iter()
+        .skip(2)
+        .any(|arg| arg == "--repo" || arg.starts_with("--repo="))
 }
 
 fn locate_sim_tooling_manifest(repo_root: &Path) -> Result<PathBuf, String> {

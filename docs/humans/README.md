@@ -21,6 +21,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 0 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 0 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 0 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors. |
+| `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
 ## Surfaces
 
