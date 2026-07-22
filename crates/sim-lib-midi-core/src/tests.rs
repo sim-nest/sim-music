@@ -1,6 +1,8 @@
 use std::convert::{Infallible, TryFrom};
 use std::sync::Arc;
 
+// conformance: MIDI notation workflows lift and lower frame descriptors.
+
 use super::*;
 use sim_kernel::{DefaultFactory, EagerPolicy, Expr, Symbol};
 

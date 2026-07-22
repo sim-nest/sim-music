@@ -9,6 +9,11 @@ framework = "advisory"
 cli = "strict"
 docs = "advisory"
 
+[enforcement.specimen]
+user = "strict"
+framework = "strict"
+code = "advisory"
+
 [enforcement.route]
 major_entrypoints = "advisory"
 frameworks = "advisory"
@@ -52,6 +57,9 @@ claims_anchors = [
   "anchor/export/sim-lib-music-synth/view-instrument-system700-editor",
   "anchor/runtime-lib/sim-lib-music-synth/audio-synth-lib",
 ]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/daw",
+]
 
 [[feature]]
 id = "feature/sim-music/midi-notation-workflows"
@@ -77,6 +85,9 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-midi-live/midi-live-lib",
   "anchor/runtime-lib/sim-lib-midi-rtmidi/midi-rtmidi-lib",
   "anchor/runtime-lib/sim-lib-midi-shapes/midi-shapes-lib",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-midi-core/src/tests",
 ]
 
 [[feature]]
@@ -134,6 +145,9 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-sound-timbre/sound-timbre-lib",
   "anchor/runtime-lib/sim-lib-sound-tuning/sound-tuning-lib",
   "anchor/runtime-lib/sim-lib-stream-bridge/stream-bridge-lib",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-pitch-core/src/tests",
 ]
 
 [[feature]]

@@ -1,5 +1,7 @@
 use super::*;
 
+// conformance: pitch and sound vocabulary exposes stable pitch descriptors.
+
 #[test]
 fn semitone_round_trip() {
     for semitone in -512..=512 {
