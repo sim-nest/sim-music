@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-rtmidi"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 license = "MPL-2.0"
 description = "Modeled RtMidi MIDI adapter surface for SIM (in-process simulation; no live MIDI hardware I/O)."

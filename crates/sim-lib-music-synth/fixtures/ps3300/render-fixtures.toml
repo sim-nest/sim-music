@@ -14,7 +14,7 @@ channels = 1
 patch_id = "audio-synth/patch/korg-ps-3300-one-cell"
 patch_hash = "764cce3b809191a7"
 event_sequence = ["offset:0:note-on:ch0:key48:vel0.756", "offset:56:note-off:ch0:key48:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.4", "Ps3300@0.1.4", "Ps3300KeyboardController@0.1.4", "Ps3300PinMatrix@0.1.4", "Ps3300SectionGenerator@0.1.4", "Ps3300TripleResonator@0.1.4"]
+component_versions = ["sim-lib-music-synth@0.1.5", "Ps3300@0.1.5", "Ps3300KeyboardController@0.1.5", "Ps3300PinMatrix@0.1.5", "Ps3300SectionGenerator@0.1.5", "Ps3300TripleResonator@0.1.5"]
 max_abs_delta = 0.500
 mean_abs_delta = 0.280
 
@@ -28,7 +28,7 @@ channels = 1
 patch_id = "audio-synth/patch/korg-ps-3300-one-section-chord"
 patch_hash = "bf6bff18e038fed5"
 event_sequence = ["offset:0:note-on:ch0:key48:vel0.819", "offset:0:note-on:ch0:key55:vel0.819", "offset:0:note-on:ch0:key60:vel0.819", "offset:72:note-off:ch0:key48:vel0.000", "offset:72:note-off:ch0:key55:vel0.000", "offset:72:note-off:ch0:key60:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.4", "Ps3300@0.1.4", "Ps3300KeyboardController@0.1.4", "Ps3300PinMatrix@0.1.4", "Ps3300SectionGenerator@0.1.4", "Ps3300TripleResonator@0.1.4"]
+component_versions = ["sim-lib-music-synth@0.1.5", "Ps3300@0.1.5", "Ps3300KeyboardController@0.1.5", "Ps3300PinMatrix@0.1.5", "Ps3300SectionGenerator@0.1.5", "Ps3300TripleResonator@0.1.5"]
 max_abs_delta = 0.500
 mean_abs_delta = 0.280
 
@@ -42,7 +42,7 @@ channels = 1
 patch_id = "audio-synth/patch/korg-ps-3300-resonator-sweep"
 patch_hash = "928e1aaca65e8883"
 event_sequence = ["offset:0:note-on:ch0:key52:vel0.882", "offset:96:note-off:ch0:key52:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.4", "Ps3300@0.1.4", "Ps3300KeyboardController@0.1.4", "Ps3300PinMatrix@0.1.4", "Ps3300SectionGenerator@0.1.4", "Ps3300TripleResonator@0.1.4"]
+component_versions = ["sim-lib-music-synth@0.1.5", "Ps3300@0.1.5", "Ps3300KeyboardController@0.1.5", "Ps3300PinMatrix@0.1.5", "Ps3300SectionGenerator@0.1.5", "Ps3300TripleResonator@0.1.5"]
 max_abs_delta = 0.500
 mean_abs_delta = 0.280
 
@@ -56,7 +56,7 @@ channels = 1
 patch_id = "audio-synth/patch/korg-ps-3300-three-section-stack"
 patch_hash = "e88982d8eb0cdec5"
 event_sequence = ["offset:0:note-on:ch0:key43:vel0.866", "offset:0:note-on:ch0:key50:vel0.866", "offset:0:note-on:ch0:key55:vel0.866", "offset:0:note-on:ch0:key62:vel0.866", "offset:96:note-off:ch0:key43:vel0.000", "offset:96:note-off:ch0:key50:vel0.000", "offset:96:note-off:ch0:key55:vel0.000", "offset:96:note-off:ch0:key62:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.4", "Ps3300@0.1.4", "Ps3300KeyboardController@0.1.4", "Ps3300PinMatrix@0.1.4", "Ps3300SectionGenerator@0.1.4", "Ps3300TripleResonator@0.1.4"]
+component_versions = ["sim-lib-music-synth@0.1.5", "Ps3300@0.1.5", "Ps3300KeyboardController@0.1.5", "Ps3300PinMatrix@0.1.5", "Ps3300SectionGenerator@0.1.5", "Ps3300TripleResonator@0.1.5"]
 max_abs_delta = 0.500
 mean_abs_delta = 0.280
 
@@ -70,6 +70,6 @@ channels = 1
 patch_id = "audio-synth/patch/korg-ps-3300-synthetic-polyphonic"
 patch_hash = "49851d6a2dc08c17"
 event_sequence = ["offset:0:note-on:ch0:key64:vel0.787", "offset:72:note-off:ch0:key64:vel0.000"]
-component_versions = ["sim-lib-music-synth@0.1.4", "Ps3300@0.1.4", "Ps3300KeyboardController@0.1.4", "Ps3300PinMatrix@0.1.4", "Ps3300SectionGenerator@0.1.4", "Ps3300TripleResonator@0.1.4"]
+component_versions = ["sim-lib-music-synth@0.1.5", "Ps3300@0.1.5", "Ps3300KeyboardController@0.1.5", "Ps3300PinMatrix@0.1.5", "Ps3300SectionGenerator@0.1.5", "Ps3300TripleResonator@0.1.5"]
 max_abs_delta = 0.500
 mean_abs_delta = 0.280

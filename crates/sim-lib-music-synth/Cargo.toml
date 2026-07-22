@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-synth"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 license = "MPL-2.0"
 description = "Playable pure Rust software synthesizer primitives for the SIM audio graph."
