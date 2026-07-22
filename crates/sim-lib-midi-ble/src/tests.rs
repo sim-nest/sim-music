@@ -10,6 +10,7 @@ use sim_lib_midi_rtmidi::RtmidiPort;
 use sim_lib_stream_host::HostReconnectPolicy;
 #[cfg(feature = "ble-midi-hardware")]
 use sim_lib_stream_host::{CatalogDeviceProvider, DeviceDirection, DeviceKind, Placement};
+use sim_value::access::field;
 
 use crate::{
     BLE_MIDI_IO_CHARACTERISTIC_UUID, BLE_MIDI_SERVICE_UUID, BleMidiDevice, BluezDeviceFixture,
@@ -215,18 +216,6 @@ fn ble_midi_bluez_gatt_smoke() {
     let provider = BleMidiProvider::from_discovery(&discovery).unwrap();
     let site = provider.open(&Symbol::new(device_id)).unwrap();
     site.close().unwrap();
-}
-
-fn field<'a>(expr: &'a Expr, name: &str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries.iter().find_map(|(key, value)| match key {
-        Expr::Symbol(symbol) if symbol.namespace.is_none() && symbol.name.as_ref() == name => {
-            Some(value)
-        }
-        _ => None,
-    })
 }
 
 #[cfg(feature = "ble-midi-hardware")]

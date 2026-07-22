@@ -1,4 +1,5 @@
 use sim_kernel::{Expr, Symbol};
+use sim_value::access::{field as plain_key_value, field_q};
 
 use crate::{
     ComponentCapability, ComponentRegistry, ComponentRegistryCategory, InstrumentWrapperCategory,
@@ -220,26 +221,8 @@ fn plain_key(name: &'static str) -> Expr {
     sim_value::build::sym(name)
 }
 
-fn plain_key_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries
-        .iter()
-        .find_map(|(key, value)| (key == &plain_key(name)).then_some(value))
-}
-
-fn builder_field(name: &'static str) -> Expr {
-    sim_value::build::qsym("audio-synth/component-builder", name)
-}
-
 fn builder_field_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries
-        .iter()
-        .find_map(|(key, value)| (key == &builder_field(name)).then_some(value))
+    field_q(expr, "audio-synth/component-builder", name)
 }
 
 fn builder_vector_field<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a [Expr]> {

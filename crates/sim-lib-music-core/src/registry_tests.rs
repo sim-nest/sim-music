@@ -1,5 +1,6 @@
 use sim_kernel::{Expr, Symbol};
 use sim_lib_stream_core::ClockDomain;
+use sim_value::access::field as card_field;
 
 use crate::{
     MusicCapability, MusicComponentRegistry, MusicComponentRegistryEntry, MusicUnit,
@@ -456,18 +457,6 @@ fn registry_rejects_duplicate_ids() {
         .expect_err("duplicate should be rejected");
 
     assert!(format!("{err}").contains("duplicate music component registry id"));
-}
-
-fn card_field<'a>(expr: &'a Expr, name: &str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries.iter().find_map(|(key, value)| match key {
-        Expr::Symbol(symbol) if symbol.namespace.is_none() && symbol.name.as_ref() == name => {
-            Some(value)
-        }
-        _ => None,
-    })
 }
 
 fn field(name: &'static str) -> Expr {

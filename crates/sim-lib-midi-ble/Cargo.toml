@@ -32,6 +32,7 @@ zbus = { version = "5", optional = true }
 
 [dev-dependencies]
 sim-test-support = { version = "0.1.0" }
+sim-value = { version = "0.1.0" }
 
 [lints]
 workspace = true

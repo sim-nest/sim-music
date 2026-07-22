@@ -6,6 +6,7 @@ use sim_lib_music_core::{
     Arranger, ArrangerPlacement, Articulation, Channel, Music, Note, PlayableRef,
 };
 use sim_lib_plugin_core::{PluginFormat, PluginId, PluginState};
+use sim_value::access::field_q;
 
 use crate::{
     COMPONENT_BUILDER_PATCH_FORMAT, ClipSource, DawClip, DawInstrumentKind, DawSession,
@@ -337,17 +338,8 @@ fn card_has_subject(card: &Expr, subject: &str) -> bool {
     })
 }
 
-fn builder_field(name: &'static str) -> Expr {
-    sim_value::build::qsym("daw-session/component-builder", name)
-}
-
 fn builder_field_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries
-        .iter()
-        .find_map(|(key, value)| (key == &builder_field(name)).then_some(value))
+    field_q(expr, "daw-session/component-builder", name)
 }
 
 fn builder_number<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a str> {

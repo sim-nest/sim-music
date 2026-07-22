@@ -4,6 +4,7 @@ use sim_lib_midi_core::{
 };
 use sim_lib_stream_core::{BufferPolicy, StreamMedia};
 use sim_lib_stream_host::{HostBackend, HostDirection, HostStreamConfigRequest};
+use sim_value::access::field;
 
 use crate::{
     RTMIDI_ALSA_SEQ_MIDI_BACKEND_CANDIDATE, RtmidiBackend, RtmidiEvent, RtmidiMidiSink,
@@ -321,16 +322,4 @@ fn assert_hardware_provider_opens(
     assert!(matches!(output.placement(), Placement::Hardware { .. }));
     input.close().unwrap();
     output.close().unwrap();
-}
-
-fn field<'a>(expr: &'a Expr, name: &str) -> Option<&'a Expr> {
-    let Expr::Map(entries) = expr else {
-        return None;
-    };
-    entries.iter().find_map(|(key, value)| match key {
-        Expr::Symbol(symbol) if symbol.namespace.is_none() && symbol.name.as_ref() == name => {
-            Some(value)
-        }
-        _ => None,
-    })
 }
