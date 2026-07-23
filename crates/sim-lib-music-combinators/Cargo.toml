@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-combinators"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Composable melody, rhythm, arpeggio, bassline, and pattern-building helpers."
@@ -12,8 +12,8 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
-sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
-sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
+sim-lib-music-core = { version = "0.1.3", path = "../sim-lib-music-core" }
+sim-lib-pitch-scale = { version = "0.1.3", path = "../sim-lib-pitch-scale" }
 sim-lib-sound-gm = { version = "0.1.0", path = "../sim-lib-sound-gm" }
 
 [build-dependencies]
