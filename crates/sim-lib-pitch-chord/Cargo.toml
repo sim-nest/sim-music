@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-chord"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Chord models, voicing helpers, and scale-aware pitch collections for SIM music."
@@ -11,10 +11,10 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
-sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer-roman = { version = "0.1.0", path = "../sim-lib-pitch-namer-roman" }
-sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-roman = { version = "0.1.2", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-scale = { version = "0.1.3", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
 thiserror = "1"
 
 [build-dependencies]
