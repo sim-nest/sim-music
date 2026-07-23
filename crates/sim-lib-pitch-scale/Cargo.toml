@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-scale"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 license = "MPL-2.0"
 description = "Scale, key, mode, and degree mapping helpers for pitch-domain transforms."
@@ -11,8 +11,8 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
-sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
 thiserror = "1"
 
 [build-dependencies]
