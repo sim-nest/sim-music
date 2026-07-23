@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-analysis"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Chord windows, diff rolls, histograms, and analysis views over SIM music."
@@ -12,9 +12,9 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
 sim-lib-discrete-spectral = { optional = true, version = "0.1.0" }
-sim-lib-music-core = { version = "0.1.0", path = "../sim-lib-music-core" }
-sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-music-core = { version = "0.1.3", path = "../sim-lib-music-core" }
+sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
