@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-core"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Pitch classes, octave-aware pitches, intervals, and MIDI conversion helpers for SIM music crates."
