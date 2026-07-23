@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-namer-riemann"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Riemannian harmonic function labels for triads and tonal contexts."
@@ -11,8 +11,8 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
-sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
