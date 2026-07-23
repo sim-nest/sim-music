@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+// conformance: audio lift and render workflows expose checked audio analysis descriptors.
+
 use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
 use sim_lib_sound_tuning::EqualTemperament;
 

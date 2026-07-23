@@ -21,6 +21,8 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 1 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 1 | Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable music operations. |
+| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
 ## Surfaces
@@ -864,5 +866,278 @@ fn reader_sugar_uses_canonical_sharps() {
 fn pitch_class_constructor_rejects_invalid_values() {
     assert_eq!(PitchClass::new(12), Err(PitchError::InvalidPitchClass(12)));
     assert_eq!(PitchClass::B.value(), 11);
+}
+```
+
+### `feature/sim-music/exact-music-analysis-and-transform`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-analysis/src/tests.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: exact music analysis and transform exposes checked analysis descriptors.
+
+use sim_lib_music_core::{Articulation, Channel, Note, PianoRoll, TimedNote};
+use sim_lib_pitch_core::{Pitch, PitchClass};
+
+use crate::{
+    ChordWindowMode, DiffRoll, chord_windows_from_diff_roll, chord_windows_from_piano_roll,
+};
+
+fn note(midi: u8, onset: Ratio<i64>, duration: Ratio<i64>) -> TimedNote {
+    TimedNote {
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+#[test]
+fn diff_roll_marks_started_sounding_ended_and_slurred() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 2)),
+        note(64, Ratio::new(1, 4), Ratio::new(1, 2)),
+    ])
+    .expect("roll");
+    let diff = DiffRoll::from_piano_roll(&roll);
+    assert_eq!(
+        diff.frames[0].started.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+    assert_eq!(diff.frames[1].sounding.to_pitches().len(), 2);
+    assert_eq!(
+        diff.frames[1].slurred.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+    assert_eq!(
+        diff.frames[2].ended.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+}
+
+#[test]
+fn sounding_and_starting_modes_differ_on_sustained_chord() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 1)),
+        note(64, Ratio::new(0, 1), Ratio::new(1, 1)),
+        note(67, Ratio::new(1, 2), Ratio::new(1, 2)),
+    ])
+    .expect("roll");
+    let sounding = chord_windows_from_piano_roll(&roll, ChordWindowMode::SoundingNotes);
+    let starting = chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes);
+    assert_ne!(sounding, starting);
+    assert_eq!(
+        starting[1].pitch_class_mask,
+        sim_lib_pitch_set::PitchClassMask::from_pitch_classes(&[PitchClass::G])
+    );
+    assert_eq!(sounding[1].pitch_class_mask.count_bits(), 3);
+}
+
+#[test]
+fn diff_roll_and_window_extraction_agree() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 4)),
+        note(67, Ratio::new(1, 4), Ratio::new(1, 4)),
+    ])
+    .expect("roll");
+    let diff = DiffRoll::from_piano_roll(&roll);
+    assert_eq!(
+        chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes),
+        chord_windows_from_diff_roll(&diff, ChordWindowMode::StartingNotes)
+    );
+}
+```
+
+### `feature/sim-music/audio-lift-and-render`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+// conformance: audio lift and render workflows expose checked audio analysis descriptors.
+
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, install_sound_audio_lift_lib,
+};
+
+#[cfg(feature = "sound-music")]
+use crate::{lifted_notes_to_counterpoint, lifted_notes_to_diff_roll, lifted_notes_to_piano_roll};
+
+#[test]
+fn synthetic_a4_sine_lifts_with_high_confidence() {
+    let samples = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let note = report
+        .value
+        .notes
+        .iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .expect("lifted note");
+    assert_eq!(note.pitch.to_midi(), Some(69));
+    assert!(note.confidence >= 0.75, "{note:?}");
+}
+
+#[test]
+fn simultaneous_sines_lift_to_two_pitch_candidates() {
+    let samples = sine_mix(&[(440.0, 1.0), (659.25, 0.8)], 48_000, 0.25, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = FftPeakLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let frame = report
+        .value
+        .frames
+        .iter()
+        .max_by_key(|frame| frame.pitch_candidates.len())
+        .expect("frame");
+    let lifted = frame
+        .pitch_candidates
+        .iter()
+        .filter_map(|candidate| candidate.pitch.to_midi())
+        .collect::<Vec<_>>();
+    assert!(lifted.contains(&69), "{lifted:?}");
+    assert!(lifted.contains(&76), "{lifted:?}");
+}
+
+#[test]
+fn noisy_audio_has_lower_confidence() {
+    let tuning = EqualTemperament::default();
+    let clean = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.0);
+    let noisy = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.35);
+    let lifter = HarmonicCombLifter::default();
+    let clean_note = lifter
+        .lift_report(&clean, 48_000, &tuning)
+        .unwrap()
+        .value
+        .notes
+        .into_iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .unwrap();
+    let noisy_note = lifter
+        .lift_report(&noisy, 48_000, &tuning)
+        .unwrap()
+        .value
+        .notes
+        .into_iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .unwrap();
+    assert!(noisy_note.confidence < clean_note.confidence);
+}
+
+#[test]
+fn note_candidates_include_onset_and_duration_estimates() {
+    let samples = stepped_sine(440.0, 48_000, 0.10, 0.10, 0.10);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter {
+        opts: AudioLiftOptions {
+            min_note_windows: 1,
+            ..AudioLiftOptions::default()
+        },
+    }
+    .lift_report(&samples, 48_000, &tuning)
+    .unwrap();
+    assert!(!report.value.notes.is_empty());
+    let note = &report.value.notes[0];
+    assert!(note.onset_sample > 0);
+    assert!(note.duration_samples > 0);
+}
+
+#[cfg(feature = "sound-music")]
+#[test]
+fn lifted_notes_convert_to_music_views() {
+    let samples = sine_mix(&[(440.0, 1.0)], 48_000, 0.20, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let roll = lifted_notes_to_piano_roll(&report.value.notes).unwrap();
+    assert!(!roll.items.is_empty());
+    let diff = lifted_notes_to_diff_roll(&report.value.notes).unwrap();
+    assert!(!diff.frames.is_empty());
+    let counterpoint = lifted_notes_to_counterpoint(&report.value.notes).unwrap();
+    assert!(!counterpoint.voices.is_empty());
+}
+
+#[test]
+fn empty_audio_returns_diagnostics_and_no_notes() {
+    let tuning = EqualTemperament::default();
+    let report = FftPeakLifter::default()
+        .lift_report(&[], 48_000, &tuning)
+        .unwrap();
+    assert!(report.value.notes.is_empty());
+    assert!(!report.diagnostics.is_empty());
+}
+
+#[test]
+fn install_runtime_is_idempotent_and_registers_audio_lifters() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+
+    let loaded = cx
+        .registry()
+        .lib(&Symbol::new("sound-audio-lift"))
+        .expect("sound-audio-lift lib");
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named("AudioLifter")
+            && record.symbol == Symbol::qualified("sound", "FftPeakLifter")
+    }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named("AudioLifter")
+            && record.symbol == Symbol::qualified("sound", "HarmonicCombLifter")
+    }));
+}
+
+fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, seconds: f64, noise: f64) -> Vec<f32> {
+    let samples = (seconds * f64::from(sample_rate)).round() as usize;
+    (0..samples)
+        .map(|index| {
+            let t = index as f64 / f64::from(sample_rate);
+            let signal = tones
+                .iter()
+                .map(|(hz, gain)| (std::f64::consts::TAU * hz * t).sin() * gain)
+                .sum::<f64>();
+            let hiss = if noise > 0.0 {
+                noise * pseudo_noise(index)
+            } else {
+                0.0
+            };
+            (signal + hiss).clamp(-1.0, 1.0) as f32
+        })
+        .collect()
+}
+
+fn stepped_sine(hz: f64, sample_rate: u32, lead_silence: f64, tone: f64, tail: f64) -> Vec<f32> {
+    let silence = vec![0.0_f32; (lead_silence * f64::from(sample_rate)).round() as usize];
+    let mut out = silence;
+    out.extend(sine_mix(&[(hz, 1.0)], sample_rate, tone, 0.0));
+    out.extend(vec![
+        0.0_f32;
+        (tail * f64::from(sample_rate)).round() as usize
+    ]);
+    out
+}
+
+fn pseudo_noise(index: usize) -> f64 {
+    let x = ((index as u64).wrapping_mul(1103515245).wrapping_add(12345) % 65536) as f64;
+    (x / 32768.0) - 1.0
 }
 ```

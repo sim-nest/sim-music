@@ -1,5 +1,7 @@
 use num_rational::Ratio;
 
+// conformance: exact music analysis and transform exposes checked analysis descriptors.
+
 use sim_lib_music_core::{Articulation, Channel, Note, PianoRoll, TimedNote};
 use sim_lib_pitch_core::{Pitch, PitchClass};
 

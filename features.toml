@@ -46,8 +46,8 @@ id = "feature/sim-music/synth-performance-workbench"
 title = "Synth performance workbench"
 summary = "Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance."
 owner = "crate/sim-lib-music-synth"
-audiences = ["user", "code"]
-guidance = "Use this row when building a playable synth fixture or comparing a placement route."
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when building a playable synth fixture, reusing additive or subtractive synth descriptors, or comparing a local, browser, or stream placement route."
 claims_anchors = [
   "anchor/crate/sim-lib-music-synth",
   "anchor/export/sim-lib-music-synth/view/component",
@@ -56,6 +56,9 @@ claims_anchors = [
   "anchor/export/sim-lib-music-synth/view-instrument-system55-editor",
   "anchor/export/sim-lib-music-synth/view-instrument-system700-editor",
   "anchor/runtime-lib/sim-lib-music-synth/audio-synth-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/daw",
@@ -66,8 +69,8 @@ id = "feature/sim-music/midi-notation-workflows"
 title = "MIDI and notation workflows"
 summary = "Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms."
 owner = "crate/sim-lib-midi-core"
-audiences = ["user", "code"]
-guidance = "Use this row when moving a musical phrase between MIDI, notation, and SIM music descriptors."
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse the current MIDI/SMF crates for import and export instead of adding another file codec or transport model."
 claims_anchors = [
   "anchor/crate/sim-lib-midi-ble",
   "anchor/crate/sim-lib-midi-core",
@@ -86,6 +89,9 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-midi-rtmidi/midi-rtmidi-lib",
   "anchor/runtime-lib/sim-lib-midi-shapes/midi-shapes-lib",
 ]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-midi-core/src/tests",
 ]
@@ -95,18 +101,9 @@ id = "feature/sim-music/pitch-and-sound-vocabulary"
 title = "Pitch and sound vocabulary"
 summary = "Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors."
 owner = "crate/sim-lib-pitch-core"
-audiences = ["user", "code"]
-guidance = "Use this row when explaining the musical vocabulary that supports synth and MIDI workflows."
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when reusing pitch, chord, scale, pitch-set, tuning, timbre, spectrum, and dissonance vocabulary. Keep pitch identity in the pitch crates, use tuning crates for frequency conversion, use timbre and spectrum crates for sound descriptors, and use the dissonance crates for sensory or pitch-class roughness models."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-analysis",
-  "anchor/crate/sim-lib-music-combinators",
-  "anchor/crate/sim-lib-music-core",
-  "anchor/crate/sim-lib-music-lift",
-  "anchor/crate/sim-lib-music-lower",
-  "anchor/crate/sim-lib-music-notation",
-  "anchor/crate/sim-lib-music-shapes",
-  "anchor/crate/sim-lib-music-transform",
-  "anchor/crate/sim-lib-music-wasm-frame",
   "anchor/crate/sim-lib-pitch-chord",
   "anchor/crate/sim-lib-pitch-core",
   "anchor/crate/sim-lib-pitch-dissonance",
@@ -119,35 +116,79 @@ claims_anchors = [
   "anchor/crate/sim-lib-pitch-set",
   "anchor/crate/sim-lib-pitch-shapes",
   "anchor/crate/sim-lib-pitch-wasm-frame",
-  "anchor/crate/sim-lib-sound-audio-lift",
-  "anchor/crate/sim-lib-sound-bridge",
   "anchor/crate/sim-lib-sound-core",
   "anchor/crate/sim-lib-sound-dissonance",
   "anchor/crate/sim-lib-sound-gm",
-  "anchor/crate/sim-lib-sound-render",
   "anchor/crate/sim-lib-sound-shapes",
   "anchor/crate/sim-lib-sound-spectrum",
   "anchor/crate/sim-lib-sound-timbre",
   "anchor/crate/sim-lib-sound-tuning",
   "anchor/crate/sim-lib-sound-wasm-frame",
-  "anchor/crate/sim-lib-stream-bridge",
-  "anchor/runtime-lib/sim-lib-music-lift/music-lift-lib",
-  "anchor/runtime-lib/sim-lib-music-notation/music-notation-lib",
-  "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
   "anchor/runtime-lib/sim-lib-pitch-dissonance/pitch-dissonance-lib",
   "anchor/runtime-lib/sim-lib-pitch-namer/pitch-namer-lib",
   "anchor/runtime-lib/sim-lib-pitch-shapes/pitch-shapes-lib",
-  "anchor/runtime-lib/sim-lib-sound-audio-lift/sound-audio-lift-lib",
-  "anchor/runtime-lib/sim-lib-sound-bridge/sound-bridge-lib",
   "anchor/runtime-lib/sim-lib-sound-dissonance/sound-dissonance-lib",
-  "anchor/runtime-lib/sim-lib-sound-render/sound-render-lib",
   "anchor/runtime-lib/sim-lib-sound-shapes/sound-shapes-lib",
   "anchor/runtime-lib/sim-lib-sound-timbre/sound-timbre-lib",
   "anchor/runtime-lib/sim-lib-sound-tuning/sound-tuning-lib",
-  "anchor/runtime-lib/sim-lib-stream-bridge/stream-bridge-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-pitch-core/src/tests",
+]
+
+[[feature]]
+id = "feature/sim-music/exact-music-analysis-and-transform"
+title = "Exact music analysis and transform"
+summary = "Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable music operations."
+owner = "crate/sim-lib-music-analysis"
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when a caller needs music analysis, exact score time, music lift/lower, notation, sequence transforms, or reusable composition helpers over the existing music object model."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-analysis",
+  "anchor/crate/sim-lib-music-combinators",
+  "anchor/crate/sim-lib-music-core",
+  "anchor/crate/sim-lib-music-lift",
+  "anchor/crate/sim-lib-music-lower",
+  "anchor/crate/sim-lib-music-notation",
+  "anchor/crate/sim-lib-music-shapes",
+  "anchor/crate/sim-lib-music-transform",
+  "anchor/crate/sim-lib-music-wasm-frame",
+  "anchor/runtime-lib/sim-lib-music-lift/music-lift-lib",
+  "anchor/runtime-lib/sim-lib-music-notation/music-notation-lib",
+  "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-analysis/src/tests",
+]
+
+[[feature]]
+id = "feature/sim-music/audio-lift-and-render"
+title = "Audio lift and render workflows"
+summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
+owner = "crate/sim-lib-sound-audio-lift"
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when analyzing audio features, routing audio lift results toward music analysis, or rendering offline buffers. Reuse sound-audio-lift for PCM feature extraction, sound-spectrum for descriptors, sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
+claims_anchors = [
+  "anchor/crate/sim-lib-sound-audio-lift",
+  "anchor/crate/sim-lib-sound-bridge",
+  "anchor/crate/sim-lib-sound-render",
+  "anchor/crate/sim-lib-stream-bridge",
+  "anchor/runtime-lib/sim-lib-sound-audio-lift/sound-audio-lift-lib",
+  "anchor/runtime-lib/sim-lib-sound-bridge/sound-bridge-lib",
+  "anchor/runtime-lib/sim-lib-sound-render/sound-render-lib",
+  "anchor/runtime-lib/sim-lib-stream-bridge/stream-bridge-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests",
 ]
 
 [[feature]]
@@ -155,7 +196,7 @@ id = "feature/sim-music/daw-session-runtime"
 title = "DAW session runtime"
 summary = "Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime."
 owner = "crate/sim-lib-daw-session"
-audiences = ["code"]
+audiences = ["code", "framework"]
 guidance = "Use this row when a caller needs a reusable session graph around music, synth, MIDI, and stream features."
 claims_anchors = [
   "anchor/crate/sim-lib-daw-session",
@@ -163,6 +204,8 @@ claims_anchors = [
 ]
 supports = [
   "feature/sim-music/midi-notation-workflows",
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/audio-lift-and-render",
   "feature/sim-music/pitch-and-sound-vocabulary",
   "feature/sim-music/synth-performance-workbench",
 ]
@@ -170,11 +213,45 @@ supports = [
 [[route]]
 id = "route/build-music-performance"
 task = "Build a music performance"
-audiences = ["user", "code"]
+audiences = ["user", "code", "framework"]
 steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row supplies pitch and sound descriptors." },
   { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row moves material into and out of performance formats." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns reusable music objects, analysis descriptors, and sequence transforms." },
   { feature = "feature/sim-music/daw-session-runtime", why = "The DAW session row supplies the reusable session graph around the performance." },
   { feature = "feature/sim-music/synth-performance-workbench", why = "The synth row turns that material into local or browser-backed sound." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-synth/01-basics/subtractive-preset", why = "The preset recipe is the smallest synth example." },
+]
+
+[[route]]
+id = "route/lift-audio-features"
+task = "Analyze current audio lift into music descriptors"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/audio-lift-and-render", why = "The audio row owns PCM feature lift, spectral summaries, and offline render evidence for audio analysis." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The music analysis row owns pitch histograms and exact object descriptors that consume lifted musical material." },
+  { specimen = "recipe/sim-music/crates/sim-lib-sound-audio-lift/01-basics/pcm-features", why = "The PCM feature recipe is the current audio-lift specimen." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-analysis/01-basics/pitch-histogram", why = "The pitch-histogram recipe is the current exact music analysis specimen." },
+]
+
+[[route]]
+id = "route/transform-exact-music"
+task = "Transform exact music"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns the object model, sequence transforms, lift/lower adapters, and notation descriptors." },
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch row supplies the pitch, scale, chord, and tuning vocabulary used by exact transforms." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-transform/01-basics/sequence-transform", why = "The sequence-transform recipe is the current transform specimen." },
+]
+
+[[route]]
+id = "route/import-export-smf"
+task = "Import and export SMF"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row owns MIDI event, SMF, stream, and notation interchange." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns the lift and lower adapters between MIDI tracks and music descriptors." },
+  { specimen = "recipe/sim-music/crates/sim-lib-midi-smf/01-basics/file-metadata", why = "The SMF metadata recipe proves the file owner." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-lift/01-basics/from-midi-track", why = "The lift recipe imports MIDI track material into music descriptors." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-lower/01-basics/to-midi-track", why = "The lower recipe exports music descriptors back to MIDI track material." },
 ]
