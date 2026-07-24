@@ -226,6 +226,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml`
 - `crates/sim-lib-pitch-chord/recipes/book.toml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/purpose.md`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/recipe.toml`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/setup.siml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/purpose.md`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/setup.siml`
@@ -866,6 +869,92 @@ fn reader_sugar_uses_canonical_sharps() {
 fn pitch_class_constructor_rejects_invalid_values() {
     assert_eq!(PitchClass::new(12), Err(PitchError::InvalidPitchClass(12)));
     assert_eq!(PitchClass::B.value(), 11);
+}
+
+#[test]
+fn octave_space_rejects_zero_divisions() {
+    assert_eq!(OctaveSpace::new(0), Err(PitchError::InvalidOctaveSpace(0)));
+}
+
+#[test]
+fn floor_decomposition_folds_negative_and_large_inputs() {
+    let twelve = OctaveSpace::twelve_tone();
+    assert_eq!(split_floor(-1, twelve), (-1, 11));
+    assert_eq!(split_floor(-12, twelve), (-1, 0));
+    assert_eq!(split_floor(-13, twelve), (-2, 11));
+    assert_eq!(split_floor(25, twelve), (2, 1));
+
+    let spaces = [1, 2, 5, 12, 19, 31, u16::MAX];
+    let values = [
+        i64::MIN + 1,
+        -1_000_000_003,
+        -2048,
+        -13,
+        -12,
+        -1,
+        0,
+        1,
+        11,
+        12,
+        13,
+        2048,
+        1_000_000_003,
+        i64::MAX,
+    ];
+    for divisions in spaces {
+        let space = OctaveSpace::new(divisions).unwrap();
+        let width = i128::from(divisions);
+        for value in values {
+            let (octave, class) = split_floor(value, space);
+            assert!(class < divisions);
+            assert_eq!(
+                i128::from(octave) * width + i128::from(class),
+                i128::from(value)
+            );
+            assert_eq!(fold(value, space), class);
+        }
+    }
+}
+
+#[test]
+fn folded_distances_handle_negative_and_large_inputs() {
+    let pairs = [
+        (-25, -13),
+        (-13, -1),
+        (-13, 14),
+        (-1, -13),
+        (0, 7),
+        (7, 0),
+        (1_000_000_003, -1_000_000_003),
+    ];
+    for divisions in [1, 5, 12, 19, 31, u16::MAX] {
+        let space = OctaveSpace::new(divisions).unwrap();
+        for (a, b) in pairs {
+            let signed = folded_distance(a, b, space, TieDirection::Ascending);
+            let unsigned = folded_unsigned_distance(a, b, space);
+            assert_eq!(fold(a + i64::from(signed), space), fold(b, space));
+            assert_eq!(signed.unsigned_abs() as u16, unsigned);
+            assert!(i32::from(unsigned) <= i32::from(divisions / 2 + divisions % 2));
+        }
+    }
+}
+
+#[test]
+fn folded_distance_uses_explicit_tie_policy() {
+    let twelve = OctaveSpace::twelve_tone();
+    assert_eq!(folded_distance(0, 6, twelve, TieDirection::Ascending), 6);
+    assert_eq!(folded_distance(0, 6, twelve, TieDirection::Descending), -6);
+    assert_eq!(folded_unsigned_distance(0, 6, twelve), 6);
+
+    let even_space = OctaveSpace::new(20).unwrap();
+    assert_eq!(
+        folded_distance(-45, 25, even_space, TieDirection::Ascending),
+        10
+    );
+    assert_eq!(
+        folded_distance(-45, 25, even_space, TieDirection::Descending),
+        -10
+    );
 }
 ```
 

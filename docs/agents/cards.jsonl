@@ -190,6 +190,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/octave-space/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/octave-space/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/octave-space/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/setup.siml"}
