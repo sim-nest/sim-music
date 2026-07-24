@@ -1,7 +1,9 @@
 use std::time::Duration;
 
 use sim_codec::{DomainForm, DomainFormError, DomainValue, parse_domain_form};
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
 use sim_lib_sound_timbre::{AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe};
 
@@ -29,29 +31,63 @@ impl From<DomainFormError> for SoundShapeError {
 /// Decodes a [`Frequency`] from its sound-shape text form.
 pub fn decode_frequency(value: &str) -> Result<Frequency, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Frequency(parse_f64(&field_atom(&node, "hz")?)?))
+    Frequency::new(parse_f64(&field_atom(&node, "hz")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes an [`Amplitude`] from its sound-shape text form.
 pub fn decode_amplitude(value: &str) -> Result<Amplitude, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Amplitude(parse_f64(&field_atom(&node, "linear")?)?))
+    Amplitude::new(parse_f64(&field_atom(&node, "linear")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes a [`Phase`] from its sound-shape text form.
 pub fn decode_phase(value: &str) -> Result<Phase, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Phase(parse_f64(&field_atom(&node, "radians")?)?))
+    Phase::new(parse_f64(&field_atom(&node, "radians")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes a [`Partial`] from its sound-shape text form.
 pub fn decode_partial(value: &str) -> Result<Partial, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Partial {
-        frequency: decode_frequency(&field_form_text(&node, "frequency")?)?,
-        amplitude: decode_amplitude(&field_form_text(&node, "amplitude")?)?,
-        phase: decode_phase(&field_form_text(&node, "phase")?)?,
-    })
+    Partial::tagged(
+        decode_frequency(&field_form_text(&node, "frequency")?)?,
+        decode_amplitude(&field_form_text(&node, "amplitude")?)?,
+        decode_phase(&field_form_text(&node, "phase")?)?,
+        decode_partial_tag_form(&node)?,
+    )
+    .map_err(|_| SoundShapeError::InvalidSoundShape)
+}
+
+fn decode_partial_tag_form(node: &DomainForm) -> Result<PartialTag, SoundShapeError> {
+    let Some(value) = node.field("tag") else {
+        return Ok(PartialTag::Source);
+    };
+    let tag = value.as_form()?;
+    match field_atom(tag, "kind")?.as_str() {
+        "source" => {
+            if tag.field("index").is_some() {
+                Err(SoundShapeError::InvalidSoundShape)
+            } else {
+                Ok(PartialTag::Source)
+            }
+        }
+        "harmonic" => PartialTag::harmonic(
+            field_atom(tag, "index")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+        )
+        .map_err(|_| SoundShapeError::InvalidSoundShape),
+        "undertone" => PartialTag::undertone(
+            field_atom(tag, "index")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+        )
+        .map_err(|_| SoundShapeError::InvalidSoundShape),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
 }
 
 /// Decodes an [`EnvelopeShape`] from its sound-shape text form.

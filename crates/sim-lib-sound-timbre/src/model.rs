@@ -1,6 +1,8 @@
 use std::time::Duration;
 
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 
 use crate::Filter;
 
@@ -289,6 +291,7 @@ fn render_recipe(recipe: &TimbreRecipe, frequency: Frequency, duration: Duration
                     frequency: Frequency(frequency.0 * stop.max(0.25)),
                     amplitude: Amplitude(1.0 / (index + 1) as f64),
                     phase: Phase(0.0),
+                    tag: PartialTag::Harmonic((index + 1) as u32),
                 })
                 .collect();
             Tone::from_partials(partials, default_env(), duration).expect("organ tone")
@@ -299,6 +302,7 @@ fn render_recipe(recipe: &TimbreRecipe, frequency: Frequency, duration: Duration
                     frequency: Frequency(frequency.0 * n as f64),
                     amplitude: Amplitude(damping.powi(n).clamp(0.0, 1.0)),
                     phase: Phase(0.0),
+                    tag: PartialTag::Harmonic(n as u32),
                 })
                 .collect();
             Tone::from_partials(partials, default_env(), duration).expect("karplus strong tone")
@@ -312,16 +316,19 @@ fn render_recipe(recipe: &TimbreRecipe, frequency: Frequency, duration: Duration
                     frequency,
                     amplitude: Amplitude(1.0),
                     phase: Phase(0.0),
+                    tag: PartialTag::Source,
                 },
                 Partial {
                     frequency: Frequency(frequency.0 * modulator_ratio),
                     amplitude: Amplitude((index / 2.0).max(0.0)),
                     phase: Phase(0.0),
+                    tag: PartialTag::Harmonic(1),
                 },
                 Partial {
                     frequency: Frequency(frequency.0 * (1.0 + modulator_ratio)),
                     amplitude: Amplitude((index / 3.0).max(0.0)),
                     phase: Phase(0.0),
+                    tag: PartialTag::Harmonic(2),
                 },
             ];
             Tone::from_partials(partials, default_env(), duration).expect("fm tone")
@@ -334,6 +341,7 @@ fn render_recipe(recipe: &TimbreRecipe, frequency: Frequency, duration: Duration
                     frequency: Frequency(frequency.0 * ratio),
                     amplitude: Amplitude(1.0 / (index + 1) as f64),
                     phase: Phase(0.0),
+                    tag: PartialTag::Harmonic((index + 1) as u32),
                 })
                 .collect();
             Tone::from_partials(partials, default_env(), duration).expect("bell tone")

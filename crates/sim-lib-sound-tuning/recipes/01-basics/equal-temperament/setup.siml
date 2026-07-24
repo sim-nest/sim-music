@@ -1,1 +1,1 @@
-sound/EqualTemperament
+"#(TuningDescriptor kind=EqualTemperament divisions=19 reference_midi=69 reference_hz=440)"

@@ -13,6 +13,12 @@ pub enum SoundCoreError {
     /// An amplitude was negative or non-finite.
     #[error("amplitude must be non-negative")]
     InvalidAmplitude,
+    /// A phase was non-finite.
+    #[error("phase must be finite")]
+    InvalidPhase,
+    /// A partial tag carried an invalid kind/index combination.
+    #[error("partial tag is invalid")]
+    InvalidPartialTag,
     /// An envelope sustain level fell outside the `0.0..=1.0` range.
     #[error("envelope sustain must be between 0.0 and 1.0")]
     InvalidSustain,
@@ -111,10 +117,60 @@ impl Amplitude {
 pub struct Phase(pub f64);
 
 impl Phase {
+    /// Builds a phase, rejecting non-finite values and normalizing the angle
+    /// into the `0.0..TAU` range.
+    pub fn new(radians: f64) -> Result<Self, SoundCoreError> {
+        if radians.is_finite() {
+            Ok(Self(radians).normalized())
+        } else {
+            Err(SoundCoreError::InvalidPhase)
+        }
+    }
+
     /// Returns this phase wrapped into the `0.0..TAU` range.
     pub fn normalized(self) -> Self {
         let tau = std::f64::consts::TAU;
         Self(self.0.rem_euclid(tau))
+    }
+}
+
+/// Stable semantic source tag for a tone partial.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum PartialTag {
+    /// The source or fundamental component.
+    Source,
+    /// The `n`th overtone harmonic above the source. The first harmonic is the
+    /// fundamental itself.
+    Harmonic(u32),
+    /// The `n`th undertone below the source.
+    Undertone(u32),
+}
+
+impl PartialTag {
+    /// Builds a harmonic tag, rejecting zero as an invalid harmonic index.
+    pub fn harmonic(index: u32) -> Result<Self, SoundCoreError> {
+        if index > 0 {
+            Ok(Self::Harmonic(index))
+        } else {
+            Err(SoundCoreError::InvalidPartialTag)
+        }
+    }
+
+    /// Builds an undertone tag, rejecting zero as an invalid undertone index.
+    pub fn undertone(index: u32) -> Result<Self, SoundCoreError> {
+        if index > 0 {
+            Ok(Self::Undertone(index))
+        } else {
+            Err(SoundCoreError::InvalidPartialTag)
+        }
+    }
+
+    fn validate(self) -> Result<Self, SoundCoreError> {
+        match self {
+            Self::Source => Ok(self),
+            Self::Harmonic(index) | Self::Undertone(index) if index > 0 => Ok(self),
+            Self::Harmonic(_) | Self::Undertone(_) => Err(SoundCoreError::InvalidPartialTag),
+        }
     }
 }
 
@@ -127,6 +183,8 @@ pub struct Partial {
     pub amplitude: Amplitude,
     /// Starting phase of the component.
     pub phase: Phase,
+    /// Semantic source of the component within a tone.
+    pub tag: PartialTag,
 }
 
 impl Partial {
@@ -137,12 +195,26 @@ impl Partial {
         amplitude: Amplitude,
         phase: Phase,
     ) -> Result<Self, SoundCoreError> {
+        Self::tagged(frequency, amplitude, phase, PartialTag::Source)
+    }
+
+    /// Builds a validated tagged partial, normalizing the phase and rejecting
+    /// invalid frequency, amplitude, phase, or tag values.
+    pub fn tagged(
+        frequency: Frequency,
+        amplitude: Amplitude,
+        phase: Phase,
+        tag: PartialTag,
+    ) -> Result<Self, SoundCoreError> {
         let _ = Frequency::new(frequency.0)?;
         let _ = Amplitude::new(amplitude.0)?;
+        let phase = Phase::new(phase.0)?;
+        let tag = tag.validate()?;
         Ok(Self {
             frequency,
             amplitude,
-            phase: phase.normalized(),
+            phase,
+            tag,
         })
     }
 }
@@ -253,6 +325,7 @@ impl Tone {
                 frequency,
                 amplitude: Amplitude(1.0),
                 phase: Phase(0.0),
+                tag: PartialTag::Source,
             }],
             default_envelope(),
             duration,
@@ -302,10 +375,17 @@ impl Tone {
         if partials.is_empty() {
             return Err(SoundCoreError::EmptyPartials);
         }
-        for partial in &partials {
-            let _ = Frequency::new(partial.frequency.0)?;
-            let _ = Amplitude::new(partial.amplitude.0)?;
-        }
+        let partials = partials
+            .into_iter()
+            .map(|partial| {
+                Partial::tagged(
+                    partial.frequency,
+                    partial.amplitude,
+                    partial.phase,
+                    partial.tag,
+                )
+            })
+            .collect::<Result<Vec<_>, _>>()?;
         Ok(Self {
             partials,
             envelope,
@@ -356,6 +436,7 @@ impl Tone {
                 frequency: Frequency(frequency.0 * n as f64),
                 amplitude: Amplitude(amp(n)),
                 phase: Phase(0.0),
+                tag: PartialTag::Harmonic(n as u32),
             })
             .collect();
         Self::from_partials(partials, default_envelope(), duration)

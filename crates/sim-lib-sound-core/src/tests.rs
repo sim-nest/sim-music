@@ -36,3 +36,50 @@ fn sawtooth_follows_inverse_harmonics() {
 fn pitch_to_equal_temperament_maps_a4_to_440() {
     assert!((equal_temperament_frequency(Pitch::from_midi(69)).0 - 440.0).abs() < 1e-6);
 }
+
+#[test]
+fn partial_tags_and_phase_are_validated() {
+    let partial = Partial::tagged(
+        Frequency(440.0),
+        Amplitude(0.5),
+        Phase(-std::f64::consts::FRAC_PI_2),
+        PartialTag::harmonic(2).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(partial.tag, PartialTag::Harmonic(2));
+    assert!((partial.phase.0 - std::f64::consts::TAU * 0.75).abs() < 1e-9);
+
+    assert_eq!(
+        PartialTag::harmonic(0).unwrap_err(),
+        SoundCoreError::InvalidPartialTag
+    );
+    assert_eq!(
+        Partial::new(Frequency(f64::NAN), Amplitude(1.0), Phase(0.0)).unwrap_err(),
+        SoundCoreError::InvalidFrequency
+    );
+    assert_eq!(
+        Partial::new(Frequency(440.0), Amplitude(-0.1), Phase(0.0)).unwrap_err(),
+        SoundCoreError::InvalidAmplitude
+    );
+    assert_eq!(
+        Partial::new(Frequency(440.0), Amplitude(1.0), Phase(f64::INFINITY)).unwrap_err(),
+        SoundCoreError::InvalidPhase
+    );
+}
+
+#[test]
+fn tone_from_partials_normalizes_partial_semantics() {
+    let tone = Tone::from_partials(
+        vec![Partial {
+            frequency: Frequency(440.0),
+            amplitude: Amplitude(1.0),
+            phase: Phase(std::f64::consts::TAU * 3.0),
+            tag: PartialTag::Source,
+        }],
+        default_envelope(),
+        Duration::from_secs(1),
+    )
+    .unwrap();
+    assert_eq!(tone.partials[0].phase, Phase(0.0));
+    assert_eq!(tone.partials[0].tag, PartialTag::Source);
+}

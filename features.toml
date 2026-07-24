@@ -102,7 +102,7 @@ title = "Pitch and sound vocabulary"
 summary = "Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors."
 owner = "crate/sim-lib-pitch-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when reusing pitch, chord, scale, pitch-set, tuning, timbre, spectrum, and dissonance vocabulary. Keep canonical pitch identity in the 12-class pitch types, use OctaveSpace helpers for parameterized floor folding and circular distance, use tuning crates for frequency conversion, use timbre and spectrum crates for sound descriptors, and use the dissonance crates for sensory or pitch-class roughness models."
+guidance = "Use this row when reusing pitch, chord, scale, pitch-set, tuning, timbre, spectrum, and dissonance vocabulary. Keep canonical pitch identity in the 12-class pitch types, use OctaveSpace helpers for parameterized floor folding and circular distance, use tuning crates for frequency conversion, use tagged sound-core partials for source/harmonic/undertone tone components, use timbre and spectrum crates for sound descriptors, and use the dissonance crates for sensory or pitch-class roughness models."
 claims_anchors = [
   "anchor/crate/sim-lib-pitch-chord",
   "anchor/crate/sim-lib-pitch-core",

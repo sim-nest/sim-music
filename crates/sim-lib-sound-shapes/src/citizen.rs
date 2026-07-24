@@ -231,10 +231,11 @@ fn default_partial_form() -> String {
     sound_form(
         "Partial",
         &format!(
-            " frequency={} amplitude={} phase={}",
+            " frequency={} amplitude={} phase={} tag={}",
             sound_form("Frequency", " hz=440"),
             sound_form("Amplitude", " linear=1"),
-            sound_form("Phase", " radians=0")
+            sound_form("Phase", " radians=0"),
+            sound_form("PartialTag", " kind=source")
         ),
     )
 }

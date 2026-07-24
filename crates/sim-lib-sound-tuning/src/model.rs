@@ -33,6 +33,9 @@ pub enum SoundTuningError {
     /// Scala input could not be parsed.
     #[error("invalid scala data")]
     InvalidScala,
+    /// A reference frequency was zero, negative, or non-finite.
+    #[error("reference frequency must be positive")]
+    InvalidReferenceFrequency,
 }
 
 /// A pitch-class degree within an arbitrary equal division of the octave.
@@ -158,9 +161,11 @@ impl EqualTemperament {
         if divisions == 0 {
             return Err(SoundTuningError::InvalidDivisions);
         }
+        let reference_frequency = Frequency::new(reference.1.0)
+            .map_err(|_| SoundTuningError::InvalidReferenceFrequency)?;
         Ok(Self {
             divisions,
-            reference,
+            reference: (reference.0, reference_frequency),
         })
     }
 }

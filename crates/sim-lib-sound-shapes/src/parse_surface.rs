@@ -24,8 +24,8 @@ pub fn decode_pitch_class_n(value: &str) -> Result<PitchClassN, SoundShapeError>
 /// Decodes a [`TuningDescriptor`] from its sound-shape text form.
 pub fn decode_tuning_descriptor(value: &str) -> Result<TuningDescriptor, SoundShapeError> {
     let node = parse_node(value)?;
-    match field_atom(&node, "kind")?.as_str() {
-        "EqualTemperament" => Ok(TuningDescriptor::EqualTemperament {
+    let descriptor = match field_atom(&node, "kind")?.as_str() {
+        "EqualTemperament" => TuningDescriptor::EqualTemperament {
             divisions: field_atom(&node, "divisions")?
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
@@ -33,7 +33,7 @@ pub fn decode_tuning_descriptor(value: &str) -> Result<TuningDescriptor, SoundSh
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
+        },
         "JustIntonation" => {
             let ratios = field_list(&node, "ratios")?
                 .iter()
@@ -43,7 +43,7 @@ pub fn decode_tuning_descriptor(value: &str) -> Result<TuningDescriptor, SoundSh
             let ratios: [f64; 12] = ratios
                 .try_into()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?;
-            Ok(TuningDescriptor::JustIntonation {
+            TuningDescriptor::JustIntonation {
                 root: field_atom(&node, "root")?
                     .parse()
                     .map_err(|_| SoundShapeError::InvalidSoundShape)?,
@@ -52,33 +52,33 @@ pub fn decode_tuning_descriptor(value: &str) -> Result<TuningDescriptor, SoundSh
                     .parse()
                     .map_err(|_| SoundShapeError::InvalidSoundShape)?,
                 reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-            })
+            }
         }
-        "PythagoreanTuning" => Ok(TuningDescriptor::PythagoreanTuning {
+        "PythagoreanTuning" => TuningDescriptor::PythagoreanTuning {
             reference_midi: field_atom(&node, "reference_midi")?
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
-        "MeantoneQuarterComma" => Ok(TuningDescriptor::MeantoneQuarterComma {
+        },
+        "MeantoneQuarterComma" => TuningDescriptor::MeantoneQuarterComma {
             reference_midi: field_atom(&node, "reference_midi")?
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
-        "WerckmeisterIII" => Ok(TuningDescriptor::WerckmeisterIII {
+        },
+        "WerckmeisterIII" => TuningDescriptor::WerckmeisterIII {
             reference_midi: field_atom(&node, "reference_midi")?
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
-        "YoungTemperament" => Ok(TuningDescriptor::YoungTemperament {
+        },
+        "YoungTemperament" => TuningDescriptor::YoungTemperament {
             reference_midi: field_atom(&node, "reference_midi")?
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
-        "ScalaScl" => Ok(TuningDescriptor::ScalaScl {
+        },
+        "ScalaScl" => TuningDescriptor::ScalaScl {
             cents: field_list(&node, "cents")?
                 .iter()
                 .map(atom_text)
@@ -88,9 +88,13 @@ pub fn decode_tuning_descriptor(value: &str) -> Result<TuningDescriptor, SoundSh
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
             reference_hz: parse_f64(&field_atom(&node, "reference_hz")?)?,
-        }),
-        _ => Err(SoundShapeError::InvalidSoundShape),
-    }
+        },
+        _ => return Err(SoundShapeError::InvalidSoundShape),
+    };
+    descriptor
+        .to_tuning()
+        .map_err(|_| SoundShapeError::InvalidSoundShape)?;
+    Ok(descriptor)
 }
 
 /// Decodes a [`DissonanceModelDescriptor`] from its sound-shape text form.

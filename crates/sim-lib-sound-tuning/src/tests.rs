@@ -1,5 +1,7 @@
 use sim_lib_pitch_core::{Pitch, PitchClass};
-use sim_lib_sound_core::Frequency;
+use std::time::Duration;
+
+use sim_lib_sound_core::{Amplitude, Frequency, Partial, PartialTag, Phase, Tone};
 
 use crate::{
     EqualTemperament, PitchClassN, ScalaScl, Tuning, TuningDescriptor, cents_between,
@@ -26,6 +28,34 @@ fn pitch_class_n_works_for_non_twelve_equal_temperament() {
     let degree = PitchClassN::new(19, 14).unwrap();
     let frequency = tuning.frequency_of_degree(degree, 4).unwrap();
     assert!((frequency.0 - 440.0).abs() < 2.0);
+}
+
+#[test]
+fn edo19_fixture_reuses_equal_temperament_for_harmonic_partials() {
+    let edo19 = EqualTemperament::new(19, (Pitch::from_midi(69), Frequency(440.0))).unwrap();
+    let fundamental = edo19.frequency_of(Pitch::from_midi(69));
+    let partials = (1..=8)
+        .map(|n| {
+            Partial::tagged(
+                Frequency(fundamental.0 * n as f64),
+                Amplitude(1.0 / n as f64),
+                Phase(0.0),
+                PartialTag::harmonic(n).unwrap(),
+            )
+        })
+        .collect::<Result<Vec<_>, _>>()
+        .unwrap();
+    let tone = Tone::from_partials(
+        partials,
+        sim_lib_sound_core::default_envelope(),
+        Duration::from_secs(1),
+    )
+    .unwrap();
+
+    assert_eq!(edo19.divisions(), 19);
+    assert_eq!(tone.partials.len(), 8);
+    assert_eq!(tone.partials[0].frequency, fundamental);
+    assert_eq!(tone.partials[7].tag, PartialTag::Harmonic(8));
 }
 
 #[test]
@@ -73,4 +103,17 @@ fn descriptor_round_trips_to_tuning() {
     let tuning = descriptor.to_tuning().unwrap();
     let a4 = tuning.frequency_of(Pitch::from_midi(69));
     assert!((a4.0 - 440.0).abs() < 1e-9);
+}
+
+#[test]
+fn descriptor_rejects_invalid_reference_frequency() {
+    let descriptor = TuningDescriptor::EqualTemperament {
+        divisions: 19,
+        reference_midi: 69,
+        reference_hz: f64::NAN,
+    };
+    assert_eq!(
+        descriptor.to_tuning().err(),
+        Some(crate::SoundTuningError::InvalidReferenceFrequency)
+    );
 }

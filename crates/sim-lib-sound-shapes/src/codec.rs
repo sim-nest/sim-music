@@ -4,7 +4,9 @@ use sim_lib_sound_audio_lift::{
     AudioLiftFrame, AudioLiftOptions, AudioNoteCandidate, PitchCandidate,
 };
 use sim_lib_sound_bridge::{BridgeOptions, TimbreBank};
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 use sim_lib_sound_dissonance::DissonanceModelDescriptor;
 use sim_lib_sound_render::RendererOptions;
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
@@ -68,11 +70,21 @@ pub fn encode_phase(value: Phase) -> String {
 /// Encodes a [`Partial`] into its sound-shape text form.
 pub fn encode_partial(value: &Partial) -> String {
     format!(
-        "#(Partial frequency={} amplitude={} phase={})",
+        "#(Partial frequency={} amplitude={} phase={} tag={})",
         encode_frequency(value.frequency),
         encode_amplitude(value.amplitude),
         encode_phase(value.phase),
+        encode_partial_tag(value.tag),
     )
+}
+
+/// Encodes a [`PartialTag`] into its sound-shape text form.
+pub fn encode_partial_tag(value: PartialTag) -> String {
+    match value {
+        PartialTag::Source => "#(PartialTag kind=source)".to_owned(),
+        PartialTag::Harmonic(index) => format!("#(PartialTag kind=harmonic index={index})"),
+        PartialTag::Undertone(index) => format!("#(PartialTag kind=undertone index={index})"),
+    }
 }
 
 /// Encodes an [`EnvelopeShape`] into its sound-shape text form.
