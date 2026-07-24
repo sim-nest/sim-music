@@ -13,8 +13,8 @@ use sim_lib_sound_dissonance::DissonanceModelDescriptor;
 use sim_lib_sound_render::RendererOptions;
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
 use sim_lib_sound_timbre::{
-    AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe, bell_inharmonic, fm_pair, karplus_strong,
-    organ_pipe, pure_sine, sawtooth, square, triangle,
+    AttackKind, Filter, MergePolicy, Timbre, TimbreMeta, TimbreRecipe, bell_inharmonic, fm_pair,
+    karplus_strong, organ_pipe, pure_sine, sawtooth, square, triangle,
 };
 use sim_lib_sound_tuning::{PitchClassN, TuningDescriptor, default_just_intonation};
 
@@ -133,6 +133,7 @@ fn every_public_type_round_trips() {
             ratios: vec![1.0, 2.7],
         }),
         mix: 0.4,
+        policy: MergePolicy::SumCoincidentResetPhase,
     };
     assert_eq!(
         decode_timbre_recipe(&encode_timbre_recipe(&recipe)).unwrap(),

@@ -4,6 +4,7 @@ use sim_kernel::Cx;
 use sim_kernel::{DefaultFactory, EagerPolicy};
 use sim_lib_sound_bridge::ScheduledTone;
 use sim_lib_sound_core::{Frequency, Tone};
+use sim_lib_sound_timbre::pure_sine;
 
 use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
 
@@ -73,6 +74,19 @@ fn render_mix_respects_scheduled_start_and_pan() {
     let mix = renderer.render_mix(&tones);
     assert!(mix.len() > renderer.render_tone(&tones[0].tone).len());
     assert!(mix.iter().any(|sample| sample.abs() > 0.0));
+}
+
+#[test]
+fn render_timbre_preview_uses_pcm_renderer() {
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    let samples = renderer
+        .render_timbre_preview(
+            &pure_sine(),
+            Frequency(440.0),
+            std::time::Duration::from_millis(10),
+        )
+        .expect("preview");
+    assert_eq!(samples.len(), 80);
 }
 
 #[test]

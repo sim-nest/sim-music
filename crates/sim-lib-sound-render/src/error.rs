@@ -15,4 +15,10 @@ pub enum SoundRenderError {
     /// The audio buffer exceeded the size encodable in a WAV header.
     #[error("audio buffer too large to encode")]
     BufferTooLarge,
+    /// The timbre policy rejected the requested preview pitch.
+    #[error("timbre policy rejected preview pitch")]
+    TimbrePreviewRejected,
+    /// The timbre did not yield any renderable partials.
+    #[error("timbre preview has no renderable partials")]
+    EmptyTimbrePreview,
 }

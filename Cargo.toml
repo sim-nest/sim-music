@@ -58,3 +58,6 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
+
+[patch.crates-io]
+sim-lib-discrete-search = { path = "../sim-discrete/crates/sim-lib-discrete-search" }

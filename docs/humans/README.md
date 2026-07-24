@@ -20,7 +20,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 1 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
-| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors. |
+| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors and bounded timbre families. |
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 2 | Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable operations and explicit pitch maps. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |

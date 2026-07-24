@@ -5,7 +5,10 @@ use sim_lib_sound_core::{
     Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
 };
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
-use sim_lib_sound_timbre::{AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe};
+use sim_lib_sound_timbre::{
+    AttackKind, Filter, MergePolicy, SampleInterpolation, SamplePitchPolicy, SampledPartial,
+    Timbre, TimbreMeta, TimbreRecipe,
+};
 
 use crate::SoundShapeError;
 
@@ -275,11 +278,79 @@ pub fn decode_timbre_recipe(value: &str) -> Result<TimbreRecipe, SoundShapeError
                 .map(|value| parse_f64(&value))
                 .collect::<Result<Vec<_>, _>>()?,
         }),
+        "TaggedPartials" => Ok(TimbreRecipe::TaggedPartials {
+            partials: decode_sampled_partial_list(&node)?,
+        }),
+        "HarmonicExpansion" => Ok(TimbreRecipe::HarmonicExpansion {
+            partials: field_atom(&node, "partials")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            amplitude_decay: parse_f64(&field_atom(&node, "amplitude_decay")?)?,
+            phase_step: parse_f64(&field_atom(&node, "phase_step")?)?,
+        }),
+        "UndertoneExpansion" => Ok(TimbreRecipe::UndertoneExpansion {
+            partials: field_atom(&node, "partials")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            amplitude_decay: parse_f64(&field_atom(&node, "amplitude_decay")?)?,
+            phase_step: parse_f64(&field_atom(&node, "phase_step")?)?,
+        }),
+        "Sampled" => Ok(TimbreRecipe::Sampled {
+            root: decode_frequency(&field_form_text(&node, "root")?)?,
+            partials: decode_sampled_partial_list(&node)?,
+            interpolation: decode_sample_interpolation(&field_atom(&node, "interpolation")?)?,
+            pitch_policy: decode_sample_pitch_policy(&field_atom(&node, "pitch_policy")?)?,
+        }),
         "Layered" => Ok(TimbreRecipe::Layered {
             primary: Box::new(decode_timbre_recipe(&field_form_text(&node, "primary")?)?),
             secondary: Box::new(decode_timbre_recipe(&field_form_text(&node, "secondary")?)?),
             mix: parse_f64(&field_atom(&node, "mix")?)?,
+            policy: decode_merge_policy(&field_atom(&node, "policy")?)?,
         }),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_sampled_partial_list(node: &DomainForm) -> Result<Vec<SampledPartial>, SoundShapeError> {
+    field_list(node, "partials")?
+        .iter()
+        .map(DomainValue::render_text)
+        .map(|text| decode_sampled_partial(&text))
+        .collect::<Result<Vec<_>, _>>()
+}
+
+fn decode_sampled_partial(value: &str) -> Result<SampledPartial, SoundShapeError> {
+    let node = parse_node(value)?;
+    Ok(SampledPartial {
+        ratio: parse_f64(&field_atom(&node, "ratio")?)?,
+        amplitude: decode_amplitude(&field_form_text(&node, "amplitude")?)?,
+        phase: decode_phase(&field_form_text(&node, "phase")?)?,
+        tag: decode_partial_tag_form(&node)?,
+    })
+}
+
+fn decode_sample_interpolation(value: &str) -> Result<SampleInterpolation, SoundShapeError> {
+    match value {
+        "Step" => Ok(SampleInterpolation::Step),
+        "Linear" => Ok(SampleInterpolation::Linear),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_sample_pitch_policy(value: &str) -> Result<SamplePitchPolicy, SoundShapeError> {
+    match value {
+        "Reject" => Ok(SamplePitchPolicy::Reject),
+        "Clamp" => Ok(SamplePitchPolicy::Clamp),
+        "Resample" => Ok(SamplePitchPolicy::Resample),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_merge_policy(value: &str) -> Result<MergePolicy, SoundShapeError> {
+    match value {
+        "PreservePartials" => Ok(MergePolicy::PreservePartials),
+        "SumCoincidentPreferLoudestPhase" => Ok(MergePolicy::SumCoincidentPreferLoudestPhase),
+        "SumCoincidentResetPhase" => Ok(MergePolicy::SumCoincidentResetPhase),
         _ => Err(SoundShapeError::InvalidSoundShape),
     }
 }

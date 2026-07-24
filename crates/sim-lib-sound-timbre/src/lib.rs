@@ -9,10 +9,15 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod cache;
+mod family;
 mod filter;
 mod model;
+mod render;
 mod runtime;
 
+pub use cache::*;
+pub use family::*;
 pub use filter::*;
 pub use model::*;
 pub use runtime::*;
