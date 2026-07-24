@@ -20,6 +20,115 @@ fn interval_vector_is_invariant_under_transposition() {
 }
 
 #[test]
+fn conventional_classification_keeps_numeric_normalization_separate() {
+    let major = PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::E, PitchClass::G]);
+    assert_eq!(major.normalize().bits(), major.bits());
+
+    let class = classify_set(major, SetEquivalence::Transposition);
+    assert_eq!(
+        class.normal,
+        vec![PitchClass::C, PitchClass::E, PitchClass::G]
+    );
+    assert_eq!(class.prime, class.normal);
+    assert_eq!(class.equivalence, SetEquivalence::Transposition);
+}
+
+#[test]
+fn transposition_inversion_policy_types_prime_form_explicitly() {
+    let major = PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::E, PitchClass::G]);
+    let minor = PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::DS, PitchClass::G]);
+
+    let major_under_t = classify_set(major, SetEquivalence::Transposition);
+    let major_under_ti = classify_set(major, SetEquivalence::TranspositionInversion);
+    let minor_under_ti = classify_set(minor, SetEquivalence::TranspositionInversion);
+
+    assert_ne!(major_under_t, major_under_ti);
+    assert_eq!(major_under_ti.prime, minor_under_ti.prime);
+    assert_eq!(
+        major_under_ti.prime,
+        vec![PitchClass::C, PitchClass::DS, PitchClass::G]
+    );
+}
+
+#[test]
+fn normal_order_is_deterministic_under_rotation_and_transposition() {
+    let source = PitchClassMask::from_pitch_classes(&[
+        PitchClass::CS,
+        PitchClass::D,
+        PitchClass::E,
+        PitchClass::FS,
+    ]);
+    let transposed = source.rotate(8);
+
+    assert_eq!(source.normal_order(), transposed.normal_order());
+    assert_eq!(
+        source.normal_order(),
+        vec![PitchClass::C, PitchClass::CS, PitchClass::DS, PitchClass::F]
+    );
+}
+
+#[test]
+fn complements_and_subset_relations_use_pitch_class_identity() {
+    let trichord =
+        PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::D, PitchClass::E]);
+    let tetrachord = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::D,
+        PitchClass::E,
+        PitchClass::FS,
+    ]);
+
+    assert!(trichord.is_subset_of(tetrachord));
+    assert!(tetrachord.is_superset_of(trichord));
+    assert_eq!(trichord.complement().count_bits(), 9);
+    assert!(!trichord.complement().is_subset_of(tetrachord));
+}
+
+#[test]
+fn roots_and_symmetries_are_derived_from_the_mask() {
+    let dominant_seventh = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::E,
+        PitchClass::G,
+        PitchClass::AS,
+    ]);
+    assert_eq!(dominant_seventh.roots(), vec![PitchClass::C]);
+
+    let diminished_seventh = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::DS,
+        PitchClass::FS,
+        PitchClass::A,
+    ]);
+    assert_eq!(
+        diminished_seventh.transpositional_symmetries(),
+        vec![0, 3, 6, 9]
+    );
+    assert_eq!(diminished_seventh.inversional_symmetries().len(), 4);
+}
+
+#[test]
+fn z_relation_and_forte_examples_are_derived_facts() {
+    let z15 = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::CS,
+        PitchClass::E,
+        PitchClass::FS,
+    ]);
+    let z29 = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::CS,
+        PitchClass::DS,
+        PitchClass::G,
+    ]);
+
+    assert!(z15.is_z_related_to(z29));
+    assert_eq!(z15.interval_vector(), z29.interval_vector());
+    assert_eq!(forte_fact_for(z15).unwrap().label, "4-Z15");
+    assert_eq!(forte_fact_for(z29).unwrap().label, "4-Z29");
+}
+
+#[test]
 fn pitch_class_mask_rejects_high_bits() {
     assert_eq!(
         PitchClassMask::new(0x1000),

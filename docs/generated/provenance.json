@@ -3,10 +3,10 @@
   "generated_by": "cargo run -p xtask -- simdoc",
   "generation_timestamp": "2026-07-15T20:01:50+02:00",
   "generator": "xtask repo-contract v1",
-  "git_commit": "9231e60c203674a52de75ed0c4aa5f3378907499",
+  "git_commit": "413e68e1914a8ee2947da41b8e377dd52ab92ca2",
   "repo": "sim-music",
   "schema": "sim.provenance.v1",
-  "source_commit": "9231e60c203674a52de75ed0c4aa5f3378907499",
+  "source_commit": "413e68e1914a8ee2947da41b8e377dd52ab92ca2",
   "source_remote": "https://github.com/sim-nest/sim-music",
   "validation_commands": [
     "cargo fmt --all --check",
@@ -19,9 +19,9 @@
     "cargo run -p xtask -- validation-matrix --check --repo .",
     "cargo run -p xtask -- crate-catalog --check --repo ."
   ],
-  "workspace_hash": "c8f9872c26de0271",
+  "workspace_hash": "9c8763b3b8d67c83",
   "workspace_hash_algorithm": "fnv1a64",
-  "workspace_hash_input_count": 633,
+  "workspace_hash_input_count": 634,
   "workspace_hash_inputs": [
     "Cargo.toml",
     "crates/sim-lib-daw-session/Cargo.toml",
@@ -504,6 +504,7 @@
     "crates/sim-lib-pitch-set/build.rs",
     "crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml",
     "crates/sim-lib-pitch-set/recipes/book.toml",
+    "crates/sim-lib-pitch-set/src/conventional.rs",
     "crates/sim-lib-pitch-set/src/lib.rs",
     "crates/sim-lib-pitch-set/src/model.rs",
     "crates/sim-lib-pitch-set/src/tests.rs",
