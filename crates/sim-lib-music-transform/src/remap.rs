@@ -5,6 +5,7 @@ use sim_lib_pitch_chord::Chord;
 use sim_lib_pitch_core::{Pitch, PitchClass};
 use sim_lib_pitch_scale::Scale;
 
+use crate::pitch_map::{MapError, PitchMap, PitchMapPolicy};
 use crate::{
     CallablePitchMap, TransformDiagnostic, TransformDiagnosticCode, TransformError,
     TransformReport, map_pitches_with_diagnostics, nearest_pitch_in_scale, note_with_pitch,
@@ -35,6 +36,11 @@ impl TuningRemap {
     /// ```
     pub fn semitone_delta(&self) -> i32 {
         (f64::from(self.cents) / 100.0).round() as i32
+    }
+
+    /// Returns the rounded tuning offset as a first-class pitch map.
+    pub fn pitch_map(&self) -> PitchMap {
+        PitchMap::chromatic_delta(self.semitone_delta())
     }
 }
 
@@ -111,6 +117,8 @@ pub enum PitchRemap {
     },
     /// Apply a named [`CallablePitchMap`].
     Callable(CallablePitchMap),
+    /// Apply a first-class partial pitch map.
+    Map(PitchMap),
 }
 
 impl PitchRemap {
@@ -187,8 +195,42 @@ impl PitchRemap {
                 let pitch = map.map_pitch(note.pitch);
                 note_with_pitch(note, pitch)
             })?)),
+            Self::Map(map) => map_pitches_with_diagnostics(object, "pitch-remap", |pitch| {
+                map.map_pitch(pitch)
+                    .map(|result| result.pitch)
+                    .map_err(|error| map_error_diagnostic(error, "pitch-remap"))
+            }),
         }
     }
+
+    /// Returns this remap as a composable pitch map when it is static and
+    /// expressible in the integer pitch-map domain.
+    pub fn as_pitch_map(&self) -> Option<PitchMap> {
+        match self {
+            Self::Chromatic(semitones) => Some(PitchMap::chromatic_delta(*semitones)),
+            Self::PitchClass { from, to } => Some(PitchMap::pitch_class_substitution(
+                *from,
+                *to,
+                PitchMapPolicy::Reject,
+            )),
+            Self::Tuning(tuning) => Some(tuning.pitch_map()),
+            Self::Map(map) => Some(map.clone()),
+            Self::ScaleDegree { .. }
+            | Self::DrumKey(_)
+            | Self::ChordTone { .. }
+            | Self::Vector { .. }
+            | Self::Matrix { .. }
+            | Self::Callable(_) => None,
+        }
+    }
+}
+
+fn map_error_diagnostic(error: MapError, transform: &'static str) -> TransformDiagnostic {
+    TransformDiagnostic::new(
+        TransformDiagnosticCode::UnsupportedMapping,
+        transform,
+        error.to_string(),
+    )
 }
 
 fn vector_remap(pitch: Pitch, scale: Scale, offsets: &[i32]) -> Result<Pitch, TransformDiagnostic> {

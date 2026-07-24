@@ -15,6 +15,7 @@ mod filter;
 mod filter_eval;
 mod model;
 mod mutator;
+mod pitch_map;
 mod player;
 mod remap;
 
@@ -23,6 +24,7 @@ pub use diagnostic::*;
 pub use filter::*;
 pub use model::*;
 pub use mutator::*;
+pub use pitch_map::*;
 pub use player::*;
 pub use remap::*;
 
