@@ -1,0 +1,8 @@
+id = "octave-space"
+title = "Octave space folding"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["pitch", "octave", "modular-distance", "sandbox-descriptor"]
+requires = ["pitch-core", "codec/lisp"]

@@ -1,1 +1,1 @@
-"sound-core descriptor: sine tone at 440 Hz with 0.5 linear amplitude"
+"#(Partial frequency=#(Frequency hz=440) amplitude=#(Amplitude linear=0.5) phase=#(Phase radians=0) tag=#(PartialTag kind=source))"

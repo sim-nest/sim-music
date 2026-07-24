@@ -4,11 +4,16 @@ use sim_lib_sound_audio_lift::{
     AudioLiftFrame, AudioLiftOptions, AudioNoteCandidate, PitchCandidate,
 };
 use sim_lib_sound_bridge::{BridgeOptions, TimbreBank};
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 use sim_lib_sound_dissonance::DissonanceModelDescriptor;
 use sim_lib_sound_render::RendererOptions;
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
-use sim_lib_sound_timbre::{AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe};
+use sim_lib_sound_timbre::{
+    AttackKind, Filter, MergePolicy, SampleInterpolation, SamplePitchPolicy, SampledPartial,
+    Timbre, TimbreMeta, TimbreRecipe,
+};
 use sim_lib_sound_tuning::{PitchClassN, TuningDescriptor};
 use thiserror::Error;
 
@@ -68,11 +73,21 @@ pub fn encode_phase(value: Phase) -> String {
 /// Encodes a [`Partial`] into its sound-shape text form.
 pub fn encode_partial(value: &Partial) -> String {
     format!(
-        "#(Partial frequency={} amplitude={} phase={})",
+        "#(Partial frequency={} amplitude={} phase={} tag={})",
         encode_frequency(value.frequency),
         encode_amplitude(value.amplitude),
         encode_phase(value.phase),
+        encode_partial_tag(value.tag),
     )
+}
+
+/// Encodes a [`PartialTag`] into its sound-shape text form.
+pub fn encode_partial_tag(value: PartialTag) -> String {
+    match value {
+        PartialTag::Source => "#(PartialTag kind=source)".to_owned(),
+        PartialTag::Harmonic(index) => format!("#(PartialTag kind=harmonic index={index})"),
+        PartialTag::Undertone(index) => format!("#(PartialTag kind=undertone index={index})"),
+    }
 }
 
 /// Encodes an [`EnvelopeShape`] into its sound-shape text form.
@@ -254,16 +269,89 @@ pub fn encode_timbre_recipe(value: &TimbreRecipe) -> String {
                 .collect::<Vec<_>>()
                 .join(",")
         ),
+        TimbreRecipe::TaggedPartials { partials } => format!(
+            "#(TimbreRecipe kind=TaggedPartials partials=[{}])",
+            partials
+                .iter()
+                .map(encode_sampled_partial)
+                .collect::<Vec<_>>()
+                .join(",")
+        ),
+        TimbreRecipe::HarmonicExpansion {
+            partials,
+            amplitude_decay,
+            phase_step,
+        } => format!(
+            "#(TimbreRecipe kind=HarmonicExpansion partials={partials} amplitude_decay={amplitude_decay} phase_step={phase_step})"
+        ),
+        TimbreRecipe::UndertoneExpansion {
+            partials,
+            amplitude_decay,
+            phase_step,
+        } => format!(
+            "#(TimbreRecipe kind=UndertoneExpansion partials={partials} amplitude_decay={amplitude_decay} phase_step={phase_step})"
+        ),
+        TimbreRecipe::Sampled {
+            root,
+            partials,
+            interpolation,
+            pitch_policy,
+        } => format!(
+            "#(TimbreRecipe kind=Sampled root={} partials=[{}] interpolation={} pitch_policy={})",
+            encode_frequency(*root),
+            partials
+                .iter()
+                .map(encode_sampled_partial)
+                .collect::<Vec<_>>()
+                .join(","),
+            encode_sample_interpolation(*interpolation),
+            encode_sample_pitch_policy(*pitch_policy),
+        ),
         TimbreRecipe::Layered {
             primary,
             secondary,
             mix,
+            policy,
         } => format!(
-            "#(TimbreRecipe kind=Layered primary={} secondary={} mix={})",
+            "#(TimbreRecipe kind=Layered primary={} secondary={} mix={} policy={})",
             encode_timbre_recipe(primary),
             encode_timbre_recipe(secondary),
             mix,
+            encode_merge_policy(*policy),
         ),
+    }
+}
+
+fn encode_sampled_partial(value: &SampledPartial) -> String {
+    format!(
+        "#(SampledPartial ratio={} amplitude={} phase={} tag={})",
+        value.ratio,
+        encode_amplitude(value.amplitude),
+        encode_phase(value.phase),
+        encode_partial_tag(value.tag),
+    )
+}
+
+fn encode_sample_interpolation(value: SampleInterpolation) -> &'static str {
+    match value {
+        SampleInterpolation::Step => "Step",
+        SampleInterpolation::Linear => "Linear",
+    }
+}
+
+fn encode_sample_pitch_policy(value: SamplePitchPolicy) -> &'static str {
+    match value {
+        SamplePitchPolicy::Reject => "Reject",
+        SamplePitchPolicy::Clamp => "Clamp",
+        SamplePitchPolicy::Resample => "Resample",
+    }
+}
+
+fn encode_merge_policy(value: MergePolicy) -> &'static str {
+    match value {
+        MergePolicy::PreservePartials => "PreservePartials",
+        MergePolicy::SumCoincidentPreferLoudestPhase => "SumCoincidentPreferLoudestPhase",
+        MergePolicy::SumCoincidentResetPhase => "SumCoincidentResetPhase",
     }
 }
 

@@ -6,13 +6,15 @@ use sim_lib_sound_audio_lift::{
     AudioLiftFrame, AudioLiftOptions, AudioNoteCandidate, PitchCandidate,
 };
 use sim_lib_sound_bridge::{BridgeOptions, TimbreBank};
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 use sim_lib_sound_dissonance::DissonanceModelDescriptor;
 use sim_lib_sound_render::RendererOptions;
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
 use sim_lib_sound_timbre::{
-    AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe, bell_inharmonic, fm_pair, karplus_strong,
-    organ_pipe, pure_sine, sawtooth, square, triangle,
+    AttackKind, Filter, MergePolicy, Timbre, TimbreMeta, TimbreRecipe, bell_inharmonic, fm_pair,
+    karplus_strong, organ_pipe, pure_sine, sawtooth, square, triangle,
 };
 use sim_lib_sound_tuning::{PitchClassN, TuningDescriptor, default_just_intonation};
 
@@ -56,6 +58,7 @@ fn every_public_type_round_trips() {
         frequency,
         amplitude,
         phase,
+        tag: PartialTag::Harmonic(3),
     };
     assert_eq!(decode_partial(&encode_partial(&partial)).unwrap(), partial);
 
@@ -130,6 +133,7 @@ fn every_public_type_round_trips() {
             ratios: vec![1.0, 2.7],
         }),
         mix: 0.4,
+        policy: MergePolicy::SumCoincidentResetPhase,
     };
     assert_eq!(
         decode_timbre_recipe(&encode_timbre_recipe(&recipe)).unwrap(),
@@ -238,6 +242,31 @@ fn every_public_type_round_trips() {
 }
 
 #[test]
+fn partial_read_construct_rejects_invalid_semantics() {
+    assert!(decode_frequency("#(Frequency hz=nan)").is_err());
+    assert!(decode_amplitude("#(Amplitude linear=-0.1)").is_err());
+    assert!(decode_phase("#(Phase radians=inf)").is_err());
+    assert!(
+        decode_partial(
+            "#(Partial frequency=#(Frequency hz=440) amplitude=#(Amplitude linear=1) phase=#(Phase radians=0) tag=#(PartialTag kind=harmonic index=0))"
+        )
+        .is_err()
+    );
+    assert!(
+        decode_partial(
+            "#(Partial frequency=#(Frequency hz=440) amplitude=#(Amplitude linear=1) phase=#(Phase radians=0) tag=#(PartialTag kind=source index=1))"
+        )
+        .is_err()
+    );
+    assert!(
+        decode_tuning_descriptor(
+            "#(TuningDescriptor kind=EqualTemperament divisions=19 reference_midi=69 reference_hz=-440)"
+        )
+        .is_err()
+    );
+}
+
+#[test]
 fn builtins_encode_and_decode() {
     let builtins = vec![
         pure_sine(),
@@ -306,6 +335,7 @@ fn sound_citizens_accept_legacy_text_and_read_construct() {
         frequency,
         amplitude,
         phase: Phase(0.0),
+        tag: PartialTag::Undertone(2),
     };
     let envelope = Envelope::new(
         Duration::from_millis(10),

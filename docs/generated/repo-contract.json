@@ -2761,6 +2761,13 @@
           "package": "sim-lib-sound-core",
           "rename": null,
           "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-timbre",
+          "rename": null,
+          "target": null
         }
       ],
       "description": "Offline PCM rendering, WAV encoding, and render diagnostics for sound objects.",
@@ -3425,10 +3432,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "ffa739d0cd4bca4c2b29d3478f1ec26053c44215",
+    "git_commit": "f8fc010c2eeda4b5f909a2e56ca69e55b35e15aa",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "ffa739d0cd4bca4c2b29d3478f1ec26053c44215",
+    "source_commit": "f8fc010c2eeda4b5f909a2e56ca69e55b35e15aa",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3441,9 +3448,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "f5322df5f75e649b",
+    "workspace_hash": "fba56e34677064b8",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 627,
+    "workspace_hash_input_count": 634,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3839,9 +3846,11 @@
       "crates/sim-lib-music-transform/src/mutator/rng.rs",
       "crates/sim-lib-music-transform/src/mutator/wire.rs",
       "crates/sim-lib-music-transform/src/mutator.rs",
+      "crates/sim-lib-music-transform/src/pitch_map.rs",
       "crates/sim-lib-music-transform/src/player.rs",
       "crates/sim-lib-music-transform/src/remap.rs",
       "crates/sim-lib-music-transform/src/tests/filter.rs",
+      "crates/sim-lib-music-transform/src/tests/remap.rs",
       "crates/sim-lib-music-transform/src/tests.rs",
       "crates/sim-lib-music-wasm-frame/Cargo.toml",
       "crates/sim-lib-music-wasm-frame/build.rs",
@@ -3863,6 +3872,7 @@
       "crates/sim-lib-pitch-chord/src/voicing.rs",
       "crates/sim-lib-pitch-core/Cargo.toml",
       "crates/sim-lib-pitch-core/build.rs",
+      "crates/sim-lib-pitch-core/recipes/01-basics/octave-space/recipe.toml",
       "crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml",
       "crates/sim-lib-pitch-core/recipes/book.toml",
       "crates/sim-lib-pitch-core/src/lib.rs",
@@ -3923,6 +3933,7 @@
       "crates/sim-lib-pitch-set/build.rs",
       "crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml",
       "crates/sim-lib-pitch-set/recipes/book.toml",
+      "crates/sim-lib-pitch-set/src/conventional.rs",
       "crates/sim-lib-pitch-set/src/lib.rs",
       "crates/sim-lib-pitch-set/src/model.rs",
       "crates/sim-lib-pitch-set/src/tests.rs",
@@ -4017,9 +4028,12 @@
       "crates/sim-lib-sound-timbre/build.rs",
       "crates/sim-lib-sound-timbre/recipes/01-basics/bright-envelope/recipe.toml",
       "crates/sim-lib-sound-timbre/recipes/book.toml",
+      "crates/sim-lib-sound-timbre/src/cache.rs",
+      "crates/sim-lib-sound-timbre/src/family.rs",
       "crates/sim-lib-sound-timbre/src/filter.rs",
       "crates/sim-lib-sound-timbre/src/lib.rs",
       "crates/sim-lib-sound-timbre/src/model.rs",
+      "crates/sim-lib-sound-timbre/src/render.rs",
       "crates/sim-lib-sound-timbre/src/runtime.rs",
       "crates/sim-lib-sound-timbre/src/tests.rs",
       "crates/sim-lib-sound-tuning/Cargo.toml",
@@ -4723,8 +4737,16 @@
       "card_id": "cookbook/pitch-core",
       "group": "workspace",
       "package": "sim-lib-pitch-core",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
+        {
+          "card_id": "pitch-core/01-basics/octave-space",
+          "codec": "lisp",
+          "id": "octave-space",
+          "package": "sim-lib-pitch-core",
+          "recipe_toml": "crates/sim-lib-pitch-core/recipes/01-basics/octave-space/recipe.toml",
+          "title": "Octave space folding"
+        },
         {
           "card_id": "pitch-core/01-basics/pitch-value",
           "codec": "lisp",

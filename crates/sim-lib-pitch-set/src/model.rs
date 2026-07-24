@@ -2,6 +2,8 @@ use thiserror::Error;
 
 use sim_lib_pitch_core::{Pitch, PitchClass};
 
+use crate::{SetClass, SetEquivalence, classify_set, conventional};
+
 /// Error returned when a pitch-set value cannot be constructed, encoded, or decoded.
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum PitchSetError {
@@ -93,6 +95,74 @@ impl PitchClassMask {
             .map(|shift| self.rotate(-shift))
             .min_by_key(|mask| mask.bits())
             .unwrap_or(self)
+    }
+
+    /// Returns the conventional normal order for this set.
+    ///
+    /// The result preserves cardinality and is transposed so the first pitch
+    /// class is C. Use [`PitchClassMask::normalize`] when the older numeric mask
+    /// identity is required instead.
+    pub fn normal_order(self) -> Vec<PitchClass> {
+        conventional::normal_order(self.pitch_classes())
+    }
+
+    /// Classifies this mask using the requested conventional equivalence policy.
+    pub fn classify(self, equivalence: SetEquivalence) -> SetClass {
+        classify_set(self, equivalence)
+    }
+
+    /// Returns `true` when every pitch class in `self` is also in `other`.
+    pub fn is_subset_of(self, other: Self) -> bool {
+        self.0 & !other.0 == 0
+    }
+
+    /// Returns `true` when every pitch class in `other` is also in `self`.
+    pub fn is_superset_of(self, other: Self) -> bool {
+        other.is_subset_of(self)
+    }
+
+    /// Returns the complement of this set in the twelve pitch-class universe.
+    pub fn complement(self) -> Self {
+        Self(!self.0 & Self::VALID_BITS)
+    }
+
+    /// Returns transpositions that map this set onto itself.
+    pub fn transpositional_symmetries(self) -> Vec<u8> {
+        (0..12)
+            .filter(|shift| self.rotate(i32::from(*shift)) == self)
+            .collect()
+    }
+
+    /// Returns inversion axes that map this set onto itself.
+    pub fn inversional_symmetries(self) -> Vec<PitchClass> {
+        (0..12)
+            .filter_map(|axis| {
+                let pitch_class =
+                    PitchClass::new(axis).expect("symmetry axis iteration yields pitch classes");
+                (self.invert(pitch_class) == self).then_some(pitch_class)
+            })
+            .collect()
+    }
+
+    /// Returns likely tonal roots, derived from third-stack interpretations.
+    pub fn roots(self) -> Vec<PitchClass> {
+        let mut roots = Vec::new();
+        for root in self.pitch_classes() {
+            let contains = |semitones| self.0 & (1u16 << root.transpose(semitones).value()) != 0;
+            if contains(7) && (contains(3) || contains(4)) {
+                roots.push(root);
+            }
+        }
+        roots
+    }
+
+    /// Returns `true` when both masks have the same interval vector but distinct
+    /// transposition-inversion prime forms.
+    pub fn is_z_related_to(self, other: Self) -> bool {
+        self.count_bits() == other.count_bits()
+            && self.interval_vector() == other.interval_vector()
+            && classify_set(self, SetEquivalence::TranspositionInversion).prime
+                != classify_set(other, SetEquivalence::TranspositionInversion).prime
     }
 
     /// Returns the number of pitch classes in the set (the population count).

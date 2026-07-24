@@ -3,6 +3,7 @@ use std::time::Duration;
 
 use sim_lib_sound_bridge::ScheduledTone;
 use sim_lib_sound_core::Tone;
+use sim_lib_sound_timbre::{Timbre, TimbreRenderError};
 
 use crate::SoundRenderError;
 
@@ -87,6 +88,20 @@ impl PcmRenderer {
     /// ```
     pub fn render_tone(&self, tone: &Tone) -> Vec<f32> {
         self.render_tone_with_pan(tone, 0.0)
+    }
+
+    /// Renders a timbre preview by constructing its tone and passing it through
+    /// this PCM renderer.
+    pub fn render_timbre_preview(
+        &self,
+        timbre: &Timbre,
+        frequency: sim_lib_sound_core::Frequency,
+        duration: Duration,
+    ) -> Result<Vec<f32>, SoundRenderError> {
+        let tone = timbre
+            .try_render(frequency, duration)
+            .map_err(sound_timbre_error)?;
+        Ok(self.render_tone(&tone))
     }
 
     /// Renders and sums a set of scheduled tones into a single mixed PCM
@@ -214,6 +229,13 @@ impl PcmRenderer {
             }
         }
         out
+    }
+}
+
+fn sound_timbre_error(error: TimbreRenderError) -> SoundRenderError {
+    match error {
+        TimbreRenderError::SamplePitchRejected => SoundRenderError::TimbrePreviewRejected,
+        TimbreRenderError::EmptySample => SoundRenderError::EmptyTimbrePreview,
     }
 }
 

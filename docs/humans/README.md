@@ -20,7 +20,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 1 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
-| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors. |
+| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors and bounded timbre families. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 2 | Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable operations and explicit pitch maps. |
+| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
 ## Surfaces
@@ -224,6 +226,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml`
 - `crates/sim-lib-pitch-chord/recipes/book.toml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/purpose.md`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/recipe.toml`
+- `crates/sim-lib-pitch-core/recipes/01-basics/octave-space/setup.siml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/purpose.md`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/recipe.toml`
 - `crates/sim-lib-pitch-core/recipes/01-basics/pitch-value/setup.siml`
@@ -864,5 +869,587 @@ fn reader_sugar_uses_canonical_sharps() {
 fn pitch_class_constructor_rejects_invalid_values() {
     assert_eq!(PitchClass::new(12), Err(PitchError::InvalidPitchClass(12)));
     assert_eq!(PitchClass::B.value(), 11);
+}
+
+#[test]
+fn octave_space_rejects_zero_divisions() {
+    assert_eq!(OctaveSpace::new(0), Err(PitchError::InvalidOctaveSpace(0)));
+}
+
+#[test]
+fn floor_decomposition_folds_negative_and_large_inputs() {
+    let twelve = OctaveSpace::twelve_tone();
+    assert_eq!(split_floor(-1, twelve), (-1, 11));
+    assert_eq!(split_floor(-12, twelve), (-1, 0));
+    assert_eq!(split_floor(-13, twelve), (-2, 11));
+    assert_eq!(split_floor(25, twelve), (2, 1));
+
+    let spaces = [1, 2, 5, 12, 19, 31, u16::MAX];
+    let values = [
+        i64::MIN + 1,
+        -1_000_000_003,
+        -2048,
+        -13,
+        -12,
+        -1,
+        0,
+        1,
+        11,
+        12,
+        13,
+        2048,
+        1_000_000_003,
+        i64::MAX,
+    ];
+    for divisions in spaces {
+        let space = OctaveSpace::new(divisions).unwrap();
+        let width = i128::from(divisions);
+        for value in values {
+            let (octave, class) = split_floor(value, space);
+            assert!(class < divisions);
+            assert_eq!(
+                i128::from(octave) * width + i128::from(class),
+                i128::from(value)
+            );
+            assert_eq!(fold(value, space), class);
+        }
+    }
+}
+
+#[test]
+fn folded_distances_handle_negative_and_large_inputs() {
+    let pairs = [
+        (-25, -13),
+        (-13, -1),
+        (-13, 14),
+        (-1, -13),
+        (0, 7),
+        (7, 0),
+        (1_000_000_003, -1_000_000_003),
+    ];
+    for divisions in [1, 5, 12, 19, 31, u16::MAX] {
+        let space = OctaveSpace::new(divisions).unwrap();
+        for (a, b) in pairs {
+            let signed = folded_distance(a, b, space, TieDirection::Ascending);
+            let unsigned = folded_unsigned_distance(a, b, space);
+            assert_eq!(fold(a + i64::from(signed), space), fold(b, space));
+            assert_eq!(signed.unsigned_abs() as u16, unsigned);
+            assert!(i32::from(unsigned) <= i32::from(divisions / 2 + divisions % 2));
+        }
+    }
+}
+
+#[test]
+fn folded_distance_uses_explicit_tie_policy() {
+    let twelve = OctaveSpace::twelve_tone();
+    assert_eq!(folded_distance(0, 6, twelve, TieDirection::Ascending), 6);
+    assert_eq!(folded_distance(0, 6, twelve, TieDirection::Descending), -6);
+    assert_eq!(folded_unsigned_distance(0, 6, twelve), 6);
+
+    let even_space = OctaveSpace::new(20).unwrap();
+    assert_eq!(
+        folded_distance(-45, 25, even_space, TieDirection::Ascending),
+        10
+    );
+    assert_eq!(
+        folded_distance(-45, 25, even_space, TieDirection::Descending),
+        -10
+    );
+}
+```
+
+### `feature/sim-music/exact-music-analysis-and-transform`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-analysis/src/tests.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: exact music analysis and transform exposes checked analysis descriptors.
+
+use sim_lib_music_core::{Articulation, Channel, Note, PianoRoll, TimedNote};
+use sim_lib_pitch_core::{Pitch, PitchClass};
+
+use crate::{
+    ChordWindowMode, DiffRoll, chord_windows_from_diff_roll, chord_windows_from_piano_roll,
+};
+
+fn note(midi: u8, onset: Ratio<i64>, duration: Ratio<i64>) -> TimedNote {
+    TimedNote {
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+#[test]
+fn diff_roll_marks_started_sounding_ended_and_slurred() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 2)),
+        note(64, Ratio::new(1, 4), Ratio::new(1, 2)),
+    ])
+    .expect("roll");
+    let diff = DiffRoll::from_piano_roll(&roll);
+    assert_eq!(
+        diff.frames[0].started.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+    assert_eq!(diff.frames[1].sounding.to_pitches().len(), 2);
+    assert_eq!(
+        diff.frames[1].slurred.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+    assert_eq!(
+        diff.frames[2].ended.to_pitches(),
+        vec![Pitch::from_midi(60)]
+    );
+}
+
+#[test]
+fn sounding_and_starting_modes_differ_on_sustained_chord() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 1)),
+        note(64, Ratio::new(0, 1), Ratio::new(1, 1)),
+        note(67, Ratio::new(1, 2), Ratio::new(1, 2)),
+    ])
+    .expect("roll");
+    let sounding = chord_windows_from_piano_roll(&roll, ChordWindowMode::SoundingNotes);
+    let starting = chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes);
+    assert_ne!(sounding, starting);
+    assert_eq!(
+        starting[1].pitch_class_mask,
+        sim_lib_pitch_set::PitchClassMask::from_pitch_classes(&[PitchClass::G])
+    );
+    assert_eq!(sounding[1].pitch_class_mask.count_bits(), 3);
+}
+
+#[test]
+fn diff_roll_and_window_extraction_agree() {
+    let roll = PianoRoll::new(vec![
+        note(60, Ratio::new(0, 1), Ratio::new(1, 4)),
+        note(67, Ratio::new(1, 4), Ratio::new(1, 4)),
+    ])
+    .expect("roll");
+    let diff = DiffRoll::from_piano_roll(&roll);
+    assert_eq!(
+        chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes),
+        chord_windows_from_diff_roll(&diff, ChordWindowMode::StartingNotes)
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-transform/src/tests/remap` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-transform/src/tests/remap.rs`:
+
+```rust
+use sim_lib_music_core::{Music, Time};
+use sim_lib_pitch_core::{OctaveSpace, Pitch, PitchClass};
+use sim_lib_pitch_scale::{Mode, Scale};
+
+use crate::{
+    MapCompositionWitness, MapError, MapWitness, PitchMap, PitchMapPolicy, PitchRemap,
+    TransformDiagnosticCode, TuningRemap, compose_pitch_map_report, compose_pitch_maps, quarter,
+    simple_melody,
+};
+
+// conformance: partial pitch maps compose and expose reversible witnesses.
+
+fn roll_midis(music: &Music) -> Vec<u8> {
+    let Music::PianoRoll(roll) = music else {
+        panic!("piano roll");
+    };
+    roll.items
+        .iter()
+        .map(|item| item.note.pitch.to_midi().expect("midi pitch"))
+        .collect()
+}
+
+fn sparse_map(pairs: &[(u16, i32)], policy: PitchMapPolicy) -> PitchMap {
+    let domain = OctaveSpace::twelve_tone();
+    let mut image = vec![None; usize::from(domain.len())];
+    for (source, target) in pairs {
+        image[usize::from(*source)] = Some(*target);
+    }
+    PitchMap::new(domain, image, policy).expect("pitch map")
+}
+
+#[test]
+fn scale_pitch_map_policies_report_holes_and_inverse_witnesses() {
+    let scale = Scale::major(PitchClass::C);
+    let c_sharp = Pitch {
+        class: PitchClass::CS,
+        octave: 4,
+    };
+
+    let nearest = PitchMap::from_scale(scale, PitchMapPolicy::Nearest);
+    let nearest_result = nearest.map_pitch(c_sharp).expect("nearest");
+    assert_eq!(nearest_result.pitch, Pitch::from_midi(62));
+    assert_eq!(
+        nearest_result.witness,
+        MapWitness::Nudged {
+            source_class: 1,
+            chosen_class: 2,
+            target_value: 62,
+            policy: PitchMapPolicy::Nearest,
+        }
+    );
+
+    let clamp = PitchMap::from_scale(scale, PitchMapPolicy::Clamp);
+    let clamp_result = clamp.map_pitch(c_sharp).expect("clamp");
+    assert_eq!(clamp_result.pitch, Pitch::from_midi(60));
+    assert_eq!(
+        clamp_result.witness,
+        MapWitness::Nudged {
+            source_class: 1,
+            chosen_class: 0,
+            target_value: 60,
+            policy: PitchMapPolicy::Clamp,
+        }
+    );
+
+    let unmapped = PitchMap::from_scale(scale, PitchMapPolicy::Unmapped);
+    let unmapped_result = unmapped.map_pitch(c_sharp).expect("unmapped");
+    assert_eq!(unmapped_result.pitch, c_sharp);
+    assert_eq!(
+        unmapped_result.witness,
+        MapWitness::Unmapped { source_class: 1 }
+    );
+
+    let rejected = PitchMap::from_scale(scale, PitchMapPolicy::Reject)
+        .map_pitch(c_sharp)
+        .unwrap_err();
+    assert_eq!(rejected, MapError::Unmapped { class: 1 });
+
+    let inverses = nearest.inverse_witnesses();
+    assert_eq!(inverses.len(), 7);
+    assert!(nearest.has_partial_inverse());
+}
+
+#[test]
+fn scale_derivation_maps_expose_their_partiality() {
+    let derivations = [
+        (Scale::major(PitchClass::C), 7),
+        (Scale::new(PitchClass::A, Mode::MinorNatural), 7),
+        (Scale::whole_tone(PitchClass::C), 6),
+        (Scale::chromatic(PitchClass::C), 12),
+    ];
+
+    for (scale, mapped_count) in derivations {
+        let map = PitchMap::from_scale(scale, PitchMapPolicy::Reject);
+        assert_eq!(map.inverse_witnesses().len(), mapped_count);
+        assert_eq!(
+            map.image.iter().filter(|target| target.is_some()).count(),
+            mapped_count
+        );
+        assert_eq!(map.is_partial(), mapped_count != 12);
+    }
+}
+
+#[test]
+fn composed_pitch_maps_are_associative_where_defined_and_report_loss() {
+    let a = sparse_map(&[(0, 2), (1, 3), (11, 12)], PitchMapPolicy::Reject);
+    let b = sparse_map(&[(0, 0), (2, 4)], PitchMapPolicy::Reject);
+    let c = sparse_map(&[(0, 2), (4, 7)], PitchMapPolicy::Reject);
+
+    let ab = compose_pitch_maps(&a, &b).expect("a then b");
+    let bc = compose_pitch_maps(&b, &c).expect("b then c");
+    let left = compose_pitch_maps(&ab, &c).expect("(a b) c");
+    let right = compose_pitch_maps(&a, &bc).expect("a (b c)");
+    assert_eq!(left.image, right.image);
+
+    let report = compose_pitch_map_report(&a, &b).expect("report");
+    assert!(
+        report
+            .witnesses
+            .contains(&MapCompositionWitness::Undefined {
+                source_class: 1,
+                reason: "right map has no image",
+            })
+    );
+    assert!(report.witnesses.contains(&MapCompositionWitness::Direct {
+        source_class: 0,
+        via_value: 2,
+        target_value: 4,
+    }));
+}
+
+#[test]
+fn pitch_remap_map_variant_preserves_time_and_reports_rejections() {
+    let melody = simple_melody(&[
+        (60, quarter()),
+        (61, Time::from_integer(2)),
+        (62, quarter()),
+    ]);
+    let scale = Scale::major(PitchClass::C);
+    let nearest = PitchRemap::Map(PitchMap::from_scale(scale, PitchMapPolicy::Nearest))
+        .apply_report(&melody)
+        .expect("nearest report");
+    assert_eq!(roll_midis(&nearest.music), vec![60, 62, 62]);
+    assert!(!nearest.has_diagnostics());
+
+    let rejected = PitchRemap::Map(PitchMap::from_scale(scale, PitchMapPolicy::Reject))
+        .apply_report(&melody)
+        .expect("reject report");
+    assert_eq!(roll_midis(&rejected.music), vec![60, 61, 62]);
+    assert_eq!(rejected.diagnostics.len(), 1);
+    assert_eq!(
+        rejected.diagnostics[0].code,
+        TransformDiagnosticCode::UnsupportedMapping
+    );
+
+    let Music::PianoRoll(roll) = nearest.music else {
+        panic!("piano roll");
+    };
+    assert_eq!(roll.items[1].note.duration, Time::from_integer(2));
+}
+
+#[test]
+fn map_helpers_cover_transpose_inversion_rotation_and_negative_octaves() {
+    let transpose = PitchMap::chromatic_delta(2);
+    assert_eq!(
+        transpose.map_pitch(Pitch::from_midi(60)).unwrap().pitch,
+        Pitch::from_midi(62)
+    );
+
+    let inversion = PitchMap::inversion(PitchClass::C);
+    assert_eq!(
+        inversion.map_pitch(Pitch::from_midi(64)).unwrap().pitch,
+        Pitch::from_midi(68)
+    );
+
+    let rotation = PitchMap::rotation(OctaveSpace::twelve_tone(), 5, PitchMapPolicy::Reject);
+    assert_eq!(
+        rotation.map_pitch(Pitch::from_midi(60)).unwrap().pitch,
+        Pitch::from_midi(65)
+    );
+
+    let tuning = TuningRemap::new(200).pitch_map();
+    assert_eq!(
+        tuning.map_pitch(Pitch::from_midi(60)).unwrap().pitch,
+        Pitch::from_midi(62)
+    );
+    let tuning_then_rotation = compose_pitch_maps(&tuning, &rotation).unwrap();
+    assert_eq!(
+        tuning_then_rotation
+            .map_pitch(Pitch::from_midi(60))
+            .unwrap()
+            .pitch,
+        Pitch::from_midi(67)
+    );
+    assert_eq!(
+        PitchRemap::PitchClass {
+            from: PitchClass::C,
+            to: PitchClass::G,
+        }
+        .as_pitch_map()
+        .unwrap()
+        .map_pitch(Pitch::from_midi(60))
+        .unwrap()
+        .pitch,
+        Pitch::from_midi(67)
+    );
+
+    let negative = sparse_map(&[(11, 12)], PitchMapPolicy::Reject);
+    assert_eq!(
+        negative
+            .map_pitch(Pitch::from_semitone(-1))
+            .expect("negative octave")
+            .pitch,
+        Pitch::from_semitone(0)
+    );
+}
+```
+
+### `feature/sim-music/audio-lift-and-render`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+// conformance: audio lift and render workflows expose checked audio analysis descriptors.
+
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, install_sound_audio_lift_lib,
+};
+
+#[cfg(feature = "sound-music")]
+use crate::{lifted_notes_to_counterpoint, lifted_notes_to_diff_roll, lifted_notes_to_piano_roll};
+
+#[test]
+fn synthetic_a4_sine_lifts_with_high_confidence() {
+    let samples = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let note = report
+        .value
+        .notes
+        .iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .expect("lifted note");
+    assert_eq!(note.pitch.to_midi(), Some(69));
+    assert!(note.confidence >= 0.75, "{note:?}");
+}
+
+#[test]
+fn simultaneous_sines_lift_to_two_pitch_candidates() {
+    let samples = sine_mix(&[(440.0, 1.0), (659.25, 0.8)], 48_000, 0.25, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = FftPeakLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let frame = report
+        .value
+        .frames
+        .iter()
+        .max_by_key(|frame| frame.pitch_candidates.len())
+        .expect("frame");
+    let lifted = frame
+        .pitch_candidates
+        .iter()
+        .filter_map(|candidate| candidate.pitch.to_midi())
+        .collect::<Vec<_>>();
+    assert!(lifted.contains(&69), "{lifted:?}");
+    assert!(lifted.contains(&76), "{lifted:?}");
+}
+
+#[test]
+fn noisy_audio_has_lower_confidence() {
+    let tuning = EqualTemperament::default();
+    let clean = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.0);
+    let noisy = sine_mix(&[(440.0, 1.0)], 48_000, 0.25, 0.35);
+    let lifter = HarmonicCombLifter::default();
+    let clean_note = lifter
+        .lift_report(&clean, 48_000, &tuning)
+        .unwrap()
+        .value
+        .notes
+        .into_iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .unwrap();
+    let noisy_note = lifter
+        .lift_report(&noisy, 48_000, &tuning)
+        .unwrap()
+        .value
+        .notes
+        .into_iter()
+        .max_by(|left, right| left.confidence.total_cmp(&right.confidence))
+        .unwrap();
+    assert!(noisy_note.confidence < clean_note.confidence);
+}
+
+#[test]
+fn note_candidates_include_onset_and_duration_estimates() {
+    let samples = stepped_sine(440.0, 48_000, 0.10, 0.10, 0.10);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter {
+        opts: AudioLiftOptions {
+            min_note_windows: 1,
+            ..AudioLiftOptions::default()
+        },
+    }
+    .lift_report(&samples, 48_000, &tuning)
+    .unwrap();
+    assert!(!report.value.notes.is_empty());
+    let note = &report.value.notes[0];
+    assert!(note.onset_sample > 0);
+    assert!(note.duration_samples > 0);
+}
+
+#[cfg(feature = "sound-music")]
+#[test]
+fn lifted_notes_convert_to_music_views() {
+    let samples = sine_mix(&[(440.0, 1.0)], 48_000, 0.20, 0.0);
+    let tuning = EqualTemperament::default();
+    let report = HarmonicCombLifter::default()
+        .lift_report(&samples, 48_000, &tuning)
+        .unwrap();
+    let roll = lifted_notes_to_piano_roll(&report.value.notes).unwrap();
+    assert!(!roll.items.is_empty());
+    let diff = lifted_notes_to_diff_roll(&report.value.notes).unwrap();
+    assert!(!diff.frames.is_empty());
+    let counterpoint = lifted_notes_to_counterpoint(&report.value.notes).unwrap();
+    assert!(!counterpoint.voices.is_empty());
+}
+
+#[test]
+fn empty_audio_returns_diagnostics_and_no_notes() {
+    let tuning = EqualTemperament::default();
+    let report = FftPeakLifter::default()
+        .lift_report(&[], 48_000, &tuning)
+        .unwrap();
+    assert!(report.value.notes.is_empty());
+    assert!(!report.diagnostics.is_empty());
+}
+
+#[test]
+fn install_runtime_is_idempotent_and_registers_audio_lifters() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+
+    let loaded = cx
+        .registry()
+        .lib(&Symbol::new("sound-audio-lift"))
+        .expect("sound-audio-lift lib");
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named("AudioLifter")
+            && record.symbol == Symbol::qualified("sound", "FftPeakLifter")
+    }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named("AudioLifter")
+            && record.symbol == Symbol::qualified("sound", "HarmonicCombLifter")
+    }));
+}
+
+fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, seconds: f64, noise: f64) -> Vec<f32> {
+    let samples = (seconds * f64::from(sample_rate)).round() as usize;
+    (0..samples)
+        .map(|index| {
+            let t = index as f64 / f64::from(sample_rate);
+            let signal = tones
+                .iter()
+                .map(|(hz, gain)| (std::f64::consts::TAU * hz * t).sin() * gain)
+                .sum::<f64>();
+            let hiss = if noise > 0.0 {
+                noise * pseudo_noise(index)
+            } else {
+                0.0
+            };
+            (signal + hiss).clamp(-1.0, 1.0) as f32
+        })
+        .collect()
+}
+
+fn stepped_sine(hz: f64, sample_rate: u32, lead_silence: f64, tone: f64, tail: f64) -> Vec<f32> {
+    let silence = vec![0.0_f32; (lead_silence * f64::from(sample_rate)).round() as usize];
+    let mut out = silence;
+    out.extend(sine_mix(&[(hz, 1.0)], sample_rate, tone, 0.0));
+    out.extend(vec![
+        0.0_f32;
+        (tail * f64::from(sample_rate)).round() as usize
+    ]);
+    out
+}
+
+fn pseudo_noise(index: usize) -> f64 {
+    let x = ((index as u64).wrapping_mul(1103515245).wrapping_add(12345) % 65536) as f64;
+    (x / 32768.0) - 1.0
 }
 ```

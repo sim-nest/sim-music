@@ -1,9 +1,14 @@
 use std::time::Duration;
 
 use sim_codec::{DomainForm, DomainFormError, DomainValue, parse_domain_form};
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{
+    Amplitude, Envelope, EnvelopeShape, Frequency, Partial, PartialTag, Phase, Tone,
+};
 use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
-use sim_lib_sound_timbre::{AttackKind, Filter, Timbre, TimbreMeta, TimbreRecipe};
+use sim_lib_sound_timbre::{
+    AttackKind, Filter, MergePolicy, SampleInterpolation, SamplePitchPolicy, SampledPartial,
+    Timbre, TimbreMeta, TimbreRecipe,
+};
 
 use crate::SoundShapeError;
 
@@ -29,29 +34,63 @@ impl From<DomainFormError> for SoundShapeError {
 /// Decodes a [`Frequency`] from its sound-shape text form.
 pub fn decode_frequency(value: &str) -> Result<Frequency, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Frequency(parse_f64(&field_atom(&node, "hz")?)?))
+    Frequency::new(parse_f64(&field_atom(&node, "hz")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes an [`Amplitude`] from its sound-shape text form.
 pub fn decode_amplitude(value: &str) -> Result<Amplitude, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Amplitude(parse_f64(&field_atom(&node, "linear")?)?))
+    Amplitude::new(parse_f64(&field_atom(&node, "linear")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes a [`Phase`] from its sound-shape text form.
 pub fn decode_phase(value: &str) -> Result<Phase, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Phase(parse_f64(&field_atom(&node, "radians")?)?))
+    Phase::new(parse_f64(&field_atom(&node, "radians")?)?)
+        .map_err(|_| SoundShapeError::InvalidSoundShape)
 }
 
 /// Decodes a [`Partial`] from its sound-shape text form.
 pub fn decode_partial(value: &str) -> Result<Partial, SoundShapeError> {
     let node = parse_node(value)?;
-    Ok(Partial {
-        frequency: decode_frequency(&field_form_text(&node, "frequency")?)?,
-        amplitude: decode_amplitude(&field_form_text(&node, "amplitude")?)?,
-        phase: decode_phase(&field_form_text(&node, "phase")?)?,
-    })
+    Partial::tagged(
+        decode_frequency(&field_form_text(&node, "frequency")?)?,
+        decode_amplitude(&field_form_text(&node, "amplitude")?)?,
+        decode_phase(&field_form_text(&node, "phase")?)?,
+        decode_partial_tag_form(&node)?,
+    )
+    .map_err(|_| SoundShapeError::InvalidSoundShape)
+}
+
+fn decode_partial_tag_form(node: &DomainForm) -> Result<PartialTag, SoundShapeError> {
+    let Some(value) = node.field("tag") else {
+        return Ok(PartialTag::Source);
+    };
+    let tag = value.as_form()?;
+    match field_atom(tag, "kind")?.as_str() {
+        "source" => {
+            if tag.field("index").is_some() {
+                Err(SoundShapeError::InvalidSoundShape)
+            } else {
+                Ok(PartialTag::Source)
+            }
+        }
+        "harmonic" => PartialTag::harmonic(
+            field_atom(tag, "index")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+        )
+        .map_err(|_| SoundShapeError::InvalidSoundShape),
+        "undertone" => PartialTag::undertone(
+            field_atom(tag, "index")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+        )
+        .map_err(|_| SoundShapeError::InvalidSoundShape),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
 }
 
 /// Decodes an [`EnvelopeShape`] from its sound-shape text form.
@@ -239,11 +278,79 @@ pub fn decode_timbre_recipe(value: &str) -> Result<TimbreRecipe, SoundShapeError
                 .map(|value| parse_f64(&value))
                 .collect::<Result<Vec<_>, _>>()?,
         }),
+        "TaggedPartials" => Ok(TimbreRecipe::TaggedPartials {
+            partials: decode_sampled_partial_list(&node)?,
+        }),
+        "HarmonicExpansion" => Ok(TimbreRecipe::HarmonicExpansion {
+            partials: field_atom(&node, "partials")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            amplitude_decay: parse_f64(&field_atom(&node, "amplitude_decay")?)?,
+            phase_step: parse_f64(&field_atom(&node, "phase_step")?)?,
+        }),
+        "UndertoneExpansion" => Ok(TimbreRecipe::UndertoneExpansion {
+            partials: field_atom(&node, "partials")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            amplitude_decay: parse_f64(&field_atom(&node, "amplitude_decay")?)?,
+            phase_step: parse_f64(&field_atom(&node, "phase_step")?)?,
+        }),
+        "Sampled" => Ok(TimbreRecipe::Sampled {
+            root: decode_frequency(&field_form_text(&node, "root")?)?,
+            partials: decode_sampled_partial_list(&node)?,
+            interpolation: decode_sample_interpolation(&field_atom(&node, "interpolation")?)?,
+            pitch_policy: decode_sample_pitch_policy(&field_atom(&node, "pitch_policy")?)?,
+        }),
         "Layered" => Ok(TimbreRecipe::Layered {
             primary: Box::new(decode_timbre_recipe(&field_form_text(&node, "primary")?)?),
             secondary: Box::new(decode_timbre_recipe(&field_form_text(&node, "secondary")?)?),
             mix: parse_f64(&field_atom(&node, "mix")?)?,
+            policy: decode_merge_policy(&field_atom(&node, "policy")?)?,
         }),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_sampled_partial_list(node: &DomainForm) -> Result<Vec<SampledPartial>, SoundShapeError> {
+    field_list(node, "partials")?
+        .iter()
+        .map(DomainValue::render_text)
+        .map(|text| decode_sampled_partial(&text))
+        .collect::<Result<Vec<_>, _>>()
+}
+
+fn decode_sampled_partial(value: &str) -> Result<SampledPartial, SoundShapeError> {
+    let node = parse_node(value)?;
+    Ok(SampledPartial {
+        ratio: parse_f64(&field_atom(&node, "ratio")?)?,
+        amplitude: decode_amplitude(&field_form_text(&node, "amplitude")?)?,
+        phase: decode_phase(&field_form_text(&node, "phase")?)?,
+        tag: decode_partial_tag_form(&node)?,
+    })
+}
+
+fn decode_sample_interpolation(value: &str) -> Result<SampleInterpolation, SoundShapeError> {
+    match value {
+        "Step" => Ok(SampleInterpolation::Step),
+        "Linear" => Ok(SampleInterpolation::Linear),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_sample_pitch_policy(value: &str) -> Result<SamplePitchPolicy, SoundShapeError> {
+    match value {
+        "Reject" => Ok(SamplePitchPolicy::Reject),
+        "Clamp" => Ok(SamplePitchPolicy::Clamp),
+        "Resample" => Ok(SamplePitchPolicy::Resample),
+        _ => Err(SoundShapeError::InvalidSoundShape),
+    }
+}
+
+fn decode_merge_policy(value: &str) -> Result<MergePolicy, SoundShapeError> {
+    match value {
+        "PreservePartials" => Ok(MergePolicy::PreservePartials),
+        "SumCoincidentPreferLoudestPhase" => Ok(MergePolicy::SumCoincidentPreferLoudestPhase),
+        "SumCoincidentResetPhase" => Ok(MergePolicy::SumCoincidentResetPhase),
         _ => Err(SoundShapeError::InvalidSoundShape),
     }
 }

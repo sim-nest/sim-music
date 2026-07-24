@@ -83,13 +83,14 @@ fn shape_specs() -> Vec<ShapeSpec> {
         (
             Symbol::qualified("sound", "Partial"),
             "Partial",
-            vec!["frequency/amplitude/phase triple"],
+            vec!["frequency/amplitude/phase/tag component"],
             domain_form_shape(
                 "Partial",
                 vec![
                     form_field("frequency"),
                     form_field("amplitude"),
                     form_field("phase"),
+                    optional_form_field("tag"),
                 ],
             ),
         ),
@@ -358,6 +359,12 @@ fn atom_field(key: &'static str) -> TableFieldSpec {
 
 fn form_field(key: &'static str) -> TableFieldSpec {
     field(key, Arc::new(ExprKindShape::new(ExprKind::Map)))
+}
+
+fn optional_form_field(key: &'static str) -> TableFieldSpec {
+    let mut spec = form_field(key);
+    spec.required = false;
+    spec
 }
 
 fn list_field(key: &'static str) -> TableFieldSpec {

@@ -1,8 +1,11 @@
 use std::time::Duration;
 
-use sim_lib_sound_core::{Amplitude, Envelope, EnvelopeShape, Frequency, Partial, Phase, Tone};
+use sim_lib_sound_core::{Amplitude, Envelope, Frequency, PartialTag, Phase, Tone};
 
-use crate::Filter;
+use crate::{
+    Filter, TimbreCache, TimbreCacheKey,
+    render::{default_env, recipe_fingerprint, render_recipe, render_recipe_lossy},
+};
 
 /// The character of a timbre's onset.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -29,6 +32,60 @@ pub struct TimbreMeta {
     /// Coarse instrument family label.
     pub category: String,
 }
+
+/// Interpolation curve used between neighboring sampled partial breakpoints.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum SampleInterpolation {
+    /// Use the lower breakpoint unchanged until the next breakpoint.
+    Step,
+    /// Linearly interpolate amplitude and phase between breakpoints.
+    Linear,
+}
+
+/// Policy applied when a sampled timbre is requested away from its root pitch.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum SamplePitchPolicy {
+    /// Reject non-root render requests through [`Timbre::try_render`].
+    Reject,
+    /// Clamp to the declared root pitch while preserving partial ratios.
+    Clamp,
+    /// Resample the declared spectrum by the requested/root frequency ratio.
+    Resample,
+}
+
+/// Amplitude and phase captured at one normalized frequency ratio.
+#[derive(Copy, Clone, Debug, PartialEq)]
+pub struct SampledPartial {
+    /// Frequency ratio relative to the sampled root pitch.
+    pub ratio: f64,
+    /// Linear amplitude at this breakpoint.
+    pub amplitude: Amplitude,
+    /// Starting phase at this breakpoint.
+    pub phase: Phase,
+    /// Semantic source tag retained when the sample is rendered.
+    pub tag: PartialTag,
+}
+
+/// Error raised when a timbre cannot be rendered under its declared policy.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum TimbreRenderError {
+    /// A sampled timbre using [`SamplePitchPolicy::Reject`] was requested at a
+    /// pitch other than its root.
+    SamplePitchRejected,
+    /// A sampled timbre had no usable partial breakpoints.
+    EmptySample,
+}
+
+impl std::fmt::Display for TimbreRenderError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::SamplePitchRejected => f.write_str("sampled timbre rejects non-root pitch"),
+            Self::EmptySample => f.write_str("sampled timbre has no usable partials"),
+        }
+    }
+}
+
+impl std::error::Error for TimbreRenderError {}
 
 /// A synthesis recipe describing how to build the partials of a tone.
 #[derive(Clone, Debug, PartialEq)]
@@ -72,6 +129,41 @@ pub enum TimbreRecipe {
         /// Frequency ratios of the inharmonic partials.
         ratios: Vec<f64>,
     },
+    /// Expands explicitly tagged harmonic or undertone partials.
+    TaggedPartials {
+        /// Root-normalized source partials.
+        partials: Vec<SampledPartial>,
+    },
+    /// Harmonic expansion with caller-declared amplitude and phase policy.
+    HarmonicExpansion {
+        /// Number of harmonic partials.
+        partials: usize,
+        /// Amplitude multiplier applied at each harmonic number.
+        amplitude_decay: f64,
+        /// Phase advance in radians per harmonic number.
+        phase_step: f64,
+    },
+    /// Undertone expansion with caller-declared amplitude and phase policy.
+    UndertoneExpansion {
+        /// Number of undertone partials.
+        partials: usize,
+        /// Amplitude multiplier applied at each undertone number.
+        amplitude_decay: f64,
+        /// Phase advance in radians per undertone number.
+        phase_step: f64,
+    },
+    /// Root-normalized sampled spectrum with declared interpolation and pitch
+    /// policy.
+    Sampled {
+        /// Root pitch for the captured sample.
+        root: Frequency,
+        /// Root-normalized partial breakpoints.
+        partials: Vec<SampledPartial>,
+        /// Interpolation applied across the breakpoints.
+        interpolation: SampleInterpolation,
+        /// Out-of-range pitch policy.
+        pitch_policy: SamplePitchPolicy,
+    },
     /// A mix of two recipes.
     Layered {
         /// Primary recipe, weighted by `1.0 - mix`.
@@ -80,7 +172,21 @@ pub enum TimbreRecipe {
         secondary: Box<TimbreRecipe>,
         /// Blend ratio in `0.0..=1.0`.
         mix: f64,
+        /// Phase and amplitude policy used when combining coincident partials.
+        policy: MergePolicy,
     },
+}
+
+/// How partials are combined when two timbres are layered.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum MergePolicy {
+    /// Keep all partials in source order after applying the layer amplitudes.
+    PreservePartials,
+    /// Sum amplitudes for matching frequency/tag pairs and keep the stronger
+    /// partial's phase.
+    SumCoincidentPreferLoudestPhase,
+    /// Sum amplitudes for matching frequency/tag pairs and reset phase to zero.
+    SumCoincidentResetPhase,
 }
 
 /// A named instrument timbre: a synthesis recipe plus a default envelope,
@@ -103,17 +209,55 @@ impl Timbre {
     /// Renders a [`Tone`] at `frequency` for `duration`, applying the default
     /// envelope and the filter chain.
     pub fn render(&self, frequency: Frequency, duration: Duration) -> Tone {
-        let mut tone = render_recipe(&self.recipe, frequency, duration);
+        self.try_render(frequency, duration)
+            .unwrap_or_else(|_| render_recipe_lossy(&self.recipe, frequency, duration))
+    }
+
+    /// Renders a [`Tone`], returning an error when the recipe's declared policy
+    /// rejects the requested pitch.
+    pub fn try_render(
+        &self,
+        frequency: Frequency,
+        duration: Duration,
+    ) -> Result<Tone, TimbreRenderError> {
+        let mut tone = render_recipe(&self.recipe, frequency, duration)?;
         tone.envelope = self.default_envelope.clone();
         for filter in &self.filters {
             tone = filter.apply(tone);
         }
-        tone
+        Ok(tone)
+    }
+
+    /// Renders with a caller-owned deterministic cache.
+    pub fn render_cached(
+        &self,
+        frequency: Frequency,
+        duration: Duration,
+        cache: &mut TimbreCache,
+    ) -> Result<Tone, TimbreRenderError> {
+        let key = TimbreCacheKey {
+            name: self.name.clone(),
+            recipe: recipe_fingerprint(&self.recipe),
+            frequency_bits: frequency.0.to_bits(),
+            duration_nanos: duration.as_nanos(),
+        };
+        if let Some(tone) = cache.get(&key) {
+            return Ok(tone);
+        }
+        let tone = self.try_render(frequency, duration)?;
+        cache.insert(key, tone.clone());
+        Ok(tone)
     }
 
     /// Returns a hybrid timbre layering `self` and `other` at blend ratio
     /// `mix`, concatenating their filter chains.
     pub fn layer(self, other: Timbre, mix: f64) -> Timbre {
+        self.layer_with_policy(other, mix, MergePolicy::PreservePartials)
+    }
+
+    /// Returns a hybrid timbre layering `self` and `other` with an explicit
+    /// partial phase/amplitude merge policy.
+    pub fn layer_with_policy(self, other: Timbre, mix: f64, policy: MergePolicy) -> Timbre {
         let mut filters = self.filters.clone();
         filters.extend(other.filters.clone());
         Timbre {
@@ -122,6 +266,7 @@ impl Timbre {
                 primary: Box::new(self.recipe),
                 secondary: Box::new(other.recipe),
                 mix,
+                policy,
             },
             default_envelope: self.default_envelope,
             metadata: TimbreMeta {
@@ -260,6 +405,69 @@ pub fn bell_inharmonic(ratios: &[f64]) -> Timbre {
     }
 }
 
+/// Returns a timbre from explicit root-normalized tagged partials.
+pub fn tagged_partials(partials: &[SampledPartial]) -> Timbre {
+    harmonic_timbre(
+        "tagged_partials",
+        TimbreRecipe::TaggedPartials {
+            partials: partials.to_vec(),
+        },
+        2.6,
+    )
+}
+
+/// Returns a harmonic expansion with tagged partials.
+pub fn harmonic_expansion(partials: usize, amplitude_decay: f64, phase_step: f64) -> Timbre {
+    harmonic_timbre(
+        "harmonic_expansion",
+        TimbreRecipe::HarmonicExpansion {
+            partials,
+            amplitude_decay,
+            phase_step,
+        },
+        3.2,
+    )
+}
+
+/// Returns an undertone expansion with tagged partials.
+pub fn undertone_expansion(partials: usize, amplitude_decay: f64, phase_step: f64) -> Timbre {
+    harmonic_timbre(
+        "undertone_expansion",
+        TimbreRecipe::UndertoneExpansion {
+            partials,
+            amplitude_decay,
+            phase_step,
+        },
+        1.8,
+    )
+}
+
+/// Returns a root-normalized sampled timbre.
+pub fn sampled_timbre(
+    root: Frequency,
+    partials: &[SampledPartial],
+    interpolation: SampleInterpolation,
+    pitch_policy: SamplePitchPolicy,
+) -> Timbre {
+    Timbre {
+        name: "sampled_timbre".to_owned(),
+        recipe: TimbreRecipe::Sampled {
+            root,
+            partials: partials.to_vec(),
+            interpolation,
+            pitch_policy,
+        },
+        default_envelope: default_env(),
+        metadata: TimbreMeta {
+            brightness: 2.5,
+            roughness: 0.1,
+            attack_kind: AttackKind::Soft,
+            category: "sampled".to_owned(),
+        },
+        filters: Vec::new(),
+    }
+}
+
 fn harmonic_timbre(name: &str, recipe: TimbreRecipe, brightness: f64) -> Timbre {
     Timbre {
         name: name.to_owned(),
@@ -273,89 +481,4 @@ fn harmonic_timbre(name: &str, recipe: TimbreRecipe, brightness: f64) -> Timbre 
         },
         filters: Vec::new(),
     }
-}
-
-fn render_recipe(recipe: &TimbreRecipe, frequency: Frequency, duration: Duration) -> Tone {
-    match recipe {
-        TimbreRecipe::PureSine => Tone::sine(frequency, duration),
-        TimbreRecipe::Sawtooth { partials } => Tone::sawtooth(frequency, duration, *partials),
-        TimbreRecipe::Square { partials } => Tone::square(frequency, duration, *partials),
-        TimbreRecipe::Triangle { partials } => Tone::triangle(frequency, duration, *partials),
-        TimbreRecipe::OrganPipe { stops } => {
-            let partials = stops
-                .iter()
-                .enumerate()
-                .map(|(index, stop)| Partial {
-                    frequency: Frequency(frequency.0 * stop.max(0.25)),
-                    amplitude: Amplitude(1.0 / (index + 1) as f64),
-                    phase: Phase(0.0),
-                })
-                .collect();
-            Tone::from_partials(partials, default_env(), duration).expect("organ tone")
-        }
-        TimbreRecipe::KarplusStrong { damping } => {
-            let partials = (1..=8)
-                .map(|n| Partial {
-                    frequency: Frequency(frequency.0 * n as f64),
-                    amplitude: Amplitude(damping.powi(n).clamp(0.0, 1.0)),
-                    phase: Phase(0.0),
-                })
-                .collect();
-            Tone::from_partials(partials, default_env(), duration).expect("karplus strong tone")
-        }
-        TimbreRecipe::FmPair {
-            modulator_ratio,
-            index,
-        } => {
-            let partials = vec![
-                Partial {
-                    frequency,
-                    amplitude: Amplitude(1.0),
-                    phase: Phase(0.0),
-                },
-                Partial {
-                    frequency: Frequency(frequency.0 * modulator_ratio),
-                    amplitude: Amplitude((index / 2.0).max(0.0)),
-                    phase: Phase(0.0),
-                },
-                Partial {
-                    frequency: Frequency(frequency.0 * (1.0 + modulator_ratio)),
-                    amplitude: Amplitude((index / 3.0).max(0.0)),
-                    phase: Phase(0.0),
-                },
-            ];
-            Tone::from_partials(partials, default_env(), duration).expect("fm tone")
-        }
-        TimbreRecipe::BellInharmonic { ratios } => {
-            let partials = ratios
-                .iter()
-                .enumerate()
-                .map(|(index, ratio)| Partial {
-                    frequency: Frequency(frequency.0 * ratio),
-                    amplitude: Amplitude(1.0 / (index + 1) as f64),
-                    phase: Phase(0.0),
-                })
-                .collect();
-            Tone::from_partials(partials, default_env(), duration).expect("bell tone")
-        }
-        TimbreRecipe::Layered {
-            primary,
-            secondary,
-            mix,
-        } => {
-            render_recipe(primary, frequency, duration).amplify(1.0 - mix.clamp(0.0, 1.0))
-                + render_recipe(secondary, frequency, duration).amplify(mix.clamp(0.0, 1.0))
-        }
-    }
-}
-
-fn default_env() -> Envelope {
-    Envelope::new(
-        Duration::from_millis(15),
-        Duration::from_millis(60),
-        0.75,
-        Duration::from_millis(120),
-        EnvelopeShape::Linear,
-    )
-    .expect("default timbre envelope")
 }

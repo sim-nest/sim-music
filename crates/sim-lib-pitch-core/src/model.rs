@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{num::NonZeroU16, str::FromStr};
 
 use thiserror::Error;
 
@@ -15,6 +15,107 @@ pub enum PitchError {
     /// An interval spelling was not one of the recognized tokens.
     #[error("invalid interval spelling")]
     InvalidInterval,
+    /// An octave-space division count was zero.
+    #[error("invalid octave-space division count {0}")]
+    InvalidOctaveSpace(u16),
+}
+
+/// A positive modular division count for octave-like pitch spaces.
+///
+/// [`PitchClass`] and [`Pitch`] remain fixed to the canonical 12-class,
+/// MIDI-compatible pitch identity. `OctaveSpace` is for algorithms that need
+/// floor decomposition or circular distance in another positive division count.
+///
+/// # Examples
+///
+/// ```
+/// use sim_lib_pitch_core::{split_floor, OctaveSpace};
+///
+/// let twelve = OctaveSpace::new(12).unwrap();
+/// assert_eq!(split_floor(-13, twelve), (-2, 11));
+/// ```
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct OctaveSpace {
+    /// Positive divisions in one octave-like cycle.
+    pub divisions: NonZeroU16,
+}
+
+impl OctaveSpace {
+    /// Constructs an octave space, rejecting zero-sized spaces.
+    pub fn new(divisions: u16) -> Result<Self, PitchError> {
+        let divisions =
+            NonZeroU16::new(divisions).ok_or(PitchError::InvalidOctaveSpace(divisions))?;
+        Ok(Self { divisions })
+    }
+
+    /// Returns the canonical 12-division semitone space.
+    pub fn twelve_tone() -> Self {
+        Self {
+            divisions: NonZeroU16::new(12).expect("12 is non-zero"),
+        }
+    }
+
+    /// Returns the positive division count.
+    pub fn len(self) -> u16 {
+        self.divisions.get()
+    }
+
+    /// Returns `true` because an [`OctaveSpace`] is always non-empty.
+    pub fn is_empty(self) -> bool {
+        false
+    }
+}
+
+/// Direction used when a folded distance has two equally short paths.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum TieDirection {
+    /// Choose the ascending path.
+    Ascending,
+    /// Choose the descending path.
+    Descending,
+}
+
+/// Splits an integer value into a floor octave and folded class for `space`.
+///
+/// The returned class is always in `0..space.len()`, including for negative
+/// inputs.
+pub fn split_floor(value: i64, space: OctaveSpace) -> (i64, u16) {
+    let divisions = i64::from(space.len());
+    (
+        value.div_euclid(divisions),
+        value.rem_euclid(divisions) as u16,
+    )
+}
+
+/// Folds an integer value into `0..space.len()` using floor modulus.
+pub fn fold(value: i64, space: OctaveSpace) -> u16 {
+    split_floor(value, space).1
+}
+
+/// Returns the unsigned shortest circular distance between two values in `space`.
+pub fn folded_unsigned_distance(a: i64, b: i64, space: OctaveSpace) -> u16 {
+    let divisions = i128::from(space.len());
+    let ascending = (i128::from(b) - i128::from(a)).rem_euclid(divisions);
+    ascending.min(divisions - ascending) as u16
+}
+
+/// Returns the signed shortest circular distance from `a` to `b` in `space`.
+///
+/// Positive values move upward and negative values move downward. When the space
+/// has an even division count and the two paths are equally short,
+/// `tie` selects the sign.
+pub fn folded_distance(a: i64, b: i64, space: OctaveSpace, tie: TieDirection) -> i32 {
+    let divisions = i128::from(space.len());
+    let ascending = (i128::from(b) - i128::from(a)).rem_euclid(divisions);
+    let descending = ascending - divisions;
+    match ascending.cmp(&(-descending)) {
+        std::cmp::Ordering::Less => ascending as i32,
+        std::cmp::Ordering::Greater => descending as i32,
+        std::cmp::Ordering::Equal => match tie {
+            TieDirection::Ascending => ascending as i32,
+            TieDirection::Descending => descending as i32,
+        },
+    }
 }
 
 /// A mod-12 pitch class, where `C = 0` and values increase by semitone to `B = 11`.

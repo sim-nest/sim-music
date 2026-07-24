@@ -79,7 +79,10 @@ impl TuningDescriptor {
                 reference_hz,
             } => Box::new(EqualTemperament::new(
                 *divisions,
-                (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             )?),
             Self::JustIntonation {
                 root,
@@ -89,31 +92,46 @@ impl TuningDescriptor {
             } => Box::new(JustIntonation {
                 root: PitchClass::new(*root).map_err(|_| SoundTuningError::InvalidScala)?,
                 ratios: *ratios,
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
             Self::PythagoreanTuning {
                 reference_midi,
                 reference_hz,
             } => Box::new(PythagoreanTuning {
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
             Self::MeantoneQuarterComma {
                 reference_midi,
                 reference_hz,
             } => Box::new(MeantoneQuarterComma {
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
             Self::WerckmeisterIII {
                 reference_midi,
                 reference_hz,
             } => Box::new(WerckmeisterIII {
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
             Self::YoungTemperament {
                 reference_midi,
                 reference_hz,
             } => Box::new(YoungTemperament {
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
             Self::ScalaScl {
                 cents,
@@ -121,10 +139,17 @@ impl TuningDescriptor {
                 reference_hz,
             } => Box::new(ScalaScl {
                 cents: cents.clone(),
-                reference: (Pitch::from_midi(*reference_midi), Frequency(*reference_hz)),
+                reference: (
+                    Pitch::from_midi(*reference_midi),
+                    reference_frequency(*reference_hz)?,
+                ),
             }),
         })
     }
+}
+
+fn reference_frequency(hz: f64) -> Result<Frequency, SoundTuningError> {
+    Frequency::new(hz).map_err(|_| SoundTuningError::InvalidReferenceFrequency)
 }
 
 /// Returns the standard 5-limit just-intonation tuning rooted at C with A4 at

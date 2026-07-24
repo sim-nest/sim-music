@@ -1,1 +1,1 @@
-"music-transform descriptor: transpose, invert, retrograde, and quantize a modeled sequence"
+"music-transform descriptor: transpose, invert, retrograde, quantize, and apply explicit pitch-map policies to a modeled sequence"
