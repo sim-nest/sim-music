@@ -60,4 +60,4 @@ homepage = "https://github.com/sim-nest/sim-music"
 unsafe_code = "forbid"
 
 [patch.crates-io]
-sim-lib-discrete-search = { path = "../sim-discrete/crates/sim-lib-discrete-search" }
+sim-lib-discrete-search = { git = "https://github.com/sim-nest/sim-discrete", rev = "0a037cc4d12294c90d323bb473aaeb7150127b2e" }
