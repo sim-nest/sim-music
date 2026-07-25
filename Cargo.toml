@@ -28,6 +28,7 @@ members = [
   "crates/sim-lib-pitch-namer-jazz",
   "crates/sim-lib-pitch-namer-riemann",
   "crates/sim-lib-pitch-namer-roman",
+  "crates/sim-lib-pitch-ratio",
   "crates/sim-lib-pitch-scale",
   "crates/sim-lib-pitch-set",
   "crates/sim-lib-pitch-shapes",

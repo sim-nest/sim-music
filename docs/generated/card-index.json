@@ -1,5 +1,5 @@
 {
-  "card_count": 50,
+  "card_count": 51,
   "cards": [
     {
       "id": "browse/catalog",
@@ -186,6 +186,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-namer-roman",
       "summary": "Roman numeral analysis descriptors."
+    },
+    {
+      "id": "cookbook/pitch-ratio",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-ratio",
+      "summary": "Exact musical ratio interval descriptors."
     },
     {
       "id": "cookbook/pitch-scale",

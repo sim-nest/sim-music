@@ -191,6 +191,13 @@
       "summary": "Roman-numeral harmonic analysis for the SIM music libraries."
     },
     {
+      "crate_name": "sim_lib_pitch_ratio",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-ratio/Cargo.toml",
+      "package": "sim-lib-pitch-ratio",
+      "summary": "Exact positive musical ratio intervals."
+    },
+    {
       "crate_name": "sim_lib_pitch_scale",
       "group": "workspace",
       "manifest": "crates/sim-lib-pitch-scale/Cargo.toml",

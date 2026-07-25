@@ -1,5 +1,5 @@
 {
-  "card_count": 50,
+  "card_count": 51,
   "cards": [
     {
       "id": "browse/catalog",
@@ -188,6 +188,12 @@
       "summary": "Roman numeral analysis descriptors."
     },
     {
+      "id": "cookbook/pitch-ratio",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-ratio",
+      "summary": "Exact musical ratio interval descriptors."
+    },
+    {
       "id": "cookbook/pitch-scale",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-scale",
@@ -338,6 +344,7 @@
       "sim-lib-pitch-namer-jazz",
       "sim-lib-pitch-namer-riemann",
       "sim-lib-pitch-namer-roman",
+      "sim-lib-pitch-ratio",
       "sim-lib-pitch-scale",
       "sim-lib-pitch-set",
       "sim-lib-pitch-shapes",
@@ -361,7 +368,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 46,
+  "package_count": 47,
   "packages": [
     {
       "crate_name": "sim_lib_daw_session",
@@ -2128,6 +2135,44 @@
       ]
     },
     {
+      "crate_name": "sim_lib_pitch_ratio",
+      "dependencies": [],
+      "description": "Exact positive musical ratio intervals with prime-limit ranking and bounded approximation search.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-ratio/Cargo.toml",
+      "name": "sim-lib-pitch-ratio",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-ratio",
+      "rustdoc_summary": "Exact positive musical ratio intervals.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_ratio",
+          "src": "crates/sim-lib-pitch-ratio/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-ratio/build.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "sim_lib_pitch_scale",
       "dependencies": [
         {
@@ -3432,10 +3477,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "16cd25cc4e9a4a9b3ce8dbd54bab63666dfd3f06",
+    "git_commit": "3eb779603fa12ae446923404b76c79dfc9e1ef38",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "16cd25cc4e9a4a9b3ce8dbd54bab63666dfd3f06",
+    "source_commit": "3eb779603fa12ae446923404b76c79dfc9e1ef38",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3448,9 +3493,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "2a567c76a4420723",
+    "workspace_hash": "652c6672d8fc99fa",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 638,
+    "workspace_hash_input_count": 648,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3921,6 +3966,16 @@
       "crates/sim-lib-pitch-namer-roman/recipes/01-basics/dominant-seven/recipe.toml",
       "crates/sim-lib-pitch-namer-roman/recipes/book.toml",
       "crates/sim-lib-pitch-namer-roman/src/lib.rs",
+      "crates/sim-lib-pitch-ratio/Cargo.toml",
+      "crates/sim-lib-pitch-ratio/build.rs",
+      "crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml",
+      "crates/sim-lib-pitch-ratio/recipes/book.toml",
+      "crates/sim-lib-pitch-ratio/src/approximate.rs",
+      "crates/sim-lib-pitch-ratio/src/error.rs",
+      "crates/sim-lib-pitch-ratio/src/lib.rs",
+      "crates/sim-lib-pitch-ratio/src/model.rs",
+      "crates/sim-lib-pitch-ratio/src/rank.rs",
+      "crates/sim-lib-pitch-ratio/src/tests.rs",
       "crates/sim-lib-pitch-scale/Cargo.toml",
       "crates/sim-lib-pitch-scale/build.rs",
       "crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml",
@@ -4092,7 +4147,7 @@
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 48,
+  "recipe_book_count": 49,
   "recipes": [
     {
       "book": "daw-session",
@@ -4882,6 +4937,26 @@
       ],
       "summary": "Roman numeral analysis descriptors.",
       "title": "Pitch Namer Roman"
+    },
+    {
+      "book": "pitch-ratio",
+      "book_toml": "crates/sim-lib-pitch-ratio/recipes/book.toml",
+      "card_id": "cookbook/pitch-ratio",
+      "group": "workspace",
+      "package": "sim-lib-pitch-ratio",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-ratio/01-basics/exact-ratio",
+          "codec": "lisp",
+          "id": "exact-ratio",
+          "package": "sim-lib-pitch-ratio",
+          "recipe_toml": "crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml",
+          "title": "Exact ratio descriptor"
+        }
+      ],
+      "summary": "Exact musical ratio interval descriptors.",
+      "title": "Pitch Ratio"
     },
     {
       "book": "pitch-scale",

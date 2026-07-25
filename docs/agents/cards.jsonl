@@ -227,6 +227,11 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer/recipes/book.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml"}

@@ -230,6 +230,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-pitch-ratio"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-pitch-scale"
     },
     {

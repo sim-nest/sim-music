@@ -1,0 +1,5 @@
+book = "pitch-ratio"
+title = "Pitch Ratio"
+summary = "Exact musical ratio interval descriptors."
+order = 214
+chapters = ["01-basics"]
