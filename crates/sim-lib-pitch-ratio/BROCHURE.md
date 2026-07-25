@@ -15,7 +15,7 @@ matrices, and walks cycle-safe ratio relation trees.
 - Compare intervals by exact rational identity, not rounded cents.
 - Constrain ratio work with octave and prime-limit policy.
 - Carry search receipts that prove work bounds and approximation error.
-- Score chords with a standard generalized mean while keeping the legacy
+- Score chords with a standard generalized mean while keeping the previous
   tuned no-division behavior opt-in.
 
 ## Where it fits
