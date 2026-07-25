@@ -33,6 +33,7 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-pitch-namer-riemann` | `true` | `custom-build, lib` | Riemannian harmonic function labels for triads and tonal contexts. |
 | `sim-lib-pitch-namer-roman` | `true` | `custom-build, lib` | Roman-numeral harmonic labels over scale keys and pitch chords. |
 | `sim-lib-pitch-namer` | `true` | `custom-build, lib` | Shared naming registry for chord, pitch-class set, and harmonic label systems. |
+| `sim-lib-pitch-ratio` | `true` | `custom-build, lib` | Exact positive musical ratio intervals with prime-limit ranking and bounded approximation search. |
 | `sim-lib-pitch-scale` | `true` | `custom-build, lib` | Scale, key, mode, and degree mapping helpers for pitch-domain transforms. |
 | `sim-lib-pitch-set` | `true` | `custom-build, lib` | Pitch-class set masks, normal forms, interval vectors, and set operations. |
 | `sim-lib-pitch-shapes` | `true` | `custom-build, lib` | Text codecs, citizen descriptors, and runtime shapes for pitch-domain values. |
