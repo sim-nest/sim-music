@@ -15,6 +15,7 @@ sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
+sim-lib-pitch-ratio = { version = "0.1.0", path = "../sim-lib-pitch-ratio" }
 sim-lib-pitch-scale = { version = "0.1.0", path = "../sim-lib-pitch-scale" }
 sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
 

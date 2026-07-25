@@ -201,6 +201,10 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/02-scenarios/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-dissonance/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer-forte/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer-forte/recipes/01-basics/forte-number/purpose.md"}

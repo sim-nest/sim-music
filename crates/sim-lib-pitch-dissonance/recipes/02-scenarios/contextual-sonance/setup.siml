@@ -1,0 +1,5 @@
+(sonance/compare
+  :models '(roughness commonality leading ratio)
+  :from '(c4 e4 g4)
+  :to '(b3 d4 g4)
+  :policy {:duplicates 'retain :normalization 'per-pair})

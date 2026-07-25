@@ -237,6 +237,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/purpose.md`
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/recipe.toml`
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/setup.siml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/chapter.toml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/purpose.md`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/recipe.toml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/setup.siml`
 - `crates/sim-lib-pitch-dissonance/recipes/book.toml`
 - `crates/sim-lib-pitch-namer-forte/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-namer-forte/recipes/01-basics/forte-number/purpose.md`

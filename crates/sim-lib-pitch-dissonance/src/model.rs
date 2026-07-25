@@ -84,7 +84,7 @@ pub enum IntervalMergeMode {
 }
 
 impl IntervalMergeMode {
-    fn name(self) -> &'static str {
+    pub(crate) fn name(self) -> &'static str {
         match self {
             Self::SumPairs => "sum-pairs",
             Self::MeanPairs => "mean-pairs",
@@ -446,7 +446,7 @@ fn directed_differences(mask: PitchClassMask) -> Vec<u8> {
     differences
 }
 
-fn merge_contributions(contributions: &[f64], mode: IntervalMergeMode) -> f64 {
+pub(crate) fn merge_contributions(contributions: &[f64], mode: IntervalMergeMode) -> f64 {
     match mode {
         IntervalMergeMode::SumPairs => contributions.iter().sum(),
         IntervalMergeMode::MeanPairs => {

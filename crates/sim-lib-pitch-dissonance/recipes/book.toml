@@ -2,4 +2,4 @@ book = "pitch-dissonance"
 title = "Pitch Dissonance"
 summary = "Interval and set dissonance descriptors."
 order = 219
-chapters = ["01-basics"]
+chapters = ["01-basics", "02-scenarios"]
