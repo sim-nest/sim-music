@@ -3432,10 +3432,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "f8fc010c2eeda4b5f909a2e56ca69e55b35e15aa",
+    "git_commit": "81f065bf37dc29a86196102541e2eb3b5010958a",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "f8fc010c2eeda4b5f909a2e56ca69e55b35e15aa",
+    "source_commit": "81f065bf37dc29a86196102541e2eb3b5010958a",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3448,9 +3448,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "fba56e34677064b8",
+    "workspace_hash": "4dbbd254e8115efb",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 634,
+    "workspace_hash_input_count": 636,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3931,9 +3931,11 @@
       "crates/sim-lib-pitch-scale/src/tests.rs",
       "crates/sim-lib-pitch-set/Cargo.toml",
       "crates/sim-lib-pitch-set/build.rs",
+      "crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml",
       "crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml",
       "crates/sim-lib-pitch-set/recipes/book.toml",
       "crates/sim-lib-pitch-set/src/conventional.rs",
+      "crates/sim-lib-pitch-set/src/geometry.rs",
       "crates/sim-lib-pitch-set/src/lib.rs",
       "crates/sim-lib-pitch-set/src/model.rs",
       "crates/sim-lib-pitch-set/src/tests.rs",
@@ -4905,8 +4907,16 @@
       "card_id": "cookbook/pitch-set",
       "group": "workspace",
       "package": "sim-lib-pitch-set",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
+        {
+          "card_id": "pitch-set/01-basics/neighborhood-walk",
+          "codec": "lisp",
+          "id": "neighborhood-walk",
+          "package": "sim-lib-pitch-set",
+          "recipe_toml": "crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml",
+          "title": "Pitch-set neighborhood walk"
+        },
         {
           "card_id": "pitch-set/01-basics/triad-mask",
           "codec": "lisp",

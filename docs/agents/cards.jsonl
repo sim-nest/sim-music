@@ -233,6 +233,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/setup.siml"}

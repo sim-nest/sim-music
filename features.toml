@@ -99,10 +99,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/pitch-and-sound-vocabulary"
 title = "Pitch and sound vocabulary"
-summary = "Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors and bounded timbre families."
+summary = "Name chords, scales, pitch sets, pitch-set graph walks, timbres, spectra, and tuning facts through worked musical descriptors and bounded timbre families."
 owner = "crate/sim-lib-pitch-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when reusing pitch, chord, scale, pitch-set, tuning, timbre, spectrum, and dissonance vocabulary. Keep canonical pitch identity in the 12-class pitch types, keep numeric pitch-set normalization separate from conventional SetEquivalence classification, use OctaveSpace helpers for parameterized floor folding and circular distance, use tuning crates for frequency conversion, use tagged sound-core partials for source/harmonic/undertone tone components, use sound-timbre for harmonic and undertone expansion, root-normalized sampled timbres, caller-owned bounded timbre caches, explicit layer merge policy, and SearchControl-bounded timbre-family enumeration, use sound-render for PCM previews, and use the dissonance crates for sensory or pitch-class roughness models."
+guidance = "Use this row when reusing pitch, chord, scale, pitch-set, tuning, timbre, spectrum, and dissonance vocabulary. Keep canonical pitch identity in the 12-class pitch types, keep numeric pitch-set normalization separate from conventional SetEquivalence classification, use pitch-set interval/gap forms with an explicit zero-gap multiplicity policy, build jumping and non-jumping pitch-set neighborhoods as discrete graphs under SearchControl, use OctaveSpace helpers for parameterized floor folding and circular distance, use tuning crates for frequency conversion, use tagged sound-core partials for source/harmonic/undertone tone components, use sound-timbre for harmonic and undertone expansion, root-normalized sampled timbres, caller-owned bounded timbre caches, explicit layer merge policy, and SearchControl-bounded timbre-family enumeration, use sound-render for PCM previews, and use the dissonance crates for sensory or pitch-class roughness models."
 claims_anchors = [
   "anchor/crate/sim-lib-pitch-chord",
   "anchor/crate/sim-lib-pitch-core",
