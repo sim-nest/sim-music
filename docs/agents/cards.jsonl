@@ -231,6 +231,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md"}

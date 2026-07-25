@@ -11,6 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
+sim-lib-discrete-search = { version = "0.1.0" }
 sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
 thiserror = "1"

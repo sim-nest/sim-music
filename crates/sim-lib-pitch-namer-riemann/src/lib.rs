@@ -59,4 +59,12 @@ mod tests {
         .expect("riemann label");
         assert_eq!(label, "T(C)");
     }
+
+    #[test]
+    fn rejects_symmetric_non_triad_root_choices() {
+        let augmented =
+            PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::E, PitchClass::GS]);
+        assert_eq!(label_riemann(augmented, None), None);
+        assert_eq!(label_riemann(augmented, Some(PitchClass::E)), None);
+    }
 }

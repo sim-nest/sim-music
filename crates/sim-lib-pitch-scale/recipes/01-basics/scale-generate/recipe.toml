@@ -1,0 +1,8 @@
+id = "scale-generate"
+title = "Tetrachord scale generation"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["pitch", "scale", "tetrachord", "bounded-search", "sandbox-descriptor"]
+requires = ["pitch-scale", "discrete-search", "codec/lisp"]

@@ -9,9 +9,11 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod generate;
 mod model;
 mod player;
 
+pub use generate::*;
 pub use model::*;
 pub use player::*;
 
