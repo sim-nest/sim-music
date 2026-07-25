@@ -320,6 +320,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/purpose.md`
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml`
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/setup.siml`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/purpose.md`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/recipe.toml`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/setup.siml`
 - `crates/sim-lib-sound-dissonance/recipes/book.toml`
 - `crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/purpose.md`
 - `crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/recipe.toml`

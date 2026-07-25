@@ -284,6 +284,9 @@
 {"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-dissonance/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/recipe.toml"}

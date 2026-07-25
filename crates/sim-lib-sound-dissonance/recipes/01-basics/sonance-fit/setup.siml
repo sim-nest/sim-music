@@ -1,0 +1,1 @@
+(sonance/fit :model 'partial-roughness :parameters {:a '(2.0 5.0 0.05) :b '(4.0 12.0 0.1)} :objective 'rank-correlation :control {:work 50000 :results 8 :seed 7})

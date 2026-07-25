@@ -13,6 +13,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
+sim-lib-discrete-search = { version = "0.1.0" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-dissonance = { version = "0.1.0", path = "../sim-lib-pitch-dissonance" }
 sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }

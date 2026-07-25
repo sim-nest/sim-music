@@ -3484,10 +3484,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "b98b7789cbd75b178e21455234617529c52837a7",
+    "git_commit": "817492e8012a52a70cc91860a24562d934aabaaf",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "b98b7789cbd75b178e21455234617529c52837a7",
+    "source_commit": "817492e8012a52a70cc91860a24562d934aabaaf",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3500,9 +3500,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "973a0a768616cfbc",
+    "workspace_hash": "fb586e2b3a3fae80",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 654,
+    "workspace_hash_input_count": 657,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4056,7 +4056,10 @@
       "crates/sim-lib-sound-dissonance/Cargo.toml",
       "crates/sim-lib-sound-dissonance/build.rs",
       "crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml",
+      "crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/recipe.toml",
       "crates/sim-lib-sound-dissonance/recipes/book.toml",
+      "crates/sim-lib-sound-dissonance/src/fit.rs",
+      "crates/sim-lib-sound-dissonance/src/fit_digest.rs",
       "crates/sim-lib-sound-dissonance/src/lib.rs",
       "crates/sim-lib-sound-dissonance/src/model.rs",
       "crates/sim-lib-sound-dissonance/src/runtime.rs",
@@ -5149,7 +5152,7 @@
       "card_id": "cookbook/sound-dissonance",
       "group": "workspace",
       "package": "sim-lib-sound-dissonance",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
         {
           "card_id": "sound-dissonance/01-basics/roughness-model",
@@ -5158,6 +5161,14 @@
           "package": "sim-lib-sound-dissonance",
           "recipe_toml": "crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml",
           "title": "Roughness model descriptor"
+        },
+        {
+          "card_id": "sound-dissonance/01-basics/sonance-fit",
+          "codec": "lisp",
+          "id": "sonance-fit",
+          "package": "sim-lib-sound-dissonance",
+          "recipe_toml": "crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/recipe.toml",
+          "title": "Bounded sonance fit descriptor"
         }
       ],
       "summary": "Roughness and spectrum-pair descriptors.",
