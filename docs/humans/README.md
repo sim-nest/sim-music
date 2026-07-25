@@ -264,6 +264,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/setup.siml`
 - `crates/sim-lib-pitch-namer/recipes/book.toml`
 - `crates/sim-lib-pitch-ratio/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/purpose.md`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/recipe.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/setup.siml`
 - `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/purpose.md`
 - `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml`
 - `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/setup.siml`

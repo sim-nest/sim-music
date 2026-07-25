@@ -48,4 +48,18 @@ pub enum PitchRatioError {
     /// Discrete mixed-radix ranking failed.
     #[error("discrete rank error: {0}")]
     DiscreteRank(String),
+    /// A chord operation requires at least one ratio.
+    #[error("ratio chord requires at least one ratio")]
+    EmptyChord,
+    /// A chord root index did not identify a ratio in the chord.
+    #[error("ratio chord root index {root_index} is outside chord length {len}")]
+    InvalidRootIndex {
+        /// Requested root index.
+        root_index: usize,
+        /// Chord length.
+        len: usize,
+    },
+    /// A generalized mean exponent must be finite and non-zero.
+    #[error("generalized mean exponent must be finite and non-zero")]
+    InvalidMeanExponent,
 }

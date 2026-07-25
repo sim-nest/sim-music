@@ -6,14 +6,17 @@ In one line: Keeps just-intonation style intervals as exact reduced ratios.
 
 It validates positive ratios, reduces them to canonical identity, optionally
 folds them into one octave, exposes bounded prime-factor vectors, ranks finite
-prime-limit vectors with the discrete mixed-radix machinery, and searches for
-nearby ratios under explicit `SearchControl` bounds.
+prime-limit vectors with the discrete mixed-radix machinery, searches for nearby
+ratios under explicit `SearchControl` bounds, analyzes exact chord interval
+matrices, and walks cycle-safe ratio relation trees.
 
 ## Why you will be glad
 
 - Compare intervals by exact rational identity, not rounded cents.
 - Constrain ratio work with octave and prime-limit policy.
 - Carry search receipts that prove work bounds and approximation error.
+- Score chords with a standard generalized mean while keeping the legacy
+  tuned no-division behavior opt-in.
 
 ## Where it fits
 

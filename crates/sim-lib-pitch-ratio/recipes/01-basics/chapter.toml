@@ -1,3 +1,4 @@
 title = "Basics"
 order = 10
 summary = "Exact ratio descriptors."
+recipes = ["exact-ratio", "chord-relations"]

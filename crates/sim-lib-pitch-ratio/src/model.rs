@@ -40,6 +40,40 @@ impl PitchRatio {
         self.numerator as f64 / self.denominator as f64
     }
 
+    /// Exact unison ratio.
+    pub const fn unison() -> Self {
+        Self {
+            numerator: 1,
+            denominator: 1,
+        }
+    }
+
+    /// Multiply two reduced ratios exactly.
+    pub fn multiply(self, other: Self) -> Result<Self, PitchRatioError> {
+        let numerator = self
+            .numerator
+            .checked_mul(other.numerator)
+            .ok_or(PitchRatioError::Overflow)?;
+        let denominator = self
+            .denominator
+            .checked_mul(other.denominator)
+            .ok_or(PitchRatioError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
+    /// Divide this ratio by another reduced ratio exactly.
+    pub fn divide(self, other: Self) -> Result<Self, PitchRatioError> {
+        let numerator = self
+            .numerator
+            .checked_mul(other.denominator)
+            .ok_or(PitchRatioError::Overflow)?;
+        let denominator = self
+            .denominator
+            .checked_mul(other.numerator)
+            .ok_or(PitchRatioError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
     /// Convert this ratio to cents.
     pub fn cents(self) -> f64 {
         1200.0 * self.as_f64().log2()
@@ -125,6 +159,14 @@ pub struct RatioPolicy {
 }
 
 impl RatioPolicy {
+    /// Policy with octave reduction and a three-limit factor vector.
+    pub const fn three_limit() -> Self {
+        Self {
+            octave_reduce: true,
+            prime_limit: Some(3),
+        }
+    }
+
     /// Policy with octave reduction and a five-limit factor vector.
     pub const fn five_limit() -> Self {
         Self {

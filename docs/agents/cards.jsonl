@@ -228,6 +228,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-namer/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/setup.siml"}

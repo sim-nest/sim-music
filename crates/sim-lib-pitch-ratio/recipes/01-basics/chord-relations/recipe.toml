@@ -1,0 +1,8 @@
+id = "chord-relations"
+title = "Ratio chord relations"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["pitch", "ratio", "chord", "matrix", "relation-tree", "sandbox-descriptor"]
+requires = ["pitch-ratio", "discrete-search", "codec/lisp"]
