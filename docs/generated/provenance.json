@@ -3,10 +3,10 @@
   "generated_by": "cargo run -p xtask -- simdoc",
   "generation_timestamp": "2026-07-15T20:01:50+02:00",
   "generator": "xtask repo-contract v1",
-  "git_commit": "bbfa41010b48f0ff18006a1d9830cffae56ac2d8",
+  "git_commit": "eaa951a1f290dafd7ed3b7244ff4dd0c3e067f7f",
   "repo": "sim-music",
   "schema": "sim.provenance.v1",
-  "source_commit": "bbfa41010b48f0ff18006a1d9830cffae56ac2d8",
+  "source_commit": "eaa951a1f290dafd7ed3b7244ff4dd0c3e067f7f",
   "source_remote": "https://github.com/sim-nest/sim-music",
   "validation_commands": [
     "cargo fmt --all --check",
@@ -19,7 +19,7 @@
     "cargo run -p xtask -- validation-matrix --check --repo .",
     "cargo run -p xtask -- crate-catalog --check --repo ."
   ],
-  "workspace_hash": "75ccdee9e9b9c930",
+  "workspace_hash": "13a4329014cbc77d",
   "workspace_hash_algorithm": "fnv1a64",
   "workspace_hash_input_count": 651,
   "workspace_hash_inputs": [

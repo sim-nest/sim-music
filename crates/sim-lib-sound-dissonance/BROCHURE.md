@@ -4,11 +4,11 @@ In one line: Estimates how rough or smooth two or more sounds are together, usin
 
 ## What it gives you
 
-This scores the sensory roughness of sound using a family of well-known psychoacoustic estimators -- Plomp-Levelt, Sethares, Helmholtz beating, and harmonic entropy. A registry lets you look them up by name and run them, and a runtime surface installs the whole set as a library. Unlike theory-based scoring, these models work from the actual spectral content, so they judge how a combination genuinely sounds to the ear.
+This scores the sensory roughness of sound using a family of well-known psychoacoustic estimators -- Plomp-Levelt, Sethares, Helmholtz beating, and harmonic entropy. Results keep roughness mass, normalized density, harmonic context, curve family, and partial-policy evidence separate, including skipped inaudible pairs. A registry lets you look models up by name and run them, and a runtime surface installs the whole set as a library. Unlike theory-based scoring, these models work from the actual spectral content, so they judge how a combination genuinely sounds to the ear.
 
 ## Why you will be glad
 
-- Estimate the roughness of a sound as the ear would hear it.
+- Estimate roughness with checked finite inputs and explicit partial-pair evidence.
 - Choose among several respected psychoacoustic models.
 - Look models up by name and run them through one registry.
 

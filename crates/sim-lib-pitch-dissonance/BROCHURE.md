@@ -4,11 +4,11 @@ In one line: Scores how tense or restful a group of notes sounds, from several t
 
 ## What it gives you
 
-This rates a collection of pitch classes for dissonance against a set of interchangeable models. It offers an interval-vector weighting, a Forte-style complexity measure, a key-relative model that weighs how notes function in a key, and a tritone-density ratio. A registry runs every model at once so you can compare readings, and the whole set installs as a runtime library you can call on demand.
+This rates a collection of pitch classes for dissonance against a set of interchangeable models. It offers an interval-vector weighting, a Forte-style complexity measure, a key-relative model that weighs how notes function in a key, and a tritone-density ratio. Each result keeps roughness mass, normalized density, harmonic context, and provenance separate, with explicit interval-difference and merge modes. The historical tritone-density binning is still available, but only as a named compatibility dialect. A registry runs every model at once so you can compare readings, and the whole set installs as a runtime library you can call on demand.
 
 ## Why you will be glad
 
-- Get a numeric read on how tense a chord sounds.
+- Get typed sonance components instead of an unlabeled tension scalar.
 - Compare several theories of dissonance side by side.
 - Weigh notes by how they function within a chosen key.
 
