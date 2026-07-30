@@ -4,8 +4,8 @@ use num_rational::Ratio;
 use thiserror::Error;
 
 use sim_lib_music_core::{
-    Articulation, AtomRef, Channel, Melody, MelodyItem, Music, MusicError, MusicObject, Note,
-    PianoRoll, Rest, Time, TimedNote,
+    Articulation, AtomRef, Channel, ConversionError, Melody, MelodyItem, Music, MusicError,
+    MusicObject, Note, PianoRoll, Rest, Time, TimedNote,
 };
 use sim_lib_pitch_core::{Pitch, PitchClass};
 use sim_lib_pitch_scale::{Key, Mode, PitchScaleError, Scale};
@@ -27,6 +27,9 @@ pub enum TransformError {
         /// Stable explanation of the invalid condition.
         reason: &'static str,
     },
+    /// An identity-bearing staff violated its conversion invariants.
+    #[error(transparent)]
+    InvalidStaff(#[from] ConversionError),
 }
 
 /// Strategy for placing notes when reversing material in time.

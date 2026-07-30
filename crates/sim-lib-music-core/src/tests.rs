@@ -1,3 +1,5 @@
+mod score;
+
 use num_rational::Ratio;
 
 use crate::{

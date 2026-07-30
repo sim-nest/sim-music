@@ -4,9 +4,11 @@
 //! concrete music domain that those surfaces operate on. It defines the music
 //! object model (notes, chords, melodies, scores), the descriptor metadata that
 //! describes music components and their ports and parameters, events and lanes,
-//! the piano roll and time grid, players and playables, performances and takes,
-//! the arranger, freeze surfaces, traces, the component registry, and the
-//! citizen integration that registers these types with the runtime.
+//! the piano roll and time grid, loss-audited score conversion through an
+//! identity-bearing [`Staff`], event snapshots and change streams, players and
+//! playables, performances and takes, the arranger, freeze surfaces, traces,
+//! the component registry, and the citizen integration that registers these
+//! types with the runtime.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
@@ -31,6 +33,7 @@ mod playable;
 mod player;
 mod player_chain;
 mod registry;
+mod score;
 mod time;
 mod trace;
 
@@ -51,6 +54,7 @@ pub use playable::*;
 pub use player::*;
 pub use player_chain::*;
 pub use registry::*;
+pub use score::*;
 pub use time::*;
 pub use trace::*;
 

@@ -143,10 +143,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/exact-music-analysis-and-transform"
 title = "Exact music analysis and transform"
-summary = "Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable operations and explicit pitch maps."
+summary = "Convert exact score forms with loss and identity evidence, analyze pitch and chord views, and transform exact sequences with audited articulation, register, rhythm, and pitch operations."
 owner = "crate/sim-lib-music-analysis"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when a caller needs music analysis, exact score time, music lift/lower, notation, sequence transforms, partial pitch maps, or reusable composition helpers over the existing music object model. Pitch maps report holes, nudge policies, direct inverses, and lossy composition witnesses while preserving the score identity and exact time carried by music objects."
+guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; exact sustain, slur, expansion, delayed-note separation, register unwrapping, sequence/parallel composition, slicing, or rhythm masks; music analysis; lift/lower; notation; or partial pitch maps. Conversion reports retain voice/note/event ids and enumerate every unrepresentable fact. Transform reports address every edit by identity, and all time stays rational. Pitch maps report holes, nudge policies, direct inverses, and lossy composition witnesses."
 claims_anchors = [
   "anchor/crate/sim-lib-music-analysis",
   "anchor/crate/sim-lib-music-combinators",
@@ -166,6 +166,8 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-analysis/src/tests",
+  "spec-test/sim-music/crates/sim-lib-music-core/src/tests/score",
+  "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/exact",
   "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/remap",
 ]
 
@@ -241,7 +243,7 @@ id = "route/transform-exact-music"
 task = "Transform exact music"
 audiences = ["user", "code", "framework"]
 steps = [
-  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns the object model, sequence transforms, partial pitch-map policy composition, lift/lower adapters, and notation descriptors." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns loss-audited score conversion, identity-bearing staff transforms, sequence/parallel/slice/rhythm laws, partial pitch-map policy composition, lift/lower adapters, and notation descriptors." },
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch row supplies the pitch, scale, chord, and tuning vocabulary used by exact transforms." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-transform/01-basics/sequence-transform", why = "The sequence-transform recipe is the current transform specimen." },
 ]
