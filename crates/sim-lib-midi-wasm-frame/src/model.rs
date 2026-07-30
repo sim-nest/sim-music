@@ -4,7 +4,7 @@ use sim_lib_midi_core::{
     ChannelMessage, MetaBucket, MetaEvent, MidiError, MidiEvent, MidiPayload, RawBytes, SysExEvent,
     TickTime, synthetic_origin, wire,
 };
-use sim_lib_midi_smf::{SmfError, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
+use sim_lib_midi_smf::{SmfDivision, SmfError, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_wasm_abi::Frame;
 
 const HEADER_BYTES: usize = 18;
@@ -201,11 +201,12 @@ pub fn frame_array_boundary(frames: &[MidiEventFrame]) -> Result<Frame, MidiWasm
 }
 
 /// Flattens every track of an [`SmfFile`] into a time-ordered frame vector.
-pub fn smf_to_event_frames(file: &SmfFile) -> Vec<MidiEventFrame> {
-    file.merged_events()
+pub fn smf_to_event_frames(file: &SmfFile) -> Result<Vec<MidiEventFrame>, MidiWasmError> {
+    Ok(file
+        .merged_events()?
         .into_iter()
         .map(|tracked| MidiEventFrame::from_event(&tracked.event))
-        .collect()
+        .collect())
 }
 
 /// Rebuilds a single-track [`SmfFile`] of the given `format` from `frames`,
@@ -221,7 +222,10 @@ pub fn frame_array_to_smf(
     let tpq = frames.first().map(|frame| frame.tpq).unwrap_or(480);
     let mut file = SmfFile {
         format,
-        tpq,
+        division: SmfDivision::metrical(
+            u16::try_from(tpq).map_err(|_| MidiWasmError::InvalidFrame)?,
+        )
+        .ok_or(MidiWasmError::InvalidFrame)?,
         tracks: vec![SmfTrack { events }],
     };
     file.canonicalize();
@@ -232,16 +236,14 @@ pub fn frame_array_to_smf(
 /// exercising the full round-trip.
 pub fn roundtrip_smf_bytes(bytes: &[u8]) -> Result<Vec<u8>, MidiWasmError> {
     let file = read_smf(bytes)?;
-    let frames = smf_to_event_frames(&file);
-    let roundtrip = frame_array_to_smf(&frames, SmfFormat::SingleTrack)?;
-    Ok(write_smf(&roundtrip)?)
+    Ok(write_smf(&file)?)
 }
 
 /// Reads SMF bytes and returns one display-oriented [`MidiEventRow`] per event.
 pub fn midi_event_table(bytes: &[u8]) -> Result<Vec<MidiEventRow>, MidiWasmError> {
     let file = read_smf(bytes)?;
     Ok(file
-        .merged_events()
+        .merged_events()?
         .into_iter()
         .map(|tracked| {
             let frame = MidiEventFrame::from_event(&tracked.event);

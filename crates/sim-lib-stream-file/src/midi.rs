@@ -2,7 +2,7 @@ use std::path::Path;
 
 use sim_kernel::{Error, Result};
 use sim_lib_midi_core::MemoryMidiSource;
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_lib_stream_core::{StreamMetadata, StreamValue};
 use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
 
@@ -44,10 +44,14 @@ pub fn smf_file_to_stream(
 ) -> Result<StreamValue> {
     let events = file
         .merged_events()
+        .map_err(|err| Error::Eval(format!("cannot stream SMF file: {err}")))?
         .into_iter()
         .map(|tracked| tracked.event)
         .collect();
-    let mut source = MemoryMidiSource::new(file.tpq, events);
+    let tpq = file.ticks_per_quarter().ok_or_else(|| {
+        Error::Eval("SMPTE SMF requires an explicit real-time stream clock adapter".to_owned())
+    })?;
+    let mut source = MemoryMidiSource::new(tpq, events);
     midi_source_to_stream(&mut source, max_events, metadata)
 }
 
@@ -81,16 +85,19 @@ pub fn stream_to_smf_bytes(stream: &StreamValue, tpq: u32) -> Result<(Vec<u8>, u
 /// Returns the assembled file and the number of events written. Errors when
 /// `tpq` exceeds the Standard MIDI File range.
 pub fn stream_to_smf_file(stream: &StreamValue, tpq: u32) -> Result<(SmfFile, usize)> {
-    if u16::try_from(tpq).is_err() {
-        return Err(Error::Eval(format!(
-            "SMF TPQ {tpq} exceeds the Standard MIDI File range"
-        )));
-    }
+    let division = u16::try_from(tpq)
+        .ok()
+        .and_then(SmfDivision::metrical)
+        .ok_or_else(|| {
+            Error::Eval(format!(
+                "SMF TPQ {tpq} exceeds the metrical Standard MIDI File range"
+            ))
+        })?;
     let mut sink = sim_lib_midi_core::MemoryMidiSink::new(tpq);
     let count = midi_stream_to_sink(stream, &mut sink)?;
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq,
+        division,
         tracks: vec![SmfTrack {
             events: sink.events().to_vec(),
         }],

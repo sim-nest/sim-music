@@ -1,7 +1,7 @@
 use super::*;
 
 use sim_lib_midi_core::{U7, synthetic_origin};
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack, write_smf};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, write_smf};
 use sim_lib_music_core::{
     Articulation, Channel, ChannelMessage, MidiEvent, MidiPayload, Music, Note, Score, TickTime,
     Time, parse_pitch,
@@ -36,7 +36,7 @@ fn lower_music_file_to_frames_round_trips() {
 fn analyze_smf_bytes_reports_all_views() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 MidiEvent {

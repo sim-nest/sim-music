@@ -71,7 +71,7 @@
       "id": "cookbook/midi-smf",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-midi-smf",
-      "summary": "Standard MIDI File structure and metadata descriptors."
+      "summary": "Bounded Standard MIDI File parsing, lossless time division, and metadata descriptors."
     },
     {
       "id": "cookbook/midi-sysex",
@@ -3484,10 +3484,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "a1eca98c7dc1a5b6b399a266631d6c38b622975c",
+    "git_commit": "8817d39dad79b260f2db318f6c441e6032534ba1",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "a1eca98c7dc1a5b6b399a266631d6c38b622975c",
+    "source_commit": "8817d39dad79b260f2db318f6c441e6032534ba1",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3500,9 +3500,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "fb0a948cd1bd9e8b",
+    "workspace_hash": "9852852cd24174ff",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 669,
+    "workspace_hash_input_count": 674,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3590,6 +3590,7 @@
       "crates/sim-lib-midi-shapes/recipes/01-basics/shape-family/recipe.toml",
       "crates/sim-lib-midi-shapes/recipes/book.toml",
       "crates/sim-lib-midi-shapes/src/citizen.rs",
+      "crates/sim-lib-midi-shapes/src/codec/smf.rs",
       "crates/sim-lib-midi-shapes/src/codec.rs",
       "crates/sim-lib-midi-shapes/src/lib.rs",
       "crates/sim-lib-midi-shapes/src/runtime.rs",
@@ -3597,14 +3598,18 @@
       "crates/sim-lib-midi-smf/Cargo.toml",
       "crates/sim-lib-midi-smf/build.rs",
       "crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml",
+      "crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/recipe.toml",
       "crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml",
       "crates/sim-lib-midi-smf/recipes/02-export-fixtures/unsupported-export-failure/recipe.toml",
       "crates/sim-lib-midi-smf/recipes/book.toml",
+      "crates/sim-lib-midi-smf/src/conformance_additional.rs",
       "crates/sim-lib-midi-smf/src/error.rs",
       "crates/sim-lib-midi-smf/src/lib.rs",
+      "crates/sim-lib-midi-smf/src/limits.rs",
       "crates/sim-lib-midi-smf/src/model.rs",
       "crates/sim-lib-midi-smf/src/reader.rs",
       "crates/sim-lib-midi-smf/src/recipe_tests.rs",
+      "crates/sim-lib-midi-smf/src/test_support.rs",
       "crates/sim-lib-midi-smf/src/tests.rs",
       "crates/sim-lib-midi-smf/src/vlq.rs",
       "crates/sim-lib-midi-smf/src/writer.rs",
@@ -4343,7 +4348,7 @@
       "card_id": "cookbook/midi-smf",
       "group": "workspace",
       "package": "sim-lib-midi-smf",
-      "recipe_count": 3,
+      "recipe_count": 4,
       "recipes": [
         {
           "card_id": "midi-smf/01-basics/file-metadata",
@@ -4352,6 +4357,14 @@
           "package": "sim-lib-midi-smf",
           "recipe_toml": "crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml",
           "title": "SMF metadata descriptor"
+        },
+        {
+          "card_id": "midi-smf/01-basics/smpte-timecode",
+          "codec": "lisp",
+          "id": "smpte-timecode",
+          "package": "sim-lib-midi-smf",
+          "recipe_toml": "crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/recipe.toml",
+          "title": "SMPTE timecode division"
         },
         {
           "card_id": "midi-smf/02-export-fixtures/note-echo-frozen-midi",
@@ -4370,7 +4383,7 @@
           "title": "Unsupported Export Failure"
         }
       ],
-      "summary": "Standard MIDI File structure and metadata descriptors.",
+      "summary": "Bounded Standard MIDI File parsing, lossless time division, and metadata descriptors.",
       "title": "MIDI SMF"
     },
     {

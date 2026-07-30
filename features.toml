@@ -67,10 +67,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/midi-notation-workflows"
 title = "MIDI and notation workflows"
-summary = "Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms."
+summary = "Lift, lower, inspect, and export musical material across bounded lossless MIDI files, live MIDI fixtures, and notation forms."
 owner = "crate/sim-lib-midi-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse the current MIDI/SMF crates for import and export instead of adding another file codec or transport model."
+guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse sim-lib-midi-smf for bounded import and canonical export: it preserves formats 0, 1, and 2, keeps format-2 track time origins independent, retains metrical and valid SMPTE divisions plus unknown valid meta/system events, and reports malformed or oversized input at absolute byte offsets. Callers that need one performance timeline must select a format-2 pattern explicitly and must install an explicit real-time adapter before converting SMPTE timing to a metrical MIDI stream."
 claims_anchors = [
   "anchor/crate/sim-lib-midi-ble",
   "anchor/crate/sim-lib-midi-core",
@@ -94,6 +94,7 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-midi-core/src/tests",
+  "spec-test/sim-music/crates/sim-lib-midi-smf/src/tests",
 ]
 
 [[feature]]

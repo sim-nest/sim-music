@@ -71,7 +71,7 @@
       "id": "cookbook/midi-smf",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-midi-smf",
-      "summary": "Standard MIDI File structure and metadata descriptors."
+      "summary": "Bounded Standard MIDI File parsing, lossless time division, and metadata descriptors."
     },
     {
       "id": "cookbook/midi-sysex",

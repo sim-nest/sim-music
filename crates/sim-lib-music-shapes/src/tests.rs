@@ -8,7 +8,7 @@ use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, Value, read_cons
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MidiEvent, MidiPayload, TickTime, U7, synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack};
 use sim_lib_music_analysis::{ChordWindowMode, DiffRoll, chord_windows_from_piano_roll};
 use sim_lib_music_core::{
     Arranger, ArrangerPlacement, Articulation, Chord, Counterpoint, LaneId, Melody, MelodyItem,
@@ -218,7 +218,7 @@ fn midi_wrappers_round_trip() {
 
     let file = MidiFileObj::new(SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: track.events.clone(),
         }],

@@ -54,7 +54,7 @@ pub(crate) fn collect_midi(file: &SmfFile) -> CollectedMidi {
         .tracks
         .iter()
         .flat_map(|track| track.events.iter())
-        .map(|event| tick_to_time(event.time.ticks, file.tpq))
+        .map(|event| tick_to_time(event.time.ticks, file.division.event_time_base()))
         .max()
         .unwrap_or_else(|| Time::from_integer(0));
 

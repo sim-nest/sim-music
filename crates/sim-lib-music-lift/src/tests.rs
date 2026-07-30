@@ -6,7 +6,7 @@ use sim_lib_midi_core::{
     Channel, ChannelMessage, MetaEvent, MidiEvent, MidiPayload, TickTime, U7, U14, meta_view,
     synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack};
 use sim_lib_music_analysis::ChordWindowMode;
 use sim_lib_music_core::{Chord, MusicObject, Progression};
 use sim_lib_music_lower::{LowerOpts, lower};
@@ -57,7 +57,7 @@ fn eot(time: i64) -> MidiEvent {
 fn note_on_without_note_off_is_closed_at_eot_with_diagnostic() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![note_on(0, 60, 0), eot(480)],
         }],
@@ -77,7 +77,7 @@ fn note_on_without_note_off_is_closed_at_eot_with_diagnostic() {
 fn overlapping_notes_split_under_highest_first() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 note_on(0, 60, 0),
@@ -116,7 +116,7 @@ fn overlapping_notes_split_under_highest_first() {
 fn channel_only_never_splits_a_track() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 note_on(0, 60, 0),
@@ -149,7 +149,7 @@ fn channel_only_never_splits_a_track() {
 fn progression_lifter_can_use_multiple_label_strategies() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 note_on(0, 60, 0),
@@ -239,7 +239,7 @@ fn lift_lower_lift_is_stable_for_simple_progression() {
 fn midi_to_diff_roll_emits_expected_masks() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 note_on(0, 60, 0),
@@ -281,7 +281,7 @@ fn midi_to_counterpoint_trait_symbol_is_stable() {
 fn midi_to_piano_roll_lifts_control_pitch_and_pressure_lanes() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 note_on(0, 60, 0),
@@ -347,7 +347,7 @@ fn midi_to_piano_roll_lifts_control_pitch_and_pressure_lanes() {
 fn track_names_become_voice_names_when_available() {
     let file = SmfFile {
         format: SmfFormat::Simultaneous,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![
             SmfTrack {
                 events: vec![

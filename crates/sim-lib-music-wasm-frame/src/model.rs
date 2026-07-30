@@ -113,7 +113,7 @@ pub fn analyze_music_file(input: &str) -> Result<MusicDemoReport, MusicWasmError
 pub fn lower_music_file_to_frames(input: &str) -> Result<Vec<MidiEventFrame>, MusicWasmError> {
     let score = decode_music_file(input)?;
     let smf = lower_score(&score, &LowerOpts::default())?;
-    Ok(sim_lib_midi_wasm_frame::smf_to_event_frames(&smf))
+    Ok(sim_lib_midi_wasm_frame::smf_to_event_frames(&smf)?)
 }
 
 /// Lifts MIDI event frames into a counterpoint score encoded as a music file.

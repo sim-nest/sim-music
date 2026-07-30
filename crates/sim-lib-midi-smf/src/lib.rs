@@ -6,22 +6,23 @@
 //! variable-length quantity encoding ([`encode_vlq`]/[`decode_vlq`]), running
 //! status, and track canonicalisation/merging. Reading is [`read_smf`];
 //! writing is [`write_smf`] (or [`write_smf_with_options`] for running-status
-//! control). Only metric (ticks-per-quarter) division is supported; SMPTE
-//! division is rejected.
+//! control). Metrical and valid SMPTE divisions are retained losslessly.
 //!
 //! # Examples
 //!
 //! Round-tripping a minimal single-track file:
 //!
 //! ```
-//! use sim_lib_midi_smf::{read_smf, write_smf, SmfFile, SmfFormat, SmfTrack};
+//! use sim_lib_midi_smf::{
+//!     read_smf, write_smf, SmfDivision, SmfFile, SmfFormat, SmfTrack,
+//! };
 //! use sim_lib_midi_core::{
 //!     MetaEvent, MidiEvent, MidiPayload, TickTime, synthetic_origin,
 //! };
 //!
 //! let file = SmfFile {
 //!     format: SmfFormat::SingleTrack,
-//!     tpq: 480,
+//!     division: SmfDivision::metrical(480).unwrap(),
 //!     tracks: vec![SmfTrack {
 //!         events: vec![MidiEvent {
 //!             time: TickTime::new(0, 480).unwrap(),
@@ -33,7 +34,7 @@
 //! let bytes = write_smf(&file).unwrap();
 //! let parsed = read_smf(&bytes).unwrap();
 //! assert_eq!(parsed.format, SmfFormat::SingleTrack);
-//! assert_eq!(parsed.tpq, 480);
+//! assert_eq!(parsed.division, SmfDivision::metrical(480).unwrap());
 //! ```
 //!
 //! The variable-length quantity codec is reversible:
@@ -50,19 +51,25 @@
 #![deny(missing_docs)]
 
 mod error;
+mod limits;
 mod model;
 mod reader;
 mod vlq;
 mod writer;
 
 pub use error::*;
+pub use limits::*;
 pub use model::*;
 pub use reader::*;
 pub use vlq::*;
 pub use writer::*;
 
 #[cfg(test)]
+mod conformance_additional;
+#[cfg(test)]
 mod recipe_tests;
+#[cfg(test)]
+mod test_support;
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

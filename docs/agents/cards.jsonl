@@ -48,6 +48,9 @@
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/02-export-fixtures/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml"}

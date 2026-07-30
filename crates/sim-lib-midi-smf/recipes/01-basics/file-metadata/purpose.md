@@ -1,5 +1,7 @@
 # File Metadata (descriptor)
 
-Documents file metadata in the midi domain. MIDI note events, devices, and files are produced and transported through MIDI I/O outside the cookbook sandbox eval stack, so this is documented rather than run in
-the cookbook, whose sandbox eval stack loads only core construction and math over the number
-domains.
+Documents format, lossless metrical or SMPTE division, track count, and
+extension metadata at the SMF boundary. MIDI files are transported through I/O
+outside the cookbook sandbox eval stack, so this descriptor names the metadata
+that a host inspects before choosing a shared-timeline or independent-pattern
+workflow.

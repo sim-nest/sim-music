@@ -5,8 +5,8 @@ use sim_lib_music_core::{
 };
 
 use crate::model::{
-    checked_tick_time, score_meta_events, tempo_meta_events, time_to_ticks, validate_note,
-    with_track_name,
+    checked_tick_time, metrical_division, score_meta_events, tempo_meta_events, time_to_ticks,
+    validate_note, with_track_name,
 };
 use crate::{LowerError, LowerOpts};
 
@@ -23,7 +23,7 @@ pub(crate) fn build_piano_roll_file(
     let name = score.map_or("PianoRoll", |_| "Score");
     let mut file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: opts.tpq,
+        division: metrical_division(opts.tpq)?,
         tracks: vec![SmfTrack {
             events: with_track_name(name, events, opts.tpq)?,
         }],

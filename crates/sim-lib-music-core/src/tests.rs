@@ -11,7 +11,7 @@ use crate::{
 };
 use sim_kernel::Symbol;
 use sim_lib_midi_core::{U7, synthetic_origin};
-use sim_lib_midi_smf::{SmfFormat, SmfTrack};
+use sim_lib_midi_smf::{SmfDivision, SmfFormat, SmfTrack};
 use sim_lib_stream_core::{
     ClockDomain, STREAM_ENVELOPE_VERSION, StreamDirection, StreamMedia, StreamPacket,
 };
@@ -148,7 +148,7 @@ fn midi_file_object_uses_wrapped_tracks() {
     let channel = Channel::new(0).expect("channel");
     let file = SmfFile {
         format: SmfFormat::Simultaneous,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 MidiEvent {
