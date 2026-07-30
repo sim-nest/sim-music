@@ -30,6 +30,9 @@ pub enum TransformError {
     /// An identity-bearing staff violated its conversion invariants.
     #[error(transparent)]
     InvalidStaff(#[from] ConversionError),
+    /// A certified discrete assignment failed or overflowed.
+    #[error(transparent)]
+    Assignment(#[from] sim_lib_discrete_graph::GraphError),
 }
 
 /// Strategy for placing notes when reversing material in time.

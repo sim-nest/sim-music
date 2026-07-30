@@ -1,6 +1,8 @@
 //! Exact identity-preserving staff transforms and their audit reports.
 
 mod composition;
+mod leading;
+mod progression;
 mod register;
 
 use std::collections::BTreeSet;
@@ -12,6 +14,8 @@ use sim_lib_music_core::{
 use crate::TransformError;
 
 pub use composition::*;
+pub use leading::*;
+pub use progression::*;
 pub use register::*;
 
 /// One reversible or explicitly destructive change made by an exact transform.
@@ -68,6 +72,19 @@ pub enum MusicTransformChange {
         voice_id: ObjectId,
         /// Original voice from which it was split.
         source_voice_id: ObjectId,
+    },
+    /// Repetition derived fresh note/event identities for a later occurrence.
+    RepeatedIdentity {
+        /// Original logical note identity.
+        source_note_id: ObjectId,
+        /// Original event identity.
+        source_event_id: ObjectId,
+        /// Derived logical note identity.
+        repeated_note_id: ObjectId,
+        /// Derived event identity.
+        repeated_event_id: ObjectId,
+        /// Zero-based occurrence index, always greater than zero.
+        occurrence: usize,
     },
     /// A rhythm mask or slice removed an event.
     Removed {
@@ -370,13 +387,23 @@ fn finish(
     changes: Vec<MusicTransformChange>,
 ) -> Result<MusicTransform<Staff>, TransformError> {
     let staff = Staff::new(voices).map_err(TransformError::InvalidStaff)?;
-    let created = changes
-        .iter()
-        .filter_map(|change| match change {
-            MusicTransformChange::CreatedVoice { voice_id, .. } => Some(voice_id),
-            _ => None,
-        })
-        .collect::<BTreeSet<_>>();
+    let mut created = BTreeSet::new();
+    for change in &changes {
+        match change {
+            MusicTransformChange::CreatedVoice { voice_id, .. } => {
+                created.insert(voice_id);
+            }
+            MusicTransformChange::RepeatedIdentity {
+                repeated_note_id,
+                repeated_event_id,
+                ..
+            } => {
+                created.insert(repeated_note_id);
+                created.insert(repeated_event_id);
+            }
+            _ => {}
+        }
+    }
     Ok(MusicTransform {
         preserved: staff
             .object_ids()

@@ -131,7 +131,7 @@
       "id": "cookbook/music-transform",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-transform",
-      "summary": "Pure music transformation descriptors."
+      "summary": "Exact music transformation and voice-leading descriptors."
     },
     {
       "id": "cookbook/music-wasm",

@@ -1,0 +1,8 @@
+id = "optimal-voice-leading"
+title = "Certified optimal voice leading descriptor"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["music", "voice-leading", "progression", "assignment", "certificate", "exact-identity", "sandbox-descriptor"]
+requires = ["music-transform", "discrete-graph", "codec/lisp"]

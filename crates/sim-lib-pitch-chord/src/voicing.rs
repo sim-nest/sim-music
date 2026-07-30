@@ -1,3 +1,6 @@
+use std::collections::BTreeSet;
+
+use crate::Chord;
 use sim_lib_pitch_core::Pitch;
 
 /// A policy for deriving an output velocity from an input velocity.
@@ -95,4 +98,80 @@ fn drop_voice(mut notes: Vec<Pitch>, voice_index_from_top: usize, octaves: i16) 
 
 fn sort_by_semitone(notes: &mut [Pitch]) {
     notes.sort_by_key(|pitch| pitch.semitone());
+}
+
+/// One unique application of a [`VoicingPolicy`] to a chord.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct VoicingPaletteEntry {
+    /// Stable position-based identifier within the palette.
+    pub id: String,
+    /// Policy that produced this first occurrence.
+    pub policy: VoicingPolicy,
+    /// Exact ordered pitches produced by the policy.
+    pub pitches: Vec<Pitch>,
+}
+
+/// Deterministically deduplicated voicings of one chord.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct VoicingPalette {
+    /// Unique voicings in caller-supplied policy order.
+    pub entries: Vec<VoicingPaletteEntry>,
+}
+
+impl VoicingPalette {
+    /// Builds a palette, retaining the first policy that produces each exact
+    /// ordered pitch vector.
+    pub fn from_policies(chord: &Chord, policies: impl IntoIterator<Item = VoicingPolicy>) -> Self {
+        let pitches = chord.pitches();
+        let mut seen = BTreeSet::new();
+        let mut entries = Vec::new();
+        for policy in policies {
+            let voiced = policy.apply(pitches.clone());
+            if !seen.insert(voiced.clone()) {
+                continue;
+            }
+            entries.push(VoicingPaletteEntry {
+                id: format!("voicing/{}", entries.len()),
+                policy,
+                pitches: voiced,
+            });
+        }
+        Self { entries }
+    }
+
+    /// Returns the palette entry with `id`.
+    pub fn get(&self, id: &str) -> Option<&VoicingPaletteEntry> {
+        self.entries.iter().find(|entry| entry.id == id)
+    }
+}
+
+#[cfg(test)]
+mod palette_tests {
+    use super::*;
+
+    #[test]
+    fn palette_deduplicates_by_exact_voicing_and_keeps_first_policy() {
+        let chord = Chord::from_root_intervals(Pitch::from_midi(60), &[4, 7]);
+        let palette = VoicingPalette::from_policies(
+            &chord,
+            [
+                VoicingPolicy::Closed,
+                VoicingPolicy::Closed,
+                VoicingPolicy::Open { spread: 12 },
+            ],
+        );
+
+        assert_eq!(palette.entries.len(), 2);
+        assert_eq!(palette.entries[0].id, "voicing/0");
+        assert_eq!(palette.entries[0].policy, VoicingPolicy::Closed);
+        assert_eq!(
+            palette.entries[1]
+                .pitches
+                .iter()
+                .map(|pitch| pitch.to_midi().expect("MIDI pitch"))
+                .collect::<Vec<_>>(),
+            vec![60, 76, 91]
+        );
+        assert_eq!(palette.get("voicing/1"), palette.entries.get(1));
+    }
 }

@@ -175,6 +175,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/setup.siml"}
