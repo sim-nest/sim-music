@@ -21,7 +21,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 1 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
-| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 2 | Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable operations and explicit pitch maps. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, analyze pitch and chord views, and transform exact sequences with audited articulation, register, rhythm, and pitch operations. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
@@ -1063,6 +1063,600 @@ fn diff_roll_and_window_extraction_agree() {
     assert_eq!(
         chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes),
         chord_windows_from_diff_roll(&diff, ChordWindowMode::StartingNotes)
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-core/src/tests/score` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-core/src/tests/score.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: catalog score conversions preserve identities or report every exact loss.
+
+use crate::{
+    AmbiguousConversionPolicy, Articulation, AutomationCell, Channel, Chord, ConversionError,
+    ConversionLossKind, LaneId, LaneKind, Melody, MelodyItem, MusicObject, Note, ObjectId,
+    PianoRoll, PianoRollCell, PianoRollLane, Pitch, Progression, Rest, ScoreForm, ScoreFormKind,
+    Staff, StaffNote, StaffVoice, Time, TimeGrid, convert_score,
+};
+
+fn quarter() -> Time {
+    Ratio::new(1, 4)
+}
+
+fn note(midi: u8, duration: Time) -> Note {
+    Note::new(
+        duration,
+        Pitch::from_midi(midi),
+        96,
+        Channel::new(0).expect("channel"),
+        Articulation::Normal,
+    )
+    .expect("note")
+}
+
+fn staff_note(path: &str, voice: &ObjectId, onset: Time, midi: u8) -> StaffNote {
+    StaffNote {
+        voice_id: voice.clone(),
+        note_id: ObjectId::new(format!("note/{path}")).expect("note id"),
+        event_id: ObjectId::new(format!("event/{path}")).expect("event id"),
+        onset,
+        note: note(midi, quarter()),
+    }
+}
+
+fn polyphonic_staff() -> Staff {
+    let high = ObjectId::new("voice/high").expect("voice");
+    let low = ObjectId::new("voice/low").expect("voice");
+    Staff::new(vec![
+        StaffVoice {
+            id: high.clone(),
+            name: "High".to_owned(),
+            duration: Time::from_integer(1),
+            notes: vec![
+                staff_note("high/0", &high, Time::from_integer(0), 72),
+                staff_note("high/1", &high, quarter(), 74),
+            ],
+        },
+        StaffVoice {
+            id: low.clone(),
+            name: "Low".to_owned(),
+            duration: Time::from_integer(1),
+            notes: vec![
+                staff_note("low/0", &low, Time::from_integer(0), 48),
+                staff_note("low/1", &low, quarter(), 50),
+            ],
+        },
+    ])
+    .expect("staff")
+}
+
+#[test]
+fn melody_staff_round_trip_keeps_exact_time_and_audits_rest_boundaries() {
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(64, Ratio::new(1, 2))),
+    ])
+    .expect("melody");
+
+    let staff = convert_score(
+        &ScoreForm::Melody(melody.clone()),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("to staff");
+    assert_eq!(staff.value.kind(), ScoreFormKind::Staff);
+    assert_eq!(staff.losses.len(), 1);
+    assert_eq!(staff.losses[0].kind, ConversionLossKind::ExplicitRest);
+    let ScoreForm::Staff(staff_value) = staff.value else {
+        panic!("staff");
+    };
+    assert_eq!(staff_value.duration(), Time::from_integer(1));
+
+    let restored = convert_score(
+        &ScoreForm::Staff(staff_value),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("to melody");
+    assert_eq!(restored.value, ScoreForm::Melody(melody));
+}
+
+#[test]
+fn snapshots_and_changes_round_trip_staff_identities() {
+    let staff = polyphonic_staff();
+    for kind in [ScoreFormKind::Snapshot, ScoreFormKind::ChangeStream] {
+        let encoded = convert_score(
+            &ScoreForm::Staff(staff.clone()),
+            kind,
+            AmbiguousConversionPolicy::Reject,
+        )
+        .expect("encode event form");
+        assert!(encoded.is_lossless());
+        assert_eq!(encoded.preserved, staff.object_ids());
+
+        let decoded = convert_score(
+            &encoded.value,
+            ScoreFormKind::Staff,
+            AmbiguousConversionPolicy::Reject,
+        )
+        .expect("decode event form");
+        assert_eq!(decoded.value, ScoreForm::Staff(staff.clone()));
+        assert_eq!(decoded.preserved, staff.object_ids());
+    }
+}
+
+#[test]
+fn ambiguous_monophonic_conversion_requires_a_policy() {
+    let staff = polyphonic_staff();
+    let rejected = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::Reject,
+    );
+    assert!(matches!(
+        rejected,
+        Err(ConversionError::Ambiguous {
+            to: ScoreFormKind::Melody,
+            ..
+        })
+    ));
+
+    let selected = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::KeepHighest,
+    )
+    .expect("select high line");
+    let ScoreForm::Melody(melody) = selected.value else {
+        panic!("melody");
+    };
+    let midis = melody
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            MelodyItem::Note(note) => note.pitch.to_midi(),
+            MelodyItem::Rest(_) => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(midis, vec![72, 74]);
+    assert!(
+        selected
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::DiscardedVoice)
+    );
+}
+
+#[test]
+fn every_catalog_target_converts_or_reports_its_loss() {
+    let staff = polyphonic_staff();
+    for target in [
+        ScoreFormKind::Melody,
+        ScoreFormKind::Chord,
+        ScoreFormKind::Staff,
+        ScoreFormKind::Counterpoint,
+        ScoreFormKind::PianoRoll,
+        ScoreFormKind::Snapshot,
+        ScoreFormKind::ChangeStream,
+        ScoreFormKind::Progression,
+    ] {
+        let report = convert_score(
+            &ScoreForm::Staff(staff.clone()),
+            target,
+            AmbiguousConversionPolicy::KeepFirst,
+        )
+        .unwrap_or_else(|error| panic!("{target:?}: {error}"));
+        assert_eq!(report.value.kind(), target);
+        if !report.is_lossless() {
+            assert!(report.losses.iter().all(|loss| !loss.detail.is_empty()));
+        }
+    }
+}
+
+#[test]
+fn full_catalog_matrix_round_trips_or_carries_explicit_losses() {
+    let staff = polyphonic_staff();
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(62, quarter())),
+    ])
+    .expect("melody");
+    let chord = Chord::new(
+        quarter(),
+        "Dm",
+        vec![Pitch::from_midi(62), Pitch::from_midi(65)],
+        90,
+        Channel::new(0).expect("channel"),
+    )
+    .expect("chord");
+    let progression =
+        Progression::new(Some("D minor".to_owned()), vec![chord.clone()]).expect("progression");
+    let counterpoint = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Counterpoint,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("counterpoint")
+    .value;
+    let piano_roll = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::PianoRoll,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("piano roll")
+    .value;
+    let snapshot = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Snapshot,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("snapshot")
+    .value;
+    let changes = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::ChangeStream,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("changes")
+    .value;
+    let sources = vec![
+        ScoreForm::Melody(melody),
+        ScoreForm::Chord(chord),
+        ScoreForm::Staff(staff),
+        counterpoint,
+        piano_roll,
+        snapshot,
+        changes,
+        ScoreForm::Progression(progression),
+    ];
+    let targets = [
+        ScoreFormKind::Melody,
+        ScoreFormKind::Chord,
+        ScoreFormKind::Staff,
+        ScoreFormKind::Counterpoint,
+        ScoreFormKind::PianoRoll,
+        ScoreFormKind::Snapshot,
+        ScoreFormKind::ChangeStream,
+        ScoreFormKind::Progression,
+    ];
+
+    for source in sources {
+        for target in targets {
+            let converted = convert_score(&source, target, AmbiguousConversionPolicy::KeepFirst)
+                .unwrap_or_else(|error| panic!("{:?} -> {target:?}: {error}", source.kind()));
+            let restored = convert_score(
+                &converted.value,
+                source.kind(),
+                AmbiguousConversionPolicy::KeepFirst,
+            )
+            .unwrap_or_else(|error| panic!("{target:?} -> {:?}: {error}", source.kind()));
+            if restored.value != source {
+                assert!(
+                    !converted.losses.is_empty() || !restored.losses.is_empty(),
+                    "{:?} -> {target:?} changed without a loss report",
+                    source.kind()
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn harmonic_and_piano_roll_metadata_losses_are_explicit() {
+    let chord = Chord::new(
+        quarter(),
+        "C",
+        vec![Pitch::from_midi(60), Pitch::from_midi(64)],
+        90,
+        Channel::new(0).expect("channel"),
+    )
+    .expect("chord");
+    let progression =
+        Progression::new(Some("C major".to_owned()), vec![chord]).expect("progression");
+    let progression_report = convert_score(
+        &ScoreForm::Progression(progression),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("progression to staff");
+    assert!(
+        progression_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::KeyAnnotation)
+    );
+    assert!(
+        progression_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::HarmonicLabel)
+    );
+
+    let automation = PianoRollCell::Automation(AutomationCell {
+        time: Time::from_integer(0),
+        target: sim_kernel::Symbol::qualified("music/parameter", "expression"),
+        value: 72,
+    });
+    let roll = PianoRoll::from_lanes_with_time(
+        vec![
+            PianoRollLane::new(
+                LaneId::new("automation"),
+                LaneKind::Automation,
+                vec![automation],
+            )
+            .expect("lane"),
+        ],
+        TimeGrid::new(960, Ratio::new(1, 32)).expect("grid"),
+    )
+    .expect("roll");
+    let roll_report = convert_score(
+        &ScoreForm::PianoRoll(roll),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("roll to staff");
+    assert!(
+        roll_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::PianoRollGrid)
+    );
+    assert!(
+        roll_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::NonNoteCell)
+    );
+}
+
+#[test]
+fn staff_duration_is_exact_parallel_maximum() {
+    let staff = polyphonic_staff();
+    assert_eq!(staff.duration(), Time::from_integer(1));
+    assert_eq!(MusicObject::duration(&staff), Time::from_integer(1));
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-transform/src/tests/exact` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-transform/src/tests/exact.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: exact staff transforms preserve identities and satisfy composition laws.
+
+use sim_lib_music_core::{
+    Articulation, Channel, Note, ObjectId, Pitch, Staff, StaffNote, StaffVoice, Time,
+};
+
+use crate::{
+    DelayedNoteOrder, MusicTransformChange, RegisterRange, RegisterTie, RhythmMask, SustainSpan,
+    apply_rhythm_mask, expand_staff, parallel_staff, restore_register, separate_delayed_notes,
+    sequence_staff, slice_staff, slur_staff, sustain_staff, unwrap_register,
+};
+
+fn q() -> Time {
+    Ratio::new(1, 4)
+}
+
+fn make_note(voice: &ObjectId, path: &str, onset: Time, duration: Time, midi: u8) -> StaffNote {
+    StaffNote {
+        voice_id: voice.clone(),
+        note_id: ObjectId::new(format!("note/{path}")).expect("note id"),
+        event_id: ObjectId::new(format!("event/{path}")).expect("event id"),
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            96,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+fn one_voice(voice_name: &str, duration: Time, notes: Vec<StaffNote>) -> Staff {
+    let voice = notes
+        .first()
+        .map(|note| note.voice_id.clone())
+        .unwrap_or_else(|| ObjectId::new(voice_name).expect("voice id"));
+    Staff::new(vec![StaffVoice {
+        id: voice,
+        name: voice_name.to_owned(),
+        duration,
+        notes,
+    }])
+    .expect("staff")
+}
+
+#[test]
+fn sustain_and_slur_report_exact_duration_and_articulation_edits() {
+    let voice = ObjectId::new("voice/lead").expect("voice");
+    let staff = one_voice(
+        "Lead",
+        Time::from_integer(1),
+        vec![
+            make_note(&voice, "lead/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "lead/1", Ratio::new(1, 2), q(), 62),
+        ],
+    );
+    let sustained = sustain_staff(
+        &staff,
+        &[SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None)],
+    )
+    .expect("sustain");
+    assert_eq!(
+        sustained.value.voices[0].notes[0].note.duration,
+        Ratio::new(3, 8)
+    );
+    assert!(matches!(
+        sustained.changes[0],
+        MusicTransformChange::Duration { .. }
+    ));
+
+    let slurred = slur_staff(&staff).expect("slur");
+    assert_eq!(
+        slurred.value.voices[0].notes[0].note.duration,
+        Ratio::new(1, 2)
+    );
+    assert_eq!(
+        slurred.value.voices[0].notes[0].note.articulation,
+        Articulation::Legato
+    );
+    assert!(
+        slurred
+            .changes
+            .iter()
+            .any(|change| matches!(change, MusicTransformChange::Articulation { .. }))
+    );
+}
+
+#[test]
+fn expansion_is_exactly_invertible_without_float_time() {
+    let voice = ObjectId::new("voice/expand").expect("voice");
+    let staff = one_voice(
+        "Expand",
+        Ratio::new(5, 8),
+        vec![make_note(
+            &voice,
+            "expand/0",
+            Ratio::new(1, 8),
+            Ratio::new(3, 16),
+            60,
+        )],
+    );
+    let expanded = expand_staff(&staff, Ratio::new(3, 2)).expect("expand");
+    let restored = expand_staff(&expanded.value, Ratio::new(2, 3)).expect("contract");
+    assert_eq!(restored.value, staff);
+}
+
+#[test]
+fn delayed_note_separation_preserves_ids_and_keeps_exact_abutment() {
+    let voice = ObjectId::new("voice/delayed").expect("voice");
+    let staff = one_voice(
+        "Delayed",
+        Time::from_integer(1),
+        vec![
+            make_note(
+                &voice,
+                "delayed/0",
+                Time::from_integer(0),
+                Ratio::new(1, 2),
+                60,
+            ),
+            make_note(&voice, "delayed/1", q(), q(), 67),
+            make_note(&voice, "delayed/2", Ratio::new(1, 2), q(), 62),
+        ],
+    );
+    let original_ids = staff.object_ids();
+    let separated =
+        separate_delayed_notes(&staff, DelayedNoteOrder::HighestFirst).expect("separate");
+
+    assert_eq!(separated.value.voices.len(), 2);
+    assert_eq!(separated.value.voices[0].notes.len(), 2);
+    assert_eq!(separated.value.voices[0].notes[1].onset, Ratio::new(1, 2));
+    assert_eq!(separated.preserved, original_ids);
+    assert!(
+        separated
+            .changes
+            .iter()
+            .any(|change| matches!(change, MusicTransformChange::CreatedVoice { .. }))
+    );
+}
+
+#[test]
+fn register_unwrap_report_restores_original_octaves() {
+    let voice = ObjectId::new("voice/register").expect("voice");
+    let staff = one_voice(
+        "Register",
+        Ratio::new(1, 2),
+        vec![
+            make_note(&voice, "register/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "register/1", q(), q(), 83),
+        ],
+    );
+    let unwrapped = unwrap_register(
+        &staff,
+        RegisterRange {
+            low: Pitch::from_midi(48),
+            high: Pitch::from_midi(72),
+            tie: RegisterTie::Descending,
+        },
+    )
+    .expect("unwrap");
+    assert_eq!(
+        unwrapped.value.voices[0].notes[1].note.pitch.to_midi(),
+        Some(59)
+    );
+    assert_eq!(restore_register(&unwrapped).expect("restore").value, staff);
+}
+
+#[test]
+fn exact_duration_sequence_and_parallel_laws_hold() {
+    let voice_a = ObjectId::new("voice/a").expect("voice");
+    let voice_b = ObjectId::new("voice/b").expect("voice");
+    let first = one_voice(
+        "voice/a",
+        Ratio::new(3, 4),
+        vec![make_note(&voice_a, "a/0", Time::from_integer(0), q(), 60)],
+    );
+    let second_same_voice = one_voice(
+        "voice/a",
+        Ratio::new(1, 2),
+        vec![make_note(&voice_a, "a/1", Ratio::new(1, 8), q(), 62)],
+    );
+    let second_parallel = one_voice(
+        "voice/b",
+        Ratio::new(1, 2),
+        vec![make_note(&voice_b, "b/0", Time::from_integer(0), q(), 48)],
+    );
+
+    let sequence = sequence_staff(&[first.clone(), second_same_voice]).expect("sequence");
+    assert_eq!(sequence.value.duration(), Ratio::new(5, 4));
+    assert_eq!(sequence.value.voices[0].notes[1].onset, Ratio::new(7, 8));
+
+    let parallel = parallel_staff(&[first, second_parallel]).expect("parallel");
+    assert_eq!(parallel.value.duration(), Ratio::new(3, 4));
+}
+
+#[test]
+fn slicing_composes_and_rhythm_masks_are_idempotent() {
+    let voice = ObjectId::new("voice/laws").expect("voice");
+    let staff = one_voice(
+        "Laws",
+        Time::from_integer(1),
+        vec![
+            make_note(&voice, "laws/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "laws/1", q(), q(), 62),
+            make_note(&voice, "laws/2", Ratio::new(1, 2), q(), 64),
+            make_note(&voice, "laws/3", Ratio::new(3, 4), q(), 65),
+        ],
+    );
+
+    let outer = slice_staff(&staff, Ratio::new(1, 8), Ratio::new(7, 8)).expect("outer");
+    let nested = slice_staff(&outer.value, Ratio::new(1, 8), Ratio::new(1, 2)).expect("nested");
+    let direct = slice_staff(&staff, q(), Ratio::new(5, 8)).expect("direct");
+    assert_eq!(nested.value, direct.value);
+
+    let mask = RhythmMask::new(q(), vec![true, false]).expect("mask");
+    let once = apply_rhythm_mask(&staff, &mask).expect("once");
+    let twice = apply_rhythm_mask(&once.value, &mask).expect("twice");
+    assert_eq!(once.value, twice.value);
+    assert_eq!(
+        once.value.voices[0]
+            .notes
+            .iter()
+            .map(|note| note.note.pitch.to_midi().expect("midi"))
+            .collect::<Vec<_>>(),
+        vec![60, 64]
     );
 }
 ```

@@ -1,5 +1,7 @@
 use num_rational::Ratio;
 
+// conformance: catalog score conversions preserve identities or report every exact loss.
+
 use crate::{
     AmbiguousConversionPolicy, Articulation, AutomationCell, Channel, Chord, ConversionError,
     ConversionLossKind, LaneId, LaneKind, Melody, MelodyItem, MusicObject, Note, ObjectId,

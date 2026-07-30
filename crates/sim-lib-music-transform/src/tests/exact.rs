@@ -1,5 +1,7 @@
 use num_rational::Ratio;
 
+// conformance: exact staff transforms preserve identities and satisfy composition laws.
+
 use sim_lib_music_core::{
     Articulation, Channel, Note, ObjectId, Pitch, Staff, StaffNote, StaffVoice, Time,
 };
