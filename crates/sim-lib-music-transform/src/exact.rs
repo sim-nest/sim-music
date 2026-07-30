@@ -174,7 +174,8 @@ impl RhythmMask {
 ///
 /// Onsets, pitches, identities, and exact rational time are retained. A note
 /// released inside overlapping sustain spans is extended through the furthest
-/// applicable pedal-up boundary.
+/// applicable pedal-up boundary. Transitive extension is independent of the
+/// order in which spans are supplied.
 pub fn sustain_staff(
     staff: &Staff,
     spans: &[SustainSpan],

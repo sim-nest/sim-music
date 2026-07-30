@@ -206,7 +206,8 @@ impl MusicObject for Staff {
 pub struct MusicSnapshot {
     /// Exact snapshot time.
     pub at: Time,
-    /// Identity-bearing notes sounding in the half-open interval at `at`.
+    /// Complete set of identity-bearing notes sounding in the half-open
+    /// interval at `at`.
     pub sounding: Vec<StaffNote>,
 }
 
@@ -228,7 +229,7 @@ pub struct SnapshotStream {
     pub duration: Time,
     /// Voice identities, names, and individual spans.
     pub voices: Vec<ScoreVoice>,
-    /// Snapshots in ascending time order.
+    /// Complete event-boundary snapshots in strictly ascending time order.
     pub snapshots: Vec<MusicSnapshot>,
 }
 
