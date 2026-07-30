@@ -1191,6 +1191,42 @@ fn snapshots_and_changes_round_trip_staff_identities() {
 }
 
 #[test]
+fn snapshot_decoder_reports_incomplete_activity_sets() {
+    let mut staff = polyphonic_staff();
+    staff.voices[0].notes[0].note.duration = Ratio::new(1, 2);
+    let omitted = staff.voices[0].notes[0].event_id.clone();
+    let encoded = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Snapshot,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("encode snapshots");
+    let ScoreForm::Snapshot(mut snapshots) = encoded.value else {
+        panic!("snapshot");
+    };
+    snapshots
+        .snapshots
+        .iter_mut()
+        .find(|snapshot| snapshot.at == quarter())
+        .expect("quarter-note boundary")
+        .sounding
+        .retain(|note| note.event_id != omitted);
+
+    let decoded = convert_score(
+        &ScoreForm::Snapshot(snapshots),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("decode incomplete snapshots");
+    assert!(
+        decoded
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::InconsistentChange)
+    );
+}
+
+#[test]
 fn ambiguous_monophonic_conversion_requires_a_policy() {
     let staff = polyphonic_staff();
     let rejected = convert_score(
@@ -1490,12 +1526,15 @@ fn sustain_and_slur_report_exact_duration_and_articulation_edits() {
     );
     let sustained = sustain_staff(
         &staff,
-        &[SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None)],
+        &[
+            SustainSpan::new(Ratio::new(3, 8), Ratio::new(1, 2), None),
+            SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None),
+        ],
     )
     .expect("sustain");
     assert_eq!(
         sustained.value.voices[0].notes[0].note.duration,
-        Ratio::new(3, 8)
+        Ratio::new(1, 2)
     );
     assert!(matches!(
         sustained.changes[0],
