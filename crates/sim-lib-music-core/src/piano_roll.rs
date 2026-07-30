@@ -58,6 +58,41 @@ pub struct TimedNote {
     pub note: Note,
 }
 
+/// Stable identity of one note occurrence inside a piano-roll lane.
+///
+/// Equal pitches remain distinct because identity is the lane plus cell index,
+/// not a pitch or pitch-class mask.
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct NoteOccurrence {
+    /// Lane containing the note cell.
+    pub lane: LaneId,
+    /// Stable index within that lane's canonical cell order.
+    pub cell_index: usize,
+}
+
+/// One identity-bearing note present in a [`NoteSlice`].
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SlicedNote {
+    /// Piano-roll occurrence identity.
+    pub occurrence: NoteOccurrence,
+    /// Exact onset and note payload.
+    pub timed: TimedNote,
+}
+
+/// Exact half-open piano-roll window with every sounding note occurrence.
+///
+/// The `notes` vector deliberately preserves duplicate pitches and unisons for
+/// later consonance, orchestration, and voice-aware analysis.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct NoteSlice {
+    /// Inclusive start of the window.
+    pub at: Time,
+    /// Exclusive end of the window.
+    pub until: Time,
+    /// Notes sounding throughout `[at, until)`, in stable occurrence order.
+    pub notes: Vec<SlicedNote>,
+}
+
 /// A drum hit cell addressed by MIDI key.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct DrumCell {
@@ -460,6 +495,58 @@ impl PianoRoll {
     /// Iterates over every cell across all lanes.
     pub fn cells(&self) -> impl Iterator<Item = &PianoRollCell> {
         self.lanes.iter().flat_map(|lane| lane.cells.iter())
+    }
+
+    /// Splits the roll at every note onset and release into exact sounding
+    /// windows.
+    ///
+    /// Silent spans and zero-duration notes do not produce slices. Equal
+    /// pitches in different cells remain separate [`SlicedNote`] entries.
+    pub fn note_slices(&self) -> Vec<NoteSlice> {
+        let occurrences = self
+            .lanes
+            .iter()
+            .flat_map(|lane| {
+                lane.cells
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(cell_index, cell)| {
+                        cell_note(cell).map(|timed| SlicedNote {
+                            occurrence: NoteOccurrence {
+                                lane: lane.id.clone(),
+                                cell_index,
+                            },
+                            timed,
+                        })
+                    })
+            })
+            .collect::<Vec<_>>();
+        let mut boundaries = occurrences
+            .iter()
+            .flat_map(|note| {
+                [
+                    note.timed.onset,
+                    note.timed.onset + note.timed.note.duration,
+                ]
+            })
+            .collect::<Vec<_>>();
+        boundaries.sort();
+        boundaries.dedup();
+        boundaries
+            .windows(2)
+            .filter_map(|pair| {
+                let at = pair[0];
+                let until = pair[1];
+                let notes = occurrences
+                    .iter()
+                    .filter(|note| {
+                        note.timed.onset <= at && at < note.timed.onset + note.timed.note.duration
+                    })
+                    .cloned()
+                    .collect::<Vec<_>>();
+                (!notes.is_empty() && at < until).then_some(NoteSlice { at, until, notes })
+            })
+            .collect()
     }
 
     /// Renders the roll, its grid, and its lanes as an expression.

@@ -14,8 +14,8 @@ use crate::test_support::{
 };
 use crate::writer::{MAX_SMF_VLQ, checked_chunk_len, checked_payload_len};
 use crate::{
-    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTimeSemantics, SmfTrack, SmfWriteOptions,
-    SmpteRate, decode_vlq, encode_vlq, read_smf, write_smf_with_options,
+    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTempoMaps, SmfTimeSemantics, SmfTrack,
+    SmfWriteOptions, SmpteRate, decode_vlq, encode_vlq, read_smf, write_smf_with_options,
 };
 
 #[test]
@@ -197,6 +197,42 @@ fn format_two_patterns_cannot_be_merged_onto_a_shared_timeline() {
         file.merged_events().unwrap_err(),
         SmfError::IndependentPatternsCannotMerge
     );
+}
+
+#[test]
+fn tempo_maps_keep_format_two_patterns_independent() {
+    let tempo = |us_per_quarter| MidiEvent {
+        time: TickTime::new(0, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    let file = SmfFile {
+        format: SmfFormat::Independent,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![
+            SmfTrack {
+                events: vec![tempo(500_000)],
+            },
+            SmfTrack {
+                events: vec![tempo(250_000)],
+            },
+        ],
+    };
+
+    let SmfTempoMaps::Independent(maps) = file.tempo_maps().expect("tempo maps") else {
+        panic!("format 2 must retain independent tempo maps");
+    };
+    assert_eq!(maps.len(), 2);
+    assert_eq!(maps[0].segments()[0].us_per_quarter, 500_000);
+    assert_eq!(maps[1].segments()[0].us_per_quarter, 250_000);
+    let first = maps[0]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    let second = maps[1]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    assert_eq!((first.numerator(), first.denominator()), (1, 2));
+    assert_eq!((second.numerator(), second.denominator()), (1, 4));
 }
 
 #[test]

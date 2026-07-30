@@ -207,12 +207,14 @@ struct OpenPerformanceNote {
     velocity: u8,
     channel: Channel,
     started_at: Tick,
-    released_while_sustained: bool,
+    key_released: bool,
+    sostenuto_captured: bool,
 }
 
 #[derive(Clone, Debug, Default)]
 struct PerformanceClipState {
-    sustain_pedal: bool,
+    sustain_pedals: [bool; 16],
+    sostenuto_pedals: [bool; 16],
     active: BTreeMap<PerformanceNoteKey, OpenPerformanceNote>,
     notes: Vec<NoteEvent>,
 }
@@ -237,30 +239,121 @@ impl PerformanceClipState {
                         velocity: *velocity,
                         channel: *channel,
                         started_at: event.time,
-                        released_while_sustained: false,
+                        key_released: false,
+                        sostenuto_captured: false,
                     },
                 );
             }
             PerformanceIntent::NoteOff { pitch, channel, .. } => {
                 let key = PerformanceNoteKey::new(*channel, *pitch);
-                if self.sustain_pedal {
-                    if let Some(note) = self.active.get_mut(&key) {
-                        note.released_while_sustained = true;
-                    }
+                let held = if let Some(note) = self.active.get_mut(&key) {
+                    note.key_released = true;
+                    self.sustain_pedals[channel.0 as usize]
+                        || (self.sostenuto_pedals[channel.0 as usize] && note.sostenuto_captured)
                 } else {
+                    false
+                };
+                if !held {
                     self.close_note(key, event.time)?;
                 }
             }
-            PerformanceIntent::Sustain { down, .. } => {
-                self.sustain_pedal = *down;
+            PerformanceIntent::Sustain { down, channel } => {
+                self.sustain_pedals[channel.0 as usize] = *down;
                 if !down {
                     let released = self
                         .active
                         .iter()
-                        .filter_map(|(key, note)| note.released_while_sustained.then_some(*key))
+                        .filter_map(|(key, note)| {
+                            (key.channel == channel.0
+                                && note.key_released
+                                && !(self.sostenuto_pedals[channel.0 as usize]
+                                    && note.sostenuto_captured))
+                                .then_some(*key)
+                        })
                         .collect::<Vec<_>>();
                     for key in released {
                         self.close_note(key, event.time)?;
+                    }
+                }
+            }
+            PerformanceIntent::Sostenuto { down, channel } => {
+                let index = channel.0 as usize;
+                if *down && !self.sostenuto_pedals[index] {
+                    for (key, note) in &mut self.active {
+                        if key.channel == channel.0 {
+                            note.sostenuto_captured = true;
+                        }
+                    }
+                }
+                self.sostenuto_pedals[index] = *down;
+                if !down {
+                    let released = self
+                        .active
+                        .iter()
+                        .filter_map(|(key, note)| {
+                            (key.channel == channel.0
+                                && note.key_released
+                                && !self.sustain_pedals[index])
+                                .then_some(*key)
+                        })
+                        .collect::<Vec<_>>();
+                    for key in released {
+                        self.close_note(key, event.time)?;
+                    }
+                    for (key, note) in &mut self.active {
+                        if key.channel == channel.0 {
+                            note.sostenuto_captured = false;
+                        }
+                    }
+                }
+            }
+            PerformanceIntent::AllNotesOff { channel } => {
+                let index = channel.0 as usize;
+                let keys = self
+                    .active
+                    .iter_mut()
+                    .filter_map(|(key, note)| {
+                        if key.channel != channel.0 {
+                            return None;
+                        }
+                        note.key_released = true;
+                        (!(self.sustain_pedals[index]
+                            || self.sostenuto_pedals[index] && note.sostenuto_captured))
+                            .then_some(*key)
+                    })
+                    .collect::<Vec<_>>();
+                for key in keys {
+                    self.close_note(key, event.time)?;
+                }
+            }
+            PerformanceIntent::AllSoundOff { channel } => {
+                let keys = self
+                    .active
+                    .keys()
+                    .filter(|key| key.channel == channel.0)
+                    .copied()
+                    .collect::<Vec<_>>();
+                for key in keys {
+                    self.close_note(key, event.time)?;
+                }
+            }
+            PerformanceIntent::ResetControllers { channel } => {
+                let index = channel.0 as usize;
+                self.sustain_pedals[index] = false;
+                self.sostenuto_pedals[index] = false;
+                let released = self
+                    .active
+                    .iter()
+                    .filter_map(|(key, note)| {
+                        (key.channel == channel.0 && note.key_released).then_some(*key)
+                    })
+                    .collect::<Vec<_>>();
+                for key in released {
+                    self.close_note(key, event.time)?;
+                }
+                for (key, note) in &mut self.active {
+                    if key.channel == channel.0 {
+                        note.sostenuto_captured = false;
                     }
                 }
             }
@@ -269,7 +362,8 @@ impl PerformanceClipState {
                 for key in keys {
                     self.close_note(key, event.time)?;
                 }
-                self.sustain_pedal = false;
+                self.sustain_pedals = [false; 16];
+                self.sostenuto_pedals = [false; 16];
             }
             PerformanceIntent::Aftertouch { .. }
             | PerformanceIntent::PitchBend { .. }

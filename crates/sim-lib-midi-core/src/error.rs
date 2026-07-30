@@ -28,6 +28,30 @@ pub enum MidiError {
     /// exactly.
     #[error("inexact TPQ rebase")]
     InexactRebase,
+    /// A tempo meta event carried the forbidden zero microseconds-per-quarter
+    /// value.
+    #[error("MIDI tempo must be non-zero")]
+    ZeroTempo,
+    /// An event or conversion used a negative tick, which is outside an SMF
+    /// tempo timeline.
+    #[error("MIDI tempo-map ticks must be non-negative")]
+    NegativeTempoTick,
+    /// Tempo-map source events were not ordered by exact tick time.
+    #[error("MIDI tempo events must be ordered by tick")]
+    TempoEventsOutOfOrder,
+    /// A tempo map was requested for a non-metrical time division.
+    #[error("MIDI tempo maps require a metrical ticks-per-quarter division")]
+    MetricalTempoRequired,
+    /// An exact beat or wall-time position does not land on an integer MIDI
+    /// tick at the map's resolution.
+    #[error("time does not land on an exact MIDI tick")]
+    InexactTempoTick,
+    /// A tempo conversion exceeded its integer representation.
+    #[error("MIDI tempo conversion overflowed")]
+    TempoOverflow,
+    /// The shared stream-clock chart rejected tempo arithmetic.
+    #[error("MIDI tempo chart failed: {0}")]
+    TempoChart(String),
 }
 
 /// An error raised while pumping events from a source into a sink, recording

@@ -96,6 +96,38 @@ fn performance_source_tracks_held_notes_sustain_and_panic() {
 }
 
 #[test]
+fn performance_sostenuto_and_channel_modes_round_trip_into_note_duration() {
+    let mut source = source();
+    source
+        .capture_start(Symbol::qualified("music/take", "sostenuto"))
+        .expect("start");
+    source
+        .poll_events(vec![
+            PerformanceInput::note_on(tick(0), channel(), 60, 96),
+            PerformanceInput::sostenuto(tick(120), channel(), true),
+            PerformanceInput::note_off(tick(240), channel(), 60, 32),
+            PerformanceInput::all_notes_off(tick(300), channel()),
+        ])
+        .expect("capture");
+    assert_eq!(source.state().held_note_count(), 1);
+    assert!(source.state().sostenuto_pedal);
+
+    source
+        .poll_events(vec![PerformanceInput::sostenuto(
+            tick(480),
+            channel(),
+            false,
+        )])
+        .expect("sostenuto up");
+    assert_eq!(source.state().held_note_count(), 0);
+    let take = source.capture_stop().expect("take");
+    assert_eq!(take.replay_events().expect("replay"), take.events);
+    let notes = take.note_events().expect("notes");
+    assert_eq!(notes.len(), 1);
+    assert_eq!(notes[0].duration, tick(480));
+}
+
+#[test]
 fn octave_transpose_and_scale_lock_are_applied_before_capture() {
     let mut source = source();
     source.set_octave_shift(1);

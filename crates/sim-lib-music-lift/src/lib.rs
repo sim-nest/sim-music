@@ -1,7 +1,10 @@
 //! Lifts music from lower-level representations to higher-level ones.
 //!
 //! A lift raises a concrete, low-level representation (a parsed MIDI/SMF file)
-//! into a richer, more structured music representation: a `PianoRoll`, a
+//! into a richer, more structured music representation. [`realize_midi`]
+//! first applies exact tempo-map, overlap-pairing, same-tick, sustain,
+//! sostenuto, and channel-mode policy without flattening format-2 patterns.
+//! The higher-level lifts then produce a `PianoRoll`, a
 //! `DiffRoll` analysis view, a chord `Progression`, or a `Counterpoint` of
 //! separated voices. Each lifter implements [`MidiLifter`] and returns a
 //! [`LiftReport`] carrying the lifted value alongside diagnostics describing
@@ -18,6 +21,7 @@ mod collect;
 mod counterpoint;
 mod model;
 mod progression;
+mod realize;
 mod runtime;
 
 pub use model::*;

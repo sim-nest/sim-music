@@ -19,7 +19,7 @@ pub(crate) fn lift_counterpoint_impl(
         return Err(LiftError::InvalidRestThreshold);
     }
 
-    let collected = collect_midi(file);
+    let collected = collect_midi(file)?;
     let (voices, names, diagnostics) = lift_to_counterpoint_voices(&collected, opts)?;
     let mut all_diagnostics = collected.diagnostics;
     all_diagnostics.extend(diagnostics);

@@ -12,8 +12,8 @@ pub(crate) fn lift_progression_impl(
     opts: &ProgressionLiftOpts,
 ) -> Result<LiftReport<Progression>, LiftError> {
     validate_progression_opts(opts)?;
-    let collected = collect_midi(file);
-    let roll = quantize_roll(&collected.to_piano_roll()?, opts.grid)?;
+    let collected = collect_midi(file)?;
+    let roll = quantize_roll(&collected.to_piano_roll(), opts.grid)?;
     let windows = chord_windows_from_piano_roll(&roll, opts.window_mode);
     let registry = NamerRegistry::new_with_builtins();
     let school = match opts.label_strategy {

@@ -291,6 +291,59 @@ fn shape_specs() -> Vec<ShapeSpec> {
             domain_form_shape("LabelStrategy", vec![atom_field("value")]),
         ),
         (
+            Symbol::qualified("music", "OverlapPolicy"),
+            "OverlapPolicy",
+            vec![
+                "same-pitch MIDI note-on/note-off pairing policy",
+                "supports FIFO, LIFO, and reject modes",
+            ],
+            domain_form_shape("OverlapPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "SameTickPolicy"),
+            "SameTickPolicy",
+            vec![
+                "MIDI event ordering policy within one exact tick",
+                "supports encoded, note-offs-first, and note-ons-first order",
+            ],
+            domain_form_shape("SameTickPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "DanglingNotePolicy"),
+            "DanglingNotePolicy",
+            vec![
+                "end-of-timeline unmatched-note policy",
+                "closes notes diagnostically or rejects the realization",
+            ],
+            domain_form_shape("DanglingNotePolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "PedalPolicy"),
+            "PedalPolicy",
+            vec![
+                "MIDI hold-pedal realization policy",
+                "selects ignored, sustain, or sustain-and-sostenuto semantics",
+            ],
+            domain_form_shape("PedalPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "MidiRealizationPolicy"),
+            "MidiRealizationPolicy",
+            vec![
+                "deterministic MIDI note-realization policy bundle",
+                "encodes overlap, same-tick, dangling-note, and pedal choices",
+            ],
+            domain_form_shape(
+                "MidiRealizationPolicy",
+                vec![
+                    atom_field("overlap"),
+                    atom_field("same_tick"),
+                    atom_field("dangling_notes"),
+                    atom_field("pedals"),
+                ],
+            ),
+        ),
+        (
             Symbol::qualified("music", "ProgressionLiftOpts"),
             "ProgressionLiftOpts",
             vec![

@@ -133,6 +133,10 @@ pub struct HeldPerformanceNote {
     pub started_at: Tick,
     /// Whether note-off arrived while sustain was held.
     pub released_while_sustained: bool,
+    /// Whether the physical/logical key is still down.
+    pub key_down: bool,
+    /// Whether sostenuto captured this sounding note when the pedal descended.
+    pub sostenuto_captured: bool,
 }
 
 /// Mutable performance state tracked by a source.
@@ -145,6 +149,8 @@ pub struct PerformanceSourceState {
     pub held_notes: BTreeMap<PerformanceNoteKey, HeldPerformanceNote>,
     /// Whether the sustain pedal is down.
     pub sustain_pedal: bool,
+    /// Whether the sostenuto pedal is down.
+    pub sostenuto_pedal: bool,
     /// Octave shift applied to incoming pitches.
     pub octave_shift: i8,
     /// Semitone transpose applied to incoming pitches.
@@ -161,6 +167,7 @@ impl PerformanceSourceState {
         Self {
             held_notes: BTreeMap::new(),
             sustain_pedal: false,
+            sostenuto_pedal: false,
             octave_shift: 0,
             transpose: 0,
             scale_lock: None,
@@ -197,29 +204,81 @@ impl PerformanceSourceState {
                         channel: *channel,
                         started_at: event.time,
                         released_while_sustained: false,
+                        key_down: true,
+                        sostenuto_captured: false,
                     },
                 );
             }
             PerformanceIntent::NoteOff { pitch, channel, .. } => {
                 let key = PerformanceNoteKey::new(*channel, *pitch);
-                if self.sustain_pedal {
-                    if let Some(note) = self.held_notes.get_mut(&key) {
-                        note.released_while_sustained = true;
-                    }
+                let held = if let Some(note) = self.held_notes.get_mut(&key) {
+                    note.key_down = false;
+                    note.released_while_sustained = self.sustain_pedal;
+                    self.sustain_pedal || (self.sostenuto_pedal && note.sostenuto_captured)
                 } else {
+                    false
+                };
+                if !held {
                     self.held_notes.remove(&key);
                 }
             }
             PerformanceIntent::Sustain { down, .. } => {
                 self.sustain_pedal = *down;
                 if !down {
+                    self.held_notes.retain(|_, note| {
+                        note.key_down || (self.sostenuto_pedal && note.sostenuto_captured)
+                    });
+                }
+            }
+            PerformanceIntent::Sostenuto { down, .. } => {
+                if *down && !self.sostenuto_pedal {
+                    for note in self.held_notes.values_mut() {
+                        note.sostenuto_captured = true;
+                    }
+                }
+                self.sostenuto_pedal = *down;
+                if !down {
                     self.held_notes
-                        .retain(|_, note| !note.released_while_sustained);
+                        .retain(|_, note| note.key_down || self.sustain_pedal);
+                    for note in self.held_notes.values_mut() {
+                        note.sostenuto_captured = false;
+                    }
+                }
+            }
+            PerformanceIntent::AllNotesOff { channel } => {
+                for note in self
+                    .held_notes
+                    .values_mut()
+                    .filter(|note| note.channel == *channel)
+                {
+                    note.key_down = false;
+                    note.released_while_sustained = self.sustain_pedal;
+                }
+                self.held_notes.retain(|_, note| {
+                    note.channel != *channel
+                        || self.sustain_pedal
+                        || (self.sostenuto_pedal && note.sostenuto_captured)
+                });
+            }
+            PerformanceIntent::AllSoundOff { channel } => {
+                self.held_notes.retain(|_, note| note.channel != *channel);
+            }
+            PerformanceIntent::ResetControllers { channel } => {
+                self.sustain_pedal = false;
+                self.sostenuto_pedal = false;
+                self.held_notes
+                    .retain(|_, note| note.channel != *channel || note.key_down);
+                for note in self.held_notes.values_mut() {
+                    if note.channel == *channel {
+                        note.sostenuto_captured = false;
+                        note.released_while_sustained = false;
+                    }
                 }
             }
             PerformanceIntent::Panic => {
                 self.held_notes.clear();
                 self.sustain_pedal = false;
+                self.sostenuto_pedal = false;
             }
             PerformanceIntent::Aftertouch { .. }
             | PerformanceIntent::PitchBend { .. }

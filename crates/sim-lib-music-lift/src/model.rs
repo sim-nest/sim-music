@@ -2,14 +2,16 @@ use num_rational::Ratio;
 use thiserror::Error;
 
 use sim_kernel::Diagnostic;
+use sim_lib_midi_core::MidiTempoMap;
 use sim_lib_midi_smf::SmfFile;
 use sim_lib_music_analysis::{ChordWindowMode, DiffRoll};
-use sim_lib_music_core::{Counterpoint, PianoRoll, Progression, Time};
+use sim_lib_music_core::{Counterpoint, Note, PianoRoll, Progression, Time};
 use sim_lib_pitch_scale::Key;
 
 use crate::collect::collect_midi;
 use crate::counterpoint::lift_counterpoint_impl;
 use crate::progression::lift_progression_impl;
+use crate::realize::realize_midi_impl;
 
 /// Error raised while lifting MIDI into a higher-level music representation.
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
@@ -29,6 +31,248 @@ pub enum LiftError {
     /// A construction error surfaced from `sim-lib-music-core`.
     #[error(transparent)]
     Music(#[from] sim_lib_music_core::MusicError),
+    /// A MIDI timing or tempo-map conversion failed.
+    #[error(transparent)]
+    Midi(#[from] sim_lib_midi_core::MidiError),
+    /// MIDI-to-music lifting requires metrical timing; SMPTE input needs an
+    /// explicit real-time-to-metrical adapter.
+    #[error("MIDI music realization requires metrical timing")]
+    MetricalTimingRequired,
+    /// A format-2 file has independent patterns, but the single-timeline lift
+    /// entry point was used.
+    #[error("SMF format 2 realization requires explicit pattern selection")]
+    IndependentPatternsRequireSelection,
+    /// A requested format-2 pattern index did not exist.
+    #[error("SMF format 2 pattern {pattern} is outside 0..{patterns}")]
+    PatternOutOfRange {
+        /// Requested track-local pattern index.
+        pattern: usize,
+        /// Available pattern count.
+        patterns: usize,
+    },
+    /// Reject-overlap policy encountered two held note-ons for one channel and
+    /// key.
+    #[error("overlapping MIDI note rejected at tick {tick}: channel {channel}, key {key}")]
+    OverlappingNote {
+        /// Tick of the overlapping attack.
+        tick: i64,
+        /// MIDI channel.
+        channel: u8,
+        /// MIDI key.
+        key: u8,
+    },
+    /// Reject-dangling policy found held notes at the end of a timeline.
+    #[error("MIDI timeline ended with {count} unmatched note-on event(s)")]
+    DanglingNotes {
+        /// Number of still-sounding note instances.
+        count: usize,
+    },
+}
+
+/// How note-offs pair with overlapping note-ons sharing channel and key.
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub enum OverlapPolicy {
+    /// Close the earliest unmatched key-down note.
+    #[default]
+    Fifo,
+    /// Close the latest unmatched key-down note.
+    Lifo,
+    /// Reject a second key-down note-on for the same channel and key.
+    Reject,
+}
+
+/// How events encoded at one exact tick are ordered before realization.
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub enum SameTickPolicy {
+    /// Preserve track/event order from the parsed file.
+    Encoded,
+    /// Process note-offs, then controllers/metadata, then note-ons.
+    #[default]
+    NoteOffsFirst,
+    /// Process note-ons, then controllers/metadata, then note-offs.
+    NoteOnsFirst,
+}
+
+/// What to do with note-ons still sounding at the end of a timeline.
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub enum DanglingNotePolicy {
+    /// Close notes at the timeline end and emit one diagnostic per note.
+    #[default]
+    CloseAtEnd,
+    /// Reject the realization.
+    Reject,
+}
+
+/// Which hold-pedal controllers extend note sounding time.
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub enum PedalPolicy {
+    /// Ignore sustain and sostenuto for note duration.
+    Ignore,
+    /// Realize sustain but leave sostenuto as an uninterpreted control cell.
+    Sustain,
+    /// Realize both sustain and sostenuto according to MIDI channel state.
+    #[default]
+    SustainAndSostenuto,
+}
+
+/// Policy bundle controlling deterministic MIDI note realization.
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+pub struct MidiRealizationPolicy {
+    /// Same-pitch note-on/note-off pairing policy.
+    pub overlap: OverlapPolicy,
+    /// Ordering policy for events sharing one exact tick.
+    pub same_tick: SameTickPolicy,
+    /// End-of-timeline unmatched-note policy.
+    pub dangling_notes: DanglingNotePolicy,
+    /// Hold-pedal interpretation policy.
+    pub pedals: PedalPolicy,
+}
+
+/// Identity of one shared or independent MIDI performance timeline.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum MidiTimelineId {
+    /// Formats 0 and 1 share one timeline.
+    Shared,
+    /// Format-2 track-local pattern at this source track index.
+    Pattern(usize),
+}
+
+/// Stable identity assigned to one note-on event during MIDI realization.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct MidiNoteId {
+    /// Timeline containing the note.
+    pub timeline: MidiTimelineId,
+    /// Source SMF track index.
+    pub track: usize,
+    /// Source event index within that track.
+    pub event_index: usize,
+}
+
+/// Event that finally ended a realized MIDI note's sounding interval.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum MidiNoteEnd {
+    /// An ordinary note-off (including velocity-zero note-on).
+    NoteOff,
+    /// MIDI All Notes Off released the note with no active hold pedal.
+    AllNotesOff,
+    /// MIDI All Sound Off silenced the note immediately.
+    AllSoundOff,
+    /// Sustain release ended a previously key-released note.
+    SustainRelease,
+    /// Sostenuto release ended a captured, key-released note.
+    SostenutoRelease,
+    /// Reset All Controllers released a pedal-held note.
+    ResetControllers,
+    /// The configured dangling-note policy closed the note at timeline end.
+    EndOfTimeline,
+}
+
+/// One identity-bearing note after overlap and pedal realization.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RealizedMidiNote {
+    /// Stable identity derived from the source note-on.
+    pub id: MidiNoteId,
+    /// Exact onset in whole-note units.
+    pub onset: Time,
+    /// Exact key-release time, when a note-off or All Notes Off was observed.
+    pub key_release: Option<Time>,
+    /// Exact half-open end of the sounding interval.
+    pub sounding_until: Time,
+    /// Velocity from the matching note-off, or zero for channel-mode endings.
+    pub release_velocity: u8,
+    /// Musical note payload whose duration equals the sounding interval.
+    pub note: Note,
+    /// Event that finally ended the sounding interval.
+    pub ended_by: MidiNoteEnd,
+}
+
+/// One realized shared timeline or independent format-2 pattern.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MidiTimelineRealization {
+    /// Shared/independent timeline identity.
+    pub id: MidiTimelineId,
+    /// Source SMF track indices contributing to this timeline.
+    pub source_tracks: Vec<usize>,
+    /// Exact metrical tempo map for this timeline.
+    pub tempo_map: MidiTempoMap,
+    /// Identity-bearing notes in stable onset/source order.
+    pub notes: Vec<RealizedMidiNote>,
+    /// Editable piano-roll projection including note and controller lanes.
+    pub piano_roll: PianoRoll,
+    /// Unmatched-note and policy diagnostics.
+    pub diagnostics: Vec<Diagnostic>,
+}
+
+/// Exact half-open window over identity-bearing realized MIDI notes.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MidiNoteSlice {
+    /// Inclusive start of the sounding window.
+    pub at: Time,
+    /// Exclusive end of the sounding window.
+    pub until: Time,
+    /// Notes sounding throughout the window, with source identities intact.
+    pub notes: Vec<RealizedMidiNote>,
+}
+
+impl MidiTimelineRealization {
+    /// Splits this timeline at every realized note onset and sounding release.
+    ///
+    /// Silent spans are omitted and equal pitches remain separate notes.
+    pub fn note_slices(&self) -> Vec<MidiNoteSlice> {
+        let mut boundaries = self
+            .notes
+            .iter()
+            .flat_map(|note| [note.onset, note.sounding_until])
+            .collect::<Vec<_>>();
+        boundaries.sort();
+        boundaries.dedup();
+        boundaries
+            .windows(2)
+            .filter_map(|pair| {
+                let at = pair[0];
+                let until = pair[1];
+                let notes = self
+                    .notes
+                    .iter()
+                    .filter(|note| note.onset <= at && at < note.sounding_until)
+                    .cloned()
+                    .collect::<Vec<_>>();
+                (!notes.is_empty() && at < until).then_some(MidiNoteSlice { at, until, notes })
+            })
+            .collect()
+    }
+}
+
+/// Complete MIDI realization without flattening independent format-2 patterns.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MidiRealization {
+    /// One shared timeline for formats 0/1 or one timeline per format-2 track.
+    pub timelines: Vec<MidiTimelineRealization>,
+}
+
+/// Realizes MIDI tempo, overlap, pedal, and channel-mode semantics.
+pub fn realize_midi(
+    file: &SmfFile,
+    policy: MidiRealizationPolicy,
+) -> Result<MidiRealization, LiftError> {
+    realize_midi_impl(file, policy)
+}
+
+/// Realizes and selects one independent format-2 pattern.
+///
+/// For shared-timeline formats, pattern zero selects the sole timeline.
+pub fn realize_midi_pattern(
+    file: &SmfFile,
+    pattern: usize,
+    policy: MidiRealizationPolicy,
+) -> Result<MidiTimelineRealization, LiftError> {
+    let realization = realize_midi_impl(file, policy)?;
+    let patterns = realization.timelines.len();
+    realization
+        .timelines
+        .into_iter()
+        .nth(pattern)
+        .ok_or(LiftError::PatternOutOfRange { pattern, patterns })
 }
 
 /// A lifted value paired with diagnostics describing lossy or ambiguous choices.
@@ -151,9 +395,9 @@ impl MidiLifter for MidiToPianoRoll {
     }
 
     fn lift_report(&self, file: &SmfFile) -> Result<LiftReport<Self::Out>, LiftError> {
-        let collected = collect_midi(file);
+        let collected = collect_midi(file)?;
         Ok(LiftReport {
-            value: collected.to_piano_roll()?,
+            value: collected.to_piano_roll(),
             diagnostics: collected.diagnostics,
         })
     }

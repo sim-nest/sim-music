@@ -4,5 +4,5 @@ codec = "lisp"
 setup = "setup.siml"
 purpose = "purpose.md"
 order = 10
-tags = ["music", "lift", "midi", "sandbox-descriptor"]
+tags = ["music", "lift", "midi", "tempo", "pedal", "note-slice", "sandbox-descriptor"]
 requires = ["music-lift", "codec/lisp"]

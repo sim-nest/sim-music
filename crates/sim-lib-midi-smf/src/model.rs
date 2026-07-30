@@ -6,7 +6,8 @@ use std::{
 };
 
 use sim_lib_midi_core::{
-    ChannelMessage, MetaEvent, MidiEvent, MidiPayload, TickTime, TrackedMidiEvent, synthetic_origin,
+    ChannelMessage, MetaEvent, MidiError, MidiEvent, MidiPayload, MidiTempoMap, TickTime,
+    TrackedMidiEvent, synthetic_origin,
 };
 
 use crate::SmfError;
@@ -204,6 +205,19 @@ pub struct SmfFile {
     pub tracks: Vec<SmfTrack>,
 }
 
+/// Tempo-map topology implied by an SMF file's format.
+///
+/// Formats 0 and 1 have one shared performance timeline. Format 2 retains one
+/// independent tempo map per track so callers cannot accidentally flatten
+/// unrelated patterns.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum SmfTempoMaps {
+    /// One map shared by every simultaneous track.
+    Shared(MidiTempoMap),
+    /// One track-local map per independent format-2 pattern, in track order.
+    Independent(Vec<MidiTempoMap>),
+}
+
 /// Options controlling SMF serialisation.
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub struct SmfWriteOptions {
@@ -230,6 +244,45 @@ impl SmfFile {
             Some(value) => Some(value.get() as u32),
             None => None,
         }
+    }
+
+    /// Builds exact tempo maps from the file's ordered tempo meta events.
+    ///
+    /// Metrical formats 0 and 1 produce one shared map. Format 2 produces one
+    /// map per independent track. SMPTE divisions have a direct timecode chart
+    /// rather than a tempo map and return [`MidiError::MetricalTempoRequired`].
+    pub fn tempo_maps(&self) -> Result<SmfTempoMaps, MidiError> {
+        let tpq = self
+            .ticks_per_quarter()
+            .ok_or(MidiError::MetricalTempoRequired)?;
+        if self.format == SmfFormat::Independent {
+            let maps = self
+                .tracks
+                .iter()
+                .map(|track| MidiTempoMap::from_ordered_events(tpq, &track.events))
+                .collect::<Result<Vec<_>, _>>()?;
+            return Ok(SmfTempoMaps::Independent(maps));
+        }
+
+        let mut events = self
+            .tracks
+            .iter()
+            .enumerate()
+            .flat_map(|(track, contents)| {
+                contents
+                    .events
+                    .iter()
+                    .enumerate()
+                    .map(move |(index, event)| (track, index, event))
+            })
+            .collect::<Vec<_>>();
+        events.sort_by(|left, right| {
+            compare_event_order(left.2, left.0, right.2, right.0).then_with(|| left.1.cmp(&right.1))
+        });
+        Ok(SmfTempoMaps::Shared(MidiTempoMap::from_ordered_events(
+            tpq,
+            events.into_iter().map(|(_, _, event)| event),
+        )?))
     }
 
     /// Sorts every track into canonical order and ensures each ends with an

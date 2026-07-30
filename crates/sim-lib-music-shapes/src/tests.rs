@@ -16,7 +16,8 @@ use sim_lib_music_core::{
     Progression, Rest, Score, Seq, StretchPolicy, TimedNote,
 };
 use sim_lib_music_lift::{
-    CounterpointLiftOpts, LabelStrategy, ProgressionLiftOpts, VoiceAssignment,
+    CounterpointLiftOpts, DanglingNotePolicy, LabelStrategy, MidiRealizationPolicy, OverlapPolicy,
+    PedalPolicy, ProgressionLiftOpts, SameTickPolicy, VoiceAssignment,
 };
 use sim_lib_music_transform::{FunctionMap, RetrogradeMode};
 use sim_lib_pitch_scale::{Mode, Scale};
@@ -26,12 +27,13 @@ use crate::{
     MusicScoreDescriptor, MusicSeqDescriptor, MusicShapeError, decode_arranger, decode_chord,
     decode_chord_window, decode_chord_window_mode, decode_counterpoint,
     decode_counterpoint_lift_opts, decode_diff_roll, decode_function_map, decode_label_strategy,
-    decode_melody, decode_midi_file, decode_midi_track, decode_music, decode_music_file,
-    decode_note, decode_piano_roll, decode_progression, decode_progression_lift_opts, decode_rest,
-    decode_retrograde_mode, decode_score, decode_voice_assignment, encode_arranger, encode_chord,
-    encode_chord_window, encode_chord_window_mode, encode_counterpoint,
-    encode_counterpoint_lift_opts, encode_diff_roll, encode_function_map, encode_label_strategy,
-    encode_melody, encode_midi_file, encode_midi_track, encode_music, encode_music_file,
+    decode_melody, decode_midi_file, decode_midi_realization_policy, decode_midi_track,
+    decode_music, decode_music_file, decode_note, decode_piano_roll, decode_progression,
+    decode_progression_lift_opts, decode_rest, decode_retrograde_mode, decode_score,
+    decode_voice_assignment, encode_arranger, encode_chord, encode_chord_window,
+    encode_chord_window_mode, encode_counterpoint, encode_counterpoint_lift_opts, encode_diff_roll,
+    encode_function_map, encode_label_strategy, encode_melody, encode_midi_file,
+    encode_midi_realization_policy, encode_midi_track, encode_music, encode_music_file,
     encode_note, encode_par, encode_piano_roll, encode_progression, encode_progression_lift_opts,
     encode_rest, encode_retrograde_mode, encode_score, encode_seq, encode_voice_assignment,
     install_music_shapes_lib, music_chord_class_symbol, music_melody_class_symbol,
@@ -573,5 +575,17 @@ fn lift_option_values_round_trip() {
         decode_counterpoint_lift_opts(&encode_counterpoint_lift_opts(&counterpoint_opts))
             .expect("counterpoint opts"),
         counterpoint_opts
+    );
+
+    let realization_policy = MidiRealizationPolicy {
+        overlap: OverlapPolicy::Lifo,
+        same_tick: SameTickPolicy::NoteOnsFirst,
+        dangling_notes: DanglingNotePolicy::Reject,
+        pedals: PedalPolicy::Sustain,
+    };
+    assert_eq!(
+        decode_midi_realization_policy(&encode_midi_realization_policy(&realization_policy))
+            .expect("realization policy"),
+        realization_policy
     );
 }

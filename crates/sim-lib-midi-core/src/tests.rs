@@ -164,6 +164,55 @@ fn unknown_meta_and_sysex_preserve_bytes() {
 }
 
 #[test]
+fn tempo_map_converts_ticks_beats_and_piecewise_wall_time_exactly() {
+    let tempo = |ticks, us_per_quarter| MidiEvent {
+        time: TickTime::new(ticks, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    let events = [tempo(0, 500_000), tempo(480, 400_000), tempo(480, 250_000)];
+    let map = MidiTempoMap::from_ordered_events(480, &events).expect("tempo map");
+
+    assert_eq!(map.segments().len(), 2);
+    assert_eq!(map.segments()[1].us_per_quarter, 250_000);
+    let tick = TickTime::new(960, 480).expect("tick");
+    assert_eq!(
+        map.beat_for_tick(tick).expect("beat"),
+        MidiBeat::new(2, 1).expect("beat")
+    );
+    assert_eq!(
+        map.tick_for_beat(MidiBeat::new(2, 1).expect("beat"))
+            .expect("tick"),
+        tick
+    );
+    let wall = map.wall_time_for_tick(tick).expect("wall time");
+    assert_eq!((wall.numerator(), wall.denominator()), (3, 4));
+    assert_eq!(map.tick_for_wall_time(wall).expect("tick"), tick);
+}
+
+#[test]
+fn tempo_map_rejects_zero_tempo_unordered_events_and_inexact_ticks() {
+    let event = |ticks, us_per_quarter| MidiEvent {
+        time: TickTime::new(ticks, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    assert_eq!(
+        MidiTempoMap::from_ordered_events(480, &[event(0, 0)]),
+        Err(MidiError::ZeroTempo)
+    );
+    assert_eq!(
+        MidiTempoMap::from_ordered_events(480, &[event(10, 500_000), event(9, 400_000)]),
+        Err(MidiError::TempoEventsOutOfOrder)
+    );
+    let map = MidiTempoMap::from_ordered_events(480, std::iter::empty()).expect("map");
+    assert_eq!(
+        map.tick_for_beat(MidiBeat::new(1, 7).expect("beat")),
+        Err(MidiError::InexactTempoTick)
+    );
+}
+
+#[test]
 fn meta_bucket_views_are_lossless() {
     let track_name = meta_view::make_track_name("piano");
     assert_eq!(meta_view::as_track_name(&track_name), Some("piano"));
