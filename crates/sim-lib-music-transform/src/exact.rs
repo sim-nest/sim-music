@@ -183,15 +183,21 @@ pub fn sustain_staff(
     transform_notes(staff, |mut note, changes| {
         let before = note.note.duration;
         let mut end = note.end();
-        for span in spans {
-            if span
-                .channel
-                .is_none_or(|channel| channel == note.note.channel)
-                && end >= span.start
-                && end < span.end
-                && note.onset < span.end
-            {
-                end = span.end;
+        loop {
+            let prior_end = end;
+            for span in spans {
+                if span
+                    .channel
+                    .is_none_or(|channel| channel == note.note.channel)
+                    && end >= span.start
+                    && end < span.end
+                    && note.onset < span.end
+                {
+                    end = span.end;
+                }
+            }
+            if end == prior_end {
+                break;
             }
         }
         note.note.duration = end - note.onset;

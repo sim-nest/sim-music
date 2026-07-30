@@ -12,8 +12,10 @@ pub(super) fn staff_to_snapshots(staff: &Staff) -> MusicConversion<SnapshotStrea
     let zero = Time::from_integer(0);
     let mut times = vec![zero, staff.duration()];
     let mut losses = Vec::new();
+    let mut lost = BTreeSet::new();
     for note in staff.notes() {
         if note.note.duration == zero {
+            lost.extend([note.note_id.clone(), note.event_id.clone()]);
             losses.push(ConversionLoss::new(
                 ConversionLossKind::ZeroDurationSnapshot,
                 Some(note.event_id.clone()),
@@ -36,10 +38,6 @@ pub(super) fn staff_to_snapshots(staff: &Staff) -> MusicConversion<SnapshotStrea
                 .collect(),
         })
         .collect();
-    let lost = losses
-        .iter()
-        .filter_map(|loss| loss.object.clone())
-        .collect::<BTreeSet<_>>();
     MusicConversion {
         value: SnapshotStream {
             duration: staff.duration(),

@@ -60,12 +60,15 @@ fn sustain_and_slur_report_exact_duration_and_articulation_edits() {
     );
     let sustained = sustain_staff(
         &staff,
-        &[SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None)],
+        &[
+            SustainSpan::new(Ratio::new(3, 8), Ratio::new(1, 2), None),
+            SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None),
+        ],
     )
     .expect("sustain");
     assert_eq!(
         sustained.value.voices[0].notes[0].note.duration,
-        Ratio::new(3, 8)
+        Ratio::new(1, 2)
     );
     assert!(matches!(
         sustained.changes[0],

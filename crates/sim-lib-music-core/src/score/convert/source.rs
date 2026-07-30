@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
     Articulation, Chord, ConversionError, ConversionLoss, ConversionLossKind, Counterpoint, Melody,
@@ -260,6 +260,17 @@ fn staff_from_snapshots(
 ) -> Result<MusicConversion<Staff>, ConversionError> {
     let mut by_event = BTreeMap::<ObjectId, StaffNote>::new();
     let mut losses = Vec::new();
+    if stream
+        .snapshots
+        .windows(2)
+        .any(|pair| pair[1].at <= pair[0].at)
+    {
+        losses.push(ConversionLoss::new(
+            ConversionLossKind::InconsistentChange,
+            None,
+            "snapshot times are not strictly increasing",
+        ));
+    }
     for snapshot in &stream.snapshots {
         if snapshot.at < Time::from_integer(0) || snapshot.at > stream.duration {
             losses.push(ConversionLoss::new(
@@ -287,6 +298,37 @@ fn staff_from_snapshots(
                     by_event.insert(note.event_id.clone(), note.clone());
                 }
             }
+        }
+    }
+    for snapshot in &stream.snapshots {
+        let actual = snapshot
+            .sounding
+            .iter()
+            .map(|note| note.event_id.clone())
+            .collect::<BTreeSet<_>>();
+        if actual.len() != snapshot.sounding.len() {
+            losses.push(ConversionLoss::new(
+                ConversionLossKind::InconsistentChange,
+                None,
+                format!("snapshot at {} repeats an event identity", snapshot.at),
+            ));
+        }
+        let expected = by_event
+            .values()
+            .filter(|note| note.onset <= snapshot.at && snapshot.at < note.end())
+            .map(|note| note.event_id.clone())
+            .collect::<BTreeSet<_>>();
+        if actual != expected {
+            losses.push(ConversionLoss::new(
+                ConversionLossKind::InconsistentChange,
+                None,
+                format!(
+                    "snapshot at {} contains {} of {} known sounding events",
+                    snapshot.at,
+                    actual.len(),
+                    expected.len()
+                ),
+            ));
         }
     }
     staff_from_identified_notes(
