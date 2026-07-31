@@ -1,0 +1,8 @@
+id = "pitch-tracking"
+title = "Bounded YIN and polyphonic partial tracking"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["sound", "pitch", "yin", "pyin", "partials", "assignment", "dtw", "sandbox-descriptor"]
+requires = ["sound-audio-lift", "sound-tuning", "numbers-signal", "discrete-graph", "codec/lisp"]

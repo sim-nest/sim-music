@@ -3723,10 +3723,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "1fc5ac7297a70ee3ff7f99268dbba6d0d727c623",
+    "git_commit": "054494eb559864f8e6cf1fd974245a2a0287ab33",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "1fc5ac7297a70ee3ff7f99268dbba6d0d727c623",
+    "source_commit": "054494eb559864f8e6cf1fd974245a2a0287ab33",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3739,9 +3739,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "d15bcbcadd287c89",
+    "workspace_hash": "68b8558fe6b5d595",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 754,
+    "workspace_hash_input_count": 760,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4359,6 +4359,7 @@
       "crates/sim-lib-sound-audio-lift/Cargo.toml",
       "crates/sim-lib-sound-audio-lift/build.rs",
       "crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml",
+      "crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/recipe.toml",
       "crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/recipe.toml",
       "crates/sim-lib-sound-audio-lift/recipes/book.toml",
       "crates/sim-lib-sound-audio-lift/src/chroma.rs",
@@ -4367,7 +4368,12 @@
       "crates/sim-lib-sound-audio-lift/src/lib.rs",
       "crates/sim-lib-sound-audio-lift/src/model.rs",
       "crates/sim-lib-sound-audio-lift/src/music.rs",
+      "crates/sim-lib-sound-audio-lift/src/partial_track.rs",
+      "crates/sim-lib-sound-audio-lift/src/partial_track_tests.rs",
       "crates/sim-lib-sound-audio-lift/src/pipeline.rs",
+      "crates/sim-lib-sound-audio-lift/src/pitch_fixture_tests.rs",
+      "crates/sim-lib-sound-audio-lift/src/pitch_track.rs",
+      "crates/sim-lib-sound-audio-lift/src/pitch_track_tests.rs",
       "crates/sim-lib-sound-audio-lift/src/runtime.rs",
       "crates/sim-lib-sound-audio-lift/src/tests.rs",
       "crates/sim-lib-sound-audio-lift/src/transform_tests.rs",
@@ -5564,7 +5570,7 @@
       "card_id": "cookbook/sound-audio-lift",
       "group": "workspace",
       "package": "sim-lib-sound-audio-lift",
-      "recipe_count": 2,
+      "recipe_count": 3,
       "recipes": [
         {
           "card_id": "sound-audio-lift/01-basics/pcm-features",
@@ -5573,6 +5579,14 @@
           "package": "sim-lib-sound-audio-lift",
           "recipe_toml": "crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml",
           "title": "PCM feature lift"
+        },
+        {
+          "card_id": "sound-audio-lift/01-basics/pitch-tracking",
+          "codec": "lisp",
+          "id": "pitch-tracking",
+          "package": "sim-lib-sound-audio-lift",
+          "recipe_toml": "crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/recipe.toml",
+          "title": "Bounded YIN and polyphonic partial tracking"
         },
         {
           "card_id": "sound-audio-lift/01-basics/stft-cqt-chroma",

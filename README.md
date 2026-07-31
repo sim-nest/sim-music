@@ -127,8 +127,9 @@ loadable SIM libs.
   produces `ScheduledTone`s, resolving programs, tunings, and polyphony.
 - `sim-lib-sound-render` -- renders synthesized tones into interleaved PCM,
   mixing scheduled tones and encoding 16-bit WAV.
-- `sim-lib-sound-audio-lift` -- audio-to-notes lifting: analyzes raw PCM and
-  lifts it into pitched note candidates via FFT-peak and harmonic-comb lifters.
+- `sim-lib-sound-audio-lift` -- audio-to-notes lifting: analyzes raw PCM with
+  YIN/pYIN contours or bounded assignment/DTW partial tracks, extending the
+  FFT-peak and harmonic-comb lifters with uncertainty and frame provenance.
 - `sim-lib-sound-shapes` -- the sound-layer text codec: `#(...)` round-trips for
   the sound types, citizen descriptors, and a runtime lib.
 - `sim-lib-sound-wasm-frame` -- frame-safe sound descriptors and stable wasm engine
@@ -181,7 +182,8 @@ reverse, rendering a structured music object or `Score` back down to a playable
 Standard MIDI File. Transforms operate on the canonical `PianoRoll` in the
 middle, so analysis, transformation, and rendering all share one model.
 `sim-lib-sound-audio-lift` extends the same idea below MIDI, lifting raw PCM
-audio into pitched note candidates that feed the music layer.
+audio into confidence-bearing monophonic contours and bounded polyphonic
+partial tracks that feed the music layer.
 
 ## Validation
 

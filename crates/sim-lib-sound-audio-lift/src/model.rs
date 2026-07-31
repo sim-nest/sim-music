@@ -25,6 +25,24 @@ pub enum AudioLiftError {
     /// The minimum note-window count was zero.
     #[error("minimum note windows must be positive")]
     InvalidMinNoteWindows,
+    /// A pitch range was non-finite, non-positive, or reversed.
+    #[error("pitch range must contain finite positive frequencies in ascending order")]
+    InvalidPitchRange,
+    /// A probability or YIN threshold fell outside `0.0..=1.0`.
+    #[error("pitch probability and threshold values must be finite and lie in 0..=1")]
+    InvalidPitchThreshold,
+    /// A result, track, or frame bound was zero.
+    #[error("pitch tracking bounds must be positive")]
+    InvalidPitchBound,
+    /// Deterministic pitch-analysis work exceeded the caller's bound.
+    #[error("pitch tracking exceeded its work limit of {limit} units")]
+    PitchWorkLimit {
+        /// Caller-declared maximum work.
+        limit: u64,
+    },
+    /// A shared graph assignment or alignment operation failed.
+    #[error("pitch tracking graph operation failed: {0}")]
+    TrackingGraph(String),
 }
 
 /// A value paired with the diagnostics produced while computing it.

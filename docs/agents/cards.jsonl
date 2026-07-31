@@ -315,6 +315,9 @@
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/setup.siml"}
