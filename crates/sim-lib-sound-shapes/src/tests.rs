@@ -94,6 +94,16 @@ fn every_public_type_round_trips() {
         source
     );
 
+    let stft_source = SpectrumSource::FromStft {
+        frame_size: 128,
+        sample_rate: 8_000,
+        onset_sample: -64,
+    };
+    assert_eq!(
+        decode_spectrum_source(&encode_spectrum_source(&stft_source)).unwrap(),
+        stft_source
+    );
+
     let spectrum = Spectrum {
         bins: vec![(frequency, amplitude)],
         source,

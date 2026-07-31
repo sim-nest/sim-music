@@ -351,10 +351,10 @@ supports = [
 [[feature]]
 id = "feature/sim-music/sound-spectrum-adapter"
 title = "Sound spectrum domain adapter"
-summary = "Retain physical frequency, amplitude, provenance, and sound descriptors while delegating PCM transform math to the generic numbers-signal real FFT."
+summary = "Retain physical frequency, amplitude, PCM/STFT provenance, and sound descriptors while delegating transform math to the generic numbers-signal real FFT."
 owner = "crate/sim-lib-sound-spectrum"
 audiences = ["user", "code", "framework"]
-guidance = "Use Spectrum::from_pcm when callers need the stable sound-domain Spectrum API. It maps generic numbers-signal Hermitian real-FFT bins into hertz and amplitude values with FromPcm provenance; add transform algorithms and conventions in sim-lib-numbers-signal, never as another loop in sound-spectrum."
+guidance = "Use Spectrum::from_pcm when callers need the stable sound-domain Spectrum API from one PCM window, and Spectrum::from_stft_bins when sound-audio-lift already owns framed transform policy. Both paths map generic numbers-signal Hermitian real-FFT bins into hertz and amplitude values while retaining FromPcm or FromStft provenance; peak, centroid, flatness, rolloff, and flux remain domain summaries. Add generic transform algorithms and conventions in sim-lib-numbers-signal, never as another Fourier loop in sound-spectrum."
 claims_anchors = [
   "anchor/crate/sim-lib-sound-spectrum",
   "anchor/rustdoc/sim-lib-sound-spectrum/spectrum",
@@ -370,10 +370,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
-summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
+summary = "Lift PCM through reconstructable framed Fourier analysis, bounded tuning-anchored constant-Q and chroma profiles, pitch candidates, spectral summaries, and finite sound or stream rendering."
 owner = "crate/sim-lib-sound-audio-lift"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when analyzing audio features, routing audio lift results toward music analysis, or rendering offline buffers. Reuse sound-audio-lift for PCM feature extraction, sound-spectrum for descriptors and its numbers-signal-backed PCM transform adapter, sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
+guidance = "Use sound-audio-lift StftPlan when frame size, hop, analysis/synthesis windows, centering, padding, phase, normalization, overlap promise, and deterministic limits must survive review. Check ColaReport and use istft only when the pair is reconstructable; invalid window pairs return their failing report rather than being silently normalized. Use CqtPlan plus constant_q for bounded, variable-window FFT bins anchored to a selected Tuning, then ChromaPlan plus chroma for an explicit Sum, Mean, or Maximum octave fold and per-frame normalization. StftFrame::spectrum keeps the existing sound-spectrum peak, centroid, flatness, rolloff, and flux APIs over shared numbers-signal transforms. Continue to use the current lifters for pitch candidates, sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
 claims_anchors = [
   "anchor/crate/sim-lib-sound-audio-lift",
   "anchor/crate/sim-lib-sound-bridge",
@@ -390,6 +390,7 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests",
+  "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/transform_tests",
 ]
 supports = [
   "feature/sim-music/sound-spectrum-adapter",

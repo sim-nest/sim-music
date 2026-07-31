@@ -233,7 +233,7 @@
       "id": "cookbook/sound-audio-lift",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-sound-audio-lift",
-      "summary": "Descriptors that lift PCM into sound and music features."
+      "summary": "Checked framed transforms and descriptors that lift PCM into sound and music features."
     },
     {
       "id": "cookbook/sound-bridge",

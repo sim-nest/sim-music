@@ -9,6 +9,9 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod chroma;
+mod constant_q;
+mod frame;
 mod model;
 mod pipeline;
 mod runtime;
@@ -16,6 +19,9 @@ mod runtime;
 #[cfg(feature = "sound-music")]
 mod music;
 
+pub use chroma::*;
+pub use constant_q::*;
+pub use frame::*;
 pub use model::*;
 pub use runtime::*;
 
@@ -28,3 +34,5 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod transform_tests;

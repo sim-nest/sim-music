@@ -1,5 +1,5 @@
 book = "sound-audio-lift"
 title = "Sound Audio Lift"
-summary = "Descriptors that lift PCM into sound and music features."
+summary = "Checked framed transforms and descriptors that lift PCM into sound and music features."
 order = 277
 chapters = ["01-basics"]
