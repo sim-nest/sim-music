@@ -21,6 +21,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
+| `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 1 | Load chord palettes, cadence-template algebra, hard legality, weighted musical preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
 | `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
@@ -113,6 +114,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml`
 - `crates/sim-lib-music-analysis/recipes/book.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/setup.siml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/purpose.md`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/setup.siml`
@@ -240,6 +244,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-wasm-frame/recipes/book.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/purpose.md`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/setup.siml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/purpose.md`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml`
@@ -2682,6 +2689,123 @@ fn folded_distance_uses_explicit_tie_policy() {
     assert_eq!(
         folded_distance(-45, 25, even_space, TieDirection::Descending),
         -10
+    );
+}
+```
+
+### `feature/sim-music/declarative-harmony`
+
+Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-pitch-chord/src/harmony_conformance.rs`:
+
+```rust
+//! Checked conformance for the declarative catalog's Lisp data fixtures.
+
+use std::sync::Arc;
+
+use sim_codec::{Input, decode_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ReadPolicy, Symbol};
+
+use crate::{HarmonyMetric, HarmonyPredicate, HarmonyProgram, PaletteAlgebra};
+
+fn decode_fixture(source: &str) -> HarmonyProgram {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    sim_test_support::register_core_classes(&mut cx);
+    sim_test_support::register_f64_number_domain(&mut cx);
+    let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&codec).unwrap();
+    let expr = decode_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source.to_owned()),
+        ReadPolicy::default(),
+    )
+    .unwrap();
+    HarmonyProgram::from_expr(&expr).unwrap()
+}
+
+#[test]
+fn catalog_harmonizer_lisp_fixture_covers_every_filter_and_render_setting() {
+    let program = decode_fixture(include_str!("../tests/fixtures/catalog-harmonizer.sx"));
+    let ids = program
+        .rules
+        .hard
+        .iter()
+        .map(|rule| rule.id.as_str())
+        .collect::<Vec<_>>();
+
+    assert_eq!(program.id, "catalog/harmonizer");
+    assert_eq!(ids.len(), 23);
+    for required in [
+        "melody-in-chord",
+        "position-is",
+        "not-position-is",
+        "not-position-is-not",
+        "common-note-rhythm",
+        "minimum-chord-distance",
+        "maximum-chord-distance",
+        "minimum-type-distance",
+        "chord-variation",
+        "chord-commonality",
+        "minimum-scale-duration",
+        "maximum-scale-duration",
+        "template-length",
+        "will-connect",
+        "template-melody-in-chord",
+    ] {
+        assert!(ids.contains(&required), "{required}");
+    }
+    assert!(program.rules.hard.iter().any(|rule| {
+        matches!(
+            rule.predicate,
+            HarmonyPredicate::All(_) | HarmonyPredicate::Any(_) | HarmonyPredicate::Not(_)
+        )
+    }));
+    assert!(
+        program
+            .rules
+            .soft
+            .iter()
+            .any(|metric| { matches!(metric.value, HarmonyMetric::PitchDissonance { .. }) })
+    );
+    assert!(
+        program
+            .rules
+            .soft
+            .iter()
+            .any(|metric| { matches!(metric.value, HarmonyMetric::ContextualSonance { .. }) })
+    );
+    assert_eq!(program.render.chord_transpose, 48);
+    assert_eq!(program.render.melody_transpose, 60);
+    assert_eq!(program.render.duration_multiplier, 4);
+    assert_eq!(program.render.tempo_bpm, 60);
+    assert_eq!(program.render.time_signature, (4, 4));
+}
+
+#[test]
+fn catalog_chord_cycle_lisp_fixture_names_transposed_palette_and_filter_chain() {
+    let program = decode_fixture(include_str!("../tests/fixtures/catalog-chord-cycle.sx"));
+
+    assert_eq!(program.id, "catalog/chord-cycle");
+    assert!(matches!(
+        program.palette.algebra,
+        PaletteAlgebra::Transpose { .. }
+    ));
+    assert_eq!(
+        program
+            .rules
+            .hard
+            .iter()
+            .map(|rule| rule.id.as_str())
+            .collect::<Vec<_>>(),
+        vec![
+            "constant-common-notes",
+            "minimum-type-distance",
+            "required-first",
+            "final-chord-only",
+        ]
     );
 }
 ```

@@ -31,6 +31,8 @@ impl VelocityPolicy {
 /// A policy for arranging a chord's notes across registers.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum VoicingPolicy {
+    /// Keep the caller's exact pitch order and registers.
+    Preserve,
     /// Pack the notes into the closest possible position.
     Closed,
     /// Spread the notes apart, transposing each successive note by `spread`
@@ -51,10 +53,13 @@ pub enum VoicingPolicy {
 impl VoicingPolicy {
     /// Applies the voicing policy to `notes`, returning the rearranged pitches.
     pub fn apply(self, mut notes: Vec<Pitch>) -> Vec<Pitch> {
-        sort_by_semitone(&mut notes);
         match self {
+            Self::Preserve => notes,
             Self::Closed => compact_closed(notes),
-            Self::Open { spread } => open_voicing(notes, spread),
+            Self::Open { spread } => {
+                sort_by_semitone(&mut notes);
+                open_voicing(notes, spread)
+            }
             Self::Drop {
                 voice_index_from_top,
                 octaves,

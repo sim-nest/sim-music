@@ -1,0 +1,8 @@
+id = "declarative-harmony-evidence"
+title = "Declarative harmony evidence"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["music", "combinators", "harmony", "sonance", "evidence", "sandbox-descriptor"]
+requires = ["music-combinators", "pitch-chord", "pitch-dissonance", "codec/lisp"]

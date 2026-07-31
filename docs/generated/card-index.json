@@ -149,7 +149,7 @@
       "id": "cookbook/pitch-chord",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-chord",
-      "summary": "Chord spelling and quality descriptors."
+      "summary": "Chord spelling, voicing, and declarative harmony descriptors."
     },
     {
       "id": "cookbook/pitch-core",

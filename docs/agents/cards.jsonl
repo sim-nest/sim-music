@@ -75,6 +75,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/setup.siml"}
@@ -202,6 +205,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-wasm-frame/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-wasm-frame/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml"}

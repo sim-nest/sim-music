@@ -9,7 +9,10 @@
 //! ([`BeatMapPlayer`], [`EuclideanPlayer`]), polyphonic step sequencing
 //! ([`PolyStepPlayer`]), and multi-stream note generation
 //! ([`QuadNotePlayer`]). The `builders` helpers wrap core constructors for
-//! ergonomic assembly of music objects.
+//! ergonomic assembly of music objects. [`DeclarativeHarmonyResolver`] composes
+//! pitch-chord rules with exact-ratio and named-sonance registries, while
+//! [`render_harmony_progression`] adapts data-only harmony programs to canonical
+//! progressions without hiding their export profile.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
@@ -20,6 +23,7 @@ mod beat_map;
 mod builders;
 mod drum;
 mod euclid;
+mod harmony;
 mod player;
 mod polystep;
 mod quad_note;
@@ -31,6 +35,7 @@ pub use beat_map::*;
 pub use builders::*;
 pub use drum::*;
 pub use euclid::*;
+pub use harmony::*;
 pub use player::*;
 pub use polystep::*;
 pub use quad_note::*;
