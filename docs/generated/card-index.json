@@ -263,7 +263,7 @@
       "id": "cookbook/sound-render",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-sound-render",
-      "summary": "Offline PCM render descriptors."
+      "summary": "Offline PCM render, phase-vocoder, loudness, and normalization descriptors."
     },
     {
       "id": "cookbook/sound-shapes",
@@ -305,7 +305,7 @@
       "id": "cookbook/stream-file",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-stream-file",
-      "summary": "Capability-gated WAV and SMF stream adapters."
+      "summary": "Capability-gated WAV and SMF streams with explicit PCM16 conversion policy."
     },
     {
       "id": "cookbook/stream-midi",

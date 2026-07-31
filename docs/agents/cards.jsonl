@@ -356,6 +356,9 @@
 {"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-render/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-shapes/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-sound-shapes/recipes/01-basics/shape-family/purpose.md"}
@@ -388,6 +391,9 @@
 {"kind":"recipe","path":"crates/sim-lib-stream-bridge/recipes/01-basics/offline-bridge/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-bridge/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/wav-smf/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/wav-smf/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-file/recipes/01-basics/wav-smf/setup.siml"}

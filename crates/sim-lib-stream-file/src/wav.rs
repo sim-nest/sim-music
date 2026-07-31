@@ -5,6 +5,7 @@ use sim_lib_stream_audio::{MemoryPcmSink, MemoryPcmSource, PcmBuffer, PcmPumpSum
 use sim_lib_stream_core::{StreamMetadata, StreamValue};
 
 use crate::effect_io::{read_file_with_effect, write_file_with_effect};
+use crate::{ChannelMatrix, PcmConversionReport, QuantizationPolicy, convert_f32_to_pcm16};
 
 /// A PCM stream decoded from a WAV file together with its sample format.
 pub struct WavStream {
@@ -112,6 +113,34 @@ pub fn pcm_buffers_to_wav_bytes(spec: PcmSpec, buffers: &[PcmBuffer]) -> Result<
         samples.extend_from_slice(buffer.samples_i16());
     }
     encode_wav_i16(spec, &samples)
+}
+
+/// Encodes already-quantized interleaved samples as canonical PCM16 WAV.
+pub fn pcm16_samples_to_wav_bytes(
+    sample_rate_hz: u32,
+    channels: usize,
+    samples: &[i16],
+) -> Result<Vec<u8>> {
+    let spec = PcmSpec::i16(channels, sample_rate_hz)?;
+    encode_wav_i16(spec, samples)
+}
+
+/// Maps and quantizes bounded interleaved floats through the canonical PCM16
+/// converter, then encodes them through this crate's WAV owner.
+pub fn convert_f32_to_wav_bytes(
+    sample_rate_hz: u32,
+    samples: &[f32],
+    matrix: &ChannelMatrix,
+    policy: QuantizationPolicy,
+) -> Result<(Vec<u8>, PcmConversionReport)> {
+    let conversion = convert_f32_to_pcm16(samples, matrix, policy)
+        .map_err(|error| Error::Eval(error.to_string()))?;
+    let bytes = pcm16_samples_to_wav_bytes(
+        sample_rate_hz,
+        matrix.output_channels(),
+        &conversion.samples,
+    )?;
+    Ok((bytes, conversion.report))
 }
 
 fn wav_bytes_to_buffers(

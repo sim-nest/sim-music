@@ -28,6 +28,8 @@ use crate::{
 
 // conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
 
+mod pcm_convert_tests;
+
 #[test]
 fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
     let temp = TempPath::new("input.mid");

@@ -47,7 +47,7 @@ title = "Synth performance workbench"
 summary = "Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations."
 owner = "crate/sim-lib-music-synth"
 audiences = ["user", "code", "framework"]
-guidance = "Use music-synth for oscillators, envelopes, subtractive voices, DX7 FM, and modeled modular instruments; use sound-timbre for additive partials, filtered timbres, Karplus-Strong, and compact FM pairs; use sound-render for deterministic offline f32 PCM; use sim-lib-stream-file only for bounded canonical PCM16 WAV bytes/streams; and use the sim-audio-daw audio graph, DSP processors, and live runner for realtime preview. Keep Table/Dir values and explicit handles at recipe boundaries, keep callback work preallocated and free of locks or I/O, and leave f32/i16 sample conversion and dither policy to MUSICALGOS4.43."
+guidance = "Use music-synth for oscillators, envelopes, subtractive voices, DX7 FM, and modeled modular instruments; use sound-timbre for additive partials, filtered timbres, Karplus-Strong, and compact FM pairs; use sound-render for deterministic offline f32 PCM, phase vocoding, loudness, and visible normalization reports; use sim-lib-stream-file for bounded channel mapping, PCM16 quantization, seeded dither, and canonical WAV bytes/streams; and use the sim-audio-daw audio graph, DSP processors, and live runner for realtime preview. Keep Table/Dir values and explicit handles at recipe boundaries, and keep callback work preallocated and free of locks or I/O."
 claims_anchors = [
   "anchor/crate/sim-lib-music-synth",
   "anchor/crate/sim-lib-sound-render",
@@ -409,6 +409,38 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/offline-audio-transform-and-loudness"
+title = "Offline audio transform and loudness"
+summary = "Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither."
+owner = "crate/sim-lib-sound-render"
+audiences = ["user", "code", "framework"]
+guidance = "Use phase_vocode only for offline PCM: it composes sound-audio-lift StftPlan with numbers-signal FFT and phase unwrapping while retaining phase-lock, transient, stretch, pitch, unwrap, instantaneous-frequency, and output bounds. Use measure_loudness for 400 ms momentary blocks, EBU R128 absolute/relative gates, ITU-R BS.1770 K-weighting, and bandlimited true peak. normalize_loudness applies one reported scalar gain and never hides a limiter, clipped float, or dBTP ceiling violation. Use sim-lib-stream-file ChannelMatrix plus convert_f32_to_pcm16 or convert_f32_to_wav_bytes for bounded format/channel conversion and seeded TPDF/noise-shaped dither; analysis and device providers must not duplicate that interchange policy. Realtime oscillation and resampling remain with sim-audio-daw."
+claims_anchors = [
+  "anchor/crate/sim-lib-sound-render",
+  "anchor/crate/sim-lib-stream-file",
+  "anchor/rustdoc/sim-lib-sound-render/loudness-report",
+  "anchor/rustdoc/sim-lib-sound-render/loudness-spec",
+  "anchor/rustdoc/sim-lib-sound-render/measure_loudness",
+  "anchor/rustdoc/sim-lib-sound-render/normalization-report",
+  "anchor/rustdoc/sim-lib-sound-render/normalize_loudness",
+  "anchor/rustdoc/sim-lib-sound-render/phase-vocoder-report",
+  "anchor/rustdoc/sim-lib-sound-render/phase_vocode",
+  "anchor/rustdoc/sim-lib-sound-render/vocoder-policy",
+  "anchor/rustdoc/sim-lib-stream-file/channel-matrix",
+  "anchor/rustdoc/sim-lib-stream-file/convert_f32_to_pcm16",
+  "anchor/rustdoc/sim-lib-stream-file/convert_f32_to_wav_bytes",
+  "anchor/rustdoc/sim-lib-stream-file/pcm-conversion-report",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-sound-render/src/tests",
+  "spec-test/sim-music/crates/sim-lib-stream-file/src/tests",
+]
+supports = [
+  "feature/sim-music/audio-lift-and-render",
+  "feature/sim-music/synth-performance-workbench",
+]
+
+[[feature]]
 id = "feature/sim-music/daw-session-runtime"
 title = "DAW session runtime"
 summary = "Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime."
@@ -547,6 +579,17 @@ steps = [
   { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The music analysis row owns pitch histograms and exact object descriptors that consume lifted musical material." },
   { specimen = "recipe/sim-music/crates/sim-lib-sound-audio-lift/01-basics/onset-beat-harmony", why = "The checked Lisp analysis call selects onsets, beats, MFCC, chroma, key, and chords under explicit varying-tempo, posterior/HMM, work, result, and seed policy; its generated click/chord fixture proves timing and labels." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-analysis/01-basics/pitch-histogram", why = "The pitch-histogram recipe is the current exact music analysis specimen." },
+]
+
+[[route]]
+id = "route/transform-and-normalize-audio"
+task = "Stretch, pitch, measure, normalize, and lower offline PCM"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/audio-lift-and-render", why = "The audio-lift row supplies bounded phase-preserving STFT frames and COLA evidence while delegating FFT conventions and phase unwrapping to numbers-signal." },
+  { feature = "feature/sim-music/offline-audio-transform-and-loudness", why = "The offline transform row owns phase-vocoder policy, standards-named loudness/true-peak reports, visible normalization gain, and bounded PCM16 conversion." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-sound-render/src/tests", why = "The renderer specimen proves duration/pitch invariants, transient resets, EBU reference loudness, intersample true peak, and visible normalization gain." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-stream-file/src/tests", why = "The interchange specimen proves bounded channel mapping, seeded dither determinism, clipping reports, and routing through canonical WAV encoding." },
 ]
 
 [[route]]

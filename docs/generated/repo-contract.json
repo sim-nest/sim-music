@@ -263,7 +263,7 @@
       "id": "cookbook/sound-render",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-sound-render",
-      "summary": "Offline PCM render descriptors."
+      "summary": "Offline PCM render, phase-vocoder, loudness, and normalization descriptors."
     },
     {
       "id": "cookbook/sound-shapes",
@@ -305,7 +305,7 @@
       "id": "cookbook/stream-file",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-stream-file",
-      "summary": "Capability-gated WAV and SMF stream adapters."
+      "summary": "Capability-gated WAV and SMF streams with explicit PCM16 conversion policy."
     },
     {
       "id": "cookbook/stream-midi",
@@ -3037,6 +3037,13 @@
         {
           "kind": "normal",
           "optional": false,
+          "package": "sim-lib-sound-audio-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
           "package": "sim-lib-sound-bridge",
           "rename": null,
           "target": null
@@ -3718,10 +3725,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "d7b5bf3a7bfedcb5e4411c964d0488d4b7db42ba",
+    "git_commit": "b97936b420c627f3068cd89f851aa3a409b1ac8e",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "d7b5bf3a7bfedcb5e4411c964d0488d4b7db42ba",
+    "source_commit": "b97936b420c627f3068cd89f851aa3a409b1ac8e",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3734,9 +3741,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "78d2decf73c39a00",
+    "workspace_hash": "4abf98d43c6451b8",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 777,
+    "workspace_hash_input_count": 787,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4428,12 +4435,19 @@
       "crates/sim-lib-sound-render/Cargo.toml",
       "crates/sim-lib-sound-render/build.rs",
       "crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml",
+      "crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/recipe.toml",
       "crates/sim-lib-sound-render/recipes/book.toml",
       "crates/sim-lib-sound-render/src/error.rs",
       "crates/sim-lib-sound-render/src/lib.rs",
+      "crates/sim-lib-sound-render/src/loudness/dsp.rs",
+      "crates/sim-lib-sound-render/src/loudness/validate.rs",
+      "crates/sim-lib-sound-render/src/loudness.rs",
       "crates/sim-lib-sound-render/src/model.rs",
       "crates/sim-lib-sound-render/src/runtime.rs",
+      "crates/sim-lib-sound-render/src/tests/loudness_tests.rs",
+      "crates/sim-lib-sound-render/src/tests/vocoder_tests.rs",
       "crates/sim-lib-sound-render/src/tests.rs",
+      "crates/sim-lib-sound-render/src/vocoder.rs",
       "crates/sim-lib-sound-shapes/Cargo.toml",
       "crates/sim-lib-sound-shapes/build.rs",
       "crates/sim-lib-sound-shapes/recipes/01-basics/shape-family/recipe.toml",
@@ -4493,6 +4507,7 @@
       "crates/sim-lib-stream-bridge/src/tests.rs",
       "crates/sim-lib-stream-file/Cargo.toml",
       "crates/sim-lib-stream-file/build.rs",
+      "crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/recipe.toml",
       "crates/sim-lib-stream-file/recipes/01-basics/wav-smf/recipe.toml",
       "crates/sim-lib-stream-file/recipes/book.toml",
       "crates/sim-lib-stream-file/src/cap.rs",
@@ -4500,6 +4515,8 @@
       "crates/sim-lib-stream-file/src/effect_io.rs",
       "crates/sim-lib-stream-file/src/lib.rs",
       "crates/sim-lib-stream-file/src/midi.rs",
+      "crates/sim-lib-stream-file/src/pcm_convert.rs",
+      "crates/sim-lib-stream-file/src/tests/pcm_convert_tests.rs",
       "crates/sim-lib-stream-file/src/tests.rs",
       "crates/sim-lib-stream-file/src/wav.rs",
       "crates/sim-lib-stream-midi/Cargo.toml",
@@ -5722,7 +5739,7 @@
       "card_id": "cookbook/sound-render",
       "group": "workspace",
       "package": "sim-lib-sound-render",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
         {
           "card_id": "sound-render/01-basics/offline-buffer",
@@ -5731,9 +5748,17 @@
           "package": "sim-lib-sound-render",
           "recipe_toml": "crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml",
           "title": "Offline render buffer"
+        },
+        {
+          "card_id": "sound-render/01-basics/phase-vocoder-loudness",
+          "codec": "lisp",
+          "id": "phase-vocoder-loudness",
+          "package": "sim-lib-sound-render",
+          "recipe_toml": "crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/recipe.toml",
+          "title": "Phase-vocoder and loudness report"
         }
       ],
-      "summary": "Offline PCM render descriptors.",
+      "summary": "Offline PCM render, phase-vocoder, loudness, and normalization descriptors.",
       "title": "Sound Render"
     },
     {
@@ -5862,8 +5887,16 @@
       "card_id": "cookbook/stream-file",
       "group": "workspace",
       "package": "sim-lib-stream-file",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
+        {
+          "card_id": "stream-file/01-basics/pcm16-conversion",
+          "codec": "lisp",
+          "id": "pcm16-conversion",
+          "package": "sim-lib-stream-file",
+          "recipe_toml": "crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/recipe.toml",
+          "title": "Bounded PCM16 conversion and dither"
+        },
         {
           "card_id": "stream-file/01-basics/wav-smf",
           "codec": "lisp",
@@ -5873,7 +5906,7 @@
           "title": "WAV and SMF descriptor"
         }
       ],
-      "summary": "Capability-gated WAV and SMF stream adapters.",
+      "summary": "Capability-gated WAV and SMF streams with explicit PCM16 conversion policy.",
       "title": "Stream File"
     },
     {

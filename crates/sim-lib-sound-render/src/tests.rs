@@ -8,6 +8,9 @@ use sim_lib_sound_timbre::pure_sine;
 
 use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
 
+mod loudness_tests;
+mod vocoder_tests;
+
 // conformance: sound rendering reuse produces deterministic offline PCM.
 
 #[test]

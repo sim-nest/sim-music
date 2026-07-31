@@ -1,0 +1,8 @@
+id = "phase-vocoder-loudness"
+title = "Phase-vocoder and loudness report"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["sound", "render", "phase-vocoder", "loudness", "true-peak", "offline", "sandbox-descriptor"]
+requires = ["sound-render", "codec/lisp"]

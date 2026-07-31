@@ -1,0 +1,8 @@
+id = "pcm16-conversion"
+title = "Bounded PCM16 conversion and dither"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["stream", "pcm", "wav", "channel-map", "quantization", "dither", "sandbox-descriptor"]
+requires = ["stream-file", "codec/lisp"]
