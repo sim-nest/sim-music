@@ -1,0 +1,53 @@
+'(expr:map
+  [catalog [
+    (expr:map [need additive] [owner sim-lib-sound-timbre] [specimen "bright-envelope"])
+    (expr:map [need envelopes] [owner sim-lib-music-synth] [specimen "subtractive-preset"])
+    (expr:map [need oscillator] [owner sim-lib-music-synth] [specimen "subtractive-preset"])
+    (expr:map [need filter] [owner sim-lib-audio-dsp] [specimen "offline-chain"])
+    (expr:map [need karplus-strong] [owner sim-lib-sound-timbre] [specimen "sound-timbre-tests"])
+    (expr:map [need fm] [owner sim-lib-music-synth] [specimen "synthetic-patch-render"])
+    (expr:map [need waveshaping] [owner sim-lib-audio-dsp] [specimen "audio-dsp-tests"])
+    (expr:map [need effects] [owner sim-lib-audio-dsp] [specimen "offline-chain"])
+    (expr:map [need wav-output] [owner sim-lib-stream-file] [specimen "wav-smf"])
+  ]]
+  [input (expr:map
+    [kind table/dir]
+    [dir-handle "music-inputs"]
+    [value-handle "fm-bell-notes"]
+    [mode read])]
+  [tone (expr:map
+    [owner sim-lib-sound-timbre]
+    [operation sound/timbre/apply]
+    [preset fm-bell]
+    [notes-handle "fm-bell-notes"])]
+  [offline (expr:map
+    [owner sim-lib-sound-render]
+    [operation sound/render]
+    [seconds 2]
+    [sample-rate 48000]
+    [buffer-type stream/PcmPacket]
+    [output (expr:map
+      [dir-handle "music-artifacts"]
+      [value-handle "fm-bell-offline-f32"]
+      [replace false])])]
+  [realtime (expr:map
+    [graph-owner sim-lib-audio-graph-core]
+    [runner-owner sim-lib-audio-graph-live]
+    [source-handle "fm-bell-notes"]
+    [effects [audio-dsp/BiquadFilter audio-dsp/Limiter]]
+    [placement default-audio]
+    [callback (expr:map [preallocated true] [locks false] [io false])]
+    [preview-output (expr:map
+      [dir-handle "music-previews"]
+      [value-handle "fm-bell-buffered-preview"]
+      [replace false])])]
+  [wav (expr:map
+    [owner sim-lib-stream-file]
+    [input-format pcm16]
+    [output (expr:map
+      [dir-handle "music-artifacts"]
+      [value-handle "fm-bell-pcm16.wav"]
+      [replace false])]
+    [deferred (expr:map
+      [sample-conversion "MUSICALGOS4.43"]
+      [dither "MUSICALGOS4.43"])])])

@@ -172,6 +172,10 @@
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/03-composition/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/placement/all-local/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-synth/recipes/placement/all-local/recipe.toml"}

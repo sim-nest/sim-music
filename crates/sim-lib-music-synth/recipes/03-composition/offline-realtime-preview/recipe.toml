@@ -1,0 +1,8 @@
+id = "offline-realtime-preview"
+title = "Offline timbre render and realtime DSP preview"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["audio", "synth", "timbre", "render", "dsp", "wav", "table-dir"]
+requires = ["audio-synth", "sound-timbre", "sound-render", "stream-file", "audio-dsp", "audio-graph-live", "codec/lisp"]

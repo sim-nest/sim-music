@@ -6,6 +6,8 @@ use sim_kernel::{DefaultFactory, EagerPolicy, Symbol};
 use sim_lib_discrete_search::{SearchControl, SearchStatus};
 use sim_lib_sound_core::{Amplitude, Frequency, PartialTag, Phase};
 
+// conformance: timbre reuse covers additive, filtered, Karplus-Strong, and FM synthesis.
+
 #[test]
 fn builtins_render_non_empty_tones() {
     let builtins = vec![

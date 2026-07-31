@@ -44,12 +44,15 @@ claims_surfaces = [
 [[feature]]
 id = "feature/sim-music/synth-performance-workbench"
 title = "Synth performance workbench"
-summary = "Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance."
+summary = "Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations."
 owner = "crate/sim-lib-music-synth"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when building a playable synth fixture, reusing additive or subtractive synth descriptors, or comparing a local, browser, or stream placement route."
+guidance = "Use music-synth for oscillators, envelopes, subtractive voices, DX7 FM, and modeled modular instruments; use sound-timbre for additive partials, filtered timbres, Karplus-Strong, and compact FM pairs; use sound-render for deterministic offline f32 PCM; use sim-lib-stream-file only for bounded canonical PCM16 WAV bytes/streams; and use the sim-audio-daw audio graph, DSP processors, and live runner for realtime preview. Keep Table/Dir values and explicit handles at recipe boundaries, keep callback work preallocated and free of locks or I/O, and leave f32/i16 sample conversion and dither policy to MUSICALGOS4.43."
 claims_anchors = [
   "anchor/crate/sim-lib-music-synth",
+  "anchor/crate/sim-lib-sound-render",
+  "anchor/crate/sim-lib-sound-timbre",
+  "anchor/crate/sim-lib-stream-file",
   "anchor/export/sim-lib-music-synth/view/component",
   "anchor/export/sim-lib-music-synth/view-instrument-dx7-editor",
   "anchor/export/sim-lib-music-synth/view-instrument-ps3300-editor",
@@ -62,6 +65,10 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/daw",
+  "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/reuse",
+  "spec-test/sim-music/crates/sim-lib-sound-render/src/tests",
+  "spec-test/sim-music/crates/sim-lib-sound-timbre/src/tests",
+  "spec-test/sim-music/crates/sim-lib-stream-file/src/tests",
 ]
 
 [[feature]]
@@ -483,6 +490,18 @@ steps = [
   { feature = "feature/sim-music/exact-score-consonance", why = "The evaluation row supplies exact sounding windows and separately inspectable named metrics." },
   { feature = "feature/sim-music/reversible-consonance-completion", why = "The completion row composes typed additions, constraints, reports, content binding, changed windows, provenance, and exact inversion while delegating deterministic traversal, bounds, interrupts, and receipts to sim-lib-discrete-search." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-consonance/01-basics/additive-consonance-completion", why = "The checked descriptor and paired Rust specimen show the bounded reversible completion contract." },
+]
+
+[[route]]
+id = "route/compose-offline-realtime-audio"
+task = "Compose one timbre as deterministic offline audio and a realtime DSP preview"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The sound vocabulary owns additive partials, envelopes, filters, Karplus-Strong, and compact FM timbres." },
+  { feature = "feature/sim-music/synth-performance-workbench", why = "The synth workbench owns oscillator, subtractive, DX7 FM, modular synth, offline-render, PCM16 WAV, and explicit Table/Dir recipe routing." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-synth/03-composition/offline-realtime-preview", why = "The recipe maps every catalog need to an existing owner, renders offline through sound-render, previews through graph/DSP, and uses non-overwriting Table/Dir handles." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/reuse", why = "The paired conformance test decodes the recipe and checks its nine owner mappings, bounded callback policy, Table/Dir handles, and phase-43 conversion/dither deferral." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-sound-render/src/tests", why = "The renderer specimen proves additive, Karplus-Strong, and FM timbres produce finite deterministic offline PCM." },
 ]
 
 [[route]]

@@ -26,6 +26,8 @@ use crate::{
     stream_to_cassette_expr, validate_cassette_fixture_path, write_smf_stream,
 };
 
+// conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
+
 #[test]
 fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
     let temp = TempPath::new("input.mid");
@@ -78,6 +80,7 @@ fn wav_to_pcm_packet_spine_to_memory_sink_round_trips() {
     let spec = pcm_spec();
     let buffers = vec![pcm_buffer(&[1, -1, 2, -2]), pcm_buffer(&[3, -3])];
     let bytes = pcm_buffers_to_wav_bytes(spec, &buffers).unwrap();
+    assert_eq!(bytes, pcm_buffers_to_wav_bytes(spec, &buffers).unwrap());
     fs::write(temp.path(), bytes).unwrap();
     let mut cx = cx(&[stream_file_read_capability()]);
 
