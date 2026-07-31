@@ -93,6 +93,13 @@
       "summary": "Core music model layer for the SIM music constellation."
     },
     {
+      "crate_name": "sim_lib_music_counterpoint",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-counterpoint/Cargo.toml",
+      "package": "sim-lib-music-counterpoint",
+      "summary": "Exact counterpoint rule reports and graph-backed stretto analysis."
+    },
+    {
       "crate_name": "sim_lib_music_lift",
       "group": "workspace",
       "manifest": "crates/sim-lib-music-lift/Cargo.toml",

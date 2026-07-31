@@ -275,6 +275,32 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/music-counterpoint"
+title = "Exact counterpoint and stretto analysis"
+summary = "Analyze existing voices under inspectable species or open rules and derive bounded stretto couples, compatibility graphs, maximal cliques, clusters, chains, fusions, and transform candidates."
+owner = "crate/sim-lib-music-counterpoint"
+audiences = ["user", "code", "framework"]
+guidance = "Use analyze_counterpoint for material that already exists: it converts through music-core's identity-bearing Staff, reuses exact consonance sounding windows for rational event alignment, and returns every motion and violation with source voices, note/event ids, exact spans, stable rule ids, and metric evidence. Species-one through species-four and open policies are ordinary RuleSet data over intervals, relative motion, range, crossing, overlap, duration, and dissonance preparation/resolution. Use stretto_graph only for bounded derived analysis candidates. It materializes original, retrograde, inversion, retrograde-inversion, transposition, and duration requests through sim-lib-music-transform, stores legal pairs in sim-lib-discrete-graph Graph, reuses connected_components, reports maximal pairwise-compatible cliques, chooses the largest normalized suffix/prefix relation for chains, and labels fusion as derived analysis rather than generation."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-consonance",
+  "anchor/crate/sim-lib-music-core",
+  "anchor/crate/sim-lib-music-counterpoint",
+  "anchor/crate/sim-lib-music-transform",
+  "anchor/runtime-lib/sim-lib-music-counterpoint/music-counterpoint-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-counterpoint/src/tests",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/exact-score-consonance",
+  "feature/sim-music/pitch-and-sound-vocabulary",
+]
+
+[[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
 summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
@@ -372,6 +398,17 @@ steps = [
   { feature = "feature/sim-music/daw-session-runtime", why = "The DAW session row supplies the reusable session graph around the performance." },
   { feature = "feature/sim-music/synth-performance-workbench", why = "The synth row turns that material into local or browser-backed sound." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-synth/01-basics/subtractive-preset", why = "The preset recipe is the smallest synth example." },
+]
+
+[[route]]
+id = "route/analyze-counterpoint"
+task = "Analyze counterpoint and bounded stretto relations"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row supplies canonical Counterpoint and identity-bearing Staff conversion plus audited transform operations." },
+  { feature = "feature/sim-music/exact-score-consonance", why = "The consonance row supplies exact half-open sounding-window alignment without collapsing voice or event identity." },
+  { feature = "feature/sim-music/music-counterpoint", why = "The counterpoint row applies inspectable rule data to existing material and builds bounded graph-backed stretto relations while keeping analysis distinct from generation." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-counterpoint/01-basics/stretto-graph", why = "The checked Lisp specimen exposes candidate entries, compatible couples, maximal cliques, and normalized chains with generation=false." },
 ]
 
 [[route]]

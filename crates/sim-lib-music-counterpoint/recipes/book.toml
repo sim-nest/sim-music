@@ -1,0 +1,5 @@
+book = "music-counterpoint"
+title = "Counterpoint and Stretto Analysis"
+summary = "Exact rule evidence and graph-backed contrapuntal overlap."
+order = 254
+chapters = ["01-basics"]

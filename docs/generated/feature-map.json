@@ -147,6 +147,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-music-counterpoint"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-music-lift"
     },
     {

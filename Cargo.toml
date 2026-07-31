@@ -14,6 +14,7 @@ members = [
   "crates/sim-lib-music-analysis",
   "crates/sim-lib-music-combinators",
   "crates/sim-lib-music-consonance",
+  "crates/sim-lib-music-counterpoint",
   "crates/sim-lib-music-core",
   "crates/sim-lib-music-lift",
   "crates/sim-lib-music-lower",

@@ -1,5 +1,5 @@
 {
-  "card_count": 52,
+  "card_count": 53,
   "cards": [
     {
       "id": "browse/catalog",
@@ -108,6 +108,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-core",
       "summary": "Score, melody, note, and duration descriptors."
+    },
+    {
+      "id": "cookbook/music-counterpoint",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-counterpoint",
+      "summary": "Exact rule evidence and graph-backed contrapuntal overlap."
     },
     {
       "id": "cookbook/music-lift",

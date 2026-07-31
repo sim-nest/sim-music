@@ -1,5 +1,5 @@
 {
-  "card_count": 52,
+  "card_count": 53,
   "cards": [
     {
       "id": "browse/catalog",
@@ -108,6 +108,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-core",
       "summary": "Score, melody, note, and duration descriptors."
+    },
+    {
+      "id": "cookbook/music-counterpoint",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-counterpoint",
+      "summary": "Exact rule evidence and graph-backed contrapuntal overlap."
     },
     {
       "id": "cookbook/music-lift",
@@ -336,6 +342,7 @@
       "sim-lib-music-combinators",
       "sim-lib-music-consonance",
       "sim-lib-music-core",
+      "sim-lib-music-counterpoint",
       "sim-lib-music-lift",
       "sim-lib-music-lower",
       "sim-lib-music-notation",
@@ -375,7 +382,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 48,
+  "package_count": 49,
   "packages": [
     {
       "crate_name": "sim_lib_daw_session",
@@ -1209,6 +1216,73 @@
           ],
           "name": "build-script-build",
           "src": "crates/sim-lib-music-core/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_counterpoint",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-consonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-shapes",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-transform",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Exact counterpoint rule reports and graph-backed stretto analysis.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-counterpoint/Cargo.toml",
+      "name": "sim-lib-music-counterpoint",
+      "publish": "true",
+      "root": "crates/sim-lib-music-counterpoint",
+      "rustdoc_summary": "Exact counterpoint rule reports and graph-backed stretto analysis.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_counterpoint",
+          "src": "crates/sim-lib-music-counterpoint/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-counterpoint/build.rs"
         }
       ]
     },
@@ -3642,10 +3716,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "1678070908e40ff29b497d83b944268cc42d2e1f",
+    "git_commit": "6e6065e7867b4dd850734d9a68bac35871c7463f",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "1678070908e40ff29b497d83b944268cc42d2e1f",
+    "source_commit": "6e6065e7867b4dd850734d9a68bac35871c7463f",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3658,9 +3732,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "6251ca6fd16608d9",
+    "workspace_hash": "8015f8126f65ab73",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 720,
+    "workspace_hash_input_count": 733,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3881,6 +3955,19 @@
       "crates/sim-lib-music-core/src/tests.rs",
       "crates/sim-lib-music-core/src/time.rs",
       "crates/sim-lib-music-core/src/trace.rs",
+      "crates/sim-lib-music-counterpoint/Cargo.toml",
+      "crates/sim-lib-music-counterpoint/build.rs",
+      "crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/recipe.toml",
+      "crates/sim-lib-music-counterpoint/recipes/01-basics/stretto-graph/recipe.toml",
+      "crates/sim-lib-music-counterpoint/recipes/book.toml",
+      "crates/sim-lib-music-counterpoint/src/analysis.rs",
+      "crates/sim-lib-music-counterpoint/src/lib.rs",
+      "crates/sim-lib-music-counterpoint/src/model.rs",
+      "crates/sim-lib-music-counterpoint/src/rule.rs",
+      "crates/sim-lib-music-counterpoint/src/runtime.rs",
+      "crates/sim-lib-music-counterpoint/src/runtime_graph_expr.rs",
+      "crates/sim-lib-music-counterpoint/src/stretto.rs",
+      "crates/sim-lib-music-counterpoint/src/tests.rs",
       "crates/sim-lib-music-lift/Cargo.toml",
       "crates/sim-lib-music-lift/build.rs",
       "crates/sim-lib-music-lift/recipes/01-basics/from-midi-track/recipe.toml",
@@ -4384,7 +4471,7 @@
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 50,
+  "recipe_book_count": 51,
   "recipes": [
     {
       "book": "daw-session",
@@ -4797,6 +4884,34 @@
       ],
       "summary": "Score, melody, note, and duration descriptors.",
       "title": "Music Core"
+    },
+    {
+      "book": "music-counterpoint",
+      "book_toml": "crates/sim-lib-music-counterpoint/recipes/book.toml",
+      "card_id": "cookbook/music-counterpoint",
+      "group": "workspace",
+      "package": "sim-lib-music-counterpoint",
+      "recipe_count": 2,
+      "recipes": [
+        {
+          "card_id": "music-counterpoint/01-basics/counterpoint-report",
+          "codec": "lisp",
+          "id": "counterpoint-report",
+          "package": "sim-lib-music-counterpoint",
+          "recipe_toml": "crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/recipe.toml",
+          "title": "Explain exact counterpoint violations"
+        },
+        {
+          "card_id": "music-counterpoint/01-basics/stretto-graph",
+          "codec": "lisp",
+          "id": "stretto-graph",
+          "package": "sim-lib-music-counterpoint",
+          "recipe_toml": "crates/sim-lib-music-counterpoint/recipes/01-basics/stretto-graph/recipe.toml",
+          "title": "Map bounded stretto relations"
+        }
+      ],
+      "summary": "Exact rule evidence and graph-backed contrapuntal overlap.",
+      "title": "Counterpoint and Stretto Analysis"
     },
     {
       "book": "music-lift",
