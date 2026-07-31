@@ -24,6 +24,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 6 | Convert exact score forms with loss and identity evidence, decode harmonic sequences, quantize declared lattices, compare melody/rhythm features, discover bounded repeated patterns, find certified graph paths, and audit exact transforms. |
+| `feature/sim-music/algorithm-foundry` | `crate/sim-lib-music-analysis` | 1 | Execute a data recipe by selecting independently loaded MIDI, analysis, harmony, counterpoint, render, and optional preview stages through open Shape-ranked runtime registrations. |
 | `feature/sim-music/carpet-composition` | `crate/sim-lib-music-combinators` | 2 | Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings. |
 | `feature/sim-music/bounded-rewrite-catalogs` | `crate/sim-lib-music-combinators` | 1 | Derive context-aware musical grammars, scale-following pitch-map programs, and finite progression-tree catalogs with explicit bounds, shared rank/search, derivation trees, and receipts. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
@@ -38,6 +39,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 
 | Surface | Kind | Subject |
 | --- | --- | --- |
+| `cli/music-algorithm-foundry` | `cli` | `crate/music-algorithm-foundry` |
 | `cli/xtask` | `cli` | `crate/xtask` |
 | `docs/sim-music/generated` | `docs` | `doc-set/sim-music/generated` |
 
@@ -457,6 +459,15 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml`
 - `crates/sim-lib-stream-midi/recipes/01-basics/packetize/setup.siml`
 - `crates/sim-lib-stream-midi/recipes/book.toml`
+- `recipes/book.toml`
+- `recipes/music-algorithm-foundry/Cargo.toml`
+- `recipes/music-algorithm-foundry/README.md`
+- `recipes/music-algorithm-foundry/recipe.toml`
+- `recipes/music-algorithm-foundry/setup.siml`
+- `recipes/music-algorithm-foundry/src/foundry.rs`
+- `recipes/music-algorithm-foundry/src/foundry/codec.rs`
+- `recipes/music-algorithm-foundry/src/foundry/tests.rs`
+- `recipes/music-algorithm-foundry/src/main.rs`
 
 ## Worked Examples
 
@@ -5760,6 +5771,31 @@ fn map_helpers_cover_transpose_inversion_rotation_and_negative_octaves() {
         Pitch::from_semitone(0)
     );
 }
+```
+
+### `feature/sim-music/algorithm-foundry`
+
+Specimen `recipe/sim-music/music-algorithm-foundry` is checked by `sh scripts/check-recipes.sh`.
+
+Source `recipes/music-algorithm-foundry/recipe.toml`:
+
+```toml
+id = "music-algorithm-foundry"
+title = "Compose a music algorithm plan from replaceable stages"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 10
+tags = ["music", "algorithm", "shape", "foundry"]
+requires = [
+  "sim-lib-midi-smf",
+  "sim-lib-music-analysis",
+  "sim-lib-music-counterpoint",
+  "sim-lib-music-lift",
+  "sim-lib-music-lower",
+  "sim-lib-pitch-chord",
+  "sim-lib-sound-render",
+]
 ```
 
 ### `feature/sim-music/carpet-composition`

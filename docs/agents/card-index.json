@@ -414,6 +414,15 @@
     "crates/sim-lib-stream-midi/recipes/01-basics/packetize/purpose.md",
     "crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml",
     "crates/sim-lib-stream-midi/recipes/01-basics/packetize/setup.siml",
-    "crates/sim-lib-stream-midi/recipes/book.toml"
+    "crates/sim-lib-stream-midi/recipes/book.toml",
+    "recipes/book.toml",
+    "recipes/music-algorithm-foundry/Cargo.toml",
+    "recipes/music-algorithm-foundry/README.md",
+    "recipes/music-algorithm-foundry/recipe.toml",
+    "recipes/music-algorithm-foundry/setup.siml",
+    "recipes/music-algorithm-foundry/src/foundry.rs",
+    "recipes/music-algorithm-foundry/src/foundry/codec.rs",
+    "recipes/music-algorithm-foundry/src/foundry/tests.rs",
+    "recipes/music-algorithm-foundry/src/main.rs"
   ]
 }

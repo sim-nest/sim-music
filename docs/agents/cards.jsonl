@@ -412,3 +412,12 @@
 {"kind":"recipe","path":"crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-midi/recipes/01-basics/packetize/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-stream-midi/recipes/book.toml"}
+{"kind":"recipe","path":"recipes/book.toml"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/Cargo.toml"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/README.md"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/recipe.toml"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/setup.siml"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/src/foundry.rs"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/src/foundry/codec.rs"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/src/foundry/tests.rs"}
+{"kind":"recipe","path":"recipes/music-algorithm-foundry/src/main.rs"}
