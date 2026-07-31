@@ -29,6 +29,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
 | `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
 | `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions. |
+| `feature/sim-music/sound-spectrum-adapter` | `crate/sim-lib-sound-spectrum` | 1 | Retain physical frequency, amplitude, provenance, and sound descriptors while delegating PCM transform math to the generic numbers-signal real FFT. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
@@ -6503,6 +6504,82 @@ fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Option<&'a Expr> {
         Expr::Symbol(symbol) if symbol.name.as_ref() == name => Some(value),
         _ => None,
     })
+}
+```
+
+### `feature/sim-music/sound-spectrum-adapter`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-spectrum/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-spectrum/src/tests.rs`:
+
+```rust
+use std::time::Duration;
+
+use super::*;
+use sim_lib_sound_core::{Amplitude, Frequency, Tone};
+
+// conformance: sound PCM spectra delegate transform math and retain domain facts.
+
+#[test]
+fn spectrum_peaks_recover_sine_frequency() {
+    let tone = Tone::sine(Frequency(440.0), Duration::from_secs(1));
+    let spectrum = Spectrum::from_tone(&tone, Duration::from_millis(100));
+    let peak = spectrum.peaks(1)[0].0;
+    assert!((peak.0 - 440.0).abs() < 1e-6);
+}
+
+#[test]
+fn pcm_spectrum_remains_a_sound_adapter_over_numbers_signal() {
+    let samples = [1.0_f32, 0.0, -1.0, 0.0];
+    let spectrum = Spectrum::from_pcm(&samples, 8, 4);
+    assert_eq!(spectrum.bins.len(), 3);
+    assert_eq!(spectrum.bins[0], (Frequency(0.0), Amplitude(0.0)));
+    assert!((spectrum.bins[1].0.0 - 2.0).abs() < 1e-12);
+    assert!((spectrum.bins[1].1.0 - 0.5).abs() < 1e-12);
+    assert!(spectrum.bins[2].1.0 < 1e-12);
+    assert_eq!(
+        spectrum.source,
+        SpectrumSource::FromPcm {
+            window_size: 4,
+            sample_rate: 8,
+        }
+    );
+}
+
+#[test]
+fn centroid_rises_with_brighter_partials() {
+    let base = Spectrum {
+        bins: vec![
+            (Frequency(220.0), Amplitude(1.0)),
+            (Frequency(880.0), Amplitude(0.1)),
+        ],
+        source: SpectrumSource::Synthetic,
+    };
+    let brighter = Spectrum {
+        bins: vec![
+            (Frequency(220.0), Amplitude(1.0)),
+            (Frequency(880.0), Amplitude(0.8)),
+        ],
+        source: SpectrumSource::Synthetic,
+    };
+    assert!(brighter.centroid().0 > base.centroid().0);
+}
+
+#[test]
+fn pcm_sine_peak_is_near_expected_bin() {
+    let sample_rate = 8_000u32;
+    let window = 256usize;
+    let frequency = 437.5;
+    let samples: Vec<f32> = (0..window)
+        .map(|index| {
+            let phase = std::f64::consts::TAU * frequency * index as f64 / f64::from(sample_rate);
+            phase.sin() as f32
+        })
+        .collect();
+    let spectrum = Spectrum::from_pcm(&samples, sample_rate, window);
+    let peak = spectrum.peaks(1)[0].0;
+    assert!((peak.0 - frequency).abs() <= f64::from(sample_rate) / window as f64);
 }
 ```
 

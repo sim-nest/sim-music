@@ -11,6 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
+sim-lib-numbers-signal = { version = "0.1.0" }
 sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
 
 [build-dependencies]

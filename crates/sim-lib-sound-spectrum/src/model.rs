@@ -1,5 +1,9 @@
 use std::time::Duration;
 
+use sim_lib_numbers_signal::{
+    Normalization, SignalBuffer, SignalView, SpectrumPacking, TransformKind, TransformPlan,
+    transform,
+};
 use sim_lib_sound_core::{Amplitude, Frequency, Tone};
 
 /// Records how a [`Spectrum`] was produced.
@@ -70,23 +74,49 @@ impl Spectrum {
         }
     }
 
-    /// Builds a magnitude spectrum from PCM `samples` by a direct discrete
-    /// Fourier transform over the first `window_size` samples.
+    /// Builds a magnitude spectrum from PCM `samples` through the generic
+    /// numbers-signal real FFT over the first `window_size` samples.
+    ///
+    /// This remains the sound-domain adapter: it assigns physical frequencies,
+    /// amplitudes, and [`SpectrumSource`] while the reusable number library owns
+    /// transform conventions and execution.
     pub fn from_pcm(samples: &[f32], sample_rate: u32, window_size: usize) -> Self {
         let window = window_size.min(samples.len()).max(1);
-        let mut bins = Vec::with_capacity(window / 2 + 1);
-        for bin in 0..=window / 2 {
-            let mut real = 0.0;
-            let mut imag = 0.0;
-            for (index, sample) in samples.iter().take(window).enumerate() {
-                let angle = std::f64::consts::TAU * bin as f64 * index as f64 / window as f64;
-                real += f64::from(*sample) * angle.cos();
-                imag -= f64::from(*sample) * angle.sin();
-            }
-            let magnitude = (real * real + imag * imag).sqrt() / window as f64;
-            let frequency = Frequency(bin as f64 * f64::from(sample_rate) / window as f64);
-            bins.push((frequency, Amplitude(magnitude)));
-        }
+        let samples = samples
+            .iter()
+            .take(window)
+            .copied()
+            .map(f64::from)
+            .collect::<Vec<_>>();
+        let magnitudes = if samples.iter().all(|sample| sample.is_finite()) {
+            let mut padded = vec![0.0; window];
+            padded[..samples.len()].copy_from_slice(&samples);
+            let mut plan = TransformPlan::new(TransformKind::RealFft, window);
+            plan.normalization = Normalization::Forward;
+            plan.packing = SpectrumPacking::HermitianHalf;
+            let SignalBuffer::Complex(spectrum) = transform(&plan, SignalView::Real(&padded))
+                .expect("a finite, exact-length real FFT plan is valid")
+            else {
+                unreachable!("a real FFT returns complex coefficients")
+            };
+            spectrum
+                .as_slice()
+                .iter()
+                .map(|(real, imaginary)| real.hypot(*imaginary))
+                .collect::<Vec<_>>()
+        } else {
+            // Preserve the legacy infallible API's non-finite observation while
+            // keeping all valid transform work in numbers-signal.
+            vec![f64::NAN; window / 2 + 1]
+        };
+        let bins = magnitudes
+            .into_iter()
+            .enumerate()
+            .map(|(bin, magnitude)| {
+                let frequency = Frequency(bin as f64 * f64::from(sample_rate) / window as f64);
+                (frequency, Amplitude(magnitude))
+            })
+            .collect();
         Self {
             bins,
             source: SpectrumSource::FromPcm {

@@ -349,16 +349,36 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/sound-spectrum-adapter"
+title = "Sound spectrum domain adapter"
+summary = "Retain physical frequency, amplitude, provenance, and sound descriptors while delegating PCM transform math to the generic numbers-signal real FFT."
+owner = "crate/sim-lib-sound-spectrum"
+audiences = ["user", "code", "framework"]
+guidance = "Use Spectrum::from_pcm when callers need the stable sound-domain Spectrum API. It maps generic numbers-signal Hermitian real-FFT bins into hertz and amplitude values with FromPcm provenance; add transform algorithms and conventions in sim-lib-numbers-signal, never as another loop in sound-spectrum."
+claims_anchors = [
+  "anchor/crate/sim-lib-sound-spectrum",
+  "anchor/rustdoc/sim-lib-sound-spectrum/spectrum",
+  "anchor/rustdoc/sim-lib-sound-spectrum/spectrum-source",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-sound-spectrum/src/tests",
+]
+
+[[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
 summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
 owner = "crate/sim-lib-sound-audio-lift"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when analyzing audio features, routing audio lift results toward music analysis, or rendering offline buffers. Reuse sound-audio-lift for PCM feature extraction, sound-spectrum for descriptors, sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
+guidance = "Use this row when analyzing audio features, routing audio lift results toward music analysis, or rendering offline buffers. Reuse sound-audio-lift for PCM feature extraction, sound-spectrum for descriptors and its numbers-signal-backed PCM transform adapter, sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
 claims_anchors = [
   "anchor/crate/sim-lib-sound-audio-lift",
   "anchor/crate/sim-lib-sound-bridge",
   "anchor/crate/sim-lib-sound-render",
+  "anchor/crate/sim-lib-sound-spectrum",
   "anchor/crate/sim-lib-stream-bridge",
   "anchor/runtime-lib/sim-lib-sound-audio-lift/sound-audio-lift-lib",
   "anchor/runtime-lib/sim-lib-sound-bridge/sound-bridge-lib",
@@ -370,6 +390,9 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests",
+]
+supports = [
+  "feature/sim-music/sound-spectrum-adapter",
 ]
 
 [[feature]]

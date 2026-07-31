@@ -3,12 +3,32 @@ use std::time::Duration;
 use super::*;
 use sim_lib_sound_core::{Amplitude, Frequency, Tone};
 
+// conformance: sound PCM spectra delegate transform math and retain domain facts.
+
 #[test]
 fn spectrum_peaks_recover_sine_frequency() {
     let tone = Tone::sine(Frequency(440.0), Duration::from_secs(1));
     let spectrum = Spectrum::from_tone(&tone, Duration::from_millis(100));
     let peak = spectrum.peaks(1)[0].0;
     assert!((peak.0 - 440.0).abs() < 1e-6);
+}
+
+#[test]
+fn pcm_spectrum_remains_a_sound_adapter_over_numbers_signal() {
+    let samples = [1.0_f32, 0.0, -1.0, 0.0];
+    let spectrum = Spectrum::from_pcm(&samples, 8, 4);
+    assert_eq!(spectrum.bins.len(), 3);
+    assert_eq!(spectrum.bins[0], (Frequency(0.0), Amplitude(0.0)));
+    assert!((spectrum.bins[1].0.0 - 2.0).abs() < 1e-12);
+    assert!((spectrum.bins[1].1.0 - 0.5).abs() < 1e-12);
+    assert!(spectrum.bins[2].1.0 < 1e-12);
+    assert_eq!(
+        spectrum.source,
+        SpectrumSource::FromPcm {
+            window_size: 4,
+            sample_rate: 8,
+        }
+    );
 }
 
 #[test]
