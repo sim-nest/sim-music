@@ -172,6 +172,32 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/bounded-harmonization"
+title = "Bounded local and global harmonization"
+summary = "Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts."
+owner = "crate/sim-lib-pitch-chord"
+audiences = ["user", "code", "framework"]
+guidance = "Use sim-lib-pitch-chord HarmonizationRequest and plan_harmony when a domain-specific metric resolver is already available; use sim-lib-music-combinators harmonize to install the pitch-dissonance and contextual-sonance registries. Every strategy consumes the same ChordPalette, melody masks, and HarmonyRuleSet. RecursiveExhaustive and FactoredBacktracking delegate bounded traversal to sim-lib-discrete-search. LayeredDp constructs the exact legal-prefix DAG and returns the sim-lib-discrete-graph Bellman certificate; Beam records its width and caller-declared remaining-cost heuristic. HarmonizationReceipt preserves complete, partial, cancelled, and infeasible status; charged work; evaluated candidates; aggregated failed-rule facts; generic backend receipts; and proven-optimal evidence only when it exists. Use layered DP for bounded exact fixtures and beam for large palettes."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-combinators",
+  "anchor/crate/sim-lib-pitch-chord",
+  "anchor/rustdoc/sim-lib-music-combinators/harmonize",
+  "anchor/rustdoc/sim-lib-pitch-chord/harmonization-receipt",
+  "anchor/rustdoc/sim-lib-pitch-chord/harmonization-request",
+  "anchor/rustdoc/sim-lib-pitch-chord/plan_harmony",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmonize_tests",
+]
+supports = [
+  "feature/sim-music/declarative-harmony",
+  "feature/sim-music/pitch-and-sound-vocabulary",
+]
+
+[[feature]]
 id = "feature/sim-music/exact-music-analysis-and-transform"
 title = "Exact music analysis and transform"
 summary = "Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations."
@@ -298,6 +324,17 @@ steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row supplies existing chord symbols, exact pitches and ratios, pitch sets, scale maps, voicings, and named sonance models." },
   { feature = "feature/sim-music/declarative-harmony", why = "The declarative row assembles those owners into codec-neutral palettes, template chains, hard rules, soft metrics, evidence, voicing changes, and render settings." },
   { specimen = "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_conformance", why = "The checked Lisp descriptors reproduce the catalog harmonizer and chord-cycle palette/filter chains without compiled policy." },
+]
+
+[[route]]
+id = "route/harmonize-melody"
+task = "Harmonize a melody under explicit rules and bounds"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row supplies melody pitch sets, chord templates, scales, registers, voice-leading, and named sonance models." },
+  { feature = "feature/sim-music/declarative-harmony", why = "The declarative row supplies the palette plus separate hard legality and weighted score lanes." },
+  { feature = "feature/sim-music/bounded-harmonization", why = "The harmonization row adapts the shared musical problem to exhaustive, factored, certified layered-DP, and beam strategies." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-combinators/01-basics/bounded-harmonization", why = "The Lisp recipe shows the public layered-DP call with explicit work, result, and seed bounds." },
 ]
 
 [[route]]

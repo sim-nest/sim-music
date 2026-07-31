@@ -119,6 +119,13 @@ fn predicate_to_expr(predicate: &HarmonyPredicate) -> Expr {
             "distinct-pitch-classes",
             vec![qualified_entry("count", range_to_expr(*count))],
         ),
+        HarmonyPredicate::PitchRange { min_midi, max_midi } => tagged(
+            "pitch-range",
+            vec![
+                qualified_entry("min-midi", scalar(min_midi)),
+                qualified_entry("max-midi", scalar(max_midi)),
+            ],
+        ),
         HarmonyPredicate::CommonNotes { count } => tagged(
             "common-notes",
             vec![qualified_entry("count", range_to_expr(*count))],
@@ -213,6 +220,10 @@ fn predicate_from_expr(expr: &Expr) -> Result<HarmonyPredicate, HarmonyError> {
         },
         "distinct-pitch-classes" => HarmonyPredicate::DistinctPitchClasses {
             count: range_from_expr(required(expr, "count")?)?,
+        },
+        "pitch-range" => HarmonyPredicate::PitchRange {
+            min_midi: parse(required(expr, "min-midi")?, "predicate.min-midi")?,
+            max_midi: parse(required(expr, "max-midi")?, "predicate.max-midi")?,
         },
         "common-notes" => HarmonyPredicate::CommonNotes {
             count: range_from_expr(required(expr, "count")?)?,

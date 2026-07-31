@@ -11,6 +11,8 @@
 //! ([`QuadNotePlayer`]). The `builders` helpers wrap core constructors for
 //! ergonomic assembly of music objects. [`DeclarativeHarmonyResolver`] composes
 //! pitch-chord rules with exact-ratio and named-sonance registries, while
+//! [`harmonize`] runs the shared recursive, factored, layered-DP, or beam planner
+//! under explicit bounds and inspectable receipts. Finally,
 //! [`render_harmony_progression`] adapts data-only harmony programs to canonical
 //! progressions without hiding their export profile.
 #![forbid(unsafe_code)]

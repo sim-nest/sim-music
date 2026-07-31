@@ -3642,10 +3642,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "5ddb9a84c1a95f6a4481ca0f4ad8e79cfd870456",
+    "git_commit": "ef6074d87c90953d8053b5d640cae6b9fc033076",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "5ddb9a84c1a95f6a4481ca0f4ad8e79cfd870456",
+    "source_commit": "ef6074d87c90953d8053b5d640cae6b9fc033076",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3658,9 +3658,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "f208e1b5801d97ff",
+    "workspace_hash": "ec88dfcc1ef89be5",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 712,
+    "workspace_hash_input_count": 717,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3796,6 +3796,7 @@
       "crates/sim-lib-music-analysis/src/walsh.rs",
       "crates/sim-lib-music-combinators/Cargo.toml",
       "crates/sim-lib-music-combinators/build.rs",
+      "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/02-player-recipes/bassline-chord-sup/recipe.toml",
@@ -4117,6 +4118,10 @@
       "crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml",
       "crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml",
       "crates/sim-lib-pitch-chord/recipes/book.toml",
+      "crates/sim-lib-pitch-chord/src/harmonize.rs",
+      "crates/sim-lib-pitch-chord/src/harmonize_layered.rs",
+      "crates/sim-lib-pitch-chord/src/harmonize_model.rs",
+      "crates/sim-lib-pitch-chord/src/harmonize_tests.rs",
       "crates/sim-lib-pitch-chord/src/harmony_conformance.rs",
       "crates/sim-lib-pitch-chord/src/harmony_eval.rs",
       "crates/sim-lib-pitch-chord/src/harmony_expr.rs",
@@ -4648,8 +4653,16 @@
       "card_id": "cookbook/music-combinators",
       "group": "workspace",
       "package": "sim-lib-music-combinators",
-      "recipe_count": 6,
+      "recipe_count": 7,
       "recipes": [
+        {
+          "card_id": "music-combinators/01-basics/bounded-harmonization",
+          "codec": "lisp",
+          "id": "bounded-harmonization",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
+          "title": "Bounded layered harmonization"
+        },
         {
           "card_id": "music-combinators/01-basics/declarative-harmony-evidence",
           "codec": "lisp",

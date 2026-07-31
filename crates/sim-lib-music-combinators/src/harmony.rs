@@ -1,8 +1,10 @@
+use sim_lib_discrete_search::{SearchControl, SearchInterrupt};
 use sim_lib_music_core::{Channel, Chord, Progression, Time};
 use sim_lib_pitch_chord::{
-    ChordTemplate, CoreHarmonyMetricResolver, HarmonyError, HarmonyEvaluation,
-    HarmonyEvaluationContext, HarmonyMetric, HarmonyMetricObservation, HarmonyMetricResolver,
-    HarmonyRenderProfile, HarmonyRuleSet, evaluate_harmony,
+    ChordTemplate, CoreHarmonyMetricResolver, HarmonizationRequest, HarmonizationRun,
+    HarmonizationStrategy, HarmonyError, HarmonyEvaluation, HarmonyEvaluationContext,
+    HarmonyMetric, HarmonyMetricObservation, HarmonyMetricResolver, HarmonyRenderProfile,
+    HarmonyRuleSet, evaluate_harmony, plan_harmony,
 };
 use sim_lib_pitch_dissonance::{
     ContextualPitch, ContextualSonanceOptions, ContextualSonanceRegistry, PitchDissonanceRegistry,
@@ -125,6 +127,26 @@ pub fn evaluate_declarative_harmony(
     evaluate_harmony(rules, context, resolver)
 }
 
+/// Harmonizes one declarative request with the installed musical metric registries.
+///
+/// Local and global strategies share the same palette and rule evaluation.
+/// Search bounds, failed-rule evidence, heuristic declarations, and optimality
+/// certificates remain available in the returned receipt.
+pub fn harmonize(
+    request: &HarmonizationRequest,
+    strategy: HarmonizationStrategy,
+    control: SearchControl,
+    interrupt: &dyn SearchInterrupt,
+) -> Result<HarmonizationRun, HarmonyError> {
+    plan_harmony(
+        request,
+        strategy,
+        control,
+        interrupt,
+        &DeclarativeHarmonyResolver::new(),
+    )
+}
+
 /// A rendered canonical progression plus retained export settings.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct HarmonyRenderPlan {
@@ -227,8 +249,13 @@ fn no_current_chord() -> HarmonyMetricObservation {
 #[cfg(test)]
 mod tests {
     use num_rational::Ratio;
+    use sim_lib_discrete_search::{NeverInterrupt, SearchStatus};
     use sim_lib_music_core::{Pitch, PitchClass};
-    use sim_lib_pitch_chord::{HarmonyMetric, Weighted};
+    use sim_lib_pitch_chord::{
+        CountRange, HarmonizationRequest, HarmonizationStrategy, HarmonyConstraint, HarmonyMetric,
+        HarmonyPredicate, Weighted,
+    };
+    use sim_lib_pitch_scale::Scale;
 
     use super::*;
 
@@ -322,5 +349,111 @@ mod tests {
         assert_eq!(plan.progression.chords[0].pitches, core.chords[0].pitches);
         assert_eq!(plan.profile, profile);
         assert_eq!(PitchClass::C, plan.progression.chords[0].pitches[0].class);
+    }
+
+    #[test]
+    fn harmonizer_composes_every_declared_musical_constraint_lane() {
+        let c = template("c", &[48, 52, 55, 60]);
+        let f = template("f", &[53, 57, 60, 65]);
+        let g7 = template("g7", &[55, 59, 62, 65]);
+        let c_mask = c.pitch_set().unwrap();
+        let request = HarmonizationRequest {
+            melody: vec![
+                c.pitch_set().unwrap(),
+                f.pitch_set().unwrap(),
+                c.pitch_set().unwrap(),
+            ],
+            palette: sim_lib_pitch_chord::ChordPalette::explicit(
+                "full-rules",
+                vec![c, f, g7],
+                Vec::new(),
+            )
+            .unwrap(),
+            rules: HarmonyRuleSet {
+                hard: vec![
+                    HarmonyConstraint::new("melody-fit", HarmonyPredicate::MelodyInChord),
+                    HarmonyConstraint::new(
+                        "scale",
+                        HarmonyPredicate::InsideScaleWindow {
+                            scale: Scale::major(PitchClass::C),
+                            length: 2,
+                        },
+                    ),
+                    HarmonyConstraint::new(
+                        "common-tone",
+                        HarmonyPredicate::CommonNotes {
+                            count: CountRange::new(1, 4).unwrap(),
+                        },
+                    ),
+                    HarmonyConstraint::new(
+                        "range",
+                        HarmonyPredicate::PitchRange {
+                            min_midi: 48,
+                            max_midi: 72,
+                        },
+                    ),
+                    HarmonyConstraint::new(
+                        "repetition",
+                        HarmonyPredicate::MinimumChordDistance { distance: 1 },
+                    ),
+                    HarmonyConstraint::new(
+                        "cadence",
+                        HarmonyPredicate::ChordAt {
+                            position: -1,
+                            chord: c_mask,
+                        },
+                    ),
+                ],
+                soft: vec![
+                    Weighted::new("voice-leading", 1.0, HarmonyMetric::VoiceLeading),
+                    Weighted::new(
+                        "sonance",
+                        -1.0,
+                        HarmonyMetric::ContextualSonance {
+                            model: "commonality".to_owned(),
+                        },
+                    ),
+                    Weighted::new(
+                        "pitch-dissonance",
+                        1.0,
+                        HarmonyMetric::PitchDissonance {
+                            model: "interval-vector".to_owned(),
+                        },
+                    ),
+                ],
+            },
+        };
+        let run = harmonize(
+            &request,
+            HarmonizationStrategy::LayeredDp,
+            SearchControl::default()
+                .with_max_work(100_000)
+                .with_max_memory_nodes(1_000),
+            &NeverInterrupt,
+        )
+        .unwrap();
+
+        assert_eq!(run.receipt.status, SearchStatus::Complete);
+        assert!(run.receipt.optimal);
+        assert_eq!(run.results[0].evaluations.len(), 3);
+        assert!(
+            run.results[0]
+                .evaluations
+                .iter()
+                .flat_map(|evaluation| &evaluation.soft)
+                .any(|evidence| {
+                    evidence.metric_id == "sonance"
+                        && evidence
+                            .facts
+                            .iter()
+                            .any(|fact| fact == "model=commonality")
+                })
+        );
+        assert!(
+            run.receipt
+                .rejections
+                .iter()
+                .any(|rejection| rejection.rule_id == "cadence")
+        );
     }
 }

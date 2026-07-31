@@ -203,6 +203,25 @@ fn evaluate_predicate(
                 format!("distinct={found}"),
             )
         }
+        HarmonyPredicate::PitchRange { min_midi, max_midi } => {
+            let notes = context
+                .progression
+                .last()
+                .map(ChordTemplate::realize)
+                .transpose()?
+                .map(|chord| chord.notes)
+                .unwrap_or_default();
+            let midi = notes
+                .iter()
+                .map(|pitch| pitch.to_midi())
+                .collect::<Vec<_>>();
+            decision(
+                midi.iter().all(|value| {
+                    value.is_some_and(|value| (*min_midi..=*max_midi).contains(&value))
+                }),
+                format!("midi={midi:?},range={min_midi}..={max_midi}"),
+            )
+        }
         HarmonyPredicate::CommonNotes { count } => {
             let found = last_common_notes(masks);
             decision(

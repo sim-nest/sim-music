@@ -1,0 +1,8 @@
+id = "bounded-harmonization"
+title = "Bounded layered harmonization"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 25
+tags = ["music", "harmony", "layered-dp", "beam", "bounded-search", "receipt"]
+requires = ["music-combinators", "pitch-chord", "discrete-search", "codec/lisp"]

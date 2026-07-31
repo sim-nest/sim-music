@@ -247,3 +247,13 @@ fn recipe_sources_are_registered_for_generated_docs() {
         assert!(source.contains("codec = \"lisp\""));
     }
 }
+
+#[test]
+fn bounded_harmonization_recipe_declares_strategy_and_all_controls() {
+    let source = include_str!("../recipes/01-basics/bounded-harmonization/setup.siml");
+    assert!(source.contains("(music/harmonize melody"));
+    assert!(source.contains(":strategy 'layered-dp"));
+    assert!(source.contains(":work 100000"));
+    assert!(source.contains(":results 4"));
+    assert!(source.contains(":seed 12"));
+}

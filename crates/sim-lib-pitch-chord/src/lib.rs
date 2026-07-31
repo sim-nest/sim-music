@@ -7,7 +7,10 @@
 //! against a scale. [`HarmonyProgram`] keeps chord palettes, cadence chains,
 //! palette algebra, hard constraints, weighted metrics, voicing changes, and
 //! export settings as codec-neutral data. Hard-rule and soft-score evidence
-//! remain separate through [`evaluate_harmony`]. On top of these sit a
+//! remain separate through [`evaluate_harmony`]. [`plan_harmony`] applies the
+//! same declarative problem through exhaustive, factored, certified layered,
+//! or bounded beam planning while retaining failed-rule and search receipts.
+//! On top of these sit a
 //! wire-serializable chord progression
 //! [`ChordSequencerPlayer`] and a roman-numeral-aware harmony suggester
 //! ([`suggest_harmony`]).
@@ -15,6 +18,9 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod harmonize;
+mod harmonize_layered;
+mod harmonize_model;
 mod harmony_eval;
 mod harmony_expr;
 mod harmony_expr_support;
@@ -30,6 +36,8 @@ mod suggest;
 mod voicing;
 mod voicing_change;
 
+pub use harmonize::*;
+pub use harmonize_model::*;
 pub use harmony_eval::*;
 pub use harmony_metric::*;
 pub use harmony_model::*;
@@ -46,6 +54,8 @@ pub use voicing_change::*;
 pub static RECIPES: sim_cookbook::EmbeddedDir =
     include!(concat!(env!("OUT_DIR"), "/cookbook_recipes.rs"));
 
+#[cfg(test)]
+mod harmonize_tests;
 #[cfg(test)]
 mod harmony_conformance;
 #[cfg(test)]

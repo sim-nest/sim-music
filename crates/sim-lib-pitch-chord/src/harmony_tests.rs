@@ -89,7 +89,7 @@ fn chord_sources_palette_algebra_and_program_round_trip_as_expression_data() {
 #[test]
 fn all_catalog_harmony_and_template_filters_are_serializable() {
     let rules = all_catalog_rules();
-    assert_eq!(rules.hard.len(), 23);
+    assert_eq!(rules.hard.len(), 24);
     assert_eq!(rules.soft.len(), 6);
     let palette = ChordPalette::explicit(
         "one",
@@ -337,6 +337,13 @@ fn all_catalog_rules() -> HarmonyRuleSet {
         (
             "distinct-note-count",
             HarmonyPredicate::DistinctPitchClasses { count: exact_three },
+        ),
+        (
+            "pitch-range",
+            HarmonyPredicate::PitchRange {
+                min_midi: 48,
+                max_midi: 84,
+            },
         ),
         (
             "common-notes",

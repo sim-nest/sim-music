@@ -70,6 +70,13 @@ pub enum HarmonyPredicate {
         /// Inclusive admitted count.
         count: CountRange,
     },
+    /// Require every realized voice to fit an inclusive MIDI register.
+    PitchRange {
+        /// Lowest admitted MIDI note.
+        min_midi: u8,
+        /// Highest admitted MIDI note.
+        max_midi: u8,
+    },
     /// Constrain the common-note count of the last transition.
     CommonNotes {
         /// Inclusive admitted count.
@@ -140,6 +147,12 @@ pub enum HarmonyPredicate {
 impl HarmonyPredicate {
     pub(crate) fn validate(&self) -> Result<(), HarmonyError> {
         match self {
+            Self::PitchRange { min_midi, max_midi } if min_midi > max_midi => {
+                Err(HarmonyError::InvalidField {
+                    field: "pitch-range",
+                    reason: format!("minimum {min_midi} exceeds maximum {max_midi}"),
+                })
+            }
             Self::CommonNotePattern { counts } if counts.is_empty() => {
                 Err(HarmonyError::Empty("common-note pattern"))
             }
