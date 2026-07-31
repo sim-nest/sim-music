@@ -1,7 +1,8 @@
 # sim-lib-music-consonance
 
-In one line: Explains how every exact score window sounds without throwing away
-notes, identities, timing, or the differences between consonance models.
+In one line: Explains how every exact score window sounds and completes it with
+reversible additions without throwing away source notes, identities, timing, or
+the differences between consonance models.
 
 ## What it gives you
 
@@ -18,6 +19,13 @@ musical judgment.
 The loadable `music/consonance/evaluate` function returns the same structure as
 Lisp data, including exact rational spans and every retained identity.
 
+For completion, callers supply typed note, ornament, chord, pedal, doubling, and
+voice candidates together with named per-window metric thresholds, protected
+spans and identities, pitch ranges, style limits, and ordinary
+`SearchControl`. The selected `ConsonancePatch` is bound to the source staff's
+kernel content identity. Applying it only adds material; removing it verifies
+every added value before restoring the exact source, including all ids.
+
 ## Why you will be glad
 
 - Slice event-aligned harmony without float drift or boundary ambiguity.
@@ -25,12 +33,18 @@ Lisp data, including exact rational spans and every retained identity.
 - Compare score and MIDI realization through the same metric families.
 - Inspect why a window scored as it did before using that evidence in a search.
 - Change one explicit model policy without silently changing the other metrics.
+- Keep useful partial completions while retaining an honest partial or cancelled
+  search receipt.
+- Prove `remove(apply(source, patch), patch) == source` instead of trusting an
+  informal undo convention.
 
 ## Where it fits
 
 This is the orchestration layer over `sim-lib-music-core`,
-`sim-lib-music-lift`, `sim-lib-pitch-dissonance`,
+`sim-lib-music-transform`, `sim-lib-music-lift`,
+`sim-lib-discrete-search`, `sim-lib-pitch-dissonance`,
 `sim-lib-sound-dissonance`, and `sim-lib-sound-tuning`. Those crates continue to
-own exact score identity, MIDI performance semantics, contextual pitch models,
-psychoacoustic curves, and tuning. This crate owns their event-window
-composition and the inspectable report.
+own exact score identity, additive staff transforms, generic bounded search,
+MIDI performance semantics, contextual pitch models, psychoacoustic curves, and
+tuning. This crate owns their event-window composition, inspectable reports,
+and consonance-specific completion policy.

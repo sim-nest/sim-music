@@ -92,6 +92,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/book.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/recipe.toml"}

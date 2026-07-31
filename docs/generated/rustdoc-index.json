@@ -83,7 +83,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-music-consonance/Cargo.toml",
       "package": "sim-lib-music-consonance",
-      "summary": "Exact sounding windows and multi-domain consonance evaluation."
+      "summary": "Exact consonance evaluation and reversible additive completion."
     },
     {
       "crate_name": "sim_lib_music_core",

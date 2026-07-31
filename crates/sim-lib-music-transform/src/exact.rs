@@ -1,5 +1,6 @@
 //! Exact identity-preserving staff transforms and their audit reports.
 
+mod additive;
 mod composition;
 mod leading;
 mod progression;
@@ -13,6 +14,7 @@ use sim_lib_music_core::{
 
 use crate::TransformError;
 
+pub use additive::*;
 pub use composition::*;
 pub use leading::*;
 pub use progression::*;
@@ -94,6 +96,25 @@ pub enum MusicTransformChange {
         event_id: ObjectId,
         /// Stable reason for removal.
         reason: &'static str,
+    },
+    /// An additive transform introduced a new independent voice.
+    AddedVoice {
+        /// New voice identity.
+        voice_id: ObjectId,
+    },
+    /// An additive transform introduced a note without changing source notes.
+    AddedNote {
+        /// Containing voice.
+        voice_id: ObjectId,
+        /// New logical note identity.
+        note_id: ObjectId,
+        /// New event identity.
+        event_id: ObjectId,
+    },
+    /// Reversing an additive transform removed its introduced voice.
+    RemovedVoice {
+        /// Removed voice identity.
+        voice_id: ObjectId,
     },
 }
 
@@ -400,6 +421,15 @@ fn finish(
             } => {
                 created.insert(repeated_note_id);
                 created.insert(repeated_event_id);
+            }
+            MusicTransformChange::AddedVoice { voice_id } => {
+                created.insert(voice_id);
+            }
+            MusicTransformChange::AddedNote {
+                note_id, event_id, ..
+            } => {
+                created.insert(note_id);
+                created.insert(event_id);
             }
             _ => {}
         }

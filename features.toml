@@ -200,6 +200,28 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/reversible-consonance-completion"
+title = "Reversible additive consonance completion"
+summary = "Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch."
+owner = "crate/sim-lib-music-consonance"
+audiences = ["user", "code", "framework"]
+guidance = "Use complete_staff when existing identity-bearing material must remain immutable while a bounded search proposes additive consonance material. Supply deterministic candidates, named per-window MetricThreshold values, protected ids and spans, pitch ranges, StyleConstraints, and sim-lib-discrete-search SearchControl. CompletionResult retains before/after ConsonanceReport values, exact changed windows, selected-candidate and identity provenance, and the unmodified SearchReceipt, including Partial or Cancelled status. ConsonancePatch is bound to the source Staff content id; apply_patch only adds, while remove_patch fails closed on altered additions and restores every original voice/note/event id exactly."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-consonance",
+  "anchor/crate/sim-lib-music-transform",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-consonance/src/completion_tests",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/exact-score-consonance",
+]
+
+[[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
 summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
@@ -252,6 +274,17 @@ steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row owns the pitch, ratio, contextual sonance, psychoacoustic, and tuning models." },
   { feature = "feature/sim-music/exact-score-consonance", why = "The consonance row composes those owners into multiplicity-preserving sounding windows and separate metric reports." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-consonance/01-basics/exact-score-consonance", why = "The Lisp recipe shows an exact progression report with a retained doubling and no implicit aggregate." },
+]
+
+[[route]]
+id = "route/complete-exact-score-consonance"
+task = "Complete an exact score with reversible consonance additions"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact transform row owns identity-bearing Staff values and the generic additive staff apply/remove seam." },
+  { feature = "feature/sim-music/exact-score-consonance", why = "The evaluation row supplies exact sounding windows and separately inspectable named metrics." },
+  { feature = "feature/sim-music/reversible-consonance-completion", why = "The completion row composes typed additions, constraints, reports, content binding, changed windows, provenance, and exact inversion while delegating deterministic traversal, bounds, interrupts, and receipts to sim-lib-discrete-search." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-consonance/01-basics/additive-consonance-completion", why = "The checked descriptor and paired Rust specimen show the bounded reversible completion contract." },
 ]
 
 [[route]]
