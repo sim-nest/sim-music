@@ -7,9 +7,12 @@
 //! against a scale. [`HarmonyProgram`] keeps chord palettes, cadence chains,
 //! palette algebra, hard constraints, weighted metrics, voicing changes, and
 //! export settings as codec-neutral data. Hard-rule and soft-score evidence
-//! remain separate through [`evaluate_harmony`]. [`plan_harmony`] applies the
-//! same declarative problem through exhaustive, factored, certified layered,
-//! or bounded beam planning while retaining failed-rule and search receipts.
+//! remain separate through [`evaluate_harmony`]. [`fit_harmony_markov`] adapts
+//! chord/key states to generic, inspectable transition counts, and
+//! [`LearnedTransitionResolver`] exposes their negative log probability only as
+//! an optional soft metric. [`plan_harmony`] applies the same declarative
+//! problem through exhaustive, factored, certified layered, or bounded beam
+//! planning while retaining failed-rule and search receipts.
 //! On top of these sit a
 //! wire-serializable chord progression
 //! [`ChordSequencerPlayer`] and a roman-numeral-aware harmony suggester
@@ -24,6 +27,7 @@ mod harmonize_model;
 mod harmony_eval;
 mod harmony_expr;
 mod harmony_expr_support;
+mod harmony_markov;
 mod harmony_metric;
 mod harmony_model;
 mod harmony_palette;
@@ -39,6 +43,7 @@ mod voicing_change;
 pub use harmonize::*;
 pub use harmonize_model::*;
 pub use harmony_eval::*;
+pub use harmony_markov::*;
 pub use harmony_metric::*;
 pub use harmony_model::*;
 pub use harmony_palette::*;
@@ -58,6 +63,8 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 mod harmonize_tests;
 #[cfg(test)]
 mod harmony_conformance;
+#[cfg(test)]
+mod harmony_markov_tests;
 #[cfg(test)]
 mod harmony_tests;
 #[cfg(test)]

@@ -229,6 +229,11 @@ pub enum HarmonyMetric {
         /// Stable registry model name.
         model: String,
     },
+    /// Smoothed negative log probability from an inspectable finite Markov model.
+    LearnedTransition {
+        /// Stable caller-installed model name.
+        model: String,
+    },
     /// Exact-ratio generalized-mean cost.
     RatioComplexity {
         /// Positive finite generalized-mean exponent encoded in milli-units.

@@ -21,7 +21,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
-| `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 1 | Load chord palettes, cadence-template algebra, hard legality, weighted musical preferences, voicing changes, and render settings as inspectable expression data. |
+| `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
@@ -251,6 +251,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/purpose.md`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/setup.siml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/purpose.md`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/recipe.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/setup.siml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/purpose.md`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml`
@@ -2810,6 +2813,164 @@ fn catalog_chord_cycle_lisp_fixture_names_transposed_palette_and_filter_chain() 
             "required-first",
             "final-chord-only",
         ]
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_markov_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-pitch-chord/src/harmony_markov_tests.rs`:
+
+```rust
+use sim_lib_numbers_stats::{CorpusProvenance, MarkovPolicy};
+use sim_lib_pitch_core::PitchClass;
+use sim_lib_pitch_scale::{Key, Mode};
+use sim_lib_pitch_set::PitchClassMask;
+
+use crate::harmony_rule_expr::{rule_set_from_expr, rule_set_to_expr};
+use crate::{
+    ChordTemplate, CoreHarmonyMetricResolver, CountRange, HarmonyConstraint, HarmonyCorpusSequence,
+    HarmonyEvaluationContext, HarmonyMetric, HarmonyPredicate, HarmonyRuleSet,
+    LearnedTransitionResolver, Weighted, evaluate_harmony, fit_harmony_markov,
+};
+
+// conformance: music states adapt the generic transparent Markov estimator.
+
+const FIXTURE: &[u8] = include_bytes!("../fixtures/generated-harmony-transitions.tsv");
+
+fn key() -> Key {
+    Key {
+        tonic: PitchClass::C,
+        mode: Mode::Major,
+    }
+}
+
+fn chord(id: &str, classes: &[PitchClass]) -> ChordTemplate {
+    ChordTemplate::from_pitch_classes(id, classes.to_vec(), 4)
+}
+
+fn c() -> ChordTemplate {
+    chord("c", &[PitchClass::C, PitchClass::E, PitchClass::G])
+}
+
+fn f() -> ChordTemplate {
+    chord("f", &[PitchClass::F, PitchClass::A, PitchClass::C])
+}
+
+fn g() -> ChordTemplate {
+    chord("g", &[PitchClass::G, PitchClass::B, PitchClass::D])
+}
+
+fn corpus() -> Vec<HarmonyCorpusSequence> {
+    vec![
+        HarmonyCorpusSequence::new(key(), vec![c(), f(), g(), c()]),
+        HarmonyCorpusSequence::new(key(), vec![c(), g(), c(), f(), g(), c()]),
+        HarmonyCorpusSequence::new(key(), vec![f(), g(), c(), g(), c()]),
+    ]
+}
+
+fn report() -> sim_lib_numbers_stats::ModelReport<
+    sim_lib_numbers_stats::MarkovModel<crate::HarmonyTransitionState>,
+> {
+    let provenance = CorpusProvenance::from_bytes(
+        "generated-functional-harmony-v1",
+        "deterministic synthetic I-IV-V chord-state fixture",
+        "CC0-1.0",
+        FIXTURE,
+    )
+    .unwrap();
+    assert_eq!(provenance.content_hash, "fnv1a64:2a739276a9d8c13c");
+    fit_harmony_markov(&corpus(), MarkovPolicy::new(0.5, 1, provenance).unwrap()).unwrap()
+}
+
+#[test]
+fn chord_key_adapter_has_reproducible_held_out_evidence() {
+    let report = report();
+    let held_out = report.held_out_score.unwrap();
+    assert_eq!(report.training_sequences, 2);
+    assert_eq!(held_out.transitions, 4);
+    let held_out_probability = (5.0 / 7.0) * (7.0 / 9.0) * (1.0 / 3.0) * (7.0 / 9.0);
+    let expected_perplexity = f64::powf(held_out_probability, -0.25);
+    assert!((held_out.perplexity - expected_perplexity).abs() < 1.0e-12);
+
+    let first = report
+        .model
+        .to_stable_text(crate::HarmonyTransitionState::stable_label)
+        .unwrap();
+    let second = report
+        .model
+        .to_stable_text(crate::HarmonyTransitionState::stable_label)
+        .unwrap();
+    assert_eq!(first, second);
+}
+
+#[test]
+fn learned_metric_descriptor_round_trips_as_declared_rule_data() {
+    let rules = HarmonyRuleSet {
+        hard: Vec::new(),
+        soft: vec![Weighted::new(
+            "learned",
+            0.25,
+            HarmonyMetric::LearnedTransition {
+                model: "functional-v1".to_owned(),
+            },
+        )],
+    };
+
+    assert_eq!(
+        rule_set_from_expr(&rule_set_to_expr(&rules)).unwrap(),
+        rules
+    );
+}
+
+#[test]
+fn learned_transition_is_only_an_optional_soft_metric() {
+    let report = report();
+    let progression = vec![c(), g()];
+    let resolver = LearnedTransitionResolver::new(
+        "functional-v1",
+        key(),
+        &report.model,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let rules = HarmonyRuleSet {
+        hard: vec![HarmonyConstraint::new(
+            "impossible-four-notes",
+            HarmonyPredicate::DistinctPitchClasses {
+                count: CountRange::new(4, 4).unwrap(),
+            },
+        )],
+        soft: vec![
+            Weighted::new("declared-common-notes", -1.0, HarmonyMetric::CommonNotes),
+            Weighted::new(
+                "learned-functional-transition",
+                0.25,
+                HarmonyMetric::LearnedTransition {
+                    model: "functional-v1".to_owned(),
+                },
+            ),
+        ],
+    };
+    let result = evaluate_harmony(
+        &rules,
+        HarmonyEvaluationContext::progression(
+            &[PitchClassMask::from_pitch_classes(&[PitchClass::C])],
+            &progression,
+        ),
+        &resolver,
+    )
+    .unwrap();
+
+    assert!(!result.legal);
+    assert_eq!(result.hard.len(), 1);
+    assert_eq!(result.soft.len(), 2);
+    assert!(result.soft[1].value.is_finite());
+    assert!(
+        result.soft[1]
+            .facts
+            .iter()
+            .any(|fact| fact.contains("license=CC0-1.0"))
     );
 }
 ```

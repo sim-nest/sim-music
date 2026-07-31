@@ -74,7 +74,8 @@ impl HarmonyMetricResolver for CoreHarmonyMetricResolver {
                 })
             }
             HarmonyMetric::PitchDissonance { model }
-            | HarmonyMetric::ContextualSonance { model } => {
+            | HarmonyMetric::ContextualSonance { model }
+            | HarmonyMetric::LearnedTransition { model } => {
                 Err(HarmonyError::UnknownMetricModel(model.clone()))
             }
         }

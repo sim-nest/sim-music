@@ -3642,10 +3642,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "340cdbeb9b494b6f0f8b9585be88b32a507969c3",
+    "git_commit": "1678070908e40ff29b497d83b944268cc42d2e1f",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "340cdbeb9b494b6f0f8b9585be88b32a507969c3",
+    "source_commit": "1678070908e40ff29b497d83b944268cc42d2e1f",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3658,9 +3658,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "efe17939bf44c4f6",
+    "workspace_hash": "6251ca6fd16608d9",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 717,
+    "workspace_hash_input_count": 720,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4116,6 +4116,7 @@
       "crates/sim-lib-pitch-chord/Cargo.toml",
       "crates/sim-lib-pitch-chord/build.rs",
       "crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml",
+      "crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/recipe.toml",
       "crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml",
       "crates/sim-lib-pitch-chord/recipes/book.toml",
       "crates/sim-lib-pitch-chord/src/harmonize.rs",
@@ -4126,6 +4127,8 @@
       "crates/sim-lib-pitch-chord/src/harmony_eval.rs",
       "crates/sim-lib-pitch-chord/src/harmony_expr.rs",
       "crates/sim-lib-pitch-chord/src/harmony_expr_support.rs",
+      "crates/sim-lib-pitch-chord/src/harmony_markov.rs",
+      "crates/sim-lib-pitch-chord/src/harmony_markov_tests.rs",
       "crates/sim-lib-pitch-chord/src/harmony_metric.rs",
       "crates/sim-lib-pitch-chord/src/harmony_model.rs",
       "crates/sim-lib-pitch-chord/src/harmony_palette.rs",
@@ -5078,7 +5081,7 @@
       "card_id": "cookbook/pitch-chord",
       "group": "workspace",
       "package": "sim-lib-pitch-chord",
-      "recipe_count": 2,
+      "recipe_count": 3,
       "recipes": [
         {
           "card_id": "pitch-chord/01-basics/declarative-harmony-program",
@@ -5087,6 +5090,14 @@
           "package": "sim-lib-pitch-chord",
           "recipe_toml": "crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml",
           "title": "Declarative harmony program"
+        },
+        {
+          "card_id": "pitch-chord/01-basics/learned-transition-score",
+          "codec": "lisp",
+          "id": "learned-transition-score",
+          "package": "sim-lib-pitch-chord",
+          "recipe_toml": "crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/recipe.toml",
+          "title": "Inspectable learned transition score"
         },
         {
           "card_id": "pitch-chord/01-basics/major-triad",

@@ -293,6 +293,10 @@ fn metric_to_expr(metric: &HarmonyMetric) -> Expr {
             "metric-contextual-sonance",
             vec![qualified_entry("model", string(model))],
         ),
+        HarmonyMetric::LearnedTransition { model } => tagged(
+            "metric-learned-transition",
+            vec![qualified_entry("model", string(model))],
+        ),
         HarmonyMetric::RatioComplexity { exponent_milli } => tagged(
             "metric-ratio-complexity",
             vec![qualified_entry("exponent-milli", scalar(exponent_milli))],
@@ -309,6 +313,9 @@ fn metric_from_expr(expr: &Expr) -> Result<HarmonyMetric, HarmonyError> {
             model: text(required(expr, "model")?, "metric.model")?.to_owned(),
         }),
         "metric-contextual-sonance" => Ok(HarmonyMetric::ContextualSonance {
+            model: text(required(expr, "model")?, "metric.model")?.to_owned(),
+        }),
+        "metric-learned-transition" => Ok(HarmonyMetric::LearnedTransition {
             model: text(required(expr, "model")?, "metric.model")?.to_owned(),
         }),
         "metric-ratio-complexity" => Ok(HarmonyMetric::RatioComplexity {

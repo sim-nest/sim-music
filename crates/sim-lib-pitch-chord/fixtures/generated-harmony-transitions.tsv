@@ -1,0 +1,7 @@
+# id: generated-functional-harmony-v1
+# source: deterministic synthetic I-IV-V state transitions
+# license: CC0-1.0
+# format: tonic-mode<TAB>pitch-class-mask...
+C-major	091	221	884	091
+C-major	091	884	091	221	884	091
+C-major	221	884	091	884	091

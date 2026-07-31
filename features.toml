@@ -148,10 +148,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/declarative-harmony"
 title = "Declarative harmony palettes and rules"
-summary = "Load chord palettes, cadence-template algebra, hard legality, weighted musical preferences, voicing changes, and render settings as inspectable expression data."
+summary = "Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data."
 owner = "crate/sim-lib-pitch-chord"
 audiences = ["user", "code", "framework"]
-guidance = "Use sim-lib-pitch-chord HarmonyProgram when harmony vocabulary and policy must be editable without compiling Rust. ChordTemplate composes existing chord symbols, exact pitches, pitch classes, pitch sets, scale-degree maps, voicing policies, and exact ratio tones. ChordPalette materializes explicit, alternative, Cartesian-chain, and transposition algebra with deterministic deduplication. HarmonyRuleSet keeps prefix-safe hard constraints separate from weighted metrics and retains one evidence row per rule. Use sim-lib-music-combinators DeclarativeHarmonyResolver to compose the chord-local count, certified voice-leading, and exact-ratio measures with named PitchDissonanceRegistry and ContextualSonanceRegistry models. Use render_harmony_progression to produce canonical exact-time Progression values while retaining the full export profile. The named catalog Lisp fixtures cover the harmonizer and chord-cycle filter families, value equality, empty prefixes, scale windows, duplicate voices, fingering bounds, and organ/trumpet render settings."
+guidance = "Use sim-lib-pitch-chord HarmonyProgram when harmony vocabulary and policy must be editable without compiling Rust. ChordTemplate composes existing chord symbols, exact pitches, pitch classes, pitch sets, scale-degree maps, voicing policies, and exact ratio tones. ChordPalette materializes explicit, alternative, Cartesian-chain, and transposition algebra with deterministic deduplication. HarmonyRuleSet keeps prefix-safe hard constraints separate from weighted metrics and retains one evidence row per rule. Use fit_harmony_markov and LearnedTransitionResolver when a corpus-derived transition preference is useful: music owns the chord/key state adapter, sim-lib-numbers-stats owns generic finite counts and smoothing, and the metric remains an optional soft negative-log score with held-out and corpus evidence. Use sim-lib-music-combinators DeclarativeHarmonyResolver to compose the chord-local count, certified voice-leading, and exact-ratio measures with named PitchDissonanceRegistry and ContextualSonanceRegistry models. Use render_harmony_progression to produce canonical exact-time Progression values while retaining the full export profile. The named fixtures cover declarative harmonizers, hard/soft separation, generated CC0 transition provenance, value equality, empty prefixes, scale windows, duplicate voices, fingering bounds, and organ/trumpet render settings."
 claims_anchors = [
   "anchor/crate/sim-lib-music-combinators",
   "anchor/crate/sim-lib-pitch-chord",
@@ -165,6 +165,7 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_conformance",
+  "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_markov_tests",
 ]
 supports = [
   "feature/sim-music/exact-music-analysis-and-transform",

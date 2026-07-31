@@ -64,3 +64,4 @@ unsafe_code = "forbid"
 [patch.crates-io]
 sim-lib-discrete-graph = { git = "https://github.com/sim-nest/sim-discrete", rev = "b7e2772fa0eb560ff2a0c67c65e98a176da49702" }
 sim-lib-discrete-search = { git = "https://github.com/sim-nest/sim-discrete", rev = "0a037cc4d12294c90d323bb473aaeb7150127b2e" }
+sim-lib-numbers-stats = { git = "https://github.com/sim-nest/sim-numbers", rev = "b7f35d8e153713afac0e7ba262e04932a2ca9d4b" }

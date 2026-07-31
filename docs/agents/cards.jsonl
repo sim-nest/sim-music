@@ -211,6 +211,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml"}
