@@ -1,8 +1,6 @@
 # sim-lib-music-consonance
 
-In one line: Explains how every exact score window sounds and completes it with
-reversible additions without throwing away source notes, identities, timing, or
-the differences between consonance models.
+In one line: Explains exact score-window sonance and proposes reversible additions without losing musical evidence.
 
 ## What it gives you
 
