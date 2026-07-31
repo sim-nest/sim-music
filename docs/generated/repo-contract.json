@@ -3723,10 +3723,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "9329da2dc7e7215e5c66f95bab53740e547fa838",
+    "git_commit": "fb53ba1bcee447787a23120b3c871f7f40c42232",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "9329da2dc7e7215e5c66f95bab53740e547fa838",
+    "source_commit": "fb53ba1bcee447787a23120b3c871f7f40c42232",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3739,9 +3739,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "f3ac349810a088fc",
+    "workspace_hash": "0c1e066dcda81e5c",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 743,
+    "workspace_hash_input_count": 749,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3878,6 +3878,7 @@
       "crates/sim-lib-music-combinators/Cargo.toml",
       "crates/sim-lib-music-combinators/build.rs",
       "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/01-basics/bounded-rewrite-catalogs/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml",
@@ -3898,12 +3899,17 @@
       "crates/sim-lib-music-combinators/src/euclid.rs",
       "crates/sim-lib-music-combinators/src/harmony.rs",
       "crates/sim-lib-music-combinators/src/lib.rs",
+      "crates/sim-lib-music-combinators/src/lsystem.rs",
+      "crates/sim-lib-music-combinators/src/lsystem_engine.rs",
       "crates/sim-lib-music-combinators/src/player.rs",
       "crates/sim-lib-music-combinators/src/polystep.rs",
+      "crates/sim-lib-music-combinators/src/progression_tree.rs",
       "crates/sim-lib-music-combinators/src/quad_note.rs",
       "crates/sim-lib-music-combinators/src/recipe_tests.rs",
       "crates/sim-lib-music-combinators/src/relative.rs",
       "crates/sim-lib-music-combinators/src/relative_conformance.rs",
+      "crates/sim-lib-music-combinators/src/rewrite_conformance.rs",
+      "crates/sim-lib-music-combinators/src/scale_rewrite.rs",
       "crates/sim-lib-music-combinators/src/tests.rs",
       "crates/sim-lib-music-consonance/Cargo.toml",
       "crates/sim-lib-music-consonance/build.rs",
@@ -4760,7 +4766,7 @@
       "card_id": "cookbook/music-combinators",
       "group": "workspace",
       "package": "sim-lib-music-combinators",
-      "recipe_count": 8,
+      "recipe_count": 9,
       "recipes": [
         {
           "card_id": "music-combinators/01-basics/bounded-harmonization",
@@ -4769,6 +4775,14 @@
           "package": "sim-lib-music-combinators",
           "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
           "title": "Bounded layered harmonization"
+        },
+        {
+          "card_id": "music-combinators/01-basics/bounded-rewrite-catalogs",
+          "codec": "lisp",
+          "id": "bounded-rewrite-catalogs",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/bounded-rewrite-catalogs/recipe.toml",
+          "title": "Bounded rewrite and progression-tree catalogs"
         },
         {
           "card_id": "music-combinators/01-basics/carpet-relative",

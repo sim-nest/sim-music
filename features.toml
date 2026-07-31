@@ -254,6 +254,30 @@ supports = [
 ]
 
 [[feature]]
+id = "feature/sim-music/bounded-rewrite-catalogs"
+title = "Bounded L-systems and ranked progression trees"
+summary = "Derive context-aware musical grammars, scale-following pitch-map programs, and finite progression-tree catalogs with explicit bounds, shared rank/search, derivation trees, and receipts."
+owner = "crate/sim-lib-music-combinators"
+audiences = ["user", "code", "framework"]
+guidance = "Use LSystem for finite parallel musical rewrites over a typed Alphabet. Every variable needs a non-empty context-free fallback, more-specific immediate-neighbor contexts take precedence, and ExpansionLimits plus bounded SearchControl are validated before sim-lib-discrete-search traversal starts. Derivation retains every generation, production child span, derivation forest, production counts, seed, and limits. Use ProgressionTreeCatalog when a fixed finite preorder topology has values from a finite catalog: rank and unrank delegate to sim-lib-discrete-rank BoundedIntVectorSpace, while explore delegates prefix filtering, work, frontier, memory, cancellation, seed, and receipts to sim-lib-discrete-search. ScaleRewriteProgram keeps modulation choices as named ScaleFollowingState data whose explicit PitchMap is checked against the declared scale and covered by a stable program digest."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-combinators",
+  "anchor/rustdoc/sim-lib-music-combinators/derive",
+  "anchor/rustdoc/sim-lib-music-combinators/lsystem",
+  "anchor/rustdoc/sim-lib-music-combinators/progression-tree-catalog",
+  "anchor/rustdoc/sim-lib-music-combinators/scale-rewrite-program",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-combinators/src/rewrite_conformance",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+]
+
+[[feature]]
 id = "feature/sim-music/exact-score-consonance"
 title = "Exact score sounding windows and consonance"
 summary = "Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately."
@@ -397,6 +421,16 @@ steps = [
   { feature = "feature/sim-music/carpet-composition", why = "The carpet row owns finite axes, sparse cells, explicit layout policy, shared mixed-radix addressing, algebraic layout operations, and relative pitch/time forms." },
   { specimen = "spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance", why = "The checked algebraic fixtures prove mixed-radix rank parity, explicit boundary policy, rotations, reflections, slices, overlays, and transform-chain composition." },
   { specimen = "spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance", why = "The checked conversion fixtures prove exact retained-origin round trips and named losses for omitted origins and source structure." },
+]
+
+[[route]]
+id = "route/grow-bounded-music-catalog"
+task = "Grow and inspect a bounded recursive music catalog"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact transform row supplies first-class partial pitch maps and scale-aware music transformations." },
+  { feature = "feature/sim-music/bounded-rewrite-catalogs", why = "The rewrite row owns typed musical alphabets, productive context rules, scale-following state data, finite progression-tree topology, and derivation evidence while delegating ordinals and traversal to shared discrete rank/search." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-music-combinators/src/rewrite_conformance", why = "The checked conformance module proves typed contextual derivation, preflight rejection, rank round trips, bounded filtered search, scale-map materialization, and stable receipts." },
 ]
 
 [[route]]

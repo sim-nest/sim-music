@@ -266,3 +266,29 @@ fn carpet_recipe_names_shared_rank_transform_and_loss_contracts() {
     assert!(source.contains("TransformChain"));
     assert!(source.contains("ConversionLoss"));
 }
+
+#[test]
+fn rewrite_catalog_recipe_declares_data_bounds_rank_search_and_receipts() {
+    let source = include_str!("../recipes/01-basics/bounded-rewrite-catalogs/setup.siml");
+    for required in [
+        ":alphabet",
+        ":productions",
+        ":context",
+        ":scale-states",
+        ":pitch-map",
+        ":generations 2",
+        ":symbols-per-generation 4",
+        ":total-symbols 8",
+        ":seed 30",
+        ":work 100000",
+        ":results 16",
+        ":frontier 256",
+        ":memory-nodes 512",
+        ":progression-tree",
+        ":rank mixed-radix",
+        "derivation-tree",
+        "search-receipt",
+    ] {
+        assert!(source.contains(required), "missing {required}");
+    }
+}

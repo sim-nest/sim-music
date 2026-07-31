@@ -17,7 +17,9 @@
 //! progressions without hiding their export profile. [`MusicCarpet`] adds a
 //! sparse, rank-addressed composition surface over those same exact music
 //! objects, with algebraic layout transforms and audited relative pitch/time
-//! forms.
+//! forms. [`LSystem`] delegates bounded parallel rewrite exploration to the
+//! shared discrete search engine, while [`ProgressionTreeCatalog`] delegates
+//! stable finite-tree identities to the shared discrete rank adapter.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
@@ -31,10 +33,14 @@ mod carpet_algebra;
 mod drum;
 mod euclid;
 mod harmony;
+mod lsystem;
+mod lsystem_engine;
 mod player;
 mod polystep;
+mod progression_tree;
 mod quad_note;
 mod relative;
+mod scale_rewrite;
 
 pub use arp_lab::*;
 pub use arpeggio::*;
@@ -45,10 +51,14 @@ pub use carpet::*;
 pub use drum::*;
 pub use euclid::*;
 pub use harmony::*;
+pub use lsystem::*;
+pub use lsystem_engine::*;
 pub use player::*;
 pub use polystep::*;
+pub use progression_tree::*;
 pub use quad_note::*;
 pub use relative::*;
+pub use scale_rewrite::*;
 pub use sim_lib_music_core::{
     Articulation, Chord, Counterpoint, Melody, MelodyItem, MidiFileObj, MidiTrackObj, Music,
     MusicError, MusicObject, Note, Par, PianoRoll, Progression, Rest, Score, Seq, Time, TimedNote,
@@ -62,6 +72,9 @@ mod carpet_conformance;
 
 #[cfg(test)]
 mod relative_conformance;
+
+#[cfg(test)]
+mod rewrite_conformance;
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =
