@@ -89,7 +89,7 @@
       "id": "cookbook/music-analysis",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-analysis",
-      "summary": "Pitch-class, histogram, and chord-window analysis descriptors."
+      "summary": "Pitch-class, histogram, chord-window, and transformational analysis descriptors."
     },
     {
       "id": "cookbook/music-combinators",
@@ -215,7 +215,7 @@
       "id": "cookbook/pitch-set",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-set",
-      "summary": "Pitch-class sets, masks, and normal-form descriptors."
+      "summary": "Pitch-class sets, canonical forms, typed relations, and graph descriptors."
     },
     {
       "id": "cookbook/pitch-shapes",

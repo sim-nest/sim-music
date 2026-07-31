@@ -1,0 +1,8 @@
+id = "set-relations"
+title = "Canonical pitch-set relations"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 15
+tags = ["pitch", "set", "analysis", "prime-form", "tn", "tni", "z-relation", "sandbox-descriptor"]
+requires = ["pitch-set", "codec/lisp"]

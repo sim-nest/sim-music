@@ -8,12 +8,16 @@
 //! chord-bearing intervals with pitch-range, pitch-class, and bit-chord masks.
 //! [`decode_keys`] and [`decode_chords`] adapt chroma/features and declared
 //! templates to shared finite-HMM inference while retaining posterior evidence.
+//! The [`tonnetz`] module adds canonical-triad P/L/R actions and certified,
+//! deterministic shortest paths while keeping chord identity independent of
+//! Riemannian display labels.
 //! With the `discrete-fwht` feature, the `walsh` module adds Walsh-Hadamard
 //! spectral analysis of melodies, contours, and pitch-class windows.
 
 mod harmonic;
 mod harmonic_templates;
 mod model;
+pub mod tonnetz;
 
 pub use harmonic::*;
 pub use harmonic_templates::*;

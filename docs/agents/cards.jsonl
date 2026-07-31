@@ -73,6 +73,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml"}
@@ -301,6 +304,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/set-relations/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/set-relations/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/set-relations/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/setup.siml"}

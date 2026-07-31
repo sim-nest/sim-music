@@ -20,10 +20,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 5 | Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
-| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
+| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, classify pitch-set relations, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
-| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 5 | Convert exact score forms with loss and identity evidence, decode key/chord feature sequences with posterior alternatives, find certified voice-leading paths, and transform exact progressions with audited operations. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 5 | Convert exact score forms with loss and identity evidence, decode key/chord feature sequences with posterior alternatives, find certified voice-leading and Tonnetz paths, and transform exact progressions with audited operations. |
 | `feature/sim-music/carpet-composition` | `crate/sim-lib-music-combinators` | 2 | Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings. |
 | `feature/sim-music/bounded-rewrite-catalogs` | `crate/sim-lib-music-combinators` | 1 | Derive context-aware musical grammars, scale-following pitch-map programs, and finite progression-tree catalogs with explicit bounds, shared rank/search, derivation trees, and receipts. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
@@ -118,6 +118,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/purpose.md`
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml`
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/purpose.md`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/recipe.toml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/setup.siml`
 - `crates/sim-lib-music-analysis/recipes/book.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/purpose.md`
 - `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml`
@@ -346,6 +349,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/setup.siml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/purpose.md`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/recipe.toml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/setup.siml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/purpose.md`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/setup.siml`
@@ -4262,10 +4268,15 @@ use num_rational::Ratio;
 // conformance: exact music analysis and transform exposes checked analysis descriptors.
 
 use sim_lib_music_core::{Articulation, Channel, Note, PianoRoll, TimedNote};
+use sim_lib_pitch_chord::ChordSymbol;
 use sim_lib_pitch_core::{Pitch, PitchClass};
 
 use crate::{
     ChordWindowMode, DiffRoll, chord_windows_from_diff_roll, chord_windows_from_piano_roll,
+    tonnetz::{
+        CanonicalTriad, TonnetzError, TonnetzMove, TriadQuality, analyze_tonnetz,
+        tonnetz_riemann_label, verify_tonnetz_path,
+    },
 };
 
 fn note(midi: u8, onset: Ratio<i64>, duration: Ratio<i64>) -> TimedNote {
@@ -4334,6 +4345,90 @@ fn diff_roll_and_window_extraction_agree() {
     assert_eq!(
         chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes),
         chord_windows_from_diff_roll(&diff, ChordWindowMode::StartingNotes)
+    );
+}
+
+#[test]
+fn plr_generators_are_involutions_and_commute_with_transposition() {
+    let operations = [
+        TonnetzMove::Parallel,
+        TonnetzMove::LeadingToneExchange,
+        TonnetzMove::Relative,
+    ];
+    for root in 0..12 {
+        let root = PitchClass::new(root).expect("pitch class");
+        for quality in [TriadQuality::Major, TriadQuality::Minor] {
+            let triad = CanonicalTriad::new(root, quality);
+            for operation in operations {
+                assert_eq!(triad.apply(operation).apply(operation), triad);
+                let shifted = CanonicalTriad::new(root.transpose(5), quality);
+                let transformed_then_shifted = triad.apply(operation);
+                assert_eq!(
+                    shifted.apply(operation),
+                    CanonicalTriad::new(
+                        transformed_then_shifted.root.transpose(5),
+                        transformed_then_shifted.quality,
+                    )
+                );
+            }
+        }
+    }
+
+    let triad = CanonicalTriad::new(PitchClass::F, TriadQuality::Minor);
+    let left = [TonnetzMove::Parallel, TonnetzMove::LeadingToneExchange];
+    let right = [TonnetzMove::Relative, TonnetzMove::Parallel];
+    let concatenated: Vec<_> = left.into_iter().chain(right).collect();
+    assert_eq!(triad.apply_moves(&[]), triad);
+    assert_eq!(
+        triad.apply_moves(&concatenated),
+        triad.apply_moves(&left).apply_moves(&right)
+    );
+}
+
+#[test]
+fn c_major_to_a_minor_is_a_reproducible_relative_path() {
+    let from = ChordSymbol::parse("C").unwrap().to_chord(4);
+    let to = ChordSymbol::parse("Am").unwrap().to_chord(4);
+    let moves = [
+        TonnetzMove::Parallel,
+        TonnetzMove::LeadingToneExchange,
+        TonnetzMove::Relative,
+    ];
+    let path = analyze_tonnetz(&from, &to, &moves, 8).expect("Tonnetz path");
+
+    assert_eq!(path.distance, 1);
+    assert_eq!(path.steps[0].operation, TonnetzMove::Relative);
+    assert_eq!(path.riemann_labels(), vec!["T(C)", "t(A)"]);
+    verify_tonnetz_path(&path, &moves, 8).expect("verified graph path");
+
+    let repeated = analyze_tonnetz(&from, &to, &moves, 8).expect("repeated path");
+    assert_eq!(repeated, path);
+}
+
+#[test]
+fn identity_drives_transform_while_labels_remain_projection() {
+    let triad = CanonicalTriad::new(PitchClass::CS, TriadQuality::Major);
+    let parallel = triad.apply(TonnetzMove::Parallel);
+    assert_eq!(parallel.root, PitchClass::CS);
+    assert_eq!(parallel.quality, TriadQuality::Minor);
+    assert_eq!(tonnetz_riemann_label(triad), "T(C#)");
+    assert_eq!(tonnetz_riemann_label(parallel), "t(C#)");
+}
+
+#[test]
+fn tonnetz_bounds_and_induced_graph_reachability_fail_closed() {
+    let c_major = ChordSymbol::parse("C").unwrap().to_chord(4);
+    let a_minor = ChordSymbol::parse("Am").unwrap().to_chord(4);
+    assert_eq!(
+        analyze_tonnetz(&c_major, &a_minor, &[TonnetzMove::Relative], 0),
+        Err(TonnetzError::LimitExceeded {
+            limit: 0,
+            required: 1,
+        })
+    );
+    assert_eq!(
+        analyze_tonnetz(&c_major, &a_minor, &[TonnetzMove::Parallel], 8),
+        Err(TonnetzError::Unreachable)
     );
 }
 ```

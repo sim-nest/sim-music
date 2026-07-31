@@ -4,7 +4,7 @@ In one line: Looks at a piece of music and reveals its structure -- what chords 
 
 ## What it gives you
 
-This studies music material and produces structural views you can read. It turns a piano roll into per-moment frames showing which pitches are sounding, starting, ending, or held over, then segments that timeline into chord-bearing stretches with pitch ranges and pitch-class masks. Its harmonic feature adapter decodes built-in key/chord profiles or caller-declared templates through the shared finite HMM, retaining transition rows, likelihood, confidence, posterior alternatives, and bounded-work evidence. With its spectral option it adds a Walsh-Hadamard analysis of melodies, contours, and pitch-class windows, giving a different angle on repetition and shape.
+This studies music material and produces structural views you can read. It turns a piano roll into per-moment frames showing which pitches are sounding, starting, ending, or held over, then segments that timeline into chord-bearing stretches with pitch ranges and pitch-class masks. Its harmonic feature adapter decodes built-in key/chord profiles or caller-declared templates through the shared finite HMM, retaining transition rows, likelihood, confidence, posterior alternatives, and bounded-work evidence. Its Tonnetz analyst finds bounded P/L/R paths between canonical major and minor chord identities with reusable shortest-path certificates, while keeping Riemannian names as display-only projections. With its spectral option it adds a Walsh-Hadamard analysis of melodies, contours, and pitch-class windows, giving a different angle on repetition and shape.
 
 ## Why you will be glad
 
@@ -12,6 +12,7 @@ This studies music material and produces structural views you can read. It turns
 - Track exactly when notes begin, end, or carry across.
 - Get a spectral read on a melody's shape and repetition.
 - Decode changing keys or chords without hiding alternative readings or posterior evidence.
+- Find reproducible neo-Riemannian chord paths without treating names as identities.
 
 ## Where it fits
 

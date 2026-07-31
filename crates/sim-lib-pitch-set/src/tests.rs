@@ -82,6 +82,74 @@ fn complements_and_subset_relations_use_pitch_class_identity() {
     assert!(tetrachord.is_superset_of(trichord));
     assert_eq!(trichord.complement().count_bits(), 9);
     assert!(!trichord.complement().is_subset_of(tetrachord));
+
+    assert_eq!(trichord.union(tetrachord), tetrachord);
+    assert_eq!(trichord.intersection(tetrachord), trichord);
+    assert_eq!(tetrachord.difference(trichord).count_bits(), 1);
+    assert_eq!(tetrachord.symmetric_difference(trichord).count_bits(), 1);
+}
+
+#[test]
+fn relation_analysis_separates_exact_operators_from_canonical_equivalence() {
+    let c_major =
+        PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::E, PitchClass::G]);
+    let d_major =
+        PitchClassMask::from_pitch_classes(&[PitchClass::D, PitchClass::FS, PitchClass::A]);
+    let c_minor =
+        PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::DS, PitchClass::G]);
+
+    let transposed = analyze_set_relations(c_major, d_major);
+    assert_eq!(transposed.transpositions, vec![2]);
+    assert!(transposed.inversion_indices.is_empty());
+    assert!(transposed.transposition_equivalent);
+    assert!(transposed.transposition_inversion_equivalent);
+
+    let inverted = analyze_set_relations(c_major, c_minor);
+    assert!(!inverted.transposition_equivalent);
+    assert!(inverted.transposition_inversion_equivalent);
+    assert_eq!(inverted.inversion_indices, vec![7]);
+}
+
+#[test]
+fn relation_analysis_reports_inclusion_complements_and_z_relations() {
+    let whole_tone_fragment =
+        PitchClassMask::from_pitch_classes(&[PitchClass::C, PitchClass::D, PitchClass::E]);
+    let whole_tone = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::D,
+        PitchClass::E,
+        PitchClass::FS,
+        PitchClass::GS,
+        PitchClass::AS,
+    ]);
+    let inclusion = analyze_set_relations(whole_tone_fragment, whole_tone);
+    assert_eq!(inclusion.inclusion, SetInclusion::ProperSubset);
+    assert_eq!(inclusion.common_tones, whole_tone_fragment);
+
+    let complement = analyze_set_relations(whole_tone, whole_tone.complement());
+    assert!(complement.exact_complement);
+    assert!(complement.complement_equivalent);
+    assert_eq!(complement.inclusion, SetInclusion::Disjoint);
+
+    let z15 = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::CS,
+        PitchClass::E,
+        PitchClass::FS,
+    ]);
+    let z29 = PitchClassMask::from_pitch_classes(&[
+        PitchClass::C,
+        PitchClass::CS,
+        PitchClass::DS,
+        PitchClass::G,
+    ]);
+    let z_relation = analyze_set_relations(z15, z29);
+    assert!(z_relation.z_related);
+    assert_eq!(
+        z_relation.source_interval_vector,
+        z_relation.target_interval_vector
+    );
+    assert!(!z_relation.transposition_inversion_equivalent);
 }
 
 #[test]
