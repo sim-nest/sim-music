@@ -173,6 +173,9 @@ pub enum AudioTransformError {
     /// Projection into the stable sound spectrum descriptor failed.
     #[error(transparent)]
     Spectrum(#[from] SpectrumError),
+    /// A delegated generic graph dynamic program failed.
+    #[error("audio analysis graph operation failed: {0}")]
+    Graph(String),
 }
 
 /// Checks constant overlap-add for the plan's analysis/synthesis window pair.

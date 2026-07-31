@@ -244,7 +244,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-sound-audio-lift/Cargo.toml",
       "package": "sim-lib-sound-audio-lift",
-      "summary": "Audio-to-notes lifting for the SIM music constellation."
+      "summary": "Audio-to-feature and audio-to-notes lifting for the SIM music constellation."
     },
     {
       "crate_name": "sim_lib_sound_bridge",

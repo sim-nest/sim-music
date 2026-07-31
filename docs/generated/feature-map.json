@@ -284,18 +284,13 @@
         },
         {
           "edges": [
-            "dep:sim-lib-music-core",
-            "dep:sim-lib-music-analysis"
+            "dep:sim-lib-music-core"
           ],
           "name": "sound-music",
           "workspace_edges": [
             {
               "feature": null,
               "package": "sim-lib-music-core"
-            },
-            {
-              "feature": null,
-              "package": "sim-lib-music-analysis"
             }
           ]
         }

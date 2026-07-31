@@ -201,10 +201,10 @@ supports = [
 [[feature]]
 id = "feature/sim-music/exact-music-analysis-and-transform"
 title = "Exact music analysis and transform"
-summary = "Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations."
+summary = "Convert exact score forms with loss and identity evidence, decode key/chord feature sequences with posterior alternatives, find certified voice-leading paths, and transform exact progressions with audited operations."
 owner = "crate/sim-lib-music-analysis"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; certified minimum-cost voice leading with explicit entrance, departure, doubling, crossing, norm, deterministic-tie, and path policy; exact progression duration multiplication, overlay, slicing, repetition, sustain, slur, expansion, delayed-note separation, register unwrapping, sequence/parallel composition, or rhythm masks; music analysis; lift/lower; notation; or partial pitch maps. Voice leading delegates optimization and certificate verification to sim-lib-discrete-graph rather than carrying a music-specific permutation or Hungarian copy. Conversion and transform reports retain or explicitly derive voice/note/event ids, enumerate every unrepresentable fact or repeated identity, and keep all time rational. Pitch maps report holes, nudge policies, direct inverses, and lossy composition witnesses."
+guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; key or chord decoding from chroma/features through built-in or declared HarmonicTemplate rows; certified minimum-cost voice leading with explicit entrance, departure, doubling, crossing, norm, deterministic-tie, and path policy; exact progression operations; music analysis; lift/lower; notation; or partial pitch maps. Harmonic adapters delegate normalized forward/backward, posterior, and Viterbi inference to sim-lib-numbers-stats, retain transition rows, likelihood, confidence, alternatives, and bounded work, and never turn a nearest template into unexplained certainty. Voice leading delegates optimization and certificate verification to sim-lib-discrete-graph rather than carrying a music-specific permutation or Hungarian copy. Conversion and transform reports retain or explicitly derive voice/note/event ids, enumerate every unrepresentable fact or repeated identity, and keep all time rational. Pitch maps report holes, nudge policies, direct inverses, and lossy composition witnesses."
 claims_anchors = [
   "anchor/crate/sim-lib-music-analysis",
   "anchor/crate/sim-lib-music-combinators",
@@ -223,6 +223,7 @@ claims_surfaces = [
   "docs/sim-music/generated",
 ]
 claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-analysis/src/harmonic_tests",
   "spec-test/sim-music/crates/sim-lib-music-analysis/src/tests",
   "spec-test/sim-music/crates/sim-lib-music-core/src/tests/score",
   "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/exact",
@@ -370,10 +371,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
-summary = "Lift PCM through bounded YIN/pYIN and polyphonic partial tracks, reconstructable framed Fourier analysis, tuning-anchored constant-Q and chroma profiles, spectral summaries, and finite sound or stream rendering."
+summary = "Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence."
 owner = "crate/sim-lib-sound-audio-lift"
 audiences = ["user", "code", "framework"]
-guidance = "Load SoundAudioLiftLib for the Shape-described sound/lift/pitch-track call, or use PitchTrackPlan with pitch_track from Rust, for monophonic YIN or pYIN under explicit range, frame/tail, threshold, integer/parabolic interpolation, voiced-probability, work, result, and seed policy; inspect every candidate, rejection, uncertainty bound, and source frame rather than treating the contour as certain. Use polyphonic_pitch_track or track_partials to extend the existing FFT-peak/harmonic-comb frames into bounded partial identities: the music adapter composes sim-lib-discrete-graph certified assignment and DTW rather than owning another optimizer, and retains birth/death/gap/crossing/jump/track/memory/work policy plus graph receipts. Use sound-audio-lift StftPlan when frame size, hop, analysis/synthesis windows, centering, padding, phase, normalization, overlap promise, and deterministic limits must survive review. Check ColaReport and use istft only when the pair is reconstructable; invalid window pairs return their failing report rather than being silently normalized. Use CqtPlan plus constant_q for bounded, variable-window FFT bins anchored to a selected Tuning, then ChromaPlan plus chroma for an explicit Sum, Mean, or Maximum octave fold and per-frame normalization. StftFrame::spectrum keeps the existing sound-spectrum peak, centroid, flatness, rolloff, and flux APIs over shared numbers-signal transforms. Use sound-render for buffers and WAV output, and stream bridge/file crates for interchange."
+guidance = "Load SoundAudioLiftLib for the Shape-described sound/lift/pitch-track and sound/lift/analyze calls. Use PitchTrackPlan with pitch_track from Rust for monophonic YIN/pYIN under explicit range, frame/tail, interpolation, probability, work, result, and seed policy; inspect candidates, rejections, bounds, and provenance. Use analyze_audio for a selected composition of onset novelty, lookahead/minimum-distance peak picking, tempo candidates, changing-tempo beats, meter hypotheses, zero-crossing rate, mel/Bark/ERB filterbanks, MFCC, chroma, key, and chords under one aggregate control. Beat trajectory selection delegates its bounded Bellman recurrence and certificate to sim-lib-discrete-graph; key/chord selection delegates finite HMM posterior/Viterbi inference to sim-lib-numbers-stats. Every inferred onset, tempo, meter, key, and chord retains confidence and alternatives. MFCC retains the full sample rate, scale, magnitude/power choice, log floor, DCT convention, lifter, normalization, and work receipt. Use polyphonic_pitch_track or track_partials for bounded partial identities through certified assignment and DTW. Use StftPlan for phase-preserving frames and checked COLA reconstruction, CqtPlan plus ChromaPlan for tuning-anchored octave folding, StftFrame::spectrum for existing summaries, sound-render for buffers/WAV, and stream bridge/file for interchange."
 claims_anchors = [
   "anchor/crate/sim-lib-sound-audio-lift",
   "anchor/crate/sim-lib-sound-bridge",
@@ -389,6 +390,7 @@ claims_surfaces = [
   "docs/sim-music/generated",
 ]
 claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/analysis_tests",
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/partial_track_tests",
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/pitch_fixture_tests",
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/pitch_track_tests",
@@ -524,7 +526,7 @@ audiences = ["user", "code", "framework"]
 steps = [
   { feature = "feature/sim-music/audio-lift-and-render", why = "The audio row owns PCM feature lift, spectral summaries, and offline render evidence for audio analysis." },
   { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The music analysis row owns pitch histograms and exact object descriptors that consume lifted musical material." },
-  { specimen = "recipe/sim-music/crates/sim-lib-sound-audio-lift/01-basics/pitch-tracking", why = "The pitch-tracking recipe names the loadable pYIN call with range/frame/work/result/seed request and the assignment/DTW partial policy backed by generated-audio specimens." },
+  { specimen = "recipe/sim-music/crates/sim-lib-sound-audio-lift/01-basics/onset-beat-harmony", why = "The checked Lisp analysis call selects onsets, beats, MFCC, chroma, key, and chords under explicit varying-tempo, posterior/HMM, work, result, and seed policy; its generated click/chord fixture proves timing and labels." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-analysis/01-basics/pitch-histogram", why = "The pitch-histogram recipe is the current exact music analysis specimen." },
 ]
 

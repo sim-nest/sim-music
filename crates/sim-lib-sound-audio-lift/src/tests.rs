@@ -148,6 +148,10 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
         record.kind == ExportKind::named(ExportKind::FUNCTION)
             && record.symbol == Symbol::qualified("sound/lift", "pitch-track")
     }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "analyze")
+    }));
 }
 
 #[test]
@@ -196,6 +200,63 @@ fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
         "frame-index (expr:number numbers/i64 \"0\")",
         "sample-rate (expr:number numbers/i64 \"8000\")",
         "work-used",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
+}
+
+#[test]
+fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/onset-beat-harmony"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "features [onsets beats mfcc chroma key chords]",
+        "latency-samples",
+        "minimum-distance-samples",
+        "tempo-policy varying",
+        "tempo-candidates",
+        "meter-hypotheses",
+        "scale mel",
+        "log-floor",
+        "dct-normalization orthonormal",
+        "strategy posterior",
+        "strategy hmm",
+        "confidence",
+        "alternatives",
+        "posterior",
+        "work-used",
+        "seed (expr:number numbers/i64 \"21\")",
     ] {
         assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
     }

@@ -13,8 +13,10 @@ homepage = "https://github.com/sim-nest/sim-music"
 sim-cookbook = { version = "0.1.0" }
 sim-lib-discrete-spectral = { optional = true, version = "0.1.0" }
 sim-lib-music-core = { version = "0.1.3", path = "../sim-lib-music-core" }
+sim-lib-numbers-stats = { version = "0.3.0" }
 sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-set = { version = "0.1.2", path = "../sim-lib-pitch-set" }
+thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

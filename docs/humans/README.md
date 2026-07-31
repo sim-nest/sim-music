@@ -23,14 +23,14 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
-| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 5 | Convert exact score forms with loss and identity evidence, decode key/chord feature sequences with posterior alternatives, find certified voice-leading paths, and transform exact progressions with audited operations. |
 | `feature/sim-music/carpet-composition` | `crate/sim-lib-music-combinators` | 2 | Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings. |
 | `feature/sim-music/bounded-rewrite-catalogs` | `crate/sim-lib-music-combinators` | 1 | Derive context-aware musical grammars, scale-following pitch-map programs, and finite progression-tree catalogs with explicit bounds, shared rank/search, derivation trees, and receipts. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
 | `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
 | `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions. |
 | `feature/sim-music/sound-spectrum-adapter` | `crate/sim-lib-sound-spectrum` | 1 | Retain physical frequency, amplitude, PCM/STFT provenance, and sound descriptors while delegating transform math to the generic numbers-signal real FFT. |
-| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 5 | Lift PCM through bounded YIN/pYIN and polyphonic partial tracks, reconstructable framed Fourier analysis, tuning-anchored constant-Q and chroma profiles, spectral summaries, and finite sound or stream rendering. |
+| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 6 | Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
 ## Surfaces
@@ -356,6 +356,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-wasm-frame/recipes/book.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/purpose.md`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/recipe.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/setup.siml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/purpose.md`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/setup.siml`
@@ -3278,6 +3281,105 @@ fn layered_budget_stop_returns_inspectable_longest_prefixes() {
 ```
 
 ### `feature/sim-music/exact-music-analysis-and-transform`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/harmonic_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-analysis/src/harmonic_tests.rs`:
+
+```rust
+use crate::{
+    HarmonicDecodePlan, HarmonicDecodeStrategy, HarmonicFeatureFrame, HarmonicTemplate,
+    decode_chords, decode_harmonic_sequence, decode_keys,
+};
+
+// conformance: music adapters retain generic HMM posterior and alternative evidence.
+
+#[test]
+fn declared_templates_decode_through_generic_hmm_with_alternatives() {
+    let templates = vec![
+        HarmonicTemplate::new("bright", vec![1.0, 0.1, 0.0]).unwrap(),
+        HarmonicTemplate::new("dark", vec![0.0, 0.1, 1.0]).unwrap(),
+    ];
+    let frames = vec![
+        HarmonicFeatureFrame {
+            at_sample: 0,
+            values: vec![1.0, 0.2, 0.0],
+        },
+        HarmonicFeatureFrame {
+            at_sample: 256,
+            values: vec![0.8, 0.2, 0.1],
+        },
+        HarmonicFeatureFrame {
+            at_sample: 512,
+            values: vec![0.0, 0.2, 1.0],
+        },
+    ];
+    let plan = HarmonicDecodePlan {
+        strategy: HarmonicDecodeStrategy::Viterbi,
+        stay_probability: 0.7,
+        max_alternatives: 2,
+        ..HarmonicDecodePlan::default()
+    };
+    let decoded = decode_harmonic_sequence(&frames, &templates, None, &plan).unwrap();
+
+    assert_eq!(decoded.frames[0].label, "bright");
+    assert_eq!(decoded.frames[2].label, "dark");
+    assert!(decoded.frames.iter().all(|frame| {
+        frame.confidence > 0.0
+            && frame.alternatives.len() == 2
+            && frame
+                .alternatives
+                .iter()
+                .all(|alternative| alternative.posterior > 0.0)
+    }));
+    assert!(decoded.evidence.path_log_probability.is_some());
+    assert_eq!(decoded.evidence.normalized_steps, frames.len());
+    assert!(decoded.evidence.work_used <= decoded.evidence.work_limit);
+}
+
+#[test]
+fn standard_key_and_chord_templates_name_clear_profiles() {
+    let c_major = HarmonicFeatureFrame {
+        at_sample: 0,
+        values: vec![1.0, 0.0, 0.1, 0.0, 0.9, 0.2, 0.0, 0.8, 0.0, 0.1, 0.0, 0.1],
+    };
+    let keys = decode_keys(
+        &[c_major.clone(), c_major.clone()],
+        &HarmonicDecodePlan::default(),
+    )
+    .unwrap();
+    let chords =
+        decode_chords(&[c_major.clone(), c_major], &HarmonicDecodePlan::default()).unwrap();
+
+    assert_eq!(keys.frames[0].label, "C major");
+    assert_eq!(chords.frames[0].label, "C:maj");
+    assert!(keys.frames[0].alternatives.len() > 1);
+    assert!(chords.frames[0].alternatives.len() > 1);
+}
+
+#[test]
+fn harmonic_decode_refuses_unbounded_or_malformed_requests() {
+    let frame = HarmonicFeatureFrame {
+        at_sample: 0,
+        values: vec![1.0, 0.0],
+    };
+    let template = HarmonicTemplate::new("one", vec![1.0, 0.0]).unwrap();
+    let error = decode_harmonic_sequence(
+        &[frame],
+        &[template],
+        None,
+        &HarmonicDecodePlan {
+            max_work: 1,
+            ..HarmonicDecodePlan::default()
+        },
+    )
+    .unwrap_err();
+    assert!(matches!(
+        error,
+        crate::HarmonicDecodeError::WorkLimit { .. }
+    ));
+}
+```
 
 Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/tests` is checked by `cargo test`.
 
@@ -6625,6 +6727,287 @@ fn stft_projection_rejects_inconsistent_or_non_finite_frames() {
 
 ### `feature/sim-music/audio-lift-and-render`
 
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/analysis_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/analysis_tests.rs`:
+
+```rust
+use sim_lib_numbers_signal::{
+    Normalization, PaddingPolicy, SignConvention, WindowFunction, WindowSampling, WindowSpec,
+};
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioAnalysisControl, AudioAnalysisPlan, AudioFeatureSelection, BeatTrackingPlan,
+    CepstralNormalization, CqtPlan, CqtWeighting, DctNormalization, Filterbank, FilterbankPlan,
+    FrequencyScale, MfccPlan, OnsetPeak, OnsetPeaks, PeakPickingPlan, SpectralEnergy,
+    StftOverlapPolicy, StftPlan, ZeroCrossingPlan, analyze_audio, track_beats, zero_crossing_rate,
+};
+
+// conformance: generated click/chord audio proves timing and labels end to end.
+
+#[test]
+fn generated_click_chord_fixture_proves_timing_features_and_labels() {
+    let sample_rate = 8_000;
+    let beat_samples = 4_000;
+    let samples = click_chord_fixture(sample_rate, beat_samples);
+    let plan = compact_analysis_plan(sample_rate);
+    let control = AudioAnalysisControl {
+        max_work: 100_000_000,
+        max_results: 16,
+        seed: 21,
+    };
+    let analysis = analyze_audio(
+        &samples,
+        sample_rate,
+        &EqualTemperament::default(),
+        &AudioFeatureSelection::foundry(),
+        &plan,
+        &control,
+    )
+    .unwrap();
+
+    let onsets = analysis.onsets.as_ref().unwrap();
+    assert!(onsets.peaks.len() >= 3, "{:#?}", onsets.peaks);
+    for expected in [beat_samples, beat_samples * 2, beat_samples * 3] {
+        assert!(
+            onsets
+                .peaks
+                .iter()
+                .any(|onset| onset.sample.abs_diff(expected as i64) <= 384),
+            "missing onset near {expected}: {:#?}",
+            onsets.peaks
+        );
+    }
+    assert!(onsets.peaks.iter().all(|onset| onset.confidence > 0.0));
+    assert!(onsets.latency_samples > 0);
+
+    let beats = analysis.beats.as_ref().unwrap();
+    assert!(
+        beats
+            .tempo_candidates
+            .iter()
+            .any(|candidate| { (candidate.bpm - 120.0).abs() < 2.0 && candidate.confidence > 0.0 })
+    );
+    assert!(beats.dynamic_programming.is_some());
+    assert!(beats.beats.iter().all(|beat| beat.confidence > 0.0));
+    assert!(
+        beats
+            .beats
+            .iter()
+            .skip(1)
+            .all(|beat| { beat.bpm.is_some() && !beat.alternatives.is_empty() })
+    );
+    assert!(beats.meter_hypotheses.len() > 1);
+
+    let mfcc = analysis.mfcc.as_ref().unwrap();
+    assert_eq!(mfcc.sample_rate, sample_rate);
+    assert_eq!(mfcc.plan.filterbank.scale, FrequencyScale::Mel);
+    assert_eq!(mfcc.frames[0].coefficients.len(), 13);
+    assert!(
+        mfcc.frames
+            .iter()
+            .flat_map(|frame| &frame.coefficients)
+            .all(|value| value.is_finite())
+    );
+
+    let keys = analysis.key.as_ref().unwrap();
+    let chords = analysis.chords.as_ref().unwrap();
+    assert!(keys.frames.iter().any(|frame| frame.label == "C major"));
+    assert!(chords.frames.iter().any(|frame| frame.label == "C:maj"));
+    assert!(chords.frames.iter().any(|frame| frame.label == "G:maj"));
+    for frame in keys.frames.iter().chain(&chords.frames) {
+        assert!(frame.confidence > 0.0);
+        assert!(frame.alternatives.len() > 1);
+        assert!(frame.alternatives.iter().all(|item| item.posterior > 0.0));
+    }
+    assert!(analysis.evidence.work_used <= analysis.evidence.work_limit);
+    assert_eq!(analysis.evidence.seed, 21);
+}
+
+#[test]
+fn beat_dp_preserves_changing_tempo_and_all_meter_alternatives() {
+    let onsets = OnsetPeaks {
+        plan: PeakPickingPlan::default(),
+        latency_samples: 64,
+        peaks: [0, 24_000, 44_000, 60_000]
+            .into_iter()
+            .enumerate()
+            .map(|(frame_index, sample)| OnsetPeak {
+                frame_index,
+                sample,
+                available_at_sample: sample + 64,
+                strength: if frame_index.is_multiple_of(2) {
+                    1.0
+                } else {
+                    0.7
+                },
+                confidence: 0.9,
+            })
+            .collect(),
+        alternatives: Vec::new(),
+        work_used: 1,
+    };
+    let tracked = track_beats(&onsets, 48_000, &BeatTrackingPlan::default()).unwrap();
+    let tempi = tracked
+        .beats
+        .iter()
+        .filter_map(|beat| beat.bpm)
+        .collect::<Vec<_>>();
+    assert_eq!(tempi.len(), 3);
+    assert!(tempi.windows(2).any(|pair| (pair[0] - pair[1]).abs() > 1.0));
+    assert!(tracked.dynamic_programming.is_some());
+    assert!(tracked.meter_hypotheses.len() >= 4);
+}
+
+#[test]
+fn zcr_and_each_perceptual_filterbank_retain_full_rate_policy() {
+    let samples = (0_usize..800)
+        .map(|index| if index.is_multiple_of(2) { -1.0 } else { 1.0 })
+        .collect::<Vec<_>>();
+    let zcr = zero_crossing_rate(
+        &samples,
+        8_000,
+        &ZeroCrossingPlan {
+            frame: 80,
+            hop: 40,
+            ..ZeroCrossingPlan::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(zcr.sample_rate, 8_000);
+    assert!(zcr.frames[0].rate > 0.99);
+
+    for scale in [
+        FrequencyScale::Mel,
+        FrequencyScale::Bark,
+        FrequencyScale::Erb,
+    ] {
+        let bank = Filterbank::new(
+            48_000,
+            1_024,
+            &FilterbankPlan {
+                scale,
+                bands: 24,
+                minimum_hz: 20.0,
+                maximum_hz: Some(20_000.0),
+                max_weights: 100_000,
+            },
+        )
+        .unwrap();
+        assert_eq!(bank.sample_rate, 48_000);
+        assert_eq!(bank.bands.len(), 24);
+        assert!(
+            bank.bands
+                .windows(2)
+                .all(|pair| pair[0].center_hz < pair[1].center_hz)
+        );
+        assert!(
+            bank.weights
+                .iter()
+                .all(|row| row.iter().all(|weight| (0.0..=1.0).contains(weight)))
+        );
+    }
+}
+
+fn compact_analysis_plan(sample_rate: u32) -> AudioAnalysisPlan {
+    let mut window = WindowSpec::new(WindowFunction::Hann);
+    window.sampling = WindowSampling::Periodic;
+    AudioAnalysisPlan {
+        stft: StftPlan {
+            frame: 256,
+            hop: 64,
+            analysis_window: window.clone(),
+            synthesis_window: window.clone(),
+            center: true,
+            padding: PaddingPolicy::Zero,
+            phase: SignConvention::NegativeForward,
+            normalization: Normalization::Forward,
+            overlap: StftOverlapPolicy::RequireCola { tolerance: 1e-10 },
+            max_frames: 2_048,
+            max_cells: 1_000_000,
+        },
+        peak_picking: PeakPickingPlan {
+            local_max_before: 2,
+            local_max_after: 2,
+            average_before: 8,
+            average_after: 8,
+            threshold: 0.04,
+            minimum_distance_samples: 2_000,
+            max_peaks: 16,
+            max_work: 1_000_000,
+        },
+        zero_crossing: ZeroCrossingPlan {
+            frame: 256,
+            hop: 64,
+            ..ZeroCrossingPlan::default()
+        },
+        mfcc: MfccPlan {
+            filterbank: FilterbankPlan {
+                scale: FrequencyScale::Mel,
+                bands: 24,
+                minimum_hz: 20.0,
+                maximum_hz: Some(f64::from(sample_rate) / 2.0 - 1.0),
+                max_weights: 100_000,
+            },
+            energy: SpectralEnergy::Power,
+            log_floor: 1e-9,
+            coefficients: 13,
+            dct_normalization: DctNormalization::Orthonormal,
+            lifter: Some(22.0),
+            normalization: CepstralNormalization::MeanVariance {
+                variance_floor: 1e-12,
+            },
+            max_work: 20_000_000,
+        },
+        constant_q: CqtPlan {
+            hop: 256,
+            min_frequency_hz: 110.0,
+            max_frequency_hz: 1_760.0,
+            bins_per_octave: 12,
+            window,
+            center: true,
+            padding: PaddingPolicy::Zero,
+            phase: SignConvention::NegativeForward,
+            weighting: CqtWeighting::Power,
+            max_window: 4_096,
+            max_frames: 1_024,
+            max_bins: 128,
+            max_work: 50_000_000,
+        },
+        ..AudioAnalysisPlan::default()
+    }
+}
+
+fn click_chord_fixture(sample_rate: u32, beat_samples: usize) -> Vec<f32> {
+    let chords: [[f64; 3]; 4] = [
+        [261.625_565, 329.627_557, 391.995_436],
+        [261.625_565, 329.627_557, 391.995_436],
+        [195.997_718, 246.941_651, 293.664_768],
+        [195.997_718, 246.941_651, 293.664_768],
+    ];
+    (0..beat_samples * chords.len())
+        .map(|index| {
+            let beat = index / beat_samples;
+            let within = index % beat_samples;
+            let time = index as f64 / f64::from(sample_rate);
+            let chord = chords[beat]
+                .iter()
+                .map(|frequency| (std::f64::consts::TAU * frequency * time).sin())
+                .sum::<f64>()
+                * 0.18;
+            let click = if within < 24 {
+                0.9 * (1.0 - within as f64 / 24.0)
+                    * if within.is_multiple_of(2) { 1.0 } else { -1.0 }
+            } else {
+                0.0
+            };
+            (chord + click).clamp(-1.0, 1.0) as f32
+        })
+        .collect()
+}
+```
+
 Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/partial_track_tests` is checked by `cargo test`.
 
 Source `crates/sim-lib-sound-audio-lift/src/partial_track_tests.rs`:
@@ -7331,6 +7714,10 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
         record.kind == ExportKind::named(ExportKind::FUNCTION)
             && record.symbol == Symbol::qualified("sound/lift", "pitch-track")
     }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "analyze")
+    }));
 }
 
 #[test]
@@ -7379,6 +7766,63 @@ fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
         "frame-index (expr:number numbers/i64 \"0\")",
         "sample-rate (expr:number numbers/i64 \"8000\")",
         "work-used",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
+}
+
+#[test]
+fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/onset-beat-harmony"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "features [onsets beats mfcc chroma key chords]",
+        "latency-samples",
+        "minimum-distance-samples",
+        "tempo-policy varying",
+        "tempo-candidates",
+        "meter-hypotheses",
+        "scale mel",
+        "log-floor",
+        "dct-normalization orthonormal",
+        "strategy posterior",
+        "strategy hmm",
+        "confidence",
+        "alternatives",
+        "posterior",
+        "work-used",
+        "seed (expr:number numbers/i64 \"21\")",
     ] {
         assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
     }
