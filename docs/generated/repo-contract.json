@@ -1243,12 +1243,19 @@
         {
           "kind": "normal",
           "optional": false,
+          "package": "sim-lib-music-shapes",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
           "package": "sim-lib-pitch-core",
           "rename": null,
           "target": null
         }
       ],
-      "description": "LilyPond subset import and export helpers for SIM score and melody objects.",
+      "description": "Bounded LilyPond and MusicXML notation profiles for canonical SIM scores.",
       "features": [],
       "group": "workspace",
       "manifest": "crates/sim-lib-music-notation/Cargo.toml",
@@ -3484,10 +3491,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "310a48a0263c2fc5c81f7b38ac24888c041e434f",
+    "git_commit": "812239c5fb8ee1e15712c51fe5f4c799dc339ac3",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "310a48a0263c2fc5c81f7b38ac24888c041e434f",
+    "source_commit": "812239c5fb8ee1e15712c51fe5f4c799dc339ac3",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3500,9 +3507,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "7eff1976bcc197d9",
+    "workspace_hash": "c85d1d9915ab2599",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 675,
+    "workspace_hash_input_count": 681,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3727,11 +3734,17 @@
       "crates/sim-lib-music-notation/Cargo.toml",
       "crates/sim-lib-music-notation/build.rs",
       "crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml",
+      "crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/recipe.toml",
       "crates/sim-lib-music-notation/recipes/book.toml",
       "crates/sim-lib-music-notation/src/export.rs",
       "crates/sim-lib-music-notation/src/import.rs",
       "crates/sim-lib-music-notation/src/lib.rs",
       "crates/sim-lib-music-notation/src/model.rs",
+      "crates/sim-lib-music-notation/src/musicxml.rs",
+      "crates/sim-lib-music-notation/src/musicxml_export.rs",
+      "crates/sim-lib-music-notation/src/musicxml_import.rs",
+      "crates/sim-lib-music-notation/src/musicxml_note.rs",
+      "crates/sim-lib-music-notation/src/musicxml_support.rs",
       "crates/sim-lib-music-notation/src/runtime.rs",
       "crates/sim-lib-music-notation/src/spell.rs",
       "crates/sim-lib-music-notation/src/tests.rs",
@@ -4597,7 +4610,7 @@
       "card_id": "cookbook/music-notation",
       "group": "workspace",
       "package": "sim-lib-music-notation",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
         {
           "card_id": "music-notation/01-basics/lilypond-export",
@@ -4606,6 +4619,14 @@
           "package": "sim-lib-music-notation",
           "recipe_toml": "crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml",
           "title": "LilyPond export descriptor"
+        },
+        {
+          "card_id": "music-notation/01-basics/musicxml-import",
+          "codec": "lisp",
+          "id": "musicxml-import",
+          "package": "sim-lib-music-notation",
+          "recipe_toml": "crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/recipe.toml",
+          "title": "Bounded MusicXML import"
         }
       ],
       "summary": "Notation import and export descriptors.",

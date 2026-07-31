@@ -67,10 +67,10 @@ claims_specimens = [
 [[feature]]
 id = "feature/sim-music/midi-notation-workflows"
 title = "MIDI and notation workflows"
-summary = "Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, and notation forms."
+summary = "Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML."
 owner = "crate/sim-lib-midi-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse sim-lib-midi-smf for bounded import and canonical export: it preserves formats 0, 1, and 2, keeps format-2 track time origins and tempo maps independent, retains metrical and valid SMPTE divisions plus unknown valid meta/system events, and reports malformed or oversized input at absolute byte offsets. Reuse sim-lib-midi-core MidiTempoMap for exact tick, quarter-beat, and wall-time conversion over the generic stream-clock chart. Reuse sim-lib-music-lift MidiRealizationPolicy for explicit FIFO/LIFO/reject overlap pairing, same-tick ordering, dangling-note behavior, sustain/sostenuto and channel-mode realization, identity-bearing notes, and multiplicity-preserving exact note slices. Callers that need one performance timeline must select a format-2 pattern explicitly and must install an explicit real-time adapter before converting SMPTE timing to a metrical MIDI stream."
+guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse sim-lib-midi-smf for bounded import and canonical export: it preserves formats 0, 1, and 2, keeps format-2 track time origins and tempo maps independent, retains metrical and valid SMPTE divisions plus unknown valid meta/system events, and reports malformed or oversized input at absolute byte offsets. Reuse sim-lib-midi-core MidiTempoMap for exact tick, quarter-beat, and wall-time conversion over the generic stream-clock chart. Reuse sim-lib-music-lift MidiRealizationPolicy for explicit FIFO/LIFO/reject overlap pairing, same-tick ordering, dangling-note behavior, sustain/sostenuto and channel-mode realization, identity-bearing notes, and multiplicity-preserving exact note slices. Reuse sim-lib-music-notation for the LilyPond subset and bounded MusicXML 4.0 score-partwise profile: the latter rejects DTDs, entity declarations, unknown extensions, and configured byte/node/depth/text/part/event overruns; retains stable part/event ids in an exchange sidecar; and reports every accepted loss while continuing to use canonical Score and its existing read-construct. Callers that need one performance timeline must select a format-2 pattern explicitly and must install an explicit real-time adapter before converting SMPTE timing to a metrical MIDI stream."
 claims_anchors = [
   "anchor/crate/sim-lib-midi-ble",
   "anchor/crate/sim-lib-midi-core",
@@ -80,6 +80,7 @@ claims_anchors = [
   "anchor/crate/sim-lib-midi-smf",
   "anchor/crate/sim-lib-midi-sysex",
   "anchor/crate/sim-lib-midi-wasm-frame",
+  "anchor/crate/sim-lib-music-notation",
   "anchor/crate/sim-lib-stream-file",
   "anchor/crate/sim-lib-stream-midi",
   "anchor/runtime-lib/sim-lib-midi-ble/midi-ble-lib",
@@ -88,6 +89,7 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-midi-live/midi-live-lib",
   "anchor/runtime-lib/sim-lib-midi-rtmidi/midi-rtmidi-lib",
   "anchor/runtime-lib/sim-lib-midi-shapes/midi-shapes-lib",
+  "anchor/runtime-lib/sim-lib-music-notation/music-notation-lib",
 ]
 claims_surfaces = [
   "docs/sim-music/generated",
@@ -96,6 +98,7 @@ claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-midi-core/src/tests",
   "spec-test/sim-music/crates/sim-lib-midi-smf/src/tests",
   "spec-test/sim-music/crates/sim-lib-music-lift/src/tests",
+  "spec-test/sim-music/crates/sim-lib-music-notation/src/tests",
 ]
 
 [[feature]]
@@ -260,4 +263,15 @@ steps = [
   { specimen = "recipe/sim-music/crates/sim-lib-midi-smf/01-basics/file-metadata", why = "The SMF metadata recipe proves the file owner." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-lift/01-basics/from-midi-track", why = "The lift recipe imports MIDI track material into music descriptors." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-lower/01-basics/to-midi-track", why = "The lower recipe exports music descriptors back to MIDI track material." },
+]
+
+[[route]]
+id = "route/exchange-score-musicxml"
+task = "Import and export a bounded MusicXML score"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The notation row owns the bounded MusicXML profile, stable exchange ids, loss reports, and one runtime import callable." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact score row supplies canonical rational Score semantics and the existing SIM expression/read-construct form." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-notation/01-basics/musicxml-import", why = "The notation recipe shows the bounded runtime call and profile limits." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-music-notation/src/tests", why = "The checked fixture proves DTD rejection, bounds, ids, losses, and LilyPond/MusicXML/SIM semantic round trips." },
 ]

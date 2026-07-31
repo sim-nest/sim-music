@@ -1,0 +1,8 @@
+id = "musicxml-import"
+title = "Bounded MusicXML import"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["music", "notation", "musicxml", "import", "bounded", "sandbox-descriptor"]
+requires = ["music-notation", "music-shapes", "codec/lisp"]

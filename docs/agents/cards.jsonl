@@ -124,6 +124,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-notation/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md"}
