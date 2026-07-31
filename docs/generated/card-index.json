@@ -113,7 +113,7 @@
       "id": "cookbook/music-counterpoint",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-counterpoint",
-      "summary": "Exact rule evidence and graph-backed contrapuntal overlap."
+      "summary": "Exact rule evidence, graph-backed overlap, and bounded reversible generation."
     },
     {
       "id": "cookbook/music-lift",

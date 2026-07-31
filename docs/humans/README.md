@@ -26,7 +26,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
 | `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
-| `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices under inspectable species or open rules and derive bounded stretto couples, compatibility graphs, maximal cliques, clusters, chains, fusions, and transform candidates. |
+| `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 
@@ -165,6 +165,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/recipe.toml`
 - `crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/setup.siml`
 - `crates/sim-lib-music-core/recipes/book.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/purpose.md`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/recipe.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/setup.siml`
 - `crates/sim-lib-music-counterpoint/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/purpose.md`
 - `crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/recipe.toml`
@@ -2594,6 +2597,18 @@ fn midi_round_trip() {
     for midi in 0..=127u8 {
         assert_eq!(Pitch::from_midi(midi).to_midi(), Some(midi));
     }
+}
+
+#[test]
+fn pitch_order_follows_absolute_semitones_across_classes_and_octaves() {
+    let c5 = Pitch::from_midi(72);
+    let f4 = Pitch::from_midi(65);
+    let b3 = Pitch::from_midi(59);
+    assert!(c5 > f4);
+    assert!(f4 > b3);
+    let mut pitches = vec![c5, b3, f4];
+    pitches.sort();
+    assert_eq!(pitches, vec![b3, f4, c5]);
 }
 
 #[test]
@@ -5058,16 +5073,19 @@ use num_rational::Ratio;
 use sim_codec::{Input, decode_with_codec};
 use sim_codec_lisp::LispCodecLib;
 use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, RawArgs, ReadPolicy, Symbol};
+use sim_lib_discrete_search::{NeverInterrupt, SearchControl, SearchInterrupt, SearchStatus};
+use sim_lib_music_consonance::{Addition, apply_patch, remove_patch};
 use sim_lib_music_core::{
     Articulation, Channel, Counterpoint, Melody, MelodyItem, Note, Pitch, Time,
 };
 use sim_lib_music_shapes::{encode_counterpoint, encode_melody};
 
 use crate::{
-    ContrapuntalForm, RuleSet, StrettoCluster, StrettoEntry, StrettoPolicy, StrettoTransform,
-    analyze_counterpoint, cluster_overlap, fuse_stretto_entries, install_music_counterpoint_lib,
-    materialize_transform, music_counterpoint_analyze_symbol, music_stretto_graph_symbol,
-    stretto_graph,
+    CadencePolicy, ContrapuntalForm, CounterpointGenerationPolicy, DiversityPolicy, PitchRange,
+    RuleSet, StrettoCluster, StrettoEntry, StrettoPolicy, StrettoTransform, analyze_counterpoint,
+    cluster_overlap, compile_counterpoint_csp, fuse_stretto_entries, generate_counterpoint,
+    install_music_counterpoint_lib, materialize_transform, music_counterpoint_analyze_symbol,
+    music_stretto_graph_symbol, stretto_graph,
 };
 
 fn time(numerator: i64, denominator: i64) -> Time {
@@ -5098,6 +5116,35 @@ fn melody(midis: &[u8], duration: Time) -> Melody {
     .expect("melody")
 }
 
+fn generation_fixture() -> (Melody, RuleSet, CounterpointGenerationPolicy) {
+    let cantus = melody(&[72, 74, 72], time(1, 1));
+    let mut rules = RuleSet::species_two(time(1, 1));
+    rules.voices.ranges = vec![
+        PitchRange::midi(),
+        PitchRange {
+            low: Pitch::from_midi(65),
+            high: Pitch::from_midi(65),
+        },
+        PitchRange {
+            low: Pitch::from_midi(53),
+            high: Pitch::from_midi(53),
+        },
+    ];
+    let policy = CounterpointGenerationPolicy {
+        voices: 2,
+        ..CounterpointGenerationPolicy::default()
+    };
+    (cantus, rules, policy)
+}
+
+fn bounded_control(seed: u64) -> SearchControl {
+    SearchControl::default()
+        .with_seed(seed)
+        .with_max_work(100_000)
+        .with_max_frontier(128)
+        .with_max_results(8)
+}
+
 #[test]
 fn species_rules_are_inspectable_and_validate() {
     let first = RuleSet::species_one(time(1, 1));
@@ -5112,6 +5159,182 @@ fn species_rules_are_inspectable_and_validate() {
     );
     first.validate().expect("first species");
     fourth.validate().expect("fourth species");
+}
+
+#[test]
+fn rules_compile_to_explicit_finite_csp_for_the_generic_search_engine() {
+    let (cantus, rules, policy) = generation_fixture();
+    let csp = compile_counterpoint_csp(&cantus, &rules, &policy).expect("compile CSP");
+    assert_eq!(csp.slots(), 6);
+    assert_eq!(csp.variables.len(), 12);
+    assert_eq!(csp.domains.len(), csp.variables.len());
+    assert!(
+        csp.variables
+            .iter()
+            .zip(&csp.domains)
+            .all(|(variable, domain)| variable == &domain.variable && !domain.pitches.is_empty())
+    );
+    assert!(
+        csp.facts
+            .iter()
+            .any(|fact| fact == "engine=sim-lib-discrete-search/SearchProblem")
+    );
+
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("generic bounded generation");
+    assert!(run.receipt.search.propagated > 0);
+    assert!(run.receipt.search.scored > 0);
+}
+
+#[test]
+fn generated_species_two_voices_preserve_fixed_material_and_pass_analysis() {
+    let (cantus, rules, policy) = generation_fixture();
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("counterpoint generation");
+    assert_eq!(run.receipt.search.status, SearchStatus::Complete);
+    assert_eq!(run.results.len(), 1);
+    let result = &run.results[0];
+    assert_eq!(result.counterpoint.voices.len(), 3);
+    assert_eq!(result.counterpoint.voices[0], cantus);
+    assert!(
+        result.analysis.is_legal(),
+        "{:?}",
+        result.analysis.violations
+    );
+    for voice in &result.counterpoint.voices[1..] {
+        assert_eq!(voice.total_duration(), cantus.total_duration());
+        assert!(voice.items.iter().all(|item| item.duration() == time(1, 2)));
+    }
+    assert!(
+        result.counterpoint.voices[1].items.iter().all(
+            |item| matches!(item, MelodyItem::Note(note) if note.pitch == Pitch::from_midi(65))
+        )
+    );
+    assert!(
+        result.counterpoint.voices[2].items.iter().all(
+            |item| matches!(item, MelodyItem::Note(note) if note.pitch == Pitch::from_midi(53))
+        )
+    );
+}
+
+#[test]
+fn generation_reports_seed_bounds_cancellation_and_diversity_honestly() {
+    let cantus = melody(&[72], time(1, 1));
+    let mut rules = RuleSet::open();
+    rules.voices.ranges = vec![
+        PitchRange::midi(),
+        PitchRange {
+            low: Pitch::from_midi(60),
+            high: Pitch::from_midi(62),
+        },
+    ];
+    let policy = CounterpointGenerationPolicy {
+        cadence: CadencePolicy::Open,
+        diversity: DiversityPolicy {
+            minimum_pitch_changes: 2,
+        },
+        ..CounterpointGenerationPolicy::default()
+    };
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("diverse generation");
+    assert_eq!(run.receipt.search.status, SearchStatus::Complete);
+    assert_eq!(run.receipt.search.seed, 99);
+    assert!(run.receipt.search.work_used <= 100_000);
+    assert!(run.receipt.search.max_frontier <= 128);
+    assert_eq!(run.receipt.raw_result_count, 3);
+    assert_eq!(run.receipt.selected_result_count, 1);
+    assert_eq!(run.receipt.diversity_rejected, 2);
+    assert_eq!(run.results.len(), 1);
+
+    let bounded = generate_counterpoint(
+        &cantus,
+        &rules,
+        &CounterpointGenerationPolicy {
+            cadence: CadencePolicy::Open,
+            ..CounterpointGenerationPolicy::default()
+        },
+        SearchControl::default()
+            .with_seed(99)
+            .with_max_work(1)
+            .with_max_frontier(1)
+            .with_max_results(1),
+        &NeverInterrupt,
+    )
+    .expect("work-bounded generation");
+    assert_eq!(bounded.receipt.search.status, SearchStatus::Partial);
+    assert_eq!(
+        bounded.receipt.search.reason.as_deref(),
+        Some("work bound reached")
+    );
+
+    struct CancelNow;
+    impl SearchInterrupt for CancelNow {
+        fn is_cancelled(&self) -> bool {
+            true
+        }
+    }
+    let cancelled = generate_counterpoint(
+        &cantus,
+        &rules,
+        &CounterpointGenerationPolicy {
+            cadence: CadencePolicy::Open,
+            ..CounterpointGenerationPolicy::default()
+        },
+        bounded_control(99),
+        &CancelNow,
+    )
+    .expect("cancelled generation");
+    assert_eq!(cancelled.receipt.search.status, SearchStatus::Cancelled);
+    assert_eq!(
+        cancelled.receipt.search.reason.as_deref(),
+        Some("interrupt cancelled search")
+    );
+    assert!(cancelled.results.is_empty());
+}
+
+#[test]
+fn generated_voice_patch_is_additive_content_bound_and_exactly_reversible() {
+    let (cantus, rules, policy) = generation_fixture();
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("counterpoint generation");
+    let result = &run.results[0];
+    assert_eq!(result.patch.additions.len(), 2);
+    assert!(
+        result
+            .patch
+            .additions
+            .iter()
+            .all(|addition| matches!(addition, Addition::Voice(_)))
+    );
+    let restored = remove_patch(&result.completed, &result.patch).expect("remove patch");
+    let reapplied = apply_patch(&restored, &result.patch).expect("reapply patch");
+    assert_eq!(reapplied, result.completed);
+    assert_eq!(restored.voices.len(), 1);
+    assert_eq!(restored.voices[0].name, "Cantus");
 }
 
 #[test]
@@ -5417,6 +5640,43 @@ fn checked_lisp_specimens_execute_and_reproduce_evidence() {
         assert!(!relations.is_empty(), "stretto specimen has no {key}");
     }
     assert!(matches!(field(&graph, "chains"), Some(Expr::Vector(_))));
+
+    let generated = evaluate_lisp_specimen(
+        &mut cx,
+        include_str!("../recipes/01-basics/bounded-generation/setup.siml"),
+    );
+    let Expr::Map(generated) = generated else {
+        panic!("generation specimen must return a map: {generated:?}");
+    };
+    assert_eq!(
+        field(&generated, "mode"),
+        Some(&Expr::String("generated-counterpoint".to_owned()))
+    );
+    let Some(Expr::Vector(results)) = field(&generated, "results") else {
+        panic!("generation specimen must return result alternatives");
+    };
+    assert!(!results.is_empty(), "{generated:?}");
+    for result in results {
+        let Expr::Map(result) = result else {
+            panic!("generated result must be a map");
+        };
+        assert_eq!(field(result, "legal"), Some(&Expr::Bool(true)));
+        assert!(field(result, "patch").is_some());
+    }
+    let Some(Expr::Map(receipt)) = field(&generated, "receipt") else {
+        panic!("generation specimen must return a receipt");
+    };
+    for key in [
+        "status",
+        "work-used",
+        "max-frontier",
+        "raw-results",
+        "selected-results",
+        "seed",
+        "digest",
+    ] {
+        assert!(field(receipt, key).is_some(), "missing receipt {key}");
+    }
 }
 
 fn evaluate_lisp_specimen(cx: &mut sim_kernel::Cx, source: &str) -> Expr {

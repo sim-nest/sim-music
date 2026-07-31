@@ -97,7 +97,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-music-counterpoint/Cargo.toml",
       "package": "sim-lib-music-counterpoint",
-      "summary": "Exact counterpoint rule reports and graph-backed stretto analysis."
+      "summary": "Exact counterpoint analysis and bounded constraint generation."
     },
     {
       "crate_name": "sim_lib_music_lift",

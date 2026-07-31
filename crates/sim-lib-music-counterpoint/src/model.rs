@@ -1,5 +1,9 @@
 use sim_lib_discrete_graph::Graph;
-use sim_lib_music_core::{Counterpoint, Melody, ObjectId, Pitch, Time};
+use sim_lib_discrete_search::{SearchReceipt, SearchStatus};
+use sim_lib_music_consonance::{ConsonancePatch, PatchError};
+use sim_lib_music_core::{
+    ConversionError, Counterpoint, Melody, MusicError, ObjectId, Pitch, Staff, Time,
+};
 use thiserror::Error;
 
 use crate::RuleSet;
@@ -153,6 +157,179 @@ impl CounterpointReport {
     pub fn is_legal(&self) -> bool {
         self.violations.is_empty()
     }
+}
+
+/// Cadential pitch-domain restriction applied by the generator.
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+pub enum CadencePolicy {
+    /// Do not add a cadence restriction beyond the rule set.
+    Open,
+    /// Require a perfect interval against the cantus at the final slot.
+    PerfectFinal,
+    /// Require perfect intervals against the cantus at both endpoints.
+    PerfectEndpoints,
+}
+
+/// Cross-result diversity policy applied in deterministic score order.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct DiversityPolicy {
+    /// Minimum number of pitch assignments that must differ from every retained result.
+    pub minimum_pitch_changes: usize,
+}
+
+impl Default for DiversityPolicy {
+    fn default() -> Self {
+        Self {
+            minimum_pitch_changes: 1,
+        }
+    }
+}
+
+/// Musical controls compiled into one finite counterpoint CSP.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CounterpointGenerationPolicy {
+    /// Number of new voices to add beside the fixed cantus.
+    pub voices: usize,
+    /// Endpoint policy compiled into pitch domains.
+    pub cadence: CadencePolicy,
+    /// Cross-result distinctness policy.
+    pub diversity: DiversityPolicy,
+    /// MIDI velocity assigned to generated notes.
+    pub velocity: u8,
+}
+
+impl Default for CounterpointGenerationPolicy {
+    fn default() -> Self {
+        Self {
+            voices: 1,
+            cadence: CadencePolicy::PerfectEndpoints,
+            diversity: DiversityPolicy::default(),
+            velocity: 96,
+        }
+    }
+}
+
+/// One generated-voice pitch variable at an exact rhythmic slot.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CounterpointVariable {
+    /// Stable position in the compiled variable order.
+    pub index: usize,
+    /// Zero-based generated voice index.
+    pub voice: usize,
+    /// Zero-based exact rhythmic slot.
+    pub slot: usize,
+    /// Exact onset in whole-note units.
+    pub onset: Time,
+    /// Fixed exact note duration.
+    pub duration: Time,
+}
+
+/// Finite pitch domain for one counterpoint variable.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CounterpointDomain {
+    /// Variable governed by this domain.
+    pub variable: CounterpointVariable,
+    /// Allowed MIDI pitches in canonical ascending order.
+    pub pitches: Vec<u8>,
+}
+
+/// Inspectable finite CSP compiled from a cantus, rules, and generation policy.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CounterpointCsp {
+    /// Variables in exact-time then voice order.
+    pub variables: Vec<CounterpointVariable>,
+    /// One finite pitch domain per variable.
+    pub domains: Vec<CounterpointDomain>,
+    /// Fixed duration of every generated note.
+    pub rhythm: Time,
+    /// Rule-set id from which constraints were compiled.
+    pub rule_set: String,
+    /// Stable compilation and delegation evidence.
+    pub facts: Vec<String>,
+}
+
+impl CounterpointCsp {
+    /// Number of rhythmic slots per generated voice.
+    pub fn slots(&self) -> usize {
+        self.variables
+            .iter()
+            .map(|variable| variable.slot)
+            .max()
+            .map_or(0, |slot| slot + 1)
+    }
+}
+
+/// One legal generated counterpoint and its exact reversible addition.
+#[derive(Clone, Debug, PartialEq)]
+pub struct CounterpointGenerationResult {
+    /// Fixed cantus followed by generated voices.
+    pub counterpoint: Counterpoint,
+    /// Identity-bearing staff after applying `patch` to the cantus staff.
+    pub completed: Staff,
+    /// Content-bound strictly additive patch for all generated voices.
+    pub patch: ConsonancePatch,
+    /// Analyzer proof under the same rule set; it contains no violations.
+    pub analysis: CounterpointReport,
+    /// Deterministic non-negative soft cost.
+    pub score: i64,
+    /// Stable pitch-assignment fingerprint.
+    pub fingerprint: String,
+}
+
+/// Counterpoint-specific interpretation of one generic search receipt.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CounterpointGenerationReceipt {
+    /// Unmodified generic bounded-search receipt.
+    pub search: SearchReceipt,
+    /// Legal assignments emitted by the search before diversity selection.
+    pub raw_result_count: usize,
+    /// Results retained after diversity selection.
+    pub selected_result_count: usize,
+    /// Legal assignments rejected only by the diversity policy.
+    pub diversity_rejected: usize,
+    /// Stable materialization and policy evidence.
+    pub facts: Vec<String>,
+}
+
+impl CounterpointGenerationReceipt {
+    /// Final generic termination status.
+    pub fn status(&self) -> &SearchStatus {
+        &self.search.status
+    }
+}
+
+/// Complete generated result set, compiled CSP, and termination receipt.
+#[derive(Clone, Debug, PartialEq)]
+pub struct CounterpointGeneration {
+    /// Inspectable variables, domains, rhythm, and compilation facts.
+    pub csp: CounterpointCsp,
+    /// Legal diverse results in deterministic score order.
+    pub results: Vec<CounterpointGenerationResult>,
+    /// Honest bounds, cancellation, search, and diversity evidence.
+    pub receipt: CounterpointGenerationReceipt,
+}
+
+/// Failure to validate, compile, or materialize counterpoint generation.
+#[derive(Debug, Error)]
+pub enum GenerationError {
+    /// Caller policy cannot define a finite valid generation problem.
+    #[error("invalid counterpoint generation policy: {0}")]
+    InvalidPolicy(String),
+    /// Counterpoint rule data is invalid.
+    #[error(transparent)]
+    Rules(#[from] crate::RuleError),
+    /// A music value could not be built.
+    #[error(transparent)]
+    Music(#[from] MusicError),
+    /// Canonical score conversion failed.
+    #[error(transparent)]
+    Conversion(#[from] ConversionError),
+    /// Reversible patch construction or validation failed.
+    #[error(transparent)]
+    Patch(#[from] PatchError),
+    /// Internal search/materialization agreement was violated.
+    #[error("counterpoint generation invariant failed: {0}")]
+    Invariant(String),
 }
 
 /// Result of fusing analyzed stretto entries into a viewable counterpoint.

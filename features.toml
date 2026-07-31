@@ -276,11 +276,11 @@ supports = [
 
 [[feature]]
 id = "feature/sim-music/music-counterpoint"
-title = "Exact counterpoint and stretto analysis"
-summary = "Analyze existing voices under inspectable species or open rules and derive bounded stretto couples, compatibility graphs, maximal cliques, clusters, chains, fusions, and transform candidates."
+title = "Exact counterpoint analysis and bounded generation"
+summary = "Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions."
 owner = "crate/sim-lib-music-counterpoint"
 audiences = ["user", "code", "framework"]
-guidance = "Use analyze_counterpoint for material that already exists: it converts through music-core's identity-bearing Staff, reuses exact consonance sounding windows for rational event alignment, and returns every motion and violation with source voices, note/event ids, exact spans, stable rule ids, and metric evidence. Species-one through species-four and open policies are ordinary RuleSet data over intervals, relative motion, range, crossing, overlap, duration, and dissonance preparation/resolution. Use stretto_graph only for bounded derived analysis candidates. It materializes original, retrograde, inversion, retrograde-inversion, transposition, and duration requests through sim-lib-music-transform, stores legal pairs in sim-lib-discrete-graph Graph, reuses connected_components, reports maximal pairwise-compatible cliques, chooses the largest normalized suffix/prefix relation for chains, and labels fusion as derived analysis rather than generation."
+guidance = "Use analyze_counterpoint for material that already exists: it converts through music-core's identity-bearing Staff, reuses exact consonance sounding windows for rational event alignment, and returns every motion and violation with source voices, note/event ids, exact spans, stable rule ids, and metric evidence. Species-one through species-four and open policies are ordinary RuleSet data over intervals, relative motion, range, crossing, overlap, duration, and dissonance preparation/resolution. Use generate_counterpoint when the cantus must remain fixed. It compiles exact-time voice-slot variables and finite range/sonance/cadence pitch domains, delegates prefix propagation, scoring, seed order, work/frontier/result bounds, and cancellation to sim-lib-discrete-search, retains the unmodified SearchReceipt plus explicit diversity counts, admits only results that pass analyze_counterpoint under the same rules, and materializes each generated voice through the existing content-bound reversible ConsonancePatch. Use stretto_graph only for bounded derived analysis candidates. It materializes original, retrograde, inversion, retrograde-inversion, transposition, and duration requests through sim-lib-music-transform, stores legal pairs in sim-lib-discrete-graph Graph, reuses connected_components, reports maximal pairwise-compatible cliques, chooses the largest normalized suffix/prefix relation for chains, and labels fusion as derived analysis rather than generation."
 claims_anchors = [
   "anchor/crate/sim-lib-music-consonance",
   "anchor/crate/sim-lib-music-core",
@@ -409,6 +409,16 @@ steps = [
   { feature = "feature/sim-music/exact-score-consonance", why = "The consonance row supplies exact half-open sounding-window alignment without collapsing voice or event identity." },
   { feature = "feature/sim-music/music-counterpoint", why = "The counterpoint row applies inspectable rule data to existing material and builds bounded graph-backed stretto relations while keeping analysis distinct from generation." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-counterpoint/01-basics/stretto-graph", why = "The checked Lisp specimen exposes candidate entries, compatible couples, maximal cliques, and normalized chains with generation=false." },
+]
+
+[[route]]
+id = "route/generate-counterpoint"
+task = "Generate bounded reversible counterpoint"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-score-consonance", why = "The consonance row owns the content-bound additive patch and exact inverse that preserve the fixed cantus staff." },
+  { feature = "feature/sim-music/music-counterpoint", why = "The counterpoint row compiles rule data to finite CSP variables/domains, delegates traversal and receipts to discrete-search, propagates musical constraints, selects diverse legal results, and rechecks each result through the existing analyzer." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-counterpoint/01-basics/bounded-generation", why = "The checked Lisp specimen generates two second-species voices under explicit work, result, frontier-default, and seed evidence." },
 ]
 
 [[route]]

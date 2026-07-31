@@ -1,30 +1,33 @@
-//! Exact counterpoint rule reports and graph-backed stretto analysis.
+//! Exact counterpoint analysis and bounded constraint generation.
 //!
-//! This crate keeps two concerns deliberately distinct. [`analyze_counterpoint`]
-//! inspects material that already exists, aligns every voice at exact rational
-//! note boundaries, and returns one evidence-bearing [`Violation`] per failed
-//! rule. [`stretto_graph`] derives bounded transform candidates from a subject
-//! and relates compatible entries through `sim-lib-discrete-graph`; those
-//! candidates are analysis values, not generated counterpoint. Species and open
-//! policies are ordinary [`RuleSet`] data, while pitch/time transformations are
-//! delegated to `sim-lib-music-transform`.
+//! [`analyze_counterpoint`] inspects material that already exists, while
+//! [`generate_counterpoint`] compiles the same rule data to explicit finite CSP
+//! variables and pitch domains consumed by `sim-lib-discrete-search`. Generated
+//! voices are strictly additive [`sim_lib_music_consonance::ConsonancePatch`]
+//! values whose inverse restores the fixed cantus exactly. [`stretto_graph`]
+//! remains a separate derived-analysis surface backed by
+//! `sim-lib-discrete-graph`.
 
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
 mod analysis;
+mod generator;
+mod generator_materialization;
 mod model;
 mod rule;
 mod runtime;
+mod runtime_generation;
 mod runtime_graph_expr;
 mod stretto;
 
 pub use analysis::analyze_counterpoint;
+pub use generator::{compile_counterpoint_csp, generate_counterpoint};
 pub use model::*;
 pub use rule::*;
 pub use runtime::{
     MusicCounterpointLib, install_music_counterpoint_lib, music_counterpoint_analyze_symbol,
-    music_stretto_graph_symbol,
+    music_counterpoint_generate_symbol, music_stretto_graph_symbol,
 };
 pub use stretto::{cluster_overlap, fuse_stretto_entries, materialize_transform, stretto_graph};
 

@@ -9,6 +9,7 @@ use sim_lib_music_core::Time;
 use sim_lib_music_shapes::{decode_counterpoint, decode_melody, install_music_shapes_lib};
 use sim_shape::{AnyShape, ExactExprShape, ListShape, shape_value};
 
+use crate::runtime_generation::generate_call;
 use crate::runtime_graph_expr::stretto_graph_expr;
 use crate::{
     CounterpointReport, MetricEvidence, NoteEvidence, RuleSet, StrettoPolicy, StrettoTransform,
@@ -39,6 +40,10 @@ impl Lib for MusicCounterpointLib {
                     function_id: None,
                 },
                 Export::Function {
+                    symbol: music_counterpoint_generate_symbol(),
+                    function_id: None,
+                },
+                Export::Function {
                     symbol: music_stretto_graph_symbol(),
                     function_id: None,
                 },
@@ -52,6 +57,11 @@ impl Lib for MusicCounterpointLib {
             music_counterpoint_analyze_symbol(),
             cx.factory()
                 .opaque(Arc::new(CounterpointFunction::Analyze))?,
+        )?;
+        linker.function_value(
+            music_counterpoint_generate_symbol(),
+            cx.factory()
+                .opaque(Arc::new(CounterpointFunction::Generate))?,
         )?;
         linker.function_value(
             music_stretto_graph_symbol(),
@@ -91,6 +101,11 @@ pub fn music_stretto_graph_symbol() -> Symbol {
     Symbol::qualified("music/stretto", "graph")
 }
 
+/// Symbol of bounded constraint counterpoint generation.
+pub fn music_counterpoint_generate_symbol() -> Symbol {
+    Symbol::qualified("music/counterpoint", "generate")
+}
+
 fn analyzer_symbol() -> Symbol {
     Symbol::qualified("music", "CounterpointAnalyzer")
 }
@@ -107,7 +122,7 @@ fn analyzer_value(cx: &mut sim_kernel::LoadCx) -> Result<Value> {
         ),
         (
             Symbol::new("kind"),
-            cx.factory().string("analysis".to_owned())?,
+            cx.factory().string("analysis-and-generation".to_owned())?,
         ),
         (
             Symbol::new("shape"),
@@ -122,6 +137,7 @@ fn analyzer_value(cx: &mut sim_kernel::LoadCx) -> Result<Value> {
                     "music-consonance",
                     "music-transform",
                     "discrete-graph",
+                    "discrete-search",
                 ]
                 .into_iter()
                 .map(|name| cx.factory().string(name.to_owned()))
@@ -138,12 +154,17 @@ fn analyzer_value(cx: &mut sim_kernel::LoadCx) -> Result<Value> {
             Symbol::new("stretto-callable"),
             cx.factory().symbol(music_stretto_graph_symbol())?,
         ),
-        (Symbol::new("generation"), cx.factory().bool(false)?),
+        (
+            Symbol::new("generation-callable"),
+            cx.factory().symbol(music_counterpoint_generate_symbol())?,
+        ),
+        (Symbol::new("generation"), cx.factory().bool(true)?),
     ])
 }
 
 enum CounterpointFunction {
     Analyze,
+    Generate,
     Stretto,
 }
 
@@ -151,6 +172,7 @@ impl Object for CounterpointFunction {
     fn display(&self, _cx: &mut Cx) -> Result<String> {
         Ok(match self {
             Self::Analyze => "#<function music/counterpoint/analyze>",
+            Self::Generate => "#<function music/counterpoint/generate>",
             Self::Stretto => "#<function music/stretto/graph>",
         }
         .to_owned())
@@ -200,6 +222,15 @@ impl Callable for CounterpointFunction {
                 keyword(":rules"),
                 Arc::new(AnyShape),
             ],
+            Self::Generate => vec![
+                Arc::new(AnyShape),
+                keyword(":rules"),
+                Arc::new(AnyShape),
+                keyword(":voices"),
+                Arc::new(AnyShape),
+                keyword(":control"),
+                Arc::new(AnyShape),
+            ],
             Self::Stretto => vec![
                 keyword(":subject"),
                 Arc::new(AnyShape),
@@ -210,6 +241,7 @@ impl Callable for CounterpointFunction {
         Ok(Some(shape_value(
             match self {
                 Self::Analyze => Symbol::qualified("music/counterpoint/analyze", "args"),
+                Self::Generate => Symbol::qualified("music/counterpoint/generate", "args"),
                 Self::Stretto => Symbol::qualified("music/stretto/graph", "args"),
             },
             Arc::new(ListShape::tuple(fields)),
@@ -220,6 +252,7 @@ impl Callable for CounterpointFunction {
         Ok(Some(shape_value(
             match self {
                 Self::Analyze => Symbol::qualified("music/counterpoint/analyze", "result"),
+                Self::Generate => Symbol::qualified("music/counterpoint/generate", "result"),
                 Self::Stretto => Symbol::qualified("music/stretto/graph", "result"),
             },
             Arc::new(AnyShape),
@@ -231,6 +264,7 @@ impl CounterpointFunction {
     fn invoke(&self, cx: &mut Cx, args: &[Expr], evaluate_values: bool) -> Result<Value> {
         match self {
             Self::Analyze => analyze_call(cx, args, evaluate_values),
+            Self::Generate => generate_call(cx, args, evaluate_values),
             Self::Stretto => stretto_call(cx, args, evaluate_values),
         }
     }
@@ -285,7 +319,7 @@ fn stretto_call(cx: &mut Cx, args: &[Expr], evaluate_values: bool) -> Result<Val
     cx.factory().expr(stretto_graph_expr(&graph))
 }
 
-fn named_rules(name: &str) -> Result<RuleSet> {
+pub(crate) fn named_rules(name: &str) -> Result<RuleSet> {
     let pulse = Time::from_integer(1);
     match name {
         "species-one" => Ok(RuleSet::species_one(pulse)),
@@ -485,14 +519,14 @@ fn parse_i32(expr: &Expr) -> Result<i32> {
         .map_err(|_| Error::Eval(format!("invalid i32 {value}")))
 }
 
-fn parse_usize(expr: &Expr) -> Result<usize> {
+pub(crate) fn parse_usize(expr: &Expr) -> Result<usize> {
     let value = scalar_text(expr)?;
     value
         .parse()
         .map_err(|_| Error::Eval(format!("invalid usize {value}")))
 }
 
-fn scalar_text(expr: &Expr) -> Result<String> {
+pub(crate) fn scalar_text(expr: &Expr) -> Result<String> {
     match unquote_ref(expr) {
         Expr::String(value) => Ok(value.clone()),
         Expr::Symbol(value) => Ok(value.name.to_string()),
@@ -504,7 +538,7 @@ fn scalar_text(expr: &Expr) -> Result<String> {
     }
 }
 
-fn value_expr(cx: &mut Cx, expr: &Expr, evaluate: bool) -> Result<Expr> {
+pub(crate) fn value_expr(cx: &mut Cx, expr: &Expr, evaluate: bool) -> Result<Expr> {
     if evaluate {
         cx.eval_expr(expr.clone())?.object().as_expr(cx)
     } else {
@@ -512,7 +546,7 @@ fn value_expr(cx: &mut Cx, expr: &Expr, evaluate: bool) -> Result<Expr> {
     }
 }
 
-fn expect_keyword(expr: &Expr, expected: &str) -> Result<()> {
+pub(crate) fn expect_keyword(expr: &Expr, expected: &str) -> Result<()> {
     if keyword_name(expr)? == expected {
         Ok(())
     } else {
@@ -520,7 +554,7 @@ fn expect_keyword(expr: &Expr, expected: &str) -> Result<()> {
     }
 }
 
-fn keyword_name(expr: &Expr) -> Result<String> {
+pub(crate) fn keyword_name(expr: &Expr) -> Result<String> {
     match unquote_ref(expr) {
         Expr::Symbol(symbol) => Ok(symbol
             .name
@@ -534,7 +568,7 @@ fn keyword_name(expr: &Expr) -> Result<String> {
     }
 }
 
-fn symbolish(expr: &Expr) -> Result<String> {
+pub(crate) fn symbolish(expr: &Expr) -> Result<String> {
     match unquote_ref(expr) {
         Expr::Symbol(value) => Ok(value.name.to_string()),
         Expr::String(value) => Ok(value.clone()),
@@ -545,14 +579,14 @@ fn symbolish(expr: &Expr) -> Result<String> {
     }
 }
 
-fn unquote(expr: Expr) -> Expr {
+pub(crate) fn unquote(expr: Expr) -> Expr {
     match expr {
         Expr::Quote { expr, .. } => *expr,
         other => other,
     }
 }
 
-fn unquote_ref(expr: &Expr) -> &Expr {
+pub(crate) fn unquote_ref(expr: &Expr) -> &Expr {
     match expr {
         Expr::Quote { expr, .. } => expr,
         other => other,

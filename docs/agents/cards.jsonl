@@ -124,6 +124,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-core/recipes/book.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/recipe.toml"}

@@ -1,0 +1,8 @@
+id = "bounded-generation"
+title = "Generate bounded reversible counterpoint"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["music", "counterpoint", "generation", "csp", "bounded-search", "patch"]
+requires = ["music-counterpoint", "music-consonance", "discrete-search", "codec/lisp"]
