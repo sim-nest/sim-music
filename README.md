@@ -92,8 +92,9 @@ loadable SIM libs.
   invert, retrograde, augment, diminish, pitch/time remaps, pattern mutators,
   and a capability-gated custom event filter pipeline.
 - `sim-lib-music-analysis` -- structural views over music objects: the
-  `DiffRoll` per-event analysis, `ChordWindow` segmentation, and optional
-  Walsh-Hadamard spectral analysis of melodies and contours.
+  `DiffRoll` per-event analysis, `ChordWindow` segmentation, exact metrical
+  quantization, DTW/correlation melody and rhythm similarity, bounded repeated
+  pattern discovery, and optional Walsh-Hadamard spectral analysis.
 - `sim-lib-music-lift` -- lifts low-level representations (parsed MIDI/SMF) into
   richer music: piano rolls, diff rolls, chord progressions, and counterpoint,
   each with a diagnostic `LiftReport`.

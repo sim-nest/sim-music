@@ -70,6 +70,9 @@
 {"kind":"recipe","path":"crates/sim-lib-midi-wasm-frame/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-midi-wasm-frame/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml"}

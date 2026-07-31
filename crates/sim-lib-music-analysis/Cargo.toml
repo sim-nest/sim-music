@@ -3,7 +3,7 @@ name = "sim-lib-music-analysis"
 version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
-description = "Chord windows, diff rolls, histograms, and analysis views over SIM music."
+description = "Exact structural, harmonic, quantization, similarity, and pattern analysis over SIM music."
 readme = "README.md"
 publish = true
 repository = "https://github.com/sim-nest/sim-music"
@@ -12,8 +12,10 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
 sim-lib-discrete-graph = { version = "0.1.4" }
+sim-lib-discrete-search = { version = "0.1.0" }
 sim-lib-discrete-spectral = { optional = true, version = "0.1.0" }
 sim-lib-music-core = { version = "0.1.3", path = "../sim-lib-music-core" }
+sim-lib-numbers-signal = { version = "0.1.0" }
 sim-lib-numbers-stats = { version = "0.3.0" }
 sim-lib-pitch-chord = { version = "0.1.3", path = "../sim-lib-pitch-chord" }
 sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }

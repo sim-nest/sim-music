@@ -208,10 +208,10 @@ supports = [
 [[feature]]
 id = "feature/sim-music/exact-music-analysis-and-transform"
 title = "Exact music analysis and transform"
-summary = "Convert exact score forms with loss and identity evidence, decode key/chord feature sequences with posterior alternatives, find certified voice-leading and Tonnetz paths, and transform exact progressions with audited operations."
+summary = "Convert exact score forms with loss and identity evidence, decode harmonic sequences, quantize declared lattices, compare melody/rhythm features, discover bounded repeated patterns, find certified graph paths, and audit exact transforms."
 owner = "crate/sim-lib-music-analysis"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; key or chord decoding from chroma/features through built-in or declared HarmonicTemplate rows; certified minimum-cost voice leading with explicit entrance, departure, doubling, crossing, norm, deterministic-tie, and path policy; canonical-triad Tonnetz analysis under an explicit P/L/R move set and limit; exact progression operations; music analysis; lift/lower; notation; or partial pitch maps. Harmonic adapters delegate normalized forward/backward, posterior, and Viterbi inference to sim-lib-numbers-stats, retain transition rows, likelihood, confidence, alternatives, and bounded work, and never turn a nearest template into unexplained certainty. Voice-leading and Tonnetz paths delegate graph solving and certificate verification to sim-lib-discrete-graph. Tonnetz operations act on rooted pitch-class masks and major/minor quality, while labels are a separate projection through sim-lib-pitch-namer-riemann and are never parsed back into identity. Conversion and transform reports retain or explicitly derive voice/note/event ids, enumerate every unrepresentable fact or repeated identity, and keep all time rational. Pitch maps report holes, nudge policies, direct inverses, and lossy composition witnesses."
+guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; key or chord decoding from chroma/features through built-in or declared HarmonicTemplate rows; metrical quantization against an exact tempo/meter lattice with explicit swing, tuplets, tolerance, alternatives, and onset edits; melody or rhythm comparison through named extractors with declared transposition/time-scale invariance; bounded repeated-pattern discovery with support and overlap policy; certified minimum-cost voice leading; canonical-triad Tonnetz analysis; exact progression operations; lift/lower; notation; or partial pitch maps. Quantization and similarity delegate global DTW to sim-lib-discrete-graph. Similarity also retains sim-lib-numbers-signal correlation geometry and normalization. Pattern discovery uses hash candidates only as a filter, exact-verifies candidate pairs through sim-lib-discrete-search, and returns stable event/occurrence identities, transforms, costs, memory admission, and an unmodified SearchReceipt. Harmonic adapters delegate normalized inference to sim-lib-numbers-stats. Graph paths retain certificates. Conversion and transform reports keep rational time and make every identity or loss explicit."
 claims_anchors = [
   "anchor/crate/sim-lib-music-analysis",
   "anchor/crate/sim-lib-music-combinators",
@@ -231,10 +231,20 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-analysis/src/harmonic_tests",
+  "spec-test/sim-music/crates/sim-lib-music-analysis/src/sequence_tests",
   "spec-test/sim-music/crates/sim-lib-music-analysis/src/tests",
   "spec-test/sim-music/crates/sim-lib-music-core/src/tests/score",
   "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/exact",
   "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/remap",
+]
+
+[[route]]
+id = "route/analyze-metrical-patterns"
+task = "Quantize, compare, and discover repeated musical patterns"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "Music analysis supplies exact tempo/meter lattices, named feature extractors, invariance transforms, identity-bearing occurrences, support, and overlap policy while delegating DTW/search to sim-discrete and correlation to sim-numbers." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-analysis/01-basics/metrical-similarity-pattern", why = "The checked descriptor states the straight/swing/tuplet quantization, DTW/correlation similarity, and bounded exact-verification contract." },
 ]
 
 [[feature]]

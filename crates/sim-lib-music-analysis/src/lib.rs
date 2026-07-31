@@ -8,20 +8,34 @@
 //! chord-bearing intervals with pitch-range, pitch-class, and bit-chord masks.
 //! [`decode_keys`] and [`decode_chords`] adapt chroma/features and declared
 //! templates to shared finite-HMM inference while retaining posterior evidence.
+//! [`quantize_staff`] globally aligns exact onsets to declared tempo/meter,
+//! swing, and tuplet lattices. [`compare_sequences`] states its melody/rhythm
+//! feature and transposition/time-scale invariances while retaining shared DTW
+//! and correlation evidence. [`discover_patterns`] admits bounded hash
+//! candidates, exact-verifies occurrences through shared discrete search, and
+//! retains identities, affine transforms, overlap policy, and receipts.
 //! The [`tonnetz`] module adds canonical-triad P/L/R actions and certified,
 //! deterministic shortest paths while keeping chord identity independent of
 //! Riemannian display labels.
 //! With the `discrete-fwht` feature, the `walsh` module adds Walsh-Hadamard
 //! spectral analysis of melodies, contours, and pitch-class windows.
 
+mod event;
 mod harmonic;
 mod harmonic_templates;
 mod model;
+mod pattern;
+mod quantize;
+mod similarity;
 pub mod tonnetz;
 
+pub use event::*;
 pub use harmonic::*;
 pub use harmonic_templates::*;
 pub use model::*;
+pub use pattern::*;
+pub use quantize::*;
+pub use similarity::*;
 
 #[cfg(feature = "discrete-fwht")]
 pub mod walsh;
@@ -32,5 +46,7 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 
 #[cfg(test)]
 mod harmonic_tests;
+#[cfg(test)]
+mod sequence_tests;
 #[cfg(test)]
 mod tests;
