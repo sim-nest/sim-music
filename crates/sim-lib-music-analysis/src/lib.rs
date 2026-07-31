@@ -14,6 +14,9 @@
 //! and correlation evidence. [`discover_patterns`] admits bounded hash
 //! candidates, exact-verifies occurrences through shared discrete search, and
 //! retains identities, affine transforms, overlap policy, and receipts.
+//! [`MusicAlgorithmPlanLib`] adds the open `music/algorithm-plan` application
+//! seam: independently loaded stage functions register under a data stage name,
+//! and Shape ranking selects the implementation for each stage request.
 //! The [`tonnetz`] module adds canonical-triad P/L/R actions and certified,
 //! deterministic shortest paths while keeping chord identity independent of
 //! Riemannian display labels.
@@ -21,6 +24,7 @@
 //! spectral analysis of melodies, contours, and pitch-class windows.
 
 mod event;
+mod foundry;
 mod harmonic;
 mod harmonic_templates;
 mod model;
@@ -30,6 +34,7 @@ mod similarity;
 pub mod tonnetz;
 
 pub use event::*;
+pub use foundry::*;
 pub use harmonic::*;
 pub use harmonic_templates::*;
 pub use model::*;

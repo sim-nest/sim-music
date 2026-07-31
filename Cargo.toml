@@ -50,6 +50,7 @@ members = [
   "crates/sim-lib-stream-file",
   "crates/sim-lib-stream-midi",
   "crates/sim-lib-daw-session",
+  "recipes/music-algorithm-foundry",
   "xtask",
 ]
 

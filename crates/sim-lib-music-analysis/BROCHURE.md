@@ -6,6 +6,13 @@ In one line: Looks at a piece of music and reveals its structure -- what chords 
 
 This studies music material and produces structural views you can read. It turns a piano roll into per-moment frames showing which pitches are sounding, starting, ending, or held over, then segments that timeline into chord-bearing stretches with pitch ranges and pitch-class masks. Its harmonic feature adapter decodes built-in key/chord profiles or caller-declared templates through the shared finite HMM, retaining transition rows, likelihood, confidence, posterior alternatives, and bounded-work evidence. Exact metrical quantization globally aligns identified notes to a declared tempo, meter, swing, and tuplet lattice without hiding any movement. Named melody and rhythm extractors compare passages through reusable dynamic-time-warp and correlation engines while stating transposition and time-scale invariances. Bounded repeated-pattern discovery hashes candidates, exact-verifies them, and returns occurrence identities, spans, transforms, costs, support, overlap policy, and search receipts. Its Tonnetz analyst finds bounded P/L/R paths between canonical major and minor chord identities with reusable shortest-path certificates, while keeping Riemannian names as display-only projections. With its spectral option it adds a Walsh-Hadamard analysis of melodies, contours, and pitch-class windows, giving another angle on repetition and shape.
 
+It also supplies the loadable `music/algorithm-plan` application seam. A plan
+selects independently loaded stages by their argument Shapes, checks each
+result Shape, and retains the chosen implementation metadata plus every
+intermediate value. That makes a complete music-analysis application editable
+as data without turning this crate into a catch-all for MIDI, harmony,
+counterpoint, rendering, or realtime providers.
+
 ## Why you will be glad
 
 - See the chord behind each moment of a passage automatically.
@@ -16,6 +23,7 @@ This studies music material and produces structural views you can read. It turns
 - Compare transposed or uniformly stretched melodies and rhythms with inspectable costs.
 - Discover repeated passages under explicit support, overlap, memory, and work bounds.
 - Find reproducible neo-Riemannian chord paths without treating names as identities.
+- Assemble replaceable analysis pipelines from data with clear missing-stage and Shape diagnostics.
 
 ## Where it fits
 

@@ -1,5 +1,5 @@
 {
-  "card_count": 53,
+  "card_count": 54,
   "cards": [
     {
       "id": "browse/catalog",
@@ -228,6 +228,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-wasm-frame",
       "summary": "Browser-safe pitch facade descriptors."
+    },
+    {
+      "id": "cookbook/sim-music",
+      "kind": "cookbook-recipe",
+      "owner": "sim-music",
+      "summary": "Runnable recipes composing the loadable SIM music libraries."
     },
     {
       "id": "cookbook/sound-audio-lift",

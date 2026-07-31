@@ -1,0 +1,32 @@
+[package]
+name = "music-algorithm-foundry"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "Data-planned composition recipe for the SIM music algorithm foundry."
+readme = "README.md"
+publish = false
+
+[dependencies]
+sim-cookbook = "0.1.0"
+sim-kernel = "0.1.0"
+sim-lib-discrete-search = "0.1.0"
+sim-lib-midi-smf = { path = "../../crates/sim-lib-midi-smf" }
+sim-lib-music-analysis = { path = "../../crates/sim-lib-music-analysis" }
+sim-lib-music-core = { path = "../../crates/sim-lib-music-core" }
+sim-lib-music-counterpoint = { path = "../../crates/sim-lib-music-counterpoint" }
+sim-lib-music-lift = { path = "../../crates/sim-lib-music-lift" }
+sim-lib-music-lower = { path = "../../crates/sim-lib-music-lower" }
+sim-lib-music-transform = { path = "../../crates/sim-lib-music-transform" }
+sim-lib-pitch-chord = { path = "../../crates/sim-lib-pitch-chord" }
+sim-lib-pitch-core = { path = "../../crates/sim-lib-pitch-core" }
+sim-lib-pitch-dissonance = { path = "../../crates/sim-lib-pitch-dissonance" }
+sim-lib-pitch-namer = { path = "../../crates/sim-lib-pitch-namer" }
+sim-lib-pitch-scale = { path = "../../crates/sim-lib-pitch-scale" }
+sim-lib-pitch-set = { path = "../../crates/sim-lib-pitch-set" }
+sim-lib-sound-core = { path = "../../crates/sim-lib-sound-core" }
+sim-lib-sound-render = { path = "../../crates/sim-lib-sound-render" }
+sim-shape = "0.1.0"
+
+[lints]
+workspace = true

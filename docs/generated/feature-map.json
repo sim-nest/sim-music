@@ -4,6 +4,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "music-algorithm-foundry"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-daw-session"
     },
     {

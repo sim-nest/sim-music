@@ -1,0 +1,19 @@
+; The executable builds the input and control Tables; this is the authored plan.
+(music/algorithm-plan
+  :input input-table
+  :stages '((midi-realize)
+            (analyze :features (pitch beat key chords scales dissonance))
+            (harmonize :strategy layered-dp)
+            (counterpoint :rules species-one)
+            (render :formats (smf wav)))
+  :control {:work 500000 :results 8 :seed 42})
+
+; Optional application extensions remain separate loadable stages.
+(algorithm-stage audio-realize
+  :owner sim-lib-sound-audio-lift
+  :input (Table :kind audio :value codec/binary)
+  :output music/analysis-frames)
+(algorithm-stage preview
+  :owner sim-audio-daw
+  :target (realize surface-session)
+  :optional true)

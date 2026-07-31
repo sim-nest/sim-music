@@ -1,0 +1,16 @@
+id = "music-algorithm-foundry"
+title = "Compose a music algorithm plan from replaceable stages"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 10
+tags = ["music", "algorithm", "shape", "foundry"]
+requires = [
+  "sim-lib-midi-smf",
+  "sim-lib-music-analysis",
+  "sim-lib-music-counterpoint",
+  "sim-lib-music-lift",
+  "sim-lib-music-lower",
+  "sim-lib-pitch-chord",
+  "sim-lib-sound-render",
+]

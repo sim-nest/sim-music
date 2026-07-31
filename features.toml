@@ -238,6 +238,40 @@ claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-transform/src/tests/remap",
 ]
 
+[[feature]]
+id = "feature/sim-music/algorithm-foundry"
+title = "Shape-ranked music algorithm foundry"
+summary = "Execute a data recipe by selecting independently loaded MIDI, analysis, harmony, counterpoint, render, and optional preview stages through open Shape-ranked runtime registrations."
+owner = "crate/sim-lib-music-analysis"
+audiences = ["user", "code", "framework"]
+guidance = "Load MusicAlgorithmPlanLib, then register each callable with register_algorithm_stage under music/algorithm-stage/<name>. Every provider must expose argument and result Shapes plus implementation, cost-class, deterministic, and provenance metadata. music/algorithm-plan validates finite work/result/seed control, selects the unique highest Shape match, checks every result, and returns trace plus intermediate values. Use the music-algorithm-foundry recipe for the complete SMF-to-analysis-to-layered-harmony-to-species-counterpoint-to-SMF/WAV application. Its alternate exhaustive harmonizer is selected by changing only plan data. Supply input and output through Table/Dir backends and codecs; add realtime preview only as a separately loaded stage whose caller-supplied target implements EvalFabric realize. A missing stage or mismatched Shape is an error and never enables a hidden fallback."
+claims_anchors = [
+  "anchor/crate/music-algorithm-foundry",
+  "anchor/runtime-lib/music-algorithm-foundry/stage-lib",
+  "anchor/runtime-lib/sim-lib-music-analysis/music-algorithm-plan-lib",
+  "anchor/rustdoc/sim-lib-music-analysis/algorithm-stage-metadata",
+  "anchor/rustdoc/sim-lib-music-analysis/algorithm_stage_export_kind",
+  "anchor/rustdoc/sim-lib-music-analysis/install_music_algorithm_plan_lib",
+  "anchor/rustdoc/sim-lib-music-analysis/music_algorithm_plan_symbol",
+  "anchor/rustdoc/sim-lib-music-analysis/register_algorithm_stage",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/music-algorithm-foundry",
+]
+supports = [
+  "feature/sim-music/audio-lift-and-render",
+  "feature/sim-music/bounded-harmonization",
+  "feature/sim-music/declarative-harmony",
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/midi-notation-workflows",
+  "feature/sim-music/music-counterpoint",
+  "feature/sim-music/pitch-and-sound-vocabulary",
+  "feature/sim-music/synth-performance-workbench",
+]
+
 [[route]]
 id = "route/analyze-metrical-patterns"
 task = "Quantize, compare, and discover repeated musical patterns"
@@ -501,6 +535,19 @@ steps = [
 ]
 
 [[route]]
+id = "route/run-music-algorithm-foundry"
+task = "Assemble a replaceable end-to-end music algorithm application from plan data"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row owns bounded SMF decoding, exact realization policy, and canonical export." },
+  { feature = "feature/sim-music/audio-lift-and-render", why = "The audio row owns the optional audio-input analysis adapter and finite offline rendering inputs." },
+  { feature = "feature/sim-music/algorithm-foundry", why = "The foundry row owns data-plan validation, open stage registration, Shape ranking, result checks, trace, Table/Dir boundaries, and realize-target preview delegation." },
+  { feature = "feature/sim-music/bounded-harmonization", why = "The harmony row supplies the selected layered-DP and alternate exhaustive implementations under the same rules and bounds." },
+  { feature = "feature/sim-music/music-counterpoint", why = "The counterpoint row supplies inspectable species rules, legal transforms, and bounded generation/analysis." },
+  { specimen = "recipe/sim-music/music-algorithm-foundry", why = "The runnable fixture checks every intermediate summary, exact SMF/WAV frame digests, data-only alternate selection, and the missing optional-stage diagnostic." },
+]
+
+[[route]]
 id = "route/compose-music-carpet"
 task = "Compose and relatively encode a finite music carpet"
 audiences = ["user", "code", "framework"]
@@ -564,6 +611,7 @@ steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row supplies pitch and sound descriptors." },
   { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row moves material into and out of performance formats." },
   { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row owns reusable music objects, analysis descriptors, and sequence transforms." },
+  { feature = "feature/sim-music/algorithm-foundry", why = "The foundry row composes the complete performance plan without baking stage providers into the application." },
   { feature = "feature/sim-music/daw-session-runtime", why = "The DAW session row supplies the reusable session graph around the performance." },
   { feature = "feature/sim-music/synth-performance-workbench", why = "The synth row turns that material into local or browser-backed sound." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-synth/01-basics/subtractive-preset", why = "The preset recipe is the smallest synth example." },

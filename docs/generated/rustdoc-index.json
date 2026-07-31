@@ -2,6 +2,13 @@
   "generator": "xtask repo-contract v1",
   "packages": [
     {
+      "crate_name": "music-algorithm-foundry",
+      "group": "workspace",
+      "manifest": "recipes/music-algorithm-foundry/Cargo.toml",
+      "package": "music-algorithm-foundry",
+      "summary": "Data-planned composition recipe for the SIM music algorithm foundry."
+    },
+    {
       "crate_name": "sim_lib_daw_session",
       "group": "workspace",
       "manifest": "crates/sim-lib-daw-session/Cargo.toml",

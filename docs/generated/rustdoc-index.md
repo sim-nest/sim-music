@@ -4,6 +4,7 @@
 
 | Package | Group | Summary |
 | --- | --- | --- |
+| `music-algorithm-foundry` | `workspace` | Data-planned composition recipe for the SIM music algorithm foundry. |
 | `sim-lib-daw-session` | `workspace` | Headless DAW session surface for SIM audio graph workspaces. |
 | `sim-lib-midi-ble` | `workspace` | BLE-MIDI discovery, packet framing, and stream-host placement support. |
 | `sim-lib-midi-core` | `workspace` | Core MIDI data model and in-memory I/O for the SIM music stack. |
@@ -15,7 +16,9 @@
 | `sim-lib-midi-wasm-frame` | `workspace` | MIDI binary-frame facade descriptors. |
 | `sim-lib-music-analysis` | `workspace` | Analysis of musical material for the SIM music libraries. |
 | `sim-lib-music-combinators` | `workspace` | Composable music-transform combinators for the SIM music constellation. |
+| `sim-lib-music-consonance` | `workspace` | Exact consonance evaluation and reversible additive completion. |
 | `sim-lib-music-core` | `workspace` | Core music model layer for the SIM music constellation. |
+| `sim-lib-music-counterpoint` | `workspace` | Exact counterpoint analysis and bounded constraint generation. |
 | `sim-lib-music-lift` | `workspace` | Lifts music from lower-level representations to higher-level ones. |
 | `sim-lib-music-lower` | `workspace` | Lowers music from higher-level representations to renderable ones. |
 | `sim-lib-music-notation` | `workspace` | Score and notation model for the SIM music libraries. |
@@ -31,11 +34,12 @@
 | `sim-lib-pitch-namer-jazz` | `workspace` | Jazz chord-symbol naming for the SIM music libraries. |
 | `sim-lib-pitch-namer-riemann` | `workspace` | Neo-Riemannian / functional triad naming for the SIM music libraries. |
 | `sim-lib-pitch-namer-roman` | `workspace` | Roman-numeral harmonic analysis for the SIM music libraries. |
+| `sim-lib-pitch-ratio` | `workspace` | Exact positive musical ratio intervals. |
 | `sim-lib-pitch-scale` | `workspace` | Scales, modes, and scale-locking for the SIM music libraries. |
 | `sim-lib-pitch-set` | `workspace` | Pitch-class set representations and operations for the SIM music libraries. |
 | `sim-lib-pitch-shapes` | `workspace` | Citizen descriptors, text codecs, and runtime shapes for SIM pitch types. |
 | `sim-lib-pitch-wasm-frame` | `workspace` | Pitch binary-frame facade descriptors. |
-| `sim-lib-sound-audio-lift` | `workspace` | Audio-to-notes lifting for the SIM music constellation. |
+| `sim-lib-sound-audio-lift` | `workspace` | Audio-to-feature and audio-to-notes lifting for the SIM music constellation. |
 | `sim-lib-sound-bridge` | `workspace` | MIDI-to-sound bridging for the SIM music constellation. |
 | `sim-lib-sound-core` | `workspace` | Core sound primitives for the SIM music constellation. |
 | `sim-lib-sound-dissonance` | `workspace` | Psychoacoustic dissonance models for the SIM music constellation. |

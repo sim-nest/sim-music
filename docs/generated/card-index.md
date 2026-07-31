@@ -15,19 +15,21 @@
 | `cookbook/midi-live` | `cookbook-recipe` | `sim-lib-midi-live` | Live MIDI session descriptors using in-memory rings. |
 | `cookbook/midi-rtmidi` | `cookbook-recipe` | `sim-lib-midi-rtmidi` | RtMidi backend descriptors with virtual and ALSA sequencer ports. |
 | `cookbook/midi-shapes` | `cookbook-recipe` | `sim-lib-midi-shapes` | Citizen descriptor shapes for MIDI values. |
-| `cookbook/midi-smf` | `cookbook-recipe` | `sim-lib-midi-smf` | Standard MIDI File structure and metadata descriptors. |
+| `cookbook/midi-smf` | `cookbook-recipe` | `sim-lib-midi-smf` | Bounded Standard MIDI File parsing, lossless time division, and metadata descriptors. |
 | `cookbook/midi-sysex` | `cookbook-recipe` | `sim-lib-midi-sysex` | System exclusive message descriptors. |
 | `cookbook/midi-wasm` | `cookbook-recipe` | `sim-lib-midi-wasm-frame` | Browser-safe MIDI facade descriptors. |
-| `cookbook/music-analysis` | `cookbook-recipe` | `sim-lib-music-analysis` | Pitch-class, histogram, and chord-window analysis descriptors. |
+| `cookbook/music-analysis` | `cookbook-recipe` | `sim-lib-music-analysis` | Exact structural, harmonic, metrical, similarity, pattern, and transformational analysis descriptors. |
 | `cookbook/music-combinators` | `cookbook-recipe` | `sim-lib-music-combinators` | Sequence, parallel, repeat, and transform combinator descriptors. |
+| `cookbook/music-consonance` | `cookbook-recipe` | `sim-lib-music-consonance` | Identity-bearing sounding windows with separate consonance metrics. |
 | `cookbook/music-core` | `cookbook-recipe` | `sim-lib-music-core` | Score, melody, note, and duration descriptors. |
+| `cookbook/music-counterpoint` | `cookbook-recipe` | `sim-lib-music-counterpoint` | Exact rule evidence, graph-backed overlap, and bounded reversible generation. |
 | `cookbook/music-lift` | `cookbook-recipe` | `sim-lib-music-lift` | Lifting descriptors from MIDI-style tracks into music objects. |
 | `cookbook/music-lower` | `cookbook-recipe` | `sim-lib-music-lower` | Lowering descriptors from scores to MIDI-like tracks. |
 | `cookbook/music-notation` | `cookbook-recipe` | `sim-lib-music-notation` | Notation import and export descriptors. |
 | `cookbook/music-shapes` | `cookbook-recipe` | `sim-lib-music-shapes` | Citizen descriptor shapes for music objects. |
-| `cookbook/music-transform` | `cookbook-recipe` | `sim-lib-music-transform` | Pure music transformation descriptors. |
+| `cookbook/music-transform` | `cookbook-recipe` | `sim-lib-music-transform` | Exact music transformation and voice-leading descriptors. |
 | `cookbook/music-wasm` | `cookbook-recipe` | `sim-lib-music-wasm-frame` | Browser-safe music facade descriptors. |
-| `cookbook/pitch-chord` | `cookbook-recipe` | `sim-lib-pitch-chord` | Chord spelling and quality descriptors. |
+| `cookbook/pitch-chord` | `cookbook-recipe` | `sim-lib-pitch-chord` | Chord spelling, voicing, and declarative harmony descriptors. |
 | `cookbook/pitch-core` | `cookbook-recipe` | `sim-lib-pitch-core` | Pitch values, names, MIDI notes, and frequency descriptors. |
 | `cookbook/pitch-dissonance` | `cookbook-recipe` | `sim-lib-pitch-dissonance` | Interval and set dissonance descriptors. |
 | `cookbook/pitch-namer` | `cookbook-recipe` | `sim-lib-pitch-namer` | Pitch and set naming registry descriptors. |
@@ -35,22 +37,24 @@
 | `cookbook/pitch-namer-jazz` | `cookbook-recipe` | `sim-lib-pitch-namer-jazz` | Jazz chord naming descriptors. |
 | `cookbook/pitch-namer-riemann` | `cookbook-recipe` | `sim-lib-pitch-namer-riemann` | Riemannian function descriptors. |
 | `cookbook/pitch-namer-roman` | `cookbook-recipe` | `sim-lib-pitch-namer-roman` | Roman numeral analysis descriptors. |
+| `cookbook/pitch-ratio` | `cookbook-recipe` | `sim-lib-pitch-ratio` | Exact musical ratio interval descriptors. |
 | `cookbook/pitch-scale` | `cookbook-recipe` | `sim-lib-pitch-scale` | Scale and degree descriptors. |
-| `cookbook/pitch-set` | `cookbook-recipe` | `sim-lib-pitch-set` | Pitch-class sets, masks, and normal-form descriptors. |
+| `cookbook/pitch-set` | `cookbook-recipe` | `sim-lib-pitch-set` | Pitch-class sets, canonical forms, typed relations, and graph descriptors. |
 | `cookbook/pitch-shapes` | `cookbook-recipe` | `sim-lib-pitch-shapes` | Citizen descriptor shapes for pitch values. |
 | `cookbook/pitch-wasm` | `cookbook-recipe` | `sim-lib-pitch-wasm-frame` | Browser-safe pitch facade descriptors. |
-| `cookbook/sound-audio-lift` | `cookbook-recipe` | `sim-lib-sound-audio-lift` | Descriptors that lift PCM into sound and music features. |
+| `cookbook/sim-music` | `cookbook-recipe` | `sim-music` | Runnable recipes composing the loadable SIM music libraries. |
+| `cookbook/sound-audio-lift` | `cookbook-recipe` | `sim-lib-sound-audio-lift` | Checked framed transforms and descriptors that lift PCM into sound and music features. |
 | `cookbook/sound-bridge` | `cookbook-recipe` | `sim-lib-sound-bridge` | Music and MIDI bridge descriptors for sound playback. |
 | `cookbook/sound-core` | `cookbook-recipe` | `sim-lib-sound-core` | Tone, oscillator, and amplitude descriptors. |
 | `cookbook/sound-dissonance` | `cookbook-recipe` | `sim-lib-sound-dissonance` | Roughness and spectrum-pair descriptors. |
 | `cookbook/sound-gm` | `cookbook-recipe` | `sim-lib-sound-gm` | General MIDI bank and preset descriptors. |
-| `cookbook/sound-render` | `cookbook-recipe` | `sim-lib-sound-render` | Offline PCM render descriptors. |
+| `cookbook/sound-render` | `cookbook-recipe` | `sim-lib-sound-render` | Offline PCM render, phase-vocoder, loudness, and normalization descriptors. |
 | `cookbook/sound-shapes` | `cookbook-recipe` | `sim-lib-sound-shapes` | Citizen descriptor shapes for sound objects. |
 | `cookbook/sound-spectrum` | `cookbook-recipe` | `sim-lib-sound-spectrum` | Partial, centroid, and peak descriptors. |
 | `cookbook/sound-timbre` | `cookbook-recipe` | `sim-lib-sound-timbre` | Timbre, filter, and envelope descriptors. |
 | `cookbook/sound-tuning` | `cookbook-recipe` | `sim-lib-sound-tuning` | Tuning-system descriptors. |
 | `cookbook/sound-wasm` | `cookbook-recipe` | `sim-lib-sound-wasm-frame` | Browser-safe sound facade descriptors. |
 | `cookbook/stream-bridge` | `cookbook-recipe` | `sim-lib-stream-bridge` | Offline MIDI-to-PCM rendering and PCM-to-MIDI lifting descriptors. |
-| `cookbook/stream-file` | `cookbook-recipe` | `sim-lib-stream-file` | Capability-gated WAV and SMF stream adapters. |
+| `cookbook/stream-file` | `cookbook-recipe` | `sim-lib-stream-file` | Capability-gated WAV and SMF streams with explicit PCM16 conversion policy. |
 | `cookbook/stream-midi` | `cookbook-recipe` | `sim-lib-stream-midi` | MIDI packetization and memory stream adapters. |
 | `registry/catalog` | `browse-registry` | `workspace` | registry catalog browse card |
