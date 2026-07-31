@@ -1,7 +1,8 @@
-use sim_kernel::{Expr, Symbol};
+use sim_kernel::Expr;
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_scale::{Mode, Scale};
 use sim_lib_pitch_set::PitchClassMask;
+use sim_value::build::qsym;
 
 use crate::HarmonyError;
 
@@ -11,8 +12,8 @@ pub(crate) fn scale_to_expr(scale: Scale) -> Expr {
     tagged(
         "scale",
         vec![
-            field("tonic", scalar(scale.tonic.value())),
-            field("mode", variant(scale.mode.name())),
+            qualified_entry("tonic", scalar(scale.tonic.value())),
+            qualified_entry("mode", variant(scale.mode.name())),
         ],
     )
 }
@@ -45,13 +46,13 @@ fn mode(name: &str) -> Result<Mode, HarmonyError> {
 }
 
 pub(crate) fn tagged(kind: &str, fields: Vec<(Expr, Expr)>) -> Expr {
-    let mut entries = vec![field("tag", variant(kind))];
+    let mut entries = vec![qualified_entry("tag", variant(kind))];
     entries.extend(fields);
     Expr::Map(entries)
 }
 
-pub(crate) fn field(name: &str, value: Expr) -> (Expr, Expr) {
-    (Expr::Symbol(Symbol::qualified(NS, name)), value)
+pub(crate) fn qualified_entry(name: &str, value: Expr) -> (Expr, Expr) {
+    (qsym(NS, name), value)
 }
 
 pub(crate) fn string(value: &str) -> Expr {
@@ -63,7 +64,7 @@ pub(crate) fn scalar(value: impl ToString) -> Expr {
 }
 
 pub(crate) fn variant(value: &str) -> Expr {
-    Expr::Symbol(Symbol::qualified(NS, value))
+    qsym(NS, value)
 }
 
 pub(crate) fn vector(values: Vec<Expr>) -> Expr {

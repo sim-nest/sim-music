@@ -1,7 +1,7 @@
 use sim_kernel::Expr;
 
 use crate::harmony_expr_support::{
-    field, invalid, mask, parse, require_tag, required, scalar, scalars, scale_from_expr,
+    invalid, mask, parse, qualified_entry, require_tag, required, scalar, scalars, scale_from_expr,
     scale_to_expr, sequence, string, tag, tagged, text, vector,
 };
 use crate::{
@@ -13,7 +13,7 @@ pub(crate) fn rule_set_to_expr(rules: &HarmonyRuleSet) -> Expr {
     tagged(
         "rule-set",
         vec![
-            field(
+            qualified_entry(
                 "hard",
                 vector(
                     rules
@@ -23,15 +23,18 @@ pub(crate) fn rule_set_to_expr(rules: &HarmonyRuleSet) -> Expr {
                             tagged(
                                 "constraint",
                                 vec![
-                                    field("id", string(&rule.id)),
-                                    field("predicate", predicate_to_expr(&rule.predicate)),
+                                    qualified_entry("id", string(&rule.id)),
+                                    qualified_entry(
+                                        "predicate",
+                                        predicate_to_expr(&rule.predicate),
+                                    ),
                                 ],
                             )
                         })
                         .collect(),
                 ),
             ),
-            field(
+            qualified_entry(
                 "soft",
                 vector(
                     rules
@@ -41,9 +44,9 @@ pub(crate) fn rule_set_to_expr(rules: &HarmonyRuleSet) -> Expr {
                             tagged(
                                 "weighted",
                                 vec![
-                                    field("id", string(&metric.id)),
-                                    field("weight", scalar(metric.weight)),
-                                    field("metric", metric_to_expr(&metric.value)),
+                                    qualified_entry("id", string(&metric.id)),
+                                    qualified_entry("weight", scalar(metric.weight)),
+                                    qualified_entry("metric", metric_to_expr(&metric.value)),
                                 ],
                             )
                         })
@@ -90,72 +93,78 @@ fn predicate_to_expr(predicate: &HarmonyPredicate) -> Expr {
         HarmonyPredicate::ChordAt { position, chord } => tagged(
             "chord-at",
             vec![
-                field("position", scalar(position)),
-                field("chord", scalar(chord.bits())),
+                qualified_entry("position", scalar(position)),
+                qualified_entry("chord", scalar(chord.bits())),
             ],
         ),
         HarmonyPredicate::ChordEverywhereExcept { position, chord } => tagged(
             "chord-everywhere-except",
             vec![
-                field("position", scalar(position)),
-                field("chord", scalar(chord.bits())),
+                qualified_entry("position", scalar(position)),
+                qualified_entry("chord", scalar(chord.bits())),
             ],
         ),
         HarmonyPredicate::ChordOnlyAt { position, chord } => tagged(
             "chord-only-at",
             vec![
-                field("position", scalar(position)),
-                field("chord", scalar(chord.bits())),
+                qualified_entry("position", scalar(position)),
+                qualified_entry("chord", scalar(chord.bits())),
             ],
         ),
-        HarmonyPredicate::AtPosition { position } => {
-            tagged("at-position", vec![field("position", scalar(position))])
-        }
+        HarmonyPredicate::AtPosition { position } => tagged(
+            "at-position",
+            vec![qualified_entry("position", scalar(position))],
+        ),
         HarmonyPredicate::DistinctPitchClasses { count } => tagged(
             "distinct-pitch-classes",
-            vec![field("count", range_to_expr(*count))],
+            vec![qualified_entry("count", range_to_expr(*count))],
         ),
-        HarmonyPredicate::CommonNotes { count } => {
-            tagged("common-notes", vec![field("count", range_to_expr(*count))])
-        }
+        HarmonyPredicate::CommonNotes { count } => tagged(
+            "common-notes",
+            vec![qualified_entry("count", range_to_expr(*count))],
+        ),
         HarmonyPredicate::CommonNotePattern { counts } => tagged(
             "common-note-pattern",
-            vec![field("counts", vector(counts.iter().map(scalar).collect()))],
+            vec![qualified_entry(
+                "counts",
+                vector(counts.iter().map(scalar).collect()),
+            )],
         ),
         HarmonyPredicate::MinimumChordDistance { distance } => tagged(
             "minimum-chord-distance",
-            vec![field("distance", scalar(distance))],
+            vec![qualified_entry("distance", scalar(distance))],
         ),
         HarmonyPredicate::MaximumChordDistance { distance } => tagged(
             "maximum-chord-distance",
-            vec![field("distance", scalar(distance))],
+            vec![qualified_entry("distance", scalar(distance))],
         ),
         HarmonyPredicate::MinimumTypeDistance { distance } => tagged(
             "minimum-type-distance",
-            vec![field("distance", scalar(distance))],
+            vec![qualified_entry("distance", scalar(distance))],
         ),
-        HarmonyPredicate::PeriodicVariation { period } => {
-            tagged("periodic-variation", vec![field("period", scalar(period))])
-        }
+        HarmonyPredicate::PeriodicVariation { period } => tagged(
+            "periodic-variation",
+            vec![qualified_entry("period", scalar(period))],
+        ),
         HarmonyPredicate::PeriodicCommonality { period, count } => tagged(
             "periodic-commonality",
             vec![
-                field("period", scalar(period)),
-                field("count", range_to_expr(*count)),
+                qualified_entry("period", scalar(period)),
+                qualified_entry("count", range_to_expr(*count)),
             ],
         ),
         HarmonyPredicate::InsideScaleWindow { scale, length } => tagged(
             "inside-scale-window",
             vec![
-                field("scale", scale_to_expr(*scale)),
-                field("length", scalar(length)),
+                qualified_entry("scale", scale_to_expr(*scale)),
+                qualified_entry("length", scalar(length)),
             ],
         ),
         HarmonyPredicate::OutsideScaleWindow { scale, length } => tagged(
             "outside-scale-window",
             vec![
-                field("scale", scale_to_expr(*scale)),
-                field("length", scalar(length)),
+                qualified_entry("scale", scale_to_expr(*scale)),
+                qualified_entry("length", scalar(length)),
             ],
         ),
         HarmonyPredicate::TemplateLength => tagged("template-length", Vec::new()),
@@ -164,21 +173,21 @@ fn predicate_to_expr(predicate: &HarmonyPredicate) -> Expr {
         HarmonyPredicate::ObserveDepth => tagged("observe-depth", Vec::new()),
         HarmonyPredicate::All(predicates) => tagged(
             "all",
-            vec![field(
+            vec![qualified_entry(
                 "predicates",
                 vector(predicates.iter().map(predicate_to_expr).collect()),
             )],
         ),
         HarmonyPredicate::Any(predicates) => tagged(
             "any",
-            vec![field(
+            vec![qualified_entry(
                 "predicates",
                 vector(predicates.iter().map(predicate_to_expr).collect()),
             )],
         ),
         HarmonyPredicate::Not(predicate) => tagged(
             "not",
-            vec![field("predicate", predicate_to_expr(predicate))],
+            vec![qualified_entry("predicate", predicate_to_expr(predicate))],
         ),
     }
 }
@@ -267,15 +276,15 @@ fn metric_to_expr(metric: &HarmonyMetric) -> Expr {
         HarmonyMetric::VoiceLeading => tagged("metric-voice-leading", Vec::new()),
         HarmonyMetric::PitchDissonance { model } => tagged(
             "metric-pitch-dissonance",
-            vec![field("model", string(model))],
+            vec![qualified_entry("model", string(model))],
         ),
         HarmonyMetric::ContextualSonance { model } => tagged(
             "metric-contextual-sonance",
-            vec![field("model", string(model))],
+            vec![qualified_entry("model", string(model))],
         ),
         HarmonyMetric::RatioComplexity { exponent_milli } => tagged(
             "metric-ratio-complexity",
-            vec![field("exponent-milli", scalar(exponent_milli))],
+            vec![qualified_entry("exponent-milli", scalar(exponent_milli))],
         ),
     }
 }
@@ -302,8 +311,8 @@ fn range_to_expr(range: CountRange) -> Expr {
     tagged(
         "count-range",
         vec![
-            field("min", scalar(range.min)),
-            field("max", scalar(range.max)),
+            qualified_entry("min", scalar(range.min)),
+            qualified_entry("max", scalar(range.max)),
         ],
     )
 }

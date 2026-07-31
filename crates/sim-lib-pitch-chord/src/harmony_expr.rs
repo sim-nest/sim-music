@@ -15,11 +15,11 @@ impl HarmonyProgram {
         tagged(
             "program",
             vec![
-                field("id", string(&self.id)),
-                field("palette", self.palette.to_expr()),
-                field("rules", rule_set_to_expr(&self.rules)),
-                field("voicing-changes", self.voicing_changes.to_expr()),
-                field("render", render_to_expr(&self.render)),
+                qualified_entry("id", string(&self.id)),
+                qualified_entry("palette", self.palette.to_expr()),
+                qualified_entry("rules", rule_set_to_expr(&self.rules)),
+                qualified_entry("voicing-changes", self.voicing_changes.to_expr()),
+                qualified_entry("render", render_to_expr(&self.render)),
             ],
         )
     }
@@ -45,16 +45,16 @@ impl ChordPalette {
         tagged(
             "palette",
             vec![
-                field("id", string(&self.id)),
-                field(
+                qualified_entry("id", string(&self.id)),
+                qualified_entry(
                     "entries",
                     vector(self.entries.iter().map(chord_to_expr).collect()),
                 ),
-                field(
+                qualified_entry(
                     "templates",
                     vector(self.templates.iter().map(template_to_expr).collect()),
                 ),
-                field("algebra", algebra_to_expr(&self.algebra)),
+                qualified_entry("algebra", algebra_to_expr(&self.algebra)),
             ],
         )
     }
@@ -85,8 +85,8 @@ impl VoicingChangePalette {
         tagged(
             "voicing-change-palette",
             vec![
-                field("id", string(&self.id)),
-                field(
+                qualified_entry("id", string(&self.id)),
+                qualified_entry(
                     "entries",
                     vector(self.entries.iter().map(voicing_change_to_expr).collect()),
                 ),
@@ -113,10 +113,10 @@ fn chord_to_expr(chord: &ChordTemplate) -> Expr {
     tagged(
         "chord",
         vec![
-            field("id", string(&chord.id)),
-            field("source", chord_source_to_expr(&chord.source)),
-            field("voicing", voicing_to_expr(chord.voicing)),
-            field(
+            qualified_entry("id", string(&chord.id)),
+            qualified_entry("source", chord_source_to_expr(&chord.source)),
+            qualified_entry("voicing", voicing_to_expr(chord.voicing)),
+            qualified_entry(
                 "ratios",
                 vector(
                     chord
@@ -126,8 +126,8 @@ fn chord_to_expr(chord: &ChordTemplate) -> Expr {
                             tagged(
                                 "ratio",
                                 vec![
-                                    field("numerator", scalar(ratio.numerator())),
-                                    field("denominator", scalar(ratio.denominator())),
+                                    qualified_entry("numerator", scalar(ratio.numerator())),
+                                    qualified_entry("denominator", scalar(ratio.denominator())),
                                 ],
                             )
                         })
@@ -169,13 +169,13 @@ fn chord_source_to_expr(source: &ChordTemplateSource) -> Expr {
         ChordTemplateSource::Symbol { symbol, octave } => tagged(
             "source-symbol",
             vec![
-                field("symbol", string(symbol)),
-                field("octave", scalar(*octave)),
+                qualified_entry("symbol", string(symbol)),
+                qualified_entry("octave", scalar(*octave)),
             ],
         ),
         ChordTemplateSource::Pitches { pitches } => tagged(
             "source-pitches",
-            vec![field(
+            vec![qualified_entry(
                 "semitones",
                 vector(
                     pitches
@@ -191,11 +191,11 @@ fn chord_source_to_expr(source: &ChordTemplateSource) -> Expr {
         } => tagged(
             "source-pitch-classes",
             vec![
-                field(
+                qualified_entry(
                     "classes",
                     vector(classes.iter().map(|class| scalar(class.value())).collect()),
                 ),
-                field("root-octave", scalar(*root_octave)),
+                qualified_entry("root-octave", scalar(*root_octave)),
             ],
         ),
         ChordTemplateSource::ScaleDegrees {
@@ -205,12 +205,12 @@ fn chord_source_to_expr(source: &ChordTemplateSource) -> Expr {
         } => tagged(
             "source-scale-degrees",
             vec![
-                field("scale", scale_to_expr(*scale)),
-                field(
+                qualified_entry("scale", scale_to_expr(*scale)),
+                qualified_entry(
                     "degrees",
                     vector(degrees.iter().map(|degree| scalar(*degree)).collect()),
                 ),
-                field("root-octave", scalar(*root_octave)),
+                qualified_entry("root-octave", scalar(*root_octave)),
             ],
         ),
         ChordTemplateSource::PitchSet {
@@ -220,9 +220,9 @@ fn chord_source_to_expr(source: &ChordTemplateSource) -> Expr {
         } => tagged(
             "source-pitch-set",
             vec![
-                field("mask", scalar(mask.bits())),
-                field("root", scalar(root.value())),
-                field("root-octave", scalar(*root_octave)),
+                qualified_entry("mask", scalar(mask.bits())),
+                qualified_entry("root", scalar(root.value())),
+                qualified_entry("root-octave", scalar(*root_octave)),
             ],
         ),
     }
@@ -262,17 +262,18 @@ fn voicing_to_expr(voicing: VoicingPolicy) -> Expr {
     match voicing {
         VoicingPolicy::Preserve => tagged("voicing-preserve", Vec::new()),
         VoicingPolicy::Closed => tagged("voicing-closed", Vec::new()),
-        VoicingPolicy::Open { spread } => {
-            tagged("voicing-open", vec![field("spread", scalar(spread))])
-        }
+        VoicingPolicy::Open { spread } => tagged(
+            "voicing-open",
+            vec![qualified_entry("spread", scalar(spread))],
+        ),
         VoicingPolicy::Drop {
             voice_index_from_top,
             octaves,
         } => tagged(
             "voicing-drop",
             vec![
-                field("voice-index-from-top", scalar(voice_index_from_top)),
-                field("octaves", scalar(octaves)),
+                qualified_entry("voice-index-from-top", scalar(voice_index_from_top)),
+                qualified_entry("octaves", scalar(octaves)),
             ],
         ),
     }
@@ -300,8 +301,8 @@ fn template_to_expr(template: &TemplateChain) -> Expr {
     tagged(
         "template",
         vec![
-            field("id", string(&template.id)),
-            field(
+            qualified_entry("id", string(&template.id)),
+            qualified_entry(
                 "chords",
                 vector(template.chords.iter().map(chord_to_expr).collect()),
             ),
@@ -325,14 +326,14 @@ fn algebra_to_expr(algebra: &PaletteAlgebra) -> Expr {
         PaletteAlgebra::Explicit => tagged("algebra-explicit", Vec::new()),
         PaletteAlgebra::Alternative { sources } => tagged(
             "algebra-alternative",
-            vec![field(
+            vec![qualified_entry(
                 "sources",
                 vector(sources.iter().map(|source| string(source)).collect()),
             )],
         ),
         PaletteAlgebra::Chain { sources } => tagged(
             "algebra-chain",
-            vec![field(
+            vec![qualified_entry(
                 "sources",
                 vector(sources.iter().map(|source| string(source)).collect()),
             )],
@@ -340,8 +341,8 @@ fn algebra_to_expr(algebra: &PaletteAlgebra) -> Expr {
         PaletteAlgebra::Transpose { source, offsets } => tagged(
             "algebra-transpose",
             vec![
-                field("source", string(source)),
-                field(
+                qualified_entry("source", string(source)),
+                qualified_entry(
                     "offsets",
                     vector(offsets.iter().map(|offset| scalar(*offset)).collect()),
                 ),
@@ -371,10 +372,10 @@ fn voicing_change_to_expr(change: &VoicingChange) -> Expr {
     tagged(
         "voicing-change",
         vec![
-            field("id", string(&change.id)),
-            field("source", string(&change.source)),
-            field("target", string(&change.target)),
-            field(
+            qualified_entry("id", string(&change.id)),
+            qualified_entry("source", string(&change.source)),
+            qualified_entry("target", string(&change.target)),
+            qualified_entry(
                 "leading",
                 vector(
                     change
@@ -385,8 +386,8 @@ fn voicing_change_to_expr(change: &VoicingChange) -> Expr {
                         .collect(),
                 ),
             ),
-            field("cost", scalar(change.cost)),
-            field("octave", scalar(change.octave)),
+            qualified_entry("cost", scalar(change.cost)),
+            qualified_entry("octave", scalar(change.octave)),
         ],
     )
 }
@@ -409,14 +410,14 @@ fn render_to_expr(render: &HarmonyRenderProfile) -> Expr {
     tagged(
         "render-profile",
         vec![
-            field("id", string(&render.id)),
-            field("chord-transpose", scalar(render.chord_transpose)),
-            field("melody-transpose", scalar(render.melody_transpose)),
-            field("duration-multiplier", scalar(render.duration_multiplier)),
-            field("chord-program", scalar(render.chord_program)),
-            field("melody-program", scalar(render.melody_program)),
-            field("tempo-bpm", scalar(render.tempo_bpm)),
-            field(
+            qualified_entry("id", string(&render.id)),
+            qualified_entry("chord-transpose", scalar(render.chord_transpose)),
+            qualified_entry("melody-transpose", scalar(render.melody_transpose)),
+            qualified_entry("duration-multiplier", scalar(render.duration_multiplier)),
+            qualified_entry("chord-program", scalar(render.chord_program)),
+            qualified_entry("melody-program", scalar(render.melody_program)),
+            qualified_entry("tempo-bpm", scalar(render.tempo_bpm)),
+            qualified_entry(
                 "time-signature",
                 vector(vec![
                     scalar(render.time_signature.0),
