@@ -177,6 +177,29 @@ claims_specimens = [
 ]
 
 [[feature]]
+id = "feature/sim-music/exact-score-consonance"
+title = "Exact score sounding windows and consonance"
+summary = "Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately."
+owner = "crate/sim-lib-music-consonance"
+audiences = ["user", "code", "framework"]
+guidance = "Use sim-lib-music-consonance when analysis must retain exact rational onsets/releases, duplicate pitches, voice/note/event ids, velocity, channel, articulation, and source provenance across a complete score timeline. Evaluate canonical Score or Staff values directly; use the realized-MIDI entry point after sim-lib-music-lift has applied overlap, pedal, same-tick, and dangling-note policy. Pitch-set models, acoustic curve models, exact-ratio context, commonality, and voice leading remain independently named MetricReport values. Roughness mass is never substituted for normalized density, and the report deliberately supplies no implicit scalar average."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-consonance",
+  "anchor/runtime-lib/sim-lib-music-consonance/music-consonance-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-consonance/src/tests",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/midi-notation-workflows",
+  "feature/sim-music/pitch-and-sound-vocabulary",
+]
+
+[[feature]]
 id = "feature/sim-music/audio-lift-and-render"
 title = "Audio lift and render workflows"
 summary = "Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries."
@@ -217,6 +240,18 @@ supports = [
   "feature/sim-music/audio-lift-and-render",
   "feature/sim-music/pitch-and-sound-vocabulary",
   "feature/sim-music/synth-performance-workbench",
+]
+
+[[route]]
+id = "route/evaluate-exact-score-consonance"
+task = "Evaluate exact score consonance"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row supplies canonical rational score time and identity-bearing Staff conversion." },
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI row supplies overlap- and pedal-aware realization before MIDI window evaluation." },
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The vocabulary row owns the pitch, ratio, contextual sonance, psychoacoustic, and tuning models." },
+  { feature = "feature/sim-music/exact-score-consonance", why = "The consonance row composes those owners into multiplicity-preserving sounding windows and separate metric reports." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-consonance/01-basics/exact-score-consonance", why = "The Lisp recipe shows an exact progression report with a retained doubling and no implicit aggregate." },
 ]
 
 [[route]]

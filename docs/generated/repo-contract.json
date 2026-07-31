@@ -1,5 +1,5 @@
 {
-  "card_count": 51,
+  "card_count": 52,
   "cards": [
     {
       "id": "browse/catalog",
@@ -96,6 +96,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-combinators",
       "summary": "Sequence, parallel, repeat, and transform combinator descriptors."
+    },
+    {
+      "id": "cookbook/music-consonance",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-consonance",
+      "summary": "Identity-bearing sounding windows with separate consonance metrics."
     },
     {
       "id": "cookbook/music-core",
@@ -328,6 +334,7 @@
       "sim-lib-midi-wasm-frame",
       "sim-lib-music-analysis",
       "sim-lib-music-combinators",
+      "sim-lib-music-consonance",
       "sim-lib-music-core",
       "sim-lib-music-lift",
       "sim-lib-music-lower",
@@ -368,7 +375,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 47,
+  "package_count": 48,
   "packages": [
     {
       "crate_name": "sim_lib_daw_session",
@@ -1005,6 +1012,122 @@
           ],
           "name": "build-script-build",
           "src": "crates/sim-lib-music-combinators/build.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "sim_lib_music_consonance",
+      "dependencies": [
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-midi-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "dev",
+          "optional": false,
+          "package": "sim-lib-midi-smf",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lift",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-shapes",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-namer",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-dissonance",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-sound-tuning",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Exact identity-bearing sounding windows and separately inspectable consonance reports.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-consonance/Cargo.toml",
+      "name": "sim-lib-music-consonance",
+      "publish": "true",
+      "root": "crates/sim-lib-music-consonance",
+      "rustdoc_summary": "Exact sounding windows and multi-domain consonance evaluation.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_music_consonance",
+          "src": "crates/sim-lib-music-consonance/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-music-consonance/build.rs"
         }
       ]
     },
@@ -3491,10 +3614,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "812239c5fb8ee1e15712c51fe5f4c799dc339ac3",
+    "git_commit": "2c0f7e0ecba66a8575168e407e551d3af8fd16d5",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "812239c5fb8ee1e15712c51fe5f4c799dc339ac3",
+    "source_commit": "2c0f7e0ecba66a8575168e407e551d3af8fd16d5",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3507,9 +3630,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "c85d1d9915ab2599",
+    "workspace_hash": "e9a71ba3082cd86b",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 681,
+    "workspace_hash_input_count": 692,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3664,6 +3787,17 @@
       "crates/sim-lib-music-combinators/src/quad_note.rs",
       "crates/sim-lib-music-combinators/src/recipe_tests.rs",
       "crates/sim-lib-music-combinators/src/tests.rs",
+      "crates/sim-lib-music-consonance/Cargo.toml",
+      "crates/sim-lib-music-consonance/build.rs",
+      "crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/recipe.toml",
+      "crates/sim-lib-music-consonance/recipes/book.toml",
+      "crates/sim-lib-music-consonance/src/evaluate.rs",
+      "crates/sim-lib-music-consonance/src/lib.rs",
+      "crates/sim-lib-music-consonance/src/model.rs",
+      "crates/sim-lib-music-consonance/src/runtime.rs",
+      "crates/sim-lib-music-consonance/src/source.rs",
+      "crates/sim-lib-music-consonance/src/tests.rs",
+      "crates/sim-lib-music-consonance/src/windows.rs",
       "crates/sim-lib-music-core/Cargo.toml",
       "crates/sim-lib-music-core/build.rs",
       "crates/sim-lib-music-core/recipes/01-basics/melody-note/recipe.toml",
@@ -4194,7 +4328,7 @@
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 49,
+  "recipe_book_count": 50,
   "recipes": [
     {
       "book": "daw-session",
@@ -4511,6 +4645,26 @@
       ],
       "summary": "Sequence, parallel, repeat, and transform combinator descriptors.",
       "title": "Music Combinators"
+    },
+    {
+      "book": "music-consonance",
+      "book_toml": "crates/sim-lib-music-consonance/recipes/book.toml",
+      "card_id": "cookbook/music-consonance",
+      "group": "workspace",
+      "package": "sim-lib-music-consonance",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "music-consonance/01-basics/exact-score-consonance",
+          "codec": "lisp",
+          "id": "exact-score-consonance",
+          "package": "sim-lib-music-consonance",
+          "recipe_toml": "crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/recipe.toml",
+          "title": "Inspect exact score consonance"
+        }
+      ],
+      "summary": "Identity-bearing sounding windows with separate consonance metrics.",
+      "title": "Exact Music Consonance"
     },
     {
       "book": "music-core",

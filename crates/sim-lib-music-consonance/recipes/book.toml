@@ -1,0 +1,5 @@
+book = "music-consonance"
+title = "Exact Music Consonance"
+summary = "Identity-bearing sounding windows with separate consonance metrics."
+order = 253
+chapters = ["01-basics"]

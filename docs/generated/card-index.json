@@ -1,5 +1,5 @@
 {
-  "card_count": 51,
+  "card_count": 52,
   "cards": [
     {
       "id": "browse/catalog",
@@ -96,6 +96,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-combinators",
       "summary": "Sequence, parallel, repeat, and transform combinator descriptors."
+    },
+    {
+      "id": "cookbook/music-consonance",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-consonance",
+      "summary": "Identity-bearing sounding windows with separate consonance metrics."
     },
     {
       "id": "cookbook/music-core",

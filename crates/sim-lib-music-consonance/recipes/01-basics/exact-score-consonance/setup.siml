@@ -1,0 +1,3 @@
+(music/consonance/evaluate
+  :score "#(Score tempo=120 time_sig=4/4 key=none body=#(Progression key=none chords=[#(Chord dur=1/2 symbol=\"C\" pitches=[C4,E4,G4,C5] vel=100 channel=0),#(Chord dur=1/2 symbol=\"G\" pitches=[B3,D4,G4] vel=92 channel=0)]))"
+  :policy {:duplicates 'retain :normalization 'per-pair})

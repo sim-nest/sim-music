@@ -137,6 +137,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-music-consonance"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-music-core"
     },
     {
