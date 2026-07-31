@@ -4512,12 +4512,24 @@ fn pattern_discovery_hash_filters_then_exact_verifies_bounded_occurrences() {
 
     let bounded = PatternDiscoveryPolicy {
         max_windows: 1,
-        ..policy
+        ..policy.clone()
     };
     assert!(matches!(
         discover_patterns(&events, &bounded),
         Err(AnalysisError::ResourceLimit {
             resource: "pattern windows",
+            ..
+        })
+    ));
+
+    let unbounded_search = PatternDiscoveryPolicy {
+        search: SearchControl::default(),
+        ..policy
+    };
+    assert!(matches!(
+        discover_patterns(&events, &unbounded_search),
+        Err(AnalysisError::InvalidPolicy {
+            field: "pattern search",
             ..
         })
     ));

@@ -44,7 +44,7 @@ pub struct PatternDiscoveryPolicy {
     pub max_candidate_pairs: usize,
     /// Maximum estimated canonical-key bytes.
     pub max_hash_bytes: usize,
-    /// Generic bounded-search order, work, result, frontier, memory, and seed policy.
+    /// Generic search policy; work and memory-node bounds are mandatory.
     pub search: SearchControl,
 }
 
@@ -286,6 +286,12 @@ fn validate_policy(
                 reason: "resource ceiling must be positive".to_owned(),
             });
         }
+    }
+    if policy.search.max_work.is_none() || policy.search.max_memory_nodes.is_none() {
+        return Err(AnalysisError::InvalidPolicy {
+            field: "pattern search",
+            reason: "exact verification requires explicit work and memory-node bounds".to_owned(),
+        });
     }
     Ok(())
 }
