@@ -24,6 +24,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
 | `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
 | `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 4 | Convert exact score forms with loss and identity evidence, find certified voice-leading paths, and transform exact progressions with audited articulation, register, rhythm, and pitch operations. |
+| `feature/sim-music/carpet-composition` | `crate/sim-lib-music-combinators` | 2 | Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings. |
 | `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
 | `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
 | `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions. |
@@ -118,6 +119,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/purpose.md`
 - `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/setup.siml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/setup.siml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/purpose.md`
 - `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml`
@@ -4386,6 +4390,454 @@ fn map_helpers_cover_transpose_inversion_rotation_and_negative_octaves() {
             .pitch,
         Pitch::from_semitone(0)
     );
+}
+```
+
+### `feature/sim-music/carpet-composition`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-combinators/src/carpet_conformance.rs`:
+
+```rust
+use std::collections::BTreeMap;
+
+use sim_lib_music_core::{Articulation, Channel, Music, MusicObject, Note, Pitch, Time};
+use sim_lib_music_transform::{PitchDelta, TransformChain, TransformStep, TransposeTransform};
+use sim_lib_rank::Nat;
+
+use crate::{
+    CarpetAxis, CarpetError, CarpetIndex, CarpetPolicy, EmptyPolicy, MusicCarpet, OutOfRangePolicy,
+    OverlayPolicy, RaggedPolicy, SlicePolicy,
+};
+
+fn axis(name: &str, labels: &[&str], cyclic: bool) -> CarpetAxis {
+    CarpetAxis::new(
+        name,
+        labels.iter().map(|label| (*label).to_owned()).collect(),
+        cyclic,
+    )
+}
+
+fn note(midi: u8) -> Music {
+    Music::Note(
+        Note::new(
+            Time::new(1, 4),
+            Pitch::from_midi(midi),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    )
+}
+
+fn full_carpet() -> MusicCarpet {
+    let axes = vec![
+        axis("row", &["north", "south"], false),
+        axis("column", &["west", "center", "east"], false),
+    ];
+    let cells = (0..2)
+        .flat_map(|row| {
+            (0..3).map(move |column| {
+                (
+                    CarpetIndex::new(vec![row, column]),
+                    note(60 + (row * 3 + column) as u8),
+                )
+            })
+        })
+        .collect();
+    MusicCarpet::new(axes, cells, CarpetPolicy::STRICT).expect("full carpet")
+}
+
+fn midi_signature(carpet: &MusicCarpet) -> Vec<(Vec<usize>, Vec<u8>)> {
+    carpet
+        .cells
+        .iter()
+        .map(|(index, music)| {
+            let mut atoms = Vec::new();
+            music.voices(Time::from_integer(0), &mut atoms);
+            let pitches = atoms
+                .into_iter()
+                .filter_map(|atom| match atom.atom {
+                    sim_lib_music_core::AtomRef::Note(note) => note.pitch.to_midi(),
+                    _ => None,
+                })
+                .collect();
+            (index.coordinates.clone(), pitches)
+        })
+        .collect()
+}
+
+#[test]
+fn mixed_radix_addresses_are_stable_and_round_trip() {
+    let carpet = full_carpet();
+    let index = CarpetIndex::new(vec![1, 2]);
+    let ordinal = carpet.rank_index(&index).expect("rank");
+
+    assert_eq!(ordinal.to_decimal_string(), "5");
+    assert_eq!(carpet.index_at_rank(&ordinal).expect("unrank"), index);
+    assert!(matches!(
+        carpet.index_at_rank(&Nat::from(6_u64)),
+        Err(CarpetError::Rank(_))
+    ));
+}
+
+#[test]
+fn empty_ragged_and_out_of_range_policies_are_explicit() {
+    assert_eq!(
+        MusicCarpet::new(Vec::new(), BTreeMap::new(), CarpetPolicy::STRICT)
+            .expect_err("strict empty"),
+        CarpetError::EmptyCarpet
+    );
+    let empty_policy = CarpetPolicy {
+        empty: EmptyPolicy::Allow,
+        ragged: RaggedPolicy::Sparse,
+        out_of_range: OutOfRangePolicy::Reject,
+    };
+    let empty = MusicCarpet::new(Vec::new(), BTreeMap::new(), empty_policy).expect("empty value");
+    assert!(matches!(
+        empty.rank_index(&CarpetIndex::default()),
+        Err(CarpetError::Rank(_))
+    ));
+
+    let axes = vec![
+        axis("cycle", &["a", "b"], true),
+        axis("line", &["x", "y"], false),
+    ];
+    let one_cell = BTreeMap::from([(CarpetIndex::new(vec![0, 0]), note(60))]);
+    assert!(matches!(
+        MusicCarpet::new(axes.clone(), one_cell.clone(), CarpetPolicy::STRICT),
+        Err(CarpetError::Ragged {
+            expected: 4,
+            actual: 1
+        })
+    ));
+    MusicCarpet::new(axes.clone(), one_cell, CarpetPolicy::SPARSE).expect("sparse carpet");
+
+    let wrapped_policy = CarpetPolicy {
+        out_of_range: OutOfRangePolicy::WrapCyclic,
+        ..CarpetPolicy::SPARSE
+    };
+    let wrapped = MusicCarpet::new(
+        axes.clone(),
+        BTreeMap::from([(CarpetIndex::new(vec![2, 1]), note(61))]),
+        wrapped_policy,
+    )
+    .expect("cyclic coordinate");
+    assert!(wrapped.cells.contains_key(&CarpetIndex::new(vec![0, 1])));
+
+    assert!(matches!(
+        MusicCarpet::new(
+            axes,
+            BTreeMap::from([(CarpetIndex::new(vec![0, 2]), note(61))]),
+            wrapped_policy,
+        ),
+        Err(CarpetError::CoordinateOutOfRange { axis: 1, .. })
+    ));
+}
+
+#[test]
+fn rotations_reflections_and_slices_obey_algebraic_fixtures() {
+    let carpet = full_carpet();
+    let rotated = carpet.rotate(0, 1, 4).expect("four rotations");
+    assert_eq!(rotated.axes, carpet.axes);
+    assert_eq!(midi_signature(&rotated), midi_signature(&carpet));
+
+    let quarter = carpet.rotate(0, 1, 1).expect("quarter turn");
+    assert_eq!(quarter.axes[0].name, "column");
+    assert_eq!(quarter.axes[1].name, "row");
+    assert_eq!(quarter.axes[1].labels, vec!["south", "north"]);
+    assert_eq!(
+        quarter
+            .cell(&CarpetIndex::new(vec![0, 1]))
+            .map(|music| music.kind()),
+        Some("Note")
+    );
+
+    let reflected = carpet
+        .reflect(1)
+        .and_then(|value| value.reflect(1))
+        .expect("double reflection");
+    assert_eq!(reflected.axes, carpet.axes);
+    assert_eq!(midi_signature(&reflected), midi_signature(&carpet));
+
+    let cyclic = MusicCarpet::new(
+        vec![axis("cycle", &["a", "b", "c"], true)],
+        BTreeMap::from([
+            (CarpetIndex::new(vec![0]), note(60)),
+            (CarpetIndex::new(vec![1]), note(61)),
+            (CarpetIndex::new(vec![2]), note(62)),
+        ]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("cyclic carpet");
+    let wrapped = cyclic
+        .slice(0, 2, 4, SlicePolicy::WrapCyclic)
+        .expect("wrapped slice");
+    assert_eq!(wrapped.axes[0].labels, vec!["c", "a", "b", "c"]);
+    assert_eq!(
+        midi_signature(&wrapped),
+        vec![
+            (vec![0], vec![62]),
+            (vec![1], vec![60]),
+            (vec![2], vec![61]),
+            (vec![3], vec![62]),
+        ]
+    );
+    assert!(matches!(
+        cyclic.slice(0, 2, 4, SlicePolicy::Strict),
+        Err(CarpetError::InvalidSlice { .. })
+    ));
+    assert_eq!(
+        cyclic
+            .slice(0, 2, 4, SlicePolicy::Clamp)
+            .expect("clamped")
+            .axes[0]
+            .labels,
+        vec!["c"]
+    );
+}
+
+#[test]
+fn overlays_and_music_transform_chains_compose_existing_music() {
+    let axes = vec![axis("x", &["only"], false)];
+    let base = MusicCarpet::new(
+        axes.clone(),
+        BTreeMap::from([(CarpetIndex::new(vec![0]), note(60))]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("base");
+    let top = MusicCarpet::new(
+        axes,
+        BTreeMap::from([(CarpetIndex::new(vec![0]), note(67))]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("top");
+
+    assert!(matches!(
+        base.overlay(&top, OverlayPolicy::Reject),
+        Err(CarpetError::OverlayCollision { .. })
+    ));
+    let parallel = base
+        .overlay(&top, OverlayPolicy::Parallel)
+        .expect("parallel overlay");
+    assert_eq!(midi_signature(&parallel), vec![(vec![0], vec![60, 67])]);
+
+    let chain = TransformChain::new(vec![TransformStep::Transpose(TransposeTransform::new(
+        PitchDelta::Semitones(12),
+    ))]);
+    let transformed = parallel.apply_transform(&chain).expect("transform chain");
+    assert!(transformed.diagnostics.is_empty());
+    assert_eq!(
+        midi_signature(&transformed.carpet),
+        vec![(vec![0], vec![72, 79])]
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-combinators/src/relative_conformance.rs`:
+
+```rust
+use std::collections::BTreeMap;
+
+use sim_lib_music_core::{
+    Articulation, AtomRef, Channel, Chord, ConversionLossKind, Music, MusicObject, Note, PianoRoll,
+    Pitch, Time, TimedNote,
+};
+
+use crate::{
+    CarpetAxis, CarpetIndex, CarpetPolicy, MusicCarpet, RelativeOrigin, RelativePolicy,
+    RelativeReference, RelativeScope, decode_relative, encode_relative,
+};
+
+fn timed(midi: u8, onset: Time) -> TimedNote {
+    TimedNote {
+        onset,
+        note: Note::new(
+            Time::new(1, 4),
+            Pitch::from_midi(midi),
+            90,
+            Channel::new(2).expect("channel"),
+            Articulation::Legato,
+        )
+        .expect("note"),
+    }
+}
+
+fn canonical_carpet() -> MusicCarpet {
+    let cells = BTreeMap::from([
+        (
+            CarpetIndex::new(vec![0]),
+            Music::PianoRoll(
+                PianoRoll::new(vec![
+                    timed(60, Time::from_integer(0)),
+                    timed(64, Time::new(1, 4)),
+                ])
+                .expect("roll"),
+            ),
+        ),
+        (
+            CarpetIndex::new(vec![1]),
+            Music::PianoRoll(PianoRoll::new(vec![timed(67, Time::new(1, 2))]).expect("roll")),
+        ),
+    ]);
+    MusicCarpet::new(
+        vec![CarpetAxis::new(
+            "phrase",
+            vec!["opening".to_owned(), "answer".to_owned()],
+            false,
+        )],
+        cells,
+        CarpetPolicy::STRICT,
+    )
+    .expect("carpet")
+}
+
+fn assert_canonical_cells_equal(left: &MusicCarpet, right: &MusicCarpet) {
+    assert_eq!(left.axes, right.axes);
+    assert_eq!(left.cells.len(), right.cells.len());
+    for (index, left) in &left.cells {
+        let right = right.cells.get(index).expect("same cell");
+        match (left, right) {
+            (Music::PianoRoll(left), Music::PianoRoll(right)) => assert_eq!(left, right),
+            pair => panic!("expected canonical rolls, got {pair:?}"),
+        }
+    }
+}
+
+fn semantic_notes(music: &Music) -> Vec<(Time, Pitch, Time)> {
+    let mut atoms = Vec::new();
+    music.voices(Time::from_integer(0), &mut atoms);
+    let mut notes = atoms
+        .into_iter()
+        .filter_map(|atom| match atom.atom {
+            AtomRef::Note(note) => Some((atom.onset, note.pitch, note.duration)),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    notes.sort();
+    notes
+}
+
+#[test]
+fn cell_previous_deltas_round_trip_canonical_music_exactly() {
+    let source = canonical_carpet();
+    let encoded = encode_relative(&source, RelativePolicy::CELL_DELTAS).expect("encode");
+    assert!(encoded.is_lossless());
+
+    let opening = &encoded.value.cells[&CarpetIndex::new(vec![0])];
+    assert_eq!(
+        opening.origin,
+        Some(RelativeOrigin::new(
+            Pitch::from_midi(60),
+            Time::from_integer(0)
+        ))
+    );
+    assert_eq!(opening.events[0].pitch_delta, 0);
+    assert_eq!(opening.events[0].onset_delta, Time::from_integer(0));
+    assert_eq!(opening.events[1].pitch_delta, 4);
+    assert_eq!(opening.events[1].onset_delta, Time::new(1, 4));
+    assert_eq!(
+        encoded.value.cells[&CarpetIndex::new(vec![1])].events[0].pitch_delta,
+        0
+    );
+
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    assert!(decoded.is_lossless());
+    assert_canonical_cells_equal(&source, &decoded.value);
+}
+
+#[test]
+fn carpet_anchor_uses_stable_rank_order_across_cells() {
+    let source = canonical_carpet();
+    let policy = RelativePolicy {
+        scope: RelativeScope::Carpet,
+        pitch: RelativeReference::Anchor,
+        time: RelativeReference::Anchor,
+    };
+    let encoded = encode_relative(&source, policy).expect("encode");
+    let opening = &encoded.value.cells[&CarpetIndex::new(vec![0])];
+    let answer = &encoded.value.cells[&CarpetIndex::new(vec![1])];
+
+    assert!(opening.origin.is_some());
+    assert!(answer.origin.is_none());
+    assert_eq!(
+        opening
+            .events
+            .iter()
+            .map(|event| event.pitch_delta)
+            .chain(answer.events.iter().map(|event| event.pitch_delta))
+            .collect::<Vec<_>>(),
+        vec![0, 4, 7]
+    );
+    assert_eq!(answer.events[0].onset_delta, Time::new(1, 2));
+
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    assert_canonical_cells_equal(&source, &decoded.value);
+}
+
+#[test]
+fn external_origin_reports_loss_and_can_be_restored_by_context() {
+    let source = canonical_carpet();
+    let policy = RelativePolicy {
+        scope: RelativeScope::External,
+        pitch: RelativeReference::Previous,
+        time: RelativeReference::Previous,
+    };
+    let encoded = encode_relative(&source, policy).expect("encode");
+    assert_eq!(encoded.losses.len(), 1);
+    assert_eq!(encoded.losses[0].kind, ConversionLossKind::RelativeAnchor);
+    assert!(
+        encoded
+            .value
+            .cells
+            .values()
+            .all(|cell| cell.origin.is_none())
+    );
+
+    let origin = RelativeOrigin::new(Pitch::from_midi(60), Time::from_integer(0));
+    let restored = decode_relative(&encoded.value, Some(origin)).expect("context decode");
+    assert!(restored.is_lossless());
+    assert_canonical_cells_equal(&source, &restored.value);
+
+    let normalized = decode_relative(&encoded.value, None).expect("zero decode");
+    assert_eq!(
+        normalized.losses[0].kind,
+        ConversionLossKind::RelativeAnchor
+    );
+    let first = normalized.value.cells[&CarpetIndex::new(vec![0])].clone();
+    assert_eq!(semantic_notes(&first)[0].1, Pitch::from_semitone(0));
+}
+
+#[test]
+fn noncanonical_music_reports_structure_loss_but_preserves_semantics() {
+    let chord = Music::Chord(
+        Chord::new(
+            Time::new(1, 2),
+            "C",
+            vec![Pitch::from_midi(60), Pitch::from_midi(64)],
+            88,
+            Channel::new(1).expect("channel"),
+        )
+        .expect("chord"),
+    );
+    let source = MusicCarpet::new(
+        vec![CarpetAxis::new("x", vec!["one".to_owned()], false)],
+        BTreeMap::from([(CarpetIndex::new(vec![0]), chord.clone())]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("carpet");
+
+    let encoded = encode_relative(&source, RelativePolicy::CELL_DELTAS).expect("encode");
+    assert_eq!(encoded.losses.len(), 1);
+    assert_eq!(encoded.losses[0].kind, ConversionLossKind::SourceStructure);
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    let reconstructed = &decoded.value.cells[&CarpetIndex::new(vec![0])];
+    assert_eq!(semantic_notes(&chord), semantic_notes(reconstructed));
+    assert_eq!(chord.duration(), reconstructed.duration());
 }
 ```
 

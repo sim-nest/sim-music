@@ -230,6 +230,30 @@ claims_specimens = [
 ]
 
 [[feature]]
+id = "feature/sim-music/carpet-composition"
+title = "Rank-addressed music carpets and relative forms"
+summary = "Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings."
+owner = "crate/sim-lib-music-combinators"
+audiences = ["user", "code", "framework"]
+guidance = "Use MusicCarpet when exact Music values need a finite multidimensional composition layout without introducing another score or matrix type. CarpetPolicy makes empty, ragged, and out-of-range behavior explicit; CarpetAxis marks cyclic dimensions; overlay, rotate, reflect, and slice carry explicit collision or boundary policy. rank_index and index_at_rank delegate stable cell ordinals to sim-lib-discrete-rank BoundedIntVectorSpace. apply_transform delegates musical edits to sim-lib-music-transform TransformChain. encode_relative and decode_relative support anchor- or previous-event pitch/time deltas at cell, carpet, or external scope. Retained origins round-trip canonical piano-roll values exactly; external origins and non-canonical source structures use the canonical music-core MusicConversion and ConversionLoss evidence."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-combinators",
+  "anchor/rustdoc/sim-lib-music-combinators/decode_relative",
+  "anchor/rustdoc/sim-lib-music-combinators/encode_relative",
+  "anchor/rustdoc/sim-lib-music-combinators/music-carpet",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance",
+  "spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+]
+
+[[feature]]
 id = "feature/sim-music/exact-score-consonance"
 title = "Exact score sounding windows and consonance"
 summary = "Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately."
@@ -362,6 +386,17 @@ steps = [
   { feature = "feature/sim-music/declarative-harmony", why = "The declarative row supplies the palette plus separate hard legality and weighted score lanes." },
   { feature = "feature/sim-music/bounded-harmonization", why = "The harmonization row adapts the shared musical problem to exhaustive, factored, certified layered-DP, and beam strategies." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-combinators/01-basics/bounded-harmonization", why = "The Lisp recipe shows the public layered-DP call with explicit work, result, and seed bounds." },
+]
+
+[[route]]
+id = "route/compose-music-carpet"
+task = "Compose and relatively encode a finite music carpet"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact music row supplies canonical Music, rational time, audited conversions, and reusable transform chains; carpet addressing calls the shared discrete-rank crate rather than implementing rank locally." },
+  { feature = "feature/sim-music/carpet-composition", why = "The carpet row owns finite axes, sparse cells, explicit layout policy, shared mixed-radix addressing, algebraic layout operations, and relative pitch/time forms." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance", why = "The checked algebraic fixtures prove mixed-radix rank parity, explicit boundary policy, rotations, reflections, slices, overlays, and transform-chain composition." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance", why = "The checked conversion fixtures prove exact retained-origin round trips and named losses for omitted origins and source structure." },
 ]
 
 [[route]]

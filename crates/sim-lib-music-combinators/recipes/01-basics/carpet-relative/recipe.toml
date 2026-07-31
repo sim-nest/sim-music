@@ -1,0 +1,8 @@
+id = "carpet-relative"
+title = "Ranked music carpets and relative forms"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["music", "combinators", "carpet", "relative", "rank", "loss-report", "sandbox-descriptor"]
+requires = ["music-combinators", "music-transform", "discrete-rank", "codec/lisp"]

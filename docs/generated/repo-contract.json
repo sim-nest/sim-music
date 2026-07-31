@@ -968,6 +968,13 @@
         {
           "kind": "normal",
           "optional": false,
+          "package": "sim-lib-music-transform",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
           "package": "sim-lib-pitch-chord",
           "rename": null,
           "target": null
@@ -3716,10 +3723,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "d8870411e21e513cf65e714a15bbdb62db41076d",
+    "git_commit": "9329da2dc7e7215e5c66f95bab53740e547fa838",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "d8870411e21e513cf65e714a15bbdb62db41076d",
+    "source_commit": "9329da2dc7e7215e5c66f95bab53740e547fa838",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3732,9 +3739,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "3503764771feae4f",
+    "workspace_hash": "f3ac349810a088fc",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 737,
+    "workspace_hash_input_count": 743,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -3871,6 +3878,7 @@
       "crates/sim-lib-music-combinators/Cargo.toml",
       "crates/sim-lib-music-combinators/build.rs",
       "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
+      "crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml",
       "crates/sim-lib-music-combinators/recipes/02-player-recipes/bassline-chord-sup/recipe.toml",
@@ -3883,6 +3891,9 @@
       "crates/sim-lib-music-combinators/src/bassline.rs",
       "crates/sim-lib-music-combinators/src/beat_map.rs",
       "crates/sim-lib-music-combinators/src/builders.rs",
+      "crates/sim-lib-music-combinators/src/carpet.rs",
+      "crates/sim-lib-music-combinators/src/carpet_algebra.rs",
+      "crates/sim-lib-music-combinators/src/carpet_conformance.rs",
       "crates/sim-lib-music-combinators/src/drum.rs",
       "crates/sim-lib-music-combinators/src/euclid.rs",
       "crates/sim-lib-music-combinators/src/harmony.rs",
@@ -3891,6 +3902,8 @@
       "crates/sim-lib-music-combinators/src/polystep.rs",
       "crates/sim-lib-music-combinators/src/quad_note.rs",
       "crates/sim-lib-music-combinators/src/recipe_tests.rs",
+      "crates/sim-lib-music-combinators/src/relative.rs",
+      "crates/sim-lib-music-combinators/src/relative_conformance.rs",
       "crates/sim-lib-music-combinators/src/tests.rs",
       "crates/sim-lib-music-consonance/Cargo.toml",
       "crates/sim-lib-music-consonance/build.rs",
@@ -4747,7 +4760,7 @@
       "card_id": "cookbook/music-combinators",
       "group": "workspace",
       "package": "sim-lib-music-combinators",
-      "recipe_count": 7,
+      "recipe_count": 8,
       "recipes": [
         {
           "card_id": "music-combinators/01-basics/bounded-harmonization",
@@ -4756,6 +4769,14 @@
           "package": "sim-lib-music-combinators",
           "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml",
           "title": "Bounded layered harmonization"
+        },
+        {
+          "card_id": "music-combinators/01-basics/carpet-relative",
+          "codec": "lisp",
+          "id": "carpet-relative",
+          "package": "sim-lib-music-combinators",
+          "recipe_toml": "crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml",
+          "title": "Ranked music carpets and relative forms"
         },
         {
           "card_id": "music-combinators/01-basics/declarative-harmony-evidence",

@@ -257,3 +257,12 @@ fn bounded_harmonization_recipe_declares_strategy_and_all_controls() {
     assert!(source.contains(":results 4"));
     assert!(source.contains(":seed 12"));
 }
+
+#[test]
+fn carpet_recipe_names_shared_rank_transform_and_loss_contracts() {
+    let source = include_str!("../recipes/01-basics/carpet-relative/setup.siml");
+    assert!(source.contains("MusicCarpet"));
+    assert!(source.contains("mixed-radix rank"));
+    assert!(source.contains("TransformChain"));
+    assert!(source.contains("ConversionLoss"));
+}

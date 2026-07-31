@@ -77,6 +77,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml"}

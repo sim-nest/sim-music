@@ -372,6 +372,10 @@ pub enum ConversionLossKind {
     InconsistentChange,
     /// A target-only label had to be synthesized.
     SynthesizedLabel,
+    /// The source music object's structural form is not carried by a semantic event form.
+    SourceStructure,
+    /// An absolute pitch/time anchor was intentionally omitted from a relative form.
+    RelativeAnchor,
 }
 
 /// One explicit, identity-addressed conversion loss.
@@ -386,7 +390,11 @@ pub struct ConversionLoss {
 }
 
 impl ConversionLoss {
-    pub(crate) fn new(
+    /// Builds one conversion loss with an optional affected score identity.
+    ///
+    /// Conversion owners outside `sim-lib-music-core` use this constructor when
+    /// they reuse [`MusicConversion`] for another exact music representation.
+    pub fn new(
         kind: ConversionLossKind,
         object: Option<ObjectId>,
         detail: impl Into<String>,
