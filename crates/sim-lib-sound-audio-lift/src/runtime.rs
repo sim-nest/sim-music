@@ -3,6 +3,8 @@ use sim_kernel::{
     Linker, Result, RuntimeId, Symbol, Version,
 };
 
+use crate::runtime_pitch::{pitch_track_function_value, sound_lift_pitch_track_symbol};
+
 const SOUND_AUDIO_LIFT_LIB_ID: &str = "sound-audio-lift";
 const AUDIO_LIFTER_EXPORT_KIND: &str = "AudioLifter";
 const REGISTRY_SYMBOL_NAME: &str = "AudioLifterRegistry";
@@ -23,6 +25,10 @@ impl Lib for SoundAudioLiftLib {
                 .into_iter()
                 .chain(std::iter::once(registry_symbol()))
                 .map(|symbol| Export::Value { symbol })
+                .chain(std::iter::once(Export::Function {
+                    symbol: sound_lift_pitch_track_symbol(),
+                    function_id: None,
+                }))
                 .collect(),
         }
     }
@@ -32,6 +38,10 @@ impl Lib for SoundAudioLiftLib {
             linker.value(symbol.clone(), lifter_value(cx, symbol.clone())?)?;
         }
         linker.value(registry_symbol(), registry_value(cx)?)?;
+        linker.function_value(
+            sound_lift_pitch_track_symbol(),
+            pitch_track_function_value(cx)?,
+        )?;
         Ok(())
     }
 }
@@ -98,6 +108,10 @@ fn registry_value(cx: &mut sim_kernel::LoadCx) -> Result<sim_kernel::Value> {
         (Symbol::new("lossless"), cx.factory().bool(false)?),
         (Symbol::new("capabilities"), cx.factory().list(Vec::new())?),
         (Symbol::new("lifters"), lifters),
+        (
+            Symbol::new("pitch-track-callable"),
+            cx.factory().symbol(sound_lift_pitch_track_symbol())?,
+        ),
     ])
 }
 

@@ -1,8 +1,8 @@
 use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
-    AudioLiftError, PitchFramePolicy, PitchFrameTail, PitchRange, PitchRejectionReason,
-    PitchTrackControl, PitchTrackMethod, PitchTrackPlan, pitch_track,
+    AudioLiftError, PitchFramePolicy, PitchFrameTail, PitchInterpolation, PitchRange,
+    PitchRejectionReason, PitchTrackControl, PitchTrackMethod, PitchTrackPlan, pitch_track,
 };
 
 // conformance: YIN and pYIN retain interpolation, probability, range, framing, and work evidence.
@@ -35,6 +35,43 @@ fn yin_and_pyin_interpolate_a_monophonic_tone_with_bounds() {
         assert!(estimate.cents_error > 0.0);
         assert!(report.value.work_used <= plan.control.max_work);
     }
+}
+
+#[test]
+fn interpolation_policy_is_explicit_and_retained() {
+    let samples = sine(443.0, 8_000, 1_024);
+    let base = PitchTrackPlan {
+        method: PitchTrackMethod::Yin,
+        range: PitchRange::new(80.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 1_024,
+            hop: 1_024,
+            tail: PitchFrameTail::Drop,
+        },
+        control: PitchTrackControl {
+            max_work: 2_000_000,
+            ..PitchTrackControl::default()
+        },
+        ..PitchTrackPlan::default()
+    };
+    let mut integer = base.clone();
+    integer.interpolation = PitchInterpolation::None;
+    let mut parabolic = base;
+    parabolic.interpolation = PitchInterpolation::Parabolic;
+    let integer_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &integer).unwrap();
+    let parabolic_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &parabolic).unwrap();
+    let integer_pitch = integer_report.value.contour[0].as_ref().unwrap();
+    let parabolic_pitch = parabolic_report.value.contour[0].as_ref().unwrap();
+    assert_eq!(integer_pitch.interpolated_lag, integer_pitch.lag as f64);
+    assert!(
+        (parabolic_pitch.frequency.0 - 443.0).abs() < (integer_pitch.frequency.0 - 443.0).abs()
+    );
+    assert_eq!(
+        parabolic_report.value.plan.interpolation,
+        PitchInterpolation::Parabolic
+    );
 }
 
 #[test]

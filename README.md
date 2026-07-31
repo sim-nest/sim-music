@@ -129,7 +129,8 @@ loadable SIM libs.
   mixing scheduled tones and encoding 16-bit WAV.
 - `sim-lib-sound-audio-lift` -- audio-to-notes lifting: analyzes raw PCM with
   YIN/pYIN contours or bounded assignment/DTW partial tracks, extending the
-  FFT-peak and harmonic-comb lifters with uncertainty and frame provenance.
+  FFT-peak and harmonic-comb lifters with uncertainty and frame provenance;
+  exports the loadable `sound/lift/pitch-track` Lisp call.
 - `sim-lib-sound-shapes` -- the sound-layer text codec: `#(...)` round-trips for
   the sound types, citizen descriptors, and a runtime lib.
 - `sim-lib-sound-wasm-frame` -- frame-safe sound descriptors and stable wasm engine

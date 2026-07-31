@@ -7044,8 +7044,8 @@ Source `crates/sim-lib-sound-audio-lift/src/pitch_track_tests.rs`:
 use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
-    AudioLiftError, PitchFramePolicy, PitchFrameTail, PitchRange, PitchRejectionReason,
-    PitchTrackControl, PitchTrackMethod, PitchTrackPlan, pitch_track,
+    AudioLiftError, PitchFramePolicy, PitchFrameTail, PitchInterpolation, PitchRange,
+    PitchRejectionReason, PitchTrackControl, PitchTrackMethod, PitchTrackPlan, pitch_track,
 };
 
 // conformance: YIN and pYIN retain interpolation, probability, range, framing, and work evidence.
@@ -7078,6 +7078,43 @@ fn yin_and_pyin_interpolate_a_monophonic_tone_with_bounds() {
         assert!(estimate.cents_error > 0.0);
         assert!(report.value.work_used <= plan.control.max_work);
     }
+}
+
+#[test]
+fn interpolation_policy_is_explicit_and_retained() {
+    let samples = sine(443.0, 8_000, 1_024);
+    let base = PitchTrackPlan {
+        method: PitchTrackMethod::Yin,
+        range: PitchRange::new(80.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 1_024,
+            hop: 1_024,
+            tail: PitchFrameTail::Drop,
+        },
+        control: PitchTrackControl {
+            max_work: 2_000_000,
+            ..PitchTrackControl::default()
+        },
+        ..PitchTrackPlan::default()
+    };
+    let mut integer = base.clone();
+    integer.interpolation = PitchInterpolation::None;
+    let mut parabolic = base;
+    parabolic.interpolation = PitchInterpolation::Parabolic;
+    let integer_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &integer).unwrap();
+    let parabolic_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &parabolic).unwrap();
+    let integer_pitch = integer_report.value.contour[0].as_ref().unwrap();
+    let parabolic_pitch = parabolic_report.value.contour[0].as_ref().unwrap();
+    assert_eq!(integer_pitch.interpolated_lag, integer_pitch.lag as f64);
+    assert!(
+        (parabolic_pitch.frequency.0 - 443.0).abs() < (integer_pitch.frequency.0 - 443.0).abs()
+    );
+    assert_eq!(
+        parabolic_report.value.plan.interpolation,
+        PitchInterpolation::Parabolic
+    );
 }
 
 #[test]
@@ -7148,11 +7185,17 @@ use std::sync::Arc;
 
 // conformance: audio lift and render workflows expose checked audio analysis descriptors.
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_codec::{Input, decode_eval_expr_with_codec, encode_value_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, ExportKind, ReadPolicy, Symbol,
+    TrustLevel,
+};
 use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
-    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, install_sound_audio_lift_lib,
+    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, RECIPES,
+    install_sound_audio_lift_lib,
 };
 
 #[cfg(feature = "sound-music")]
@@ -7284,6 +7327,61 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
         record.kind == ExportKind::named("AudioLifter")
             && record.symbol == Symbol::qualified("sound", "HarmonicCombLifter")
     }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "pitch-track")
+    }));
+}
+
+#[test]
+fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/pitch-tracking"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "method pyin",
+        "interpolation parabolic",
+        "frequency",
+        "lower-frequency",
+        "upper-frequency",
+        "confidence",
+        "rejected",
+        "frame-index (expr:number numbers/i64 \"0\")",
+        "sample-rate (expr:number numbers/i64 \"8000\")",
+        "work-used",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
 }
 
 fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, seconds: f64, noise: f64) -> Vec<f32> {

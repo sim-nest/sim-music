@@ -1,6 +1,7 @@
-# Bounded YIN and polyphonic partial tracking (descriptor)
+# Bounded YIN and polyphonic partial tracking
 
-The checked Rust specimens exercise the public monophonic request corresponding to:
+Load `sound-audio-lift` to call the public monophonic tracker. `pcm` is a map
+with `:samples` (a mono sample vector) and `:sample-rate` (positive hertz):
 
 ```lisp
 (sound/lift/pitch-track pcm
@@ -10,8 +11,9 @@ The checked Rust specimens exercise the public monophonic request corresponding 
   :control {:work 500000 :results 8 :seed 0})
 ```
 
-`PitchTrackPlan` retains the YIN or probabilistic-YIN method, frequency range,
-threshold distribution, interpolation, voiced-probability floor, final-frame
+The callable returns the complete retained `PitchTrackPlan`: YIN or
+probabilistic-YIN method, frequency range, threshold distribution, explicit
+integer or parabolic interpolation, voiced-probability floor, final-frame
 policy, work/result limits, and seed. Every frame returns accepted candidates,
 rejected hypotheses, lower and upper frequency bounds, and its source PCM
 location; the contour never substitutes a tuned note for its measured frequency.

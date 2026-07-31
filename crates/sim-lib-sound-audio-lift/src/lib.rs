@@ -17,6 +17,8 @@ mod partial_track;
 mod pipeline;
 mod pitch_track;
 mod runtime;
+mod runtime_pitch;
+mod runtime_pitch_report;
 
 #[cfg(feature = "sound-music")]
 mod music;
@@ -28,6 +30,7 @@ pub use model::*;
 pub use partial_track::*;
 pub use pitch_track::*;
 pub use runtime::*;
+pub use runtime_pitch::*;
 
 #[cfg(feature = "sound-music")]
 pub use music::*;

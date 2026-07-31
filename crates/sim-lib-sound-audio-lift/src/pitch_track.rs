@@ -15,6 +15,15 @@ pub enum PitchTrackMethod {
     Pyin,
 }
 
+/// Sub-sample lag refinement applied after YIN trough selection.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum PitchInterpolation {
+    /// Retain the selected integer lag without refinement.
+    None,
+    /// Fit a parabola through the trough and its immediate neighbors.
+    Parabolic,
+}
+
 /// Treatment of a final PCM fragment shorter than the declared frame size.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum PitchFrameTail {
@@ -137,6 +146,8 @@ pub struct PitchTrackPlan {
     pub range: PitchRange,
     /// Framing policy.
     pub frames: PitchFramePolicy,
+    /// Lag-refinement policy.
+    pub interpolation: PitchInterpolation,
     /// YIN/pYIN thresholds.
     pub yin: YinPolicy,
     /// Resource and result bounds.
@@ -149,6 +160,7 @@ impl Default for PitchTrackPlan {
             method: PitchTrackMethod::Pyin,
             range: PitchRange::default(),
             frames: PitchFramePolicy::default(),
+            interpolation: PitchInterpolation::Parabolic,
             yin: YinPolicy::default(),
             control: PitchTrackControl::default(),
         }
@@ -265,10 +277,8 @@ pub struct PitchTrackFrame {
 /// Monophonic track plus complete frame evidence.
 #[derive(Clone, Debug, PartialEq)]
 pub struct PitchTrack {
-    /// Selected method.
-    pub method: PitchTrackMethod,
-    /// Retained seed.
-    pub seed: u64,
+    /// Complete validated request, retained for reconstruction and review.
+    pub plan: PitchTrackPlan,
     /// Charged deterministic work.
     pub work_used: u64,
     /// Per-frame candidates and rejected hypotheses.
@@ -333,8 +343,7 @@ pub fn pitch_track(
         .collect();
     Ok(AudioLiftReport {
         value: PitchTrack {
-            method: plan.method,
-            seed: plan.control.seed,
+            plan: plan.clone(),
             work_used: work.used,
             frames,
             contour,
@@ -427,6 +436,7 @@ fn analyze_frame(
                 &cmnd,
                 sample_rate,
                 tuning,
+                plan.interpolation,
                 voiced_probability,
                 energy_weight,
             )
@@ -477,13 +487,16 @@ fn hypothesis(
     cmnd: &[f64],
     sample_rate: u32,
     tuning: &dyn Tuning,
+    interpolation: PitchInterpolation,
     voiced_probability: f64,
     energy_weight: f64,
 ) -> PitchHypothesis {
-    let delta = if lag == 0 || lag + 1 == cmnd.len() {
-        0.0
-    } else {
-        parabolic_delta(cmnd[lag - 1], cmnd[lag], cmnd[lag + 1])
+    let delta = match interpolation {
+        PitchInterpolation::None => 0.0,
+        PitchInterpolation::Parabolic if lag > 0 && lag + 1 < cmnd.len() => {
+            parabolic_delta(cmnd[lag - 1], cmnd[lag], cmnd[lag + 1])
+        }
+        PitchInterpolation::Parabolic => 0.0,
     };
     let interpolated_lag = (lag as f64 + delta).max(1.0);
     let frequency = Frequency(f64::from(sample_rate) / interpolated_lag);
