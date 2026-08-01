@@ -8,7 +8,8 @@ use crate::{
     EventPlacement, ExtractionOutcome, OrdinalRef, PlannedSerialEvent, RowInstanceId,
     SerialEventId, SerialExtractionRequest, SerialExtractionServices, SerialOrigin, SerialPlan,
     SerialRenderOptions, SerialRole, SimultaneousGroupId, StrictEventSpec,
-    StrictRealizationContext, extract_serial_hypotheses, realize_strict, render_serial_score,
+    StrictRealizationContext, StructuralLicense, StructuralReadingId, extract_serial_hypotheses,
+    realize_strict, render_serial_score,
 };
 
 fn op25_form() -> sim_lib_pitch_serial::RowForm {
@@ -38,6 +39,14 @@ fn quarter() -> Time {
     Time::new(1, 4)
 }
 
+fn structural_license() -> StructuralLicense {
+    StructuralLicense::new(
+        StructuralReadingId::new("reading/extract").expect("reading id"),
+        "extraction structural reading",
+    )
+    .expect("license")
+}
+
 fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
     let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
     PlannedSerialEvent {
@@ -54,6 +63,7 @@ fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
         voice: voice(voice_name),
         placement: EventPlacement::independent(),
         parents: Vec::new(),
+        licenses: vec![structural_license()],
     }
 }
 
@@ -191,6 +201,7 @@ fn repeated_pitch_score() -> Score {
             voice: voice("voice/high"),
             placement: EventPlacement::independent(),
             parents: vec![SerialEventId::new("event/struct-0").expect("event id")],
+            licenses: vec![structural_license()],
         },
     );
     let events = items

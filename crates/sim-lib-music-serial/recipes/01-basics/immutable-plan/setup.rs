@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use sim_lib_music_core::ObjectId;
 use sim_lib_music_serial::{
     EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId, SerialOrigin,
-    SerialPlan, SerialRole, SimultaneousGroupId,
+    SerialPlan, SerialRole, SimultaneousGroupId, StructuralLicense, StructuralReadingId,
 };
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
@@ -26,6 +26,10 @@ pub fn immutable_plan() -> Result<(), Box<dyn std::error::Error>> {
     let row = row.apply(RowOperation::new(RowFamily::P, 0));
     let row_id = RowInstanceId::new("row/op25/p0")?;
     let chord_group = SimultaneousGroupId::new("simul/opening")?;
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/recipe")?,
+        "immutable plan recipe reading",
+    )?;
 
     let mut rows = BTreeMap::new();
     rows.insert(row_id.clone(), row);
@@ -44,6 +48,7 @@ pub fn immutable_plan() -> Result<(), Box<dyn std::error::Error>> {
             voice: ObjectId::new("voice/soprano")?,
             placement: EventPlacement::simultaneous(chord_group.clone()),
             parents: vec![],
+            licenses: vec![license.clone()],
         },
         PlannedSerialEvent {
             id: SerialEventId::new("event/opening-lower")?,
@@ -55,6 +60,7 @@ pub fn immutable_plan() -> Result<(), Box<dyn std::error::Error>> {
             voice: ObjectId::new("voice/alto")?,
             placement: EventPlacement::simultaneous(chord_group),
             parents: vec![],
+            licenses: vec![license.clone()],
         },
         PlannedSerialEvent {
             id: SerialEventId::new("event/middle")?,
@@ -74,6 +80,7 @@ pub fn immutable_plan() -> Result<(), Box<dyn std::error::Error>> {
             voice: ObjectId::new("voice/tenor")?,
             placement: EventPlacement::independent(),
             parents: vec![],
+            licenses: vec![license.clone()],
         },
         PlannedSerialEvent {
             id: SerialEventId::new("event/close")?,
@@ -88,6 +95,7 @@ pub fn immutable_plan() -> Result<(), Box<dyn std::error::Error>> {
             voice: ObjectId::new("voice/bass")?,
             placement: EventPlacement::independent(),
             parents: vec![],
+            licenses: vec![license],
         },
     ];
 

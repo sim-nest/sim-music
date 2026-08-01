@@ -4,7 +4,8 @@ use sim_lib_music_core::{Articulation, Channel, ObjectId, PitchClass, Time};
 use sim_lib_music_serial::{
     EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId, SerialOrigin,
     SerialPlan, SerialRole, SimultaneousGroupId, StrictEventSpec, StrictPitchLayout,
-    StrictRealizationContext, TiePolicy, realize_strict, render_serial_piano_roll,
+    StrictRealizationContext, StructuralLicense, StructuralReadingId, TiePolicy, realize_strict,
+    render_serial_piano_roll,
 };
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
@@ -30,6 +31,10 @@ pub fn strict_row_realization() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut rows = BTreeMap::new();
     rows.insert(row_id.clone(), row);
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/recipe")?,
+        "strict recipe reading",
+    )?;
 
     let event = |id: &str,
                  ordinals: &[usize],
@@ -50,6 +55,7 @@ pub fn strict_row_realization() -> Result<(), Box<dyn std::error::Error>> {
             voice: ObjectId::new(voice)?,
             placement,
             parents: vec![],
+            licenses: vec![license.clone()],
         })
     };
 

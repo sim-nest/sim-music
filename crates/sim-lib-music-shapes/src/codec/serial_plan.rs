@@ -6,7 +6,7 @@ use sim_codec::{DomainForm, DomainValue, parse_domain_form};
 use sim_lib_music_core::ObjectId;
 use sim_lib_music_serial::{
     EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId, SerialOrigin,
-    SerialPlan, SerialRole, SimultaneousGroupId,
+    SerialPlan, SerialRole, SimultaneousGroupId, StructuralLicense, StructuralReadingId,
 };
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
@@ -94,6 +94,18 @@ fn encode_event(event: &PlannedSerialEvent) -> Result<String, MusicShapeError> {
         .map(|parent| encode_string(parent.as_str()))
         .collect::<Vec<_>>()
         .join(",");
+    let licenses = event
+        .licenses
+        .iter()
+        .map(|license| {
+            format!(
+                "#(StructuralLicense reading_id={} rationale={})",
+                encode_string(license.reading_id.as_str()),
+                encode_string(&license.rationale),
+            )
+        })
+        .collect::<Vec<_>>()
+        .join(",");
     let placement = encode_placement(&event.placement);
     let (origin_kind, origin_value) = match &event.origin {
         SerialOrigin::Structural { rationale } => ("Structural", rationale.as_str()),
@@ -102,7 +114,7 @@ fn encode_event(event: &PlannedSerialEvent) -> Result<String, MusicShapeError> {
         SerialOrigin::External { source } => ("External", source.as_str()),
     };
     Ok(format!(
-        "#(SerialEvent id={} ordinals=[{}] role={} origin_kind={} origin_value={} voice={} placement={} parents=[{}])",
+        "#(SerialEvent id={} ordinals=[{}] role={} origin_kind={} origin_value={} voice={} placement={} parents=[{}] licenses=[{}])",
         encode_string(event.id.as_str()),
         ordinals,
         event.role.as_str(),
@@ -111,6 +123,7 @@ fn encode_event(event: &PlannedSerialEvent) -> Result<String, MusicShapeError> {
         encode_string(event.voice.as_str()),
         placement,
         parents,
+        licenses,
     ))
 }
 
@@ -172,6 +185,10 @@ fn decode_event(node: &DomainForm) -> Result<(SerialEventId, PlannedSerialEvent)
             _ => Err(MusicShapeError::InvalidMusic),
         })
         .collect::<Result<Vec<_>, MusicShapeError>>()?;
+    let licenses = field_list(node, "licenses")?
+        .iter()
+        .map(|value| decode_license(value.as_form()?))
+        .collect::<Result<Vec<_>, _>>()?;
     let event = PlannedSerialEvent {
         id: event_id.clone(),
         ordinals,
@@ -180,8 +197,17 @@ fn decode_event(node: &DomainForm) -> Result<(SerialEventId, PlannedSerialEvent)
         voice,
         placement,
         parents,
+        licenses,
     };
     Ok((event_id, event))
+}
+
+fn decode_license(node: &DomainForm) -> Result<StructuralLicense, MusicShapeError> {
+    ensure_form(node, "StructuralLicense")?;
+    Ok(StructuralLicense::new(
+        StructuralReadingId::new(node.field_atom_or_string("reading_id")?)?,
+        node.field_atom_or_string("rationale")?,
+    )?)
 }
 
 fn decode_ordinal_ref(node: &DomainForm) -> Result<OrdinalRef, MusicShapeError> {

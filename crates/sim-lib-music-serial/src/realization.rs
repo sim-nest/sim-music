@@ -6,11 +6,13 @@ use sim_lib_music_core::{Note, Time};
 use sim_lib_pitch_serial::RowForm;
 use thiserror::Error;
 
-use crate::{OrdinalRef, SerialEventId, SerialPlan, VoiceId};
+use crate::{OrdinalRef, SerialEventId, SerialPlan, StructuralLicense, VoiceId};
 
 /// Complete serial provenance for one realized sounding note.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RealizedSerialOrigin {
+    /// Structural readings that license the realized note.
+    pub licenses: Vec<StructuralLicense>,
     /// Every structural ordinal cited by the planned event.
     pub ordinals: Vec<OrdinalRef>,
     /// The specific ordinal realized by this note.

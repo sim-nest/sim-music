@@ -89,6 +89,9 @@ fn validate_events(
         if event.ordinals.is_empty() {
             return Err(SerialPlanError::EmptyOrdinalSet(event.id.clone()));
         }
+        if event.licenses.is_empty() {
+            return Err(SerialPlanError::MissingStructuralLicenses(event.id.clone()));
+        }
         let mut seen_ordinals = BTreeSet::new();
         for ordinal in &event.ordinals {
             if !seen_ordinals.insert(ordinal.clone()) {

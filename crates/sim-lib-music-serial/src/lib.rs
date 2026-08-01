@@ -8,6 +8,7 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod deploy;
 mod error;
 mod event;
 mod evidence;
@@ -25,10 +26,18 @@ mod render;
 mod report;
 mod strict;
 
+pub use deploy::{
+    AggregateRotationSpec, InterlockingPartitionSpec, MelodyAccompanimentSpec, SerialDeployError,
+    SerialDeployer, SerialDeployerKind, SerialDeployerParameter, SerialDeployerSpec,
+    SimultaneousFormsSpec, TechniquePlan, TechniquePlanBuilder, VerticalBlocksSpec,
+    complete_horizontal_statement, interlocking_partition, melody_accompaniment_distribution,
+    motivic_partition, schoenberg_partitioned, simultaneous_forms, strict_aggregate,
+    verticalize_selected_blocks,
+};
 pub use error::SerialPlanError;
 pub use event::{
     EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId,
-    SimultaneousGroupId, VoiceId,
+    SimultaneousGroupId, StructuralLicense, StructuralReadingId, VoiceId,
 };
 pub use evidence::{ExtractionEvidence, ExtractionOutcome};
 pub use extract::{
@@ -67,5 +76,7 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_deploy;
 #[cfg(test)]
 mod tests_extract;

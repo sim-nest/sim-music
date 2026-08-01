@@ -222,6 +222,7 @@ pub fn realize_strict(
                         onset: unit_onset,
                         note,
                         origin: RealizedSerialOrigin {
+                            licenses: planned.licenses.clone(),
                             ordinals: planned.ordinals.clone(),
                             source_ordinal: ordinal.clone(),
                             row_forms: planned

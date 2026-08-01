@@ -2,7 +2,7 @@
 
 use thiserror::Error;
 
-use crate::{OrdinalRef, RowInstanceId, SerialEventId, SimultaneousGroupId};
+use crate::{OrdinalRef, RowInstanceId, SerialEventId, SimultaneousGroupId, StructuralReadingId};
 
 /// Failure while validating immutable serial-plan data.
 #[derive(Clone, Debug, PartialEq, Eq, Error)]
@@ -107,4 +107,10 @@ pub enum SerialPlanError {
         /// Repeated ordinal reference.
         ordinal: OrdinalRef,
     },
+    /// An event omitted the structural licenses required for reporting.
+    #[error("event {0} must declare at least one structural license")]
+    MissingStructuralLicenses(SerialEventId),
+    /// A structural license explanation was empty.
+    #[error("structural reading {0} must provide a non-empty rationale")]
+    EmptyStructuralLicenseRationale(StructuralReadingId),
 }

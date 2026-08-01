@@ -72,6 +72,11 @@ stable_id!(
     "simultaneous-group",
     "Stable identity for one equal-onset simultaneous event group."
 );
+stable_id!(
+    StructuralReadingId,
+    "structural-reading",
+    "Stable identity for one structural reading or deployment witness."
+);
 
 /// Stable voice identity reused from the exact music-core score model.
 pub type VoiceId = ObjectId;
@@ -83,6 +88,32 @@ pub struct OrdinalRef {
     pub row_id: RowInstanceId,
     /// Zero-based ordinal within that row instance.
     pub ordinal: usize,
+}
+
+/// Inspectable structural reading that licenses one event or realized note.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct StructuralLicense {
+    /// Stable reading identity.
+    pub reading_id: StructuralReadingId,
+    /// Human-facing explanation of the structural reading.
+    pub rationale: String,
+}
+
+impl StructuralLicense {
+    /// Creates one structural reading license.
+    pub fn new(
+        reading_id: StructuralReadingId,
+        rationale: impl Into<String>,
+    ) -> Result<Self, SerialPlanError> {
+        let rationale = rationale.into();
+        if rationale.trim().is_empty() {
+            return Err(SerialPlanError::EmptyStructuralLicenseRationale(reading_id));
+        }
+        Ok(Self {
+            reading_id,
+            rationale,
+        })
+    }
 }
 
 impl OrdinalRef {
@@ -136,4 +167,6 @@ pub struct PlannedSerialEvent {
     pub placement: EventPlacement,
     /// Explicit parent evidence.
     pub parents: Vec<SerialEventId>,
+    /// Structural readings that license this event's note claims.
+    pub licenses: Vec<StructuralLicense>,
 }

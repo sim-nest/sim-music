@@ -8,8 +8,9 @@ use crate::{
     BuiltInPracticeRule, DeclaredWaivers, EventPlacement, InvariantStatus, OrdinalRef,
     PlannedSerialEvent, PracticeId, PracticeRuleId, RowInstanceId, SerialEventId, SerialOrigin,
     SerialPlan, SerialPlanError, SerialPractice, SerialReading, SerialRenderOptions, SerialRole,
-    SimultaneousGroupId, StrictEventSpec, StrictPitchLayout, StrictRealizationContext, TiePolicy,
-    WaiverId, realize_strict, render_serial_piano_roll, render_serial_score, render_serial_staff,
+    SimultaneousGroupId, StrictEventSpec, StrictPitchLayout, StrictRealizationContext,
+    StructuralLicense, StructuralReadingId, TiePolicy, WaiverId, realize_strict,
+    render_serial_piano_roll, render_serial_score, render_serial_staff,
 };
 
 fn op25_form() -> sim_lib_pitch_serial::RowForm {
@@ -39,6 +40,15 @@ fn quarter() -> Time {
     Time::new(1, 4)
 }
 
+fn structural_license() -> StructuralLicense {
+    named_license("reading/test", "test structural reading")
+}
+
+fn named_license(id: &str, rationale: &str) -> StructuralLicense {
+    StructuralLicense::new(StructuralReadingId::new(id).expect("reading id"), rationale)
+        .expect("license")
+}
+
 fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
     let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
     event_for_row(row_id, id, ordinals, voice_name)
@@ -64,6 +74,7 @@ fn event_for_row(
         voice: voice(voice_name),
         placement: EventPlacement::independent(),
         parents: Vec::new(),
+        licenses: vec![structural_license()],
     }
 }
 
@@ -138,6 +149,7 @@ fn serial_plan_rejects_parentless_ornament() {
         voice: voice("voice/soprano"),
         placement: EventPlacement::independent(),
         parents: Vec::new(),
+        licenses: vec![structural_license()],
     };
 
     let error = SerialPlan::try_new(
@@ -346,6 +358,7 @@ fn practice_plan() -> SerialPlan {
             SerialEventId::new("event/struct-a").unwrap(),
             SerialEventId::new("event/struct-c").unwrap(),
         ],
+        licenses: vec![structural_license()],
     };
     let external = PlannedSerialEvent {
         id: SerialEventId::new("event/external-citation").expect("event id"),
@@ -357,6 +370,7 @@ fn practice_plan() -> SerialPlan {
         voice: voice("voice/guest"),
         placement: EventPlacement::independent(),
         parents: vec![SerialEventId::new("event/derived-repeat").unwrap()],
+        licenses: vec![structural_license()],
     };
     let events = [
         (structural_a.id.clone(), structural_a),
