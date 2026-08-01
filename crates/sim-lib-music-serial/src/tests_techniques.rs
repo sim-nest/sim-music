@@ -1,10 +1,17 @@
 use sim_lib_music_core::{Articulation, Channel, ObjectId, PitchClass, Time};
+use sim_lib_pitch_chord::ChordTemplate;
+use sim_lib_pitch_ratio::{PitchRatio, RatioPolicy};
+use sim_lib_pitch_scale::{Key, Mode, Scale};
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
+use sim_lib_pitch_set::PitchClassMask;
 
 use crate::{
-    CanonOrchestration, CanonSpec, CanonSymmetryRequirement, CanonVoiceSpec, InvariantRequirement,
-    RowInstanceId, StructuralLicense, StructuralReadingId, SymmetryRequirement, build_canon,
-    deploy_derived_cells, forms_with_invariant,
+    CanonOrchestration, CanonSpec, CanonSymmetryRequirement, CanonVoiceSpec, CyclicOrder,
+    CyclicProjectionSpec, InvariantRequirement, ParameterTrackKind, ReferentialClaim,
+    ReferentialEmphasis, ReferentialEvidence, ReferentialEvidenceKind, ReferentialRequest,
+    RowInstanceId, StructuralLicense, StructuralReadingId, SymmetryRequirement,
+    analyze_referential_subset, build_canon, deploy_derived_cells, forms_with_invariant,
+    project_cyclic_order,
 };
 
 fn op25_form() -> sim_lib_pitch_serial::RowForm {
@@ -204,4 +211,194 @@ fn impossible_invariant_request_returns_explicit_unsatisfied_evidence() {
     let unsatisfied = candidates.unsatisfied().expect("unsatisfied");
     assert_eq!(unsatisfied.forms_checked, 48);
     assert!(unsatisfied.segments_checked >= 48);
+}
+
+#[test]
+fn referential_subset_binds_mask_without_whole_passage_tonality() {
+    let report = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![0, 1, 2],
+            evidence: ReferentialEvidence::Mask {
+                label: "op25-opening-trichord".to_owned(),
+                mask: PitchClassMask::from_pitch_classes(&[
+                    PitchClass::E,
+                    PitchClass::F,
+                    PitchClass::G,
+                ]),
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("referential report");
+
+    assert_eq!(report.claim, ReferentialClaim::EmbeddedSubset);
+    assert_eq!(report.ordinals, vec![0, 1, 2]);
+    assert_eq!(report.context.evidence_kind, ReferentialEvidenceKind::Mask);
+    assert!(!report.claims_whole_passage_tonality);
+}
+
+#[test]
+fn referential_report_retains_emphasis_without_changing_identity() {
+    let emphasis = ReferentialEmphasis {
+        register_focus: Some(5),
+        rhythm_profile: Some("long-short-short".to_owned()),
+        dynamic_profile: Some("sforzando".to_owned()),
+        timbral_profile: Some("muted-brass".to_owned()),
+        harmonic_profile: Some("pedal-shadow".to_owned()),
+    };
+    let report = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![10, 9, 0],
+            evidence: ReferentialEvidence::Chord {
+                label: "a-minor".to_owned(),
+                chord: ChordTemplate::from_pitch_classes(
+                    "a-minor",
+                    vec![PitchClass::A, PitchClass::C, PitchClass::E],
+                    4,
+                ),
+            },
+            emphasis: emphasis.clone(),
+        },
+    )
+    .expect("referential report");
+
+    assert_eq!(report.claim, ReferentialClaim::EmbeddedSubset);
+    assert_eq!(report.ordinals, vec![10, 9, 0]);
+    assert_eq!(report.emphasis, emphasis);
+    assert!(!report.claims_whole_passage_tonality);
+}
+
+#[test]
+fn referential_report_tracks_nonmatching_rows_and_label_context_changes() {
+    let matching = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![10, 9, 0],
+            evidence: ReferentialEvidence::KeyRegion {
+                label: "c-major/vi".to_owned(),
+                key: Key {
+                    tonic: PitchClass::C,
+                    mode: Mode::Major,
+                },
+                preferred_root: Some(PitchClass::A),
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("matching report");
+    let relabeled = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![10, 9, 0],
+            evidence: ReferentialEvidence::KeyRegion {
+                label: "a-minor/i".to_owned(),
+                key: Key {
+                    tonic: PitchClass::A,
+                    mode: Mode::MinorNatural,
+                },
+                preferred_root: Some(PitchClass::A),
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("relabeled report");
+    let nonmatching = analyze_referential_subset(
+        &webern_op24_row().apply(RowOperation::new(RowFamily::P, 0)),
+        ReferentialRequest {
+            ordinals: vec![10, 9, 0],
+            evidence: ReferentialEvidence::Mask {
+                label: "a-minor-subset".to_owned(),
+                mask: matching.context.subset_mask,
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("nonmatching report");
+
+    assert_eq!(matching.claim, ReferentialClaim::EmbeddedSubset);
+    assert_eq!(matching.context.harmonic_claim.as_deref(), Some("vi"));
+    assert_eq!(relabeled.context.harmonic_claim.as_deref(), Some("i"));
+    assert_eq!(
+        matching.context.subset_classes,
+        vec![PitchClass::A, PitchClass::C, PitchClass::E]
+    );
+    assert_eq!(nonmatching.claim, ReferentialClaim::NoReferentialSubset);
+}
+
+#[test]
+fn cyclic_projection_rotates_orchestration_and_ratio_tracks() {
+    let orchestration = project_cyclic_order(
+        &CyclicOrder {
+            track: ParameterTrackKind::Orchestration,
+            values: vec![
+                "flute".to_owned(),
+                "clarinet".to_owned(),
+                "violin".to_owned(),
+                "horn".to_owned(),
+            ],
+        },
+        &CyclicProjectionSpec {
+            order: vec![0, 2, 3, 1],
+            rotation: 1,
+        },
+    )
+    .expect("orchestration projection");
+    let ratio_projection = project_cyclic_order(
+        &CyclicOrder {
+            track: ParameterTrackKind::Rhythm,
+            values: vec![
+                PitchRatio::new(1, 1).unwrap(),
+                PitchRatio::new(3, 2).unwrap(),
+                PitchRatio::new(5, 4).unwrap(),
+            ],
+        },
+        &CyclicProjectionSpec {
+            order: vec![0, 1, 2],
+            rotation: 2,
+        },
+    )
+    .expect("ratio projection");
+    let ratio_report = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![0, 1, 2],
+            evidence: ReferentialEvidence::PitchRatio {
+                label: "ratio-trichord".to_owned(),
+                ratios: ratio_projection.values.clone(),
+                policy: RatioPolicy::five_limit(),
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("ratio referential report");
+    let scale_report = analyze_referential_subset(
+        &op25_form(),
+        ReferentialRequest {
+            ordinals: vec![10, 9, 0],
+            evidence: ReferentialEvidence::Scale {
+                label: "a-natural-minor".to_owned(),
+                scale: Scale::aeolian(PitchClass::A),
+            },
+            emphasis: ReferentialEmphasis::default(),
+        },
+    )
+    .expect("scale report");
+
+    assert_eq!(
+        orchestration.values,
+        vec!["violin", "horn", "clarinet", "flute"]
+    );
+    assert_eq!(ratio_projection.values[0], PitchRatio::new(5, 4).unwrap());
+    assert_eq!(ratio_report.claim, ReferentialClaim::EmbeddedSubset);
+    assert_eq!(
+        ratio_report
+            .context
+            .ratio_summary
+            .as_ref()
+            .map(|summary| summary.admitted_tones),
+        Some(3)
+    );
+    assert_eq!(scale_report.context.scale_degrees, vec![1, 3, 5]);
 }

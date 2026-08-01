@@ -8,7 +8,9 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod anchor;
 mod canon;
+mod cycle;
 mod deploy;
 mod derived;
 mod error;
@@ -24,15 +26,20 @@ mod practice;
 mod practice_builtin;
 mod reading;
 mod realization;
+mod referential;
 mod render;
 mod report;
 mod strict;
 mod techniques;
 
+pub use anchor::ReferentialEmphasis;
 pub use canon::{
     CanonDeployment, CanonError, CanonOrchestration, CanonRealizationEvent, CanonSpec,
     CanonSymmetryCertificate, CanonSymmetryRequirement, CanonVoiceProfile, CanonVoiceSpec,
     build_canon,
+};
+pub use cycle::{
+    CyclicOrder, CyclicProjection, CyclicProjectionSpec, ParameterTrackKind, project_cyclic_order,
 };
 pub use deploy::{
     AggregateRotationSpec, InterlockingPartitionSpec, MelodyAccompanimentSpec, SerialDeployError,
@@ -73,6 +80,10 @@ pub use reading::SerialReading;
 pub use realization::{
     RealizedSerialEvent, RealizedSerialNote, RealizedSerialOrigin, SerialRealization,
     StrictRealizationError,
+};
+pub use referential::{
+    ReferentialClaim, ReferentialContextReport, ReferentialEvidence, ReferentialEvidenceKind,
+    ReferentialRatioSummary, ReferentialReport, ReferentialRequest, analyze_referential_subset,
 };
 pub use render::{
     SerialRenderOptions, render_serial_piano_roll, render_serial_score, render_serial_staff,
