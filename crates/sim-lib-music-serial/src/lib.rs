@@ -8,7 +8,9 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod canon;
 mod deploy;
+mod derived;
 mod error;
 mod event;
 mod evidence;
@@ -25,7 +27,13 @@ mod realization;
 mod render;
 mod report;
 mod strict;
+mod techniques;
 
+pub use canon::{
+    CanonDeployment, CanonError, CanonOrchestration, CanonRealizationEvent, CanonSpec,
+    CanonSymmetryCertificate, CanonSymmetryRequirement, CanonVoiceProfile, CanonVoiceSpec,
+    build_canon,
+};
 pub use deploy::{
     AggregateRotationSpec, InterlockingPartitionSpec, MelodyAccompanimentSpec, SerialDeployError,
     SerialDeployer, SerialDeployerKind, SerialDeployerParameter, SerialDeployerSpec,
@@ -33,6 +41,11 @@ pub use deploy::{
     complete_horizontal_statement, interlocking_partition, melody_accompaniment_distribution,
     motivic_partition, schoenberg_partitioned, simultaneous_forms, strict_aggregate,
     verticalize_selected_blocks,
+};
+pub use derived::{
+    DerivedCellDeployment, DerivedCellOccurrence, InvariantCertificate, InvariantFormCandidate,
+    InvariantFormCandidates, InvariantRequirement, SymmetryCertificate, SymmetryRequirement,
+    UnsatisfiedInvariantRequest, deploy_derived_cells, forms_with_invariant,
 };
 pub use error::SerialPlanError;
 pub use event::{
@@ -80,3 +93,5 @@ mod tests;
 mod tests_deploy;
 #[cfg(test)]
 mod tests_extract;
+#[cfg(test)]
+mod tests_techniques;
