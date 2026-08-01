@@ -169,6 +169,9 @@
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/setup.rs"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md"}

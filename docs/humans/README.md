@@ -36,7 +36,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
 | `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
-| `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 1 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan before realization. |
+| `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 2 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
 
 ## Surfaces
 
@@ -219,6 +219,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/purpose.md`
 - `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml`
 - `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/setup.rs`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/purpose.md`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs`
 - `crates/sim-lib-music-serial/recipes/book.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md`
@@ -9995,5 +9998,17 @@ title = "Immutable serial plan"
 summary = "Validate an immutable serial plan with simultaneous groups, structural coverage, and stable provenance."
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "plan", "provenance", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`:
+
+```toml
+title = "Strict row realization"
+summary = "Realize and render a strict serial row statement without losing planned event, voice, or ordinal identity."
+category = "Rust"
+tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
 requires = ["music-serial", "pitch-serial", "music-core"]
 ```

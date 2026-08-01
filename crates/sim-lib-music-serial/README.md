@@ -3,12 +3,19 @@
 Immutable serial plans with stable row and event identity, explicit role and
 origin provenance, and validated partial temporal order.
 
-`sim-lib-music-serial` keeps the structural source honest before realization.
-Rows remain immutable `RowForm` values from `sim-lib-pitch-serial`; events cite
-them through stable `OrdinalRef` values rather than flattening them into a fake
-score order. Equal-onset chords are expressed through simultaneous groups, while
-independent temporal requirements stay in a validated precedence DAG. Roles and
-origins stay explicit, and every non-structural event carries parent evidence.
+`sim-lib-music-serial` keeps the structural source honest before and during
+realization. Rows remain immutable `RowForm` values from
+`sim-lib-pitch-serial`; events cite them through stable `OrdinalRef` values
+rather than flattening them into a fake score order. Equal-onset chords are
+expressed through simultaneous groups, while independent temporal requirements
+stay in a validated precedence DAG. Roles and origins stay explicit, and every
+non-structural event carries parent evidence.
+
+Strict realization adds explicit register, duration, velocity, articulation,
+voice, rest, tie, and simultaneity choices without mutating the source plan.
+Rendered serial notes retain their planned event and ordinal provenance, then
+pass through the canonical `sim-lib-music-core` staff, piano-roll, and score
+forms so equal-pitch occurrences and voice identity survive rendering.
 
 ```rust
 use std::collections::BTreeMap;

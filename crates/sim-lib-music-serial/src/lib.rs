@@ -13,6 +13,9 @@ mod event;
 mod order;
 mod origin;
 mod plan;
+mod realization;
+mod render;
+mod strict;
 
 pub use error::SerialPlanError;
 pub use event::{
@@ -22,6 +25,17 @@ pub use event::{
 pub use order::PrecedenceGraph;
 pub use origin::{SerialOrigin, SerialRole};
 pub use plan::SerialPlan;
+pub use realization::{
+    RealizedSerialEvent, RealizedSerialNote, RealizedSerialOrigin, SerialRealization,
+    StrictRealizationError,
+};
+pub use render::{
+    SerialRenderOptions, render_serial_piano_roll, render_serial_score, render_serial_staff,
+};
+pub use strict::{
+    EventSound, SimultaneousRenderPolicy, StrictEventSpec, StrictPitchLayout,
+    StrictRealizationContext, TiePolicy, realize_strict,
+};
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

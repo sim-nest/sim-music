@@ -47,6 +47,16 @@ impl SerialPlan {
         &self.events
     }
 
+    /// Returns one immutable planned event by stable id.
+    pub fn event(&self, event_id: &SerialEventId) -> Option<&PlannedSerialEvent> {
+        self.events.get(event_id)
+    }
+
+    /// Returns one immutable row form by stable id.
+    pub fn row(&self, row_id: &RowInstanceId) -> Option<&RowForm> {
+        self.rows.get(row_id)
+    }
+
     /// Returns the validated precedence DAG.
     pub fn precedence(&self) -> &PrecedenceGraph<SerialEventId> {
         &self.precedence

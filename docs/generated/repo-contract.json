@@ -1718,7 +1718,8 @@
       "rustdoc_summary": "Immutable serial plans with stable identity, provenance, and partial order.",
       "target_kinds": [
         "custom-build",
-        "lib"
+        "lib",
+        "test"
       ],
       "targets": [
         {
@@ -1730,6 +1731,16 @@
           ],
           "name": "sim_lib_music_serial",
           "src": "crates/sim-lib-music-serial/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "strict_row_realization_recipe",
+          "src": "crates/sim-lib-music-serial/tests/strict_row_realization_recipe.rs"
         },
         {
           "crate_types": [
@@ -4138,10 +4149,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "91b3b276497b35134d3a7ed528e44b4d8c56d1ef",
+    "git_commit": "f53499b0ad96d301fc921456c12bd2680738cd3c",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "91b3b276497b35134d3a7ed528e44b4d8c56d1ef",
+    "source_commit": "f53499b0ad96d301fc921456c12bd2680738cd3c",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -4154,9 +4165,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "4bcab10e89025a76",
+    "workspace_hash": "89ce6f8400299bf9",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 869,
+    "workspace_hash_input_count": 875,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4461,6 +4472,8 @@
       "crates/sim-lib-music-serial/build.rs",
       "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml",
       "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/setup.rs",
+      "crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs",
       "crates/sim-lib-music-serial/recipes/book.toml",
       "crates/sim-lib-music-serial/src/error.rs",
       "crates/sim-lib-music-serial/src/event.rs",
@@ -4468,7 +4481,11 @@
       "crates/sim-lib-music-serial/src/order.rs",
       "crates/sim-lib-music-serial/src/origin.rs",
       "crates/sim-lib-music-serial/src/plan.rs",
+      "crates/sim-lib-music-serial/src/realization.rs",
+      "crates/sim-lib-music-serial/src/render.rs",
+      "crates/sim-lib-music-serial/src/strict.rs",
       "crates/sim-lib-music-serial/src/tests.rs",
+      "crates/sim-lib-music-serial/tests/strict_row_realization_recipe.rs",
       "crates/sim-lib-music-shapes/Cargo.toml",
       "crates/sim-lib-music-shapes/build.rs",
       "crates/sim-lib-music-shapes/recipes/01-basics/shape-family/recipe.toml",
@@ -5585,7 +5602,7 @@
       "card_id": "cookbook/music-serial",
       "group": "workspace",
       "package": "sim-lib-music-serial",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
         {
           "card_id": "music-serial/01-basics/immutable-plan",
@@ -5594,6 +5611,14 @@
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml",
           "title": "Immutable serial plan"
+        },
+        {
+          "card_id": "music-serial/01-basics/strict-row-realization",
+          "codec": "",
+          "id": "strict-row-realization",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml",
+          "title": "Strict row realization"
         }
       ],
       "summary": "",
