@@ -1,7 +1,8 @@
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_serial::{
-    MatrixCoordinate, PitchClassAlphabet, ROW_MATRIX_SIZE, RowError, RowFamily, RowFamilySet,
-    RowLabel, RowLabelConvention, RowMatrix, RowOperation, ToneRow,
+    MatrixCoordinate, OrderedIntervalString, PitchClassAlphabet, ROW_MATRIX_SIZE, RowError,
+    RowFamily, RowFamilySet, RowLabel, RowLabelConvention, RowMatrix, RowOperation,
+    RowSegmentSource, ToneRow, analyze_invariance, analyze_row_class,
 };
 use sim_lib_serial_core::SeriesError;
 
@@ -154,6 +155,146 @@ fn gate_row_operation_identity_and_labels_remain_distinct() {
             .to_string(),
         "R7"
     );
+}
+
+#[test]
+fn gate_ordered_intervals_obey_p_i_r_ri_laws() {
+    let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let intervals = source.ordered_intervals();
+    assert_eq!(intervals.intervals(), &[1, 2, 6, 5, 9, 5, 6, 9, 1, 9, 1]);
+
+    for family in [RowFamily::P, RowFamily::I, RowFamily::R, RowFamily::RI] {
+        let form = source.apply(RowOperation::new(family, 7));
+        assert_eq!(
+            OrderedIntervalString::of_row(form.row()),
+            intervals.under_family(family)
+        );
+    }
+}
+
+#[test]
+fn gate_segments_retain_order_and_unordered_set_facts() {
+    let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+
+    let contiguous = source.segment(0, 4).expect("contiguous segment");
+    assert_eq!(
+        contiguous.source(),
+        &RowSegmentSource::Contiguous { start: 0, len: 4 }
+    );
+    assert_eq!(contiguous.ordinals(), &[0, 1, 2, 3]);
+    assert_eq!(
+        contiguous
+            .classes()
+            .iter()
+            .map(|pitch_class| pitch_class.value())
+            .collect::<Vec<_>>(),
+        vec![4, 5, 7, 1]
+    );
+    assert_eq!(contiguous.mask().count_bits(), 4);
+    assert_eq!(contiguous.ordered_intervals(), vec![1, 2, 6]);
+
+    let wrapped = source.wrapped_segment(10, 4).expect("wrapped segment");
+    assert_eq!(
+        wrapped.source(),
+        &RowSegmentSource::Wrapped { start: 10, len: 4 }
+    );
+    assert_eq!(wrapped.ordinals(), &[10, 11, 0, 1]);
+    assert_eq!(
+        wrapped
+            .classes()
+            .iter()
+            .map(|pitch_class| pitch_class.value())
+            .collect::<Vec<_>>(),
+        vec![9, 10, 4, 5]
+    );
+
+    let indexed = source
+        .indexed_segment(&[0, 3, 6, 9])
+        .expect("indexed segment");
+    assert_eq!(indexed.source(), &RowSegmentSource::Indexed);
+    assert_eq!(indexed.ordinals(), &[0, 3, 6, 9]);
+    assert_eq!(
+        indexed
+            .classes()
+            .iter()
+            .map(|pitch_class| pitch_class.value())
+            .collect::<Vec<_>>(),
+        vec![4, 1, 8, 0]
+    );
+
+    let labeled = ToneRow::try_from_classes(CHROMATIC)
+        .expect("chromatic row")
+        .segment(0, 3)
+        .expect("named contiguous segment");
+    assert_eq!(labeled.forte_label(), Some("3-1"));
+
+    assert_eq!(
+        source.segment(10, 3),
+        Err(RowError::SegmentOutOfBounds { start: 10, len: 3 })
+    );
+    assert_eq!(
+        source.wrapped_segment(0, 13),
+        Err(RowError::WrappedSegmentTooLong { len: 13 })
+    );
+    assert_eq!(
+        source.indexed_segment(&[12]),
+        Err(RowError::InvalidOrdinal { ordinal: 12 })
+    );
+}
+
+#[test]
+fn gate_invariance_distinguishes_ordered_and_unordered_evidence() {
+    let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let left = source.segment(0, 4).expect("left segment");
+    let transposed_row = source.apply(RowOperation::new(RowFamily::P, 10)).into_row();
+    let transposed = transposed_row.segment(0, 4).expect("transposed segment");
+    let reordered = source
+        .indexed_segment(&[3, 2, 1, 0])
+        .expect("reordered segment");
+
+    let transposed_invariant = analyze_invariance(&left, &transposed);
+    assert!(transposed_invariant.ordinal_identity);
+    assert!(!transposed_invariant.pitch_identity);
+    assert_eq!(transposed_invariant.transposition, Some(10));
+    assert_eq!(transposed_invariant.inversion, None);
+    assert!(transposed_invariant.interval_order_identity);
+    assert!(transposed_invariant.set_class_identity);
+
+    let reordered_invariant = analyze_invariance(&left, &reordered);
+    assert!(!reordered_invariant.ordinal_identity);
+    assert!(!reordered_invariant.pitch_identity);
+    assert_eq!(reordered_invariant.transposition, None);
+    assert_eq!(reordered_invariant.inversion, None);
+    assert!(!reordered_invariant.interval_order_identity);
+    assert!(reordered_invariant.set_class_identity);
+}
+
+#[test]
+fn gate_row_class_reports_stabilizers_and_form_equivalence() {
+    let row = ToneRow::try_from_classes(CHROMATIC).expect("chromatic row");
+    let report = analyze_row_class(&row);
+
+    assert_eq!(report.ordered_intervals.intervals(), &[1; 11]);
+    assert_eq!(report.aliases.len(), 48);
+    assert_eq!(report.distinct_forms.len(), 24);
+    assert_eq!(report.stabilizers.len(), 2);
+    assert_eq!(
+        report.stabilizers,
+        vec![
+            RowOperation::new(RowFamily::P, 0),
+            RowOperation::new(RowFamily::RI, 11)
+        ]
+    );
+    assert_eq!(report.form_equivalences.len(), report.distinct_forms.len());
+    assert!(
+        report
+            .form_equivalences
+            .iter()
+            .all(|equivalence| !equivalence.operations.is_empty())
+    );
+    assert!(report.form_equivalences.iter().any(
+        |equivalence| equivalence.operations.len() == 2 && equivalence.invariant.pitch_identity
+    ));
 }
 
 #[test]
