@@ -1,0 +1,8 @@
+id = "row-class-analysis"
+title = "Analyze derivation, all-interval status, and combinatorial partners"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
+order = 20
+tags = ["pitch", "serial", "tone-row", "analysis", "all-interval", "combinatoriality", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core", "pitch-set", "serial-core"]

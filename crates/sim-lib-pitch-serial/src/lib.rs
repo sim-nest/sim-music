@@ -7,8 +7,11 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod all_interval;
 mod alphabet;
 mod class;
+mod combinatoriality;
+mod derivation;
 mod error;
 mod family;
 mod interval;
@@ -20,8 +23,17 @@ mod render;
 mod row;
 mod segment;
 
+pub use all_interval::{AllIntervalMultiplicity, AllIntervalReport, analyze_all_interval};
 pub use alphabet::PitchClassAlphabet;
 pub use class::{FormEquivalence, RowClassAlias, RowClassReport, analyze_row_class};
+pub use combinatoriality::{
+    CombinatorialBlockEvidence, CombinatorialPartition, CombinatorialPartner,
+    CombinatorialityReport, analyze_combinatoriality, analyze_combinatoriality_partition,
+};
+pub use derivation::{
+    DerivationCellRelation, DerivationKind, DerivationMatch, DerivationReport, analyze_derivation,
+    analyze_derivation_partition,
+};
 pub use error::RowError;
 pub use family::{RowAlias, RowFamilySet};
 pub use interval::OrderedIntervalString;

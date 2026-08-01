@@ -1,8 +1,9 @@
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_serial::{
-    MatrixCoordinate, OrderedIntervalString, PitchClassAlphabet, ROW_MATRIX_SIZE, RowError,
-    RowFamily, RowFamilySet, RowLabel, RowLabelConvention, RowMatrix, RowOperation,
-    RowSegmentSource, ToneRow, analyze_invariance, analyze_row_class,
+    DerivationKind, MatrixCoordinate, OrderedIntervalString, PitchClassAlphabet, ROW_MATRIX_SIZE,
+    RowError, RowFamily, RowFamilySet, RowLabel, RowLabelConvention, RowMatrix, RowOperation,
+    RowSegmentSource, ToneRow, analyze_combinatoriality_partition, analyze_derivation_partition,
+    analyze_invariance, analyze_row_class,
 };
 use sim_lib_serial_core::SeriesError;
 
@@ -34,6 +35,36 @@ const OP_25: [PitchClass; 12] = [
     PitchClass::C,
     PitchClass::A,
     PitchClass::AS,
+];
+
+const ALL_INTERVAL_ROW: [PitchClass; 12] = [
+    PitchClass::C,
+    PitchClass::CS,
+    PitchClass::DS,
+    PitchClass::G,
+    PitchClass::D,
+    PitchClass::F,
+    PitchClass::B,
+    PitchClass::AS,
+    PitchClass::GS,
+    PitchClass::E,
+    PitchClass::A,
+    PitchClass::FS,
+];
+
+const DERIVED_COMBINATORIAL_ROW: [PitchClass; 12] = [
+    PitchClass::C,
+    PitchClass::CS,
+    PitchClass::D,
+    PitchClass::DS,
+    PitchClass::E,
+    PitchClass::F,
+    PitchClass::FS,
+    PitchClass::G,
+    PitchClass::B,
+    PitchClass::AS,
+    PitchClass::A,
+    PitchClass::GS,
 ];
 
 fn values(classes: &[PitchClass; 12]) -> [u8; 12] {
@@ -295,6 +326,73 @@ fn gate_row_class_reports_stabilizers_and_form_equivalence() {
     assert!(report.form_equivalences.iter().any(
         |equivalence| equivalence.operations.len() == 2 && equivalence.invariant.pitch_identity
     ));
+}
+
+#[test]
+fn gate_row_class_reports_derivation_all_interval_and_combinatoriality() {
+    let derived = ToneRow::try_from_classes(DERIVED_COMBINATORIAL_ROW).expect("derived row");
+    let derived_report = analyze_row_class(&derived);
+
+    assert_eq!(derived_report.derivation.generator_size, Some(4));
+    assert!(
+        derived_report
+            .derivation
+            .matches
+            .iter()
+            .any(|entry| entry.kind == DerivationKind::Tetrachordal && entry.generator_size == 4)
+    );
+    assert!(
+        derived_report
+            .combinatoriality
+            .iter()
+            .all(|partner| { partner.source.union(partner.complement).count_bits() == 12 })
+    );
+    let families = derived_report
+        .combinatoriality
+        .iter()
+        .map(|partner| partner.operation.family)
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(
+        families,
+        [RowFamily::P, RowFamily::I, RowFamily::R, RowFamily::RI,]
+            .into_iter()
+            .collect()
+    );
+    let same_row_partner = derived_report
+        .combinatoriality
+        .iter()
+        .find(|partner| partner.operation == RowOperation::new(RowFamily::P, 0))
+        .expect("P0 combinatorial witness");
+    assert_eq!(same_row_partner.partition.block_size, 6);
+    assert_eq!(same_row_partner.partition.partner_block_order, vec![1, 0]);
+
+    let all_interval = ToneRow::try_from_classes(ALL_INTERVAL_ROW).expect("all-interval row");
+    let all_interval_report = analyze_row_class(&all_interval);
+    assert!(all_interval_report.all_interval.is_all_interval);
+    assert!(all_interval_report.all_interval.duplicates.is_empty());
+    assert!(all_interval_report.all_interval.missing.is_empty());
+
+    let non_all_interval = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let non_all_interval_report = analyze_row_class(&non_all_interval);
+    assert!(!non_all_interval_report.all_interval.is_all_interval);
+    assert_eq!(
+        non_all_interval_report.all_interval.missing,
+        vec![3, 4, 7, 8, 10, 11]
+    );
+}
+
+#[test]
+fn gate_row_partition_analyses_reject_invalid_requests() {
+    let row = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+
+    assert_eq!(
+        analyze_derivation_partition(&row, 5),
+        Err(RowError::InvalidPartitionSize { size: 5 })
+    );
+    assert_eq!(
+        analyze_combinatoriality_partition(&row, RowOperation::new(RowFamily::P, 0), 5),
+        Err(RowError::InvalidPartitionSize { size: 5 })
+    );
 }
 
 #[test]

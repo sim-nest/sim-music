@@ -1,7 +1,5 @@
 use sim_lib_pitch_core::PitchClass;
-use sim_lib_pitch_serial::{
-    ROW_MATRIX_SIZE, RowFamilySet, RowLabelConvention, RowMatrix, ToneRow,
-};
+use sim_lib_pitch_serial::{ROW_MATRIX_SIZE, RowFamilySet, RowLabelConvention, RowMatrix, ToneRow};
 
 pub fn row_family_matrix() -> Result<(), Box<dyn std::error::Error>> {
     let row = ToneRow::try_from_classes([
@@ -30,6 +28,10 @@ pub fn row_family_matrix() -> Result<(), Box<dyn std::error::Error>> {
     let data = matrix.render_data();
     assert_eq!(data.cells().len(), ROW_MATRIX_SIZE * ROW_MATRIX_SIZE);
     assert_eq!(data.source(), &row);
-    assert!(matrix.render_ascii().contains("label-convention: first-last-pitch"));
+    assert!(
+        matrix
+            .render_ascii()
+            .contains("label-convention: first-last-pitch")
+    );
     Ok(())
 }

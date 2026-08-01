@@ -32,4 +32,10 @@ pub enum RowError {
         /// Zero-based row ordinal that fell outside `0..12`.
         ordinal: usize,
     },
+    /// A derivation or combinatoriality partition size was unsupported.
+    #[error("partition size {size} is invalid; expected one of 2, 3, 4, or 6")]
+    InvalidPartitionSize {
+        /// The invalid partition size requested by the caller.
+        size: usize,
+    },
 }

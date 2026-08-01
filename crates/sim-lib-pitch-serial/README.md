@@ -32,6 +32,12 @@ let family = RowFamilySet::of(&row);
 assert_eq!(family.aliases().len(), 48);
 assert!(family.distinct_forms().len() <= 48);
 
+let report = sim_lib_pitch_serial::analyze_row_class(&row);
+assert!(report
+    .combinatoriality
+    .iter()
+    .all(|partner| partner.source.union(partner.complement).count_bits() == 12));
+
 let matrix = RowMatrix::new(&row, RowLabelConvention::FirstLastPitch);
 assert_eq!(matrix.source(), &row);
 assert_eq!(matrix.render_data().cells().len(), 144);
@@ -43,11 +49,15 @@ modulo twelve, transformed rows are constructed through a private
 invariant-preserving path, and every result retains its normalized operation
 identity. Labels are separate values selected by either the first/last-pitch or
 operation-index convention. `RowFamilySet` preserves all 48 operation aliases
-while deduplicating equal row values caused by symmetry. `RowMatrix` retains its
-source, convention, coordinate-bearing cells, P/I line operations, and P/R/I/RI
-edge labels; both its structured data and ASCII display project the same object.
+while deduplicating equal row values caused by symmetry. `analyze_row_class`
+adds generator-cell derivation, exact all-interval evidence, stabilizers, form
+equivalences, and combinatorial partner witnesses without introducing a second
+permutation engine. `RowMatrix` retains its source, convention,
+coordinate-bearing cells, P/I line operations, and P/R/I/RI edge labels; both
+its structured data and ASCII display project the same object.
 
-See the embedded `row-family-matrix` Rust scenario and the `GATE-ROW`
-integration tests for the Op. 25 fixture, all 48 aliases, symmetric-family
-deduplication, every matrix row and column, inverse laws, malformed aggregates,
+See the embedded `row-family-matrix` and `row-class-analysis` Rust scenarios and
+the `GATE-ROW` integration tests for the Op. 25 fixture, derived rows,
+all-interval rows, all 48 aliases, symmetric-family deduplication, every matrix
+row and column, inverse laws, malformed aggregates, combinatorial partitions,
 and label disagreement.

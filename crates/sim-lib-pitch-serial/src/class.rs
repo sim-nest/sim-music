@@ -1,7 +1,8 @@
 //! Row-class reports that retain aliases, stabilizers, and invariance evidence.
 
 use crate::{
-    OrderedIntervalString, RowFamilySet, RowOperation, SegmentInvariant, ToneRow,
+    AllIntervalReport, CombinatorialPartner, DerivationReport, OrderedIntervalString, RowFamilySet,
+    RowOperation, SegmentInvariant, ToneRow, analyze_all_interval, analyze_derivation,
     analyze_invariance,
 };
 
@@ -34,6 +35,12 @@ pub struct RowClassReport {
     pub row: ToneRow,
     /// The source row's directed ordered-interval string.
     pub ordered_intervals: OrderedIntervalString,
+    /// Generator-cell derivation evidence over supported equal contiguous partitions.
+    pub derivation: DerivationReport,
+    /// All-interval evidence over the source row's adjacent directed intervals.
+    pub all_interval: AllIntervalReport,
+    /// Prime, inversional, retrograde, and retrograde-inversional combinatorial partners.
+    pub combinatoriality: Vec<CombinatorialPartner>,
     /// Every operation alias paired with its deduplicated row index.
     pub aliases: Vec<RowClassAlias>,
     /// The deduplicated row values in first-alias order.
@@ -88,6 +95,9 @@ pub fn analyze_row_class(row: &ToneRow) -> RowClassReport {
     RowClassReport {
         row: row.clone(),
         ordered_intervals: row.ordered_intervals(),
+        derivation: analyze_derivation(row),
+        all_interval: analyze_all_interval(row),
+        combinatoriality: crate::analyze_combinatoriality(row).partners,
         aliases,
         distinct_forms,
         stabilizers,
