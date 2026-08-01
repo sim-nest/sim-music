@@ -455,6 +455,15 @@ fn shape_specs() -> Vec<ShapeSpec> {
             ],
             serial::serial_series_shape(),
         ),
+        (
+            Symbol::qualified("music", "SerialPlan"),
+            "SerialPlan",
+            vec![
+                "immutable serial plan with stable row and event identity",
+                "semantic validation delegates precedence, coverage, and parent rules to music-serial",
+            ],
+            serial::serial_plan_shape(),
+        ),
     ]
 }
 

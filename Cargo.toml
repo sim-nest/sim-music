@@ -20,6 +20,7 @@ members = [
   "crates/sim-lib-music-lift",
   "crates/sim-lib-music-lower",
   "crates/sim-lib-music-notation",
+  "crates/sim-lib-music-serial",
   "crates/sim-lib-music-shapes",
   "crates/sim-lib-music-transform",
   "crates/sim-lib-music-wasm-frame",

@@ -1,5 +1,5 @@
 {
-  "card_count": 56,
+  "card_count": 57,
   "cards": [
     {
       "id": "browse/catalog",
@@ -132,6 +132,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-notation",
       "summary": "Notation import and export descriptors."
+    },
+    {
+      "id": "cookbook/music-serial",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-serial",
+      "summary": ""
     },
     {
       "id": "cookbook/music-shapes",

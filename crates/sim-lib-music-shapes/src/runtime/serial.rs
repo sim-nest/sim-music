@@ -11,7 +11,7 @@ use sim_shape::{AnyShape, ListShape, Shape, ShapeDoc, ShapeMatch, shape_value};
 use super::{
     DomainFormShape, form_field, form_shape, list_field, music_serial_validate_symbol, string_field,
 };
-use crate::decode_serial_series;
+use crate::{decode_serial_plan, decode_serial_series};
 
 pub(super) fn serial_series_shape() -> Arc<dyn Shape> {
     Arc::new(SerialSeriesShape {
@@ -22,6 +22,19 @@ pub(super) fn serial_series_shape() -> Arc<dyn Shape> {
                 list_field("symbols"),
                 form_field("rule"),
                 list_field("order"),
+            ],
+        )),
+    })
+}
+
+pub(super) fn serial_plan_shape() -> Arc<dyn Shape> {
+    Arc::new(SerialPlanShape {
+        structural: DomainFormShape::new(form_shape(
+            "SerialPlan",
+            vec![
+                list_field("rows"),
+                list_field("events"),
+                list_field("precedence"),
             ],
         )),
     })
@@ -39,6 +52,10 @@ pub(super) fn load_validate_function(
 }
 
 struct SerialSeriesShape {
+    structural: DomainFormShape,
+}
+
+struct SerialPlanShape {
     structural: DomainFormShape,
 }
 
@@ -65,6 +82,38 @@ impl Shape for SerialSeriesShape {
             && let Err(error) = decode_serial_series(text)
         {
             return Ok(ShapeMatch::reject(format!("shape-serial-series: {error}")));
+        }
+        Ok(structural)
+    }
+
+    fn describe(&self, cx: &mut Cx) -> Result<ShapeDoc> {
+        self.structural.describe(cx)
+    }
+}
+
+impl Shape for SerialPlanShape {
+    fn is_effectful(&self) -> bool {
+        false
+    }
+
+    fn is_total(&self) -> bool {
+        false
+    }
+
+    fn check_value(&self, cx: &mut Cx, value: Value) -> Result<ShapeMatch> {
+        let expr = value.object().as_expr(cx)?;
+        self.check_expr(cx, &expr)
+    }
+
+    fn check_expr(&self, cx: &mut Cx, expr: &Expr) -> Result<ShapeMatch> {
+        let structural = self.structural.check_expr(cx, expr)?;
+        if !structural.accepted {
+            return Ok(structural);
+        }
+        if let Expr::String(text) = expr
+            && let Err(error) = decode_serial_plan(text)
+        {
+            return Ok(ShapeMatch::reject(format!("shape-serial-plan: {error}")));
         }
         Ok(structural)
     }

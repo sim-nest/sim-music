@@ -128,6 +128,13 @@
       "summary": "Score and notation model for the SIM music libraries."
     },
     {
+      "crate_name": "sim_lib_music_serial",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-serial/Cargo.toml",
+      "package": "sim-lib-music-serial",
+      "summary": "Immutable serial plans with stable identity, provenance, and partial order."
+    },
+    {
       "crate_name": "sim_lib_music_shapes",
       "group": "workspace",
       "manifest": "crates/sim-lib-music-shapes/Cargo.toml",

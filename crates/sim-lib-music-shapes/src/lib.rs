@@ -12,8 +12,10 @@
 //! value to its `#(...)` form, and `decode_*` functions parse that form back
 //! into the corresponding `sim-lib-music-core` type. The narrow serial adapter
 //! also validates pitch-independent [`SymbolSeries`] values through the
-//! `music/SerialSeries` Shape and `music/serial/validate` callable while the
-//! domain contract remains owned by `sim-lib-serial-core`.
+//! `music/SerialSeries` Shape and `music/serial/validate` callable, and
+//! validates immutable `SerialPlan` values through the `music/SerialPlan`
+//! shape, while the domain contracts remain owned by `sim-lib-serial-core` and
+//! `sim-lib-music-serial`.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 #![allow(deprecated)]

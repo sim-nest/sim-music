@@ -13,6 +13,7 @@ use sim_lib_music_lift::{
 };
 use sim_lib_music_transform::{FunctionMap, RetrogradeMode};
 use sim_lib_pitch_scale::{Key, Mode};
+use sim_lib_pitch_serial::RowError;
 
 mod analysis;
 mod encode_arranger;
@@ -20,6 +21,7 @@ mod filter;
 mod lift;
 mod parse;
 mod serial;
+mod serial_plan;
 
 use encode_arranger::encode_arranger_placement;
 
@@ -41,6 +43,7 @@ pub use parse::{
     decode_progression, decode_rest, decode_score, decode_time,
 };
 pub use serial::{SymbolSeries, decode_serial_series, encode_serial_series};
+pub use serial_plan::{decode_serial_plan, encode_serial_plan};
 
 /// Error raised while decoding a music `#(...)` form.
 #[derive(Debug, Error)]
@@ -66,6 +69,12 @@ pub enum MusicShapeError {
     /// A finite serial alphabet, rule, or series failed semantic validation.
     #[error(transparent)]
     Serial(#[from] sim_lib_serial_core::SeriesError),
+    /// A strict tone-row form used inside a serial plan was invalid.
+    #[error(transparent)]
+    Row(#[from] RowError),
+    /// An immutable serial plan failed semantic validation.
+    #[error(transparent)]
+    SerialPlan(#[from] sim_lib_music_serial::SerialPlanError),
 }
 
 /// Encodes a `Time` as its `numer/denom` text form.

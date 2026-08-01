@@ -3,6 +3,7 @@ use std::any::Any;
 use std::sync::Arc;
 
 mod custom_filter;
+mod serial_plan;
 
 use sim_codec::{Input, decode_eval_expr_with_codec};
 use sim_codec_lisp::LispCodecLib;

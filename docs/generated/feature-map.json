@@ -172,6 +172,11 @@
     {
       "features": [],
       "group": "workspace",
+      "package": "sim-lib-music-serial"
+    },
+    {
+      "features": [],
+      "group": "workspace",
       "package": "sim-lib-music-shapes"
     },
     {
