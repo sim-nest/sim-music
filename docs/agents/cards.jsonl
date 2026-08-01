@@ -304,6 +304,9 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/setup.siml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-scale/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/setup.rs"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs"}

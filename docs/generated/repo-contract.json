@@ -2719,6 +2719,16 @@
           "kind": [
             "test"
           ],
+          "name": "row_class_analysis_recipe",
+          "src": "crates/sim-lib-pitch-serial/tests/row_class_analysis_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
           "name": "row_family_matrix_recipe",
           "src": "crates/sim-lib-pitch-serial/tests/row_family_matrix_recipe.rs"
         },
@@ -4044,10 +4054,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "d68fc92fa09e06f98c282af2846c0d483aa43120",
+    "git_commit": "591bf03f6fcf2d52118cd4c17ac0cb6293a8c82a",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "d68fc92fa09e06f98c282af2846c0d483aa43120",
+    "source_commit": "591bf03f6fcf2d52118cd4c17ac0cb6293a8c82a",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -4060,9 +4070,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "00c647cee338d340",
+    "workspace_hash": "e49bff6fbebdbbf8",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 842,
+    "workspace_hash_input_count": 848,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4671,11 +4681,16 @@
       "crates/sim-lib-pitch-scale/src/tests.rs",
       "crates/sim-lib-pitch-serial/Cargo.toml",
       "crates/sim-lib-pitch-serial/build.rs",
+      "crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/recipe.toml",
+      "crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/setup.rs",
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs",
       "crates/sim-lib-pitch-serial/recipes/book.toml",
+      "crates/sim-lib-pitch-serial/src/all_interval.rs",
       "crates/sim-lib-pitch-serial/src/alphabet.rs",
       "crates/sim-lib-pitch-serial/src/class.rs",
+      "crates/sim-lib-pitch-serial/src/combinatoriality.rs",
+      "crates/sim-lib-pitch-serial/src/derivation.rs",
       "crates/sim-lib-pitch-serial/src/error.rs",
       "crates/sim-lib-pitch-serial/src/family.rs",
       "crates/sim-lib-pitch-serial/src/interval.rs",
@@ -4688,6 +4703,7 @@
       "crates/sim-lib-pitch-serial/src/row.rs",
       "crates/sim-lib-pitch-serial/src/segment.rs",
       "crates/sim-lib-pitch-serial/tests/gate_row.rs",
+      "crates/sim-lib-pitch-serial/tests/row_class_analysis_recipe.rs",
       "crates/sim-lib-pitch-serial/tests/row_family_matrix_recipe.rs",
       "crates/sim-lib-pitch-set/Cargo.toml",
       "crates/sim-lib-pitch-set/build.rs",
@@ -5929,8 +5945,16 @@
       "card_id": "cookbook/pitch-serial",
       "group": "workspace",
       "package": "sim-lib-pitch-serial",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
+        {
+          "card_id": "pitch-serial/01-basics/row-class-analysis",
+          "codec": "rust",
+          "id": "row-class-analysis",
+          "package": "sim-lib-pitch-serial",
+          "recipe_toml": "crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/recipe.toml",
+          "title": "Analyze derivation, all-interval status, and combinatorial partners"
+        },
         {
           "card_id": "pitch-serial/01-basics/row-family-matrix",
           "codec": "rust",
