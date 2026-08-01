@@ -550,7 +550,7 @@ title = "Immutable serial plans and provenance"
 summary = "Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity."
 owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
-guidance = "Use sim-lib-music-serial when twelve-tone or broader serial material must remain an immutable structural source instead of collapsing early into score order. A SerialPlan stores stable RowInstanceId and SerialEventId keys, references row content through OrdinalRef values, preserves row operations in pitch-serial RowForm values, and validates every reference at construction. EventPlacement uses explicit simultaneous groups so equal-onset sonorities stay grouped without a fabricated left-to-right chord order; independent temporal requirements live in the validated precedence DAG. SerialRole and SerialOrigin keep structural, derived, ornamental, and external material distinct, every event carries at least one StructuralLicense naming the structural reading that licenses its notes, and every non-structural event must carry explicit parent evidence. SerialPractice composes open Arc-backed PracticeRule components instead of a closed style enum, evaluates a named SerialReading (StructuralPlan, DeclaredRoles, or AllSounding), and returns an InvariantLedger with one inspectable entry per rule: expected fact, observed fact, evidence ids, explicit waiver, and preserved/relaxed/violated status. Use the built-in aggregate, order, repeats, doublings, simultaneity, row-mixing, foreign-material, and parameter-exhaustion rules when a caller needs explicit policy and relaxation receipts rather than a single strictness boolean. Use TechniquePlan with the public complete-horizontal, motivic-partition, vertical-block, interlocking-partition, melody/accompaniment, aggregate-rotation, and simultaneous-form deployers when a practice such as Schoenberg-style partitioned deployment must stay inspectable instead of becoming a privileged style mode; `schoenberg_partitioned()` is one ordinary public composition of those components. StrictRealizationContext supplies explicit register, duration, velocity, articulation, voice, rest, tie, octave displacement, and simultaneity policy; realize_strict returns a SerialRealization whose plan is equality-identical to the source and whose notes retain planned event ids, voice ids, ordinal origins, row-form provenance, and structural-reading licenses. Render through render_serial_staff, render_serial_piano_roll, or render_serial_score when canonical music-core identity, equal-pitch multiplicity, and exact rational timing must be preserved. Construction, practice evaluation, deployment, and realization fail closed on malformed ids, missing rows, out-of-range ordinals, missing structural coverage, parent cycles, impossible MIDI placement, non-positive duration, invalid ties, and unsupported interlocking or simultaneous-form witnesses. Load MusicShapesLib for the narrow music/SerialPlan shape and text adapter; MIDI/audio lowering, transforms, search, and completion remain in their existing owners."
+guidance = "Use sim-lib-music-serial when twelve-tone or broader serial material must remain an immutable structural source instead of collapsing early into score order. A SerialPlan stores stable RowInstanceId and SerialEventId keys, references row content through OrdinalRef values, preserves row operations in pitch-serial RowForm values, and validates every reference at construction. EventPlacement uses explicit simultaneous groups so equal-onset sonorities stay grouped without a fabricated left-to-right chord order; independent temporal requirements live in the validated precedence DAG. SerialRole and SerialOrigin keep structural, derived, ornamental, and external material distinct, every event carries at least one StructuralLicense naming the structural reading that licenses its notes, and every non-structural event must carry explicit parent evidence. SerialPractice composes open Arc-backed PracticeRule components instead of a closed style enum, evaluates a named SerialReading (StructuralPlan, DeclaredRoles, or AllSounding), and returns an InvariantLedger with one inspectable entry per rule: expected fact, observed fact, evidence ids, explicit waiver, and preserved/relaxed/violated status. Use the built-in aggregate, order, repeats, doublings, simultaneity, row-mixing, foreign-material, and parameter-exhaustion rules when a caller needs explicit policy and relaxation receipts rather than a single strictness boolean. Use TechniquePlan with the public complete-horizontal, motivic-partition, vertical-block, interlocking-partition, melody/accompaniment, aggregate-rotation, and simultaneous-form deployers when a practice such as Schoenberg-style partitioned deployment must stay inspectable instead of becoming a privileged style mode; `schoenberg_partitioned()` is one ordinary public composition of those components. StrictRealizationContext supplies explicit register, duration, velocity, articulation, voice, rest, tie, octave displacement, and simultaneity policy; `realize_strict` remains the opt-in strict chromatic path only. Modal or caller-defined scale landing is a separate open adaptation surface and never silently claims strict twelve-tone aggregate identity. Render through render_serial_staff, render_serial_piano_roll, or render_serial_score when canonical music-core identity, equal-pitch multiplicity, and exact rational timing must be preserved. Construction, practice evaluation, deployment, and realization fail closed on malformed ids, missing rows, out-of-range ordinals, missing structural coverage, parent cycles, impossible MIDI placement, non-positive duration, invalid ties, and unsupported interlocking or simultaneous-form witnesses. Load MusicShapesLib for the narrow music/SerialPlan shape and text adapter; MIDI/audio lowering, transforms, search, and completion remain in their existing owners."
 claims_anchors = [
   "anchor/crate/sim-lib-music-core",
   "anchor/crate/sim-lib-music-serial",
@@ -564,6 +564,32 @@ claims_surfaces = [
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan",
   "recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization",
+]
+
+[[feature]]
+id = "feature/sim-music/open-serial-adaptation"
+title = "Open serial adaptation across modal and caller-defined spines"
+summary = "Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently."
+owner = "crate/sim-lib-music-serial"
+audiences = ["user", "code", "framework"]
+guidance = "Use this row when a serial plan must adapt beyond strict twelve-tone output without mutating the source plan. The built-in modal degree-cycle, nearest-scale-tone, marked-chromatic-inflection, and non-pitch-spine realizers all start from the same immutable SerialPlan and explicit event specs, land pitches through an explicit twelve-tone pitch map derived from either a named Scale or a caller-defined PlayerScale, and attach a SerialSpineReport instead of pretending the result is still a strict chromatic aggregate. The report keeps modal membership, landed-versus-source pitch identity, chromatic aggregate loss, retained ordinal order, collisions, repeated degrees, and contextual sonance as separate inspectable facets. `realize_strict` stays strict and chromatic by default; open adaptation is opt-in through the realizer registry."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-core",
+  "anchor/crate/sim-lib-music-serial",
+  "anchor/crate/sim-lib-music-transform",
+  "anchor/crate/sim-lib-pitch-dissonance",
+  "anchor/crate/sim-lib-pitch-scale",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine",
+]
+supports = [
+  "feature/sim-music/exact-music-analysis-and-transform",
+  "feature/sim-music/pitch-and-sound-vocabulary",
+  "feature/sim-music/serial-practice",
 ]
 
 [[route]]
@@ -607,6 +633,18 @@ steps = [
   { feature = "feature/sim-music/serial-practice", why = "The music-serial layer freezes row instances, stable event ids, ordinal references, role/origin provenance, explicit parents, simultaneous groups, and precedence into one immutable validated plan, then realizes strict statements with explicit register, duration, dynamics, rests, ties, and canonical music-core rendering." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan", why = "The checked Rust scenario proves that one row can span multiple voices while equal-onset material stays grouped without a fabricated chord order." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization", why = "The checked Rust scenario realizes a strict row statement with a chord, rest, tie, and equal-pitch simultaneous notes while preserving plan, event, voice, and ordinal identity through the piano roll." },
+]
+
+[[route]]
+id = "route/realize-serial-spine"
+task = "Adapt an immutable serial plan onto a modal or caller-defined spine without hiding aggregate loss"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/serial-practice", why = "The serial owner keeps the immutable plan, stable event identities, row-form provenance, explicit strict specs, and strict chromatic baseline intact before any adaptation occurs." },
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch vocabulary row owns named scales, caller-defined player scales, and contextual sonance models reused by the adaptation report." },
+  { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact transform row owns the first-class partial pitch-map policy that modal landing reuses instead of inventing another remap surface." },
+  { feature = "feature/sim-music/open-serial-adaptation", why = "The open adaptation row owns landed modal realization, aggregate-relaxation receipts, and the independent spine, pitch, ordinal, and sonance report facets." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine", why = "The checked Rust scenario realizes the same immutable plan through C Dorian, C Lydian, and a caller-defined scale, proves plan equality with differing sounding pitches, and inspects the spine report without claiming strict twelve-tone output." },
 ]
 
 [[route]]

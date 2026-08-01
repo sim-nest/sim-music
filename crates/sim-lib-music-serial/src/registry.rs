@@ -4,8 +4,9 @@ use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use crate::{
-    ChromaticSerialRealizer, RealizationContext, RealizerId, SerialPlan, SerialRealization,
-    SerialRealizer, StrictRealizationError,
+    ChromaticSerialRealizer, MarkedChromaticInflectionRealizer, ModalDegreeCycleRealizer,
+    NearestScaleToneRealizer, NonPitchSpineRealizer, RealizationContext, RealizerId, SerialPlan,
+    SerialRealization, SerialRealizer, StrictRealizationError,
 };
 
 /// Id-addressed registry of serial realizers with stable sorted listing.
@@ -59,11 +60,27 @@ impl SerialRealizerRegistry {
         };
         realizer.realize(plan, context)
     }
+
+    /// Realizes one plan through the registered realizer named by a stable string id.
+    pub fn realize_named(
+        &self,
+        id: &str,
+        plan: &SerialPlan,
+        context: &RealizationContext,
+    ) -> Result<SerialRealization, StrictRealizationError> {
+        let id = RealizerId::new(id)
+            .map_err(|error| StrictRealizationError::PitchMap(error.to_string()))?;
+        self.realize(&id, plan, context)
+    }
 }
 
 /// Returns the built-in registry with the strict chromatic realizer installed.
 pub fn default_realizer_registry() -> SerialRealizerRegistry {
     let mut registry = SerialRealizerRegistry::new();
     registry.replace(Arc::new(ChromaticSerialRealizer::default()));
+    registry.replace(Arc::new(ModalDegreeCycleRealizer::default()));
+    registry.replace(Arc::new(NearestScaleToneRealizer::default()));
+    registry.replace(Arc::new(MarkedChromaticInflectionRealizer::default()));
+    registry.replace(Arc::new(NonPitchSpineRealizer::default()));
     registry
 }

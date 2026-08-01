@@ -6,7 +6,8 @@ use std::fmt::{Display, Formatter};
 use std::sync::Arc;
 
 use sim_lib_music_core::{Articulation, Channel, Time};
-use sim_lib_pitch_scale::Scale;
+use sim_lib_pitch_dissonance::ContextualSonanceOptions;
+use sim_lib_pitch_scale::{PlayerScale, Scale};
 use sim_lib_sound_tuning::Tuning;
 
 use crate::{ErasedParameterBinding, SerialEventId, SerialPlan, SerialRealization, VoiceId};
@@ -234,8 +235,12 @@ pub struct RealizationContext {
     pub simultaneous_policy: SimultaneousRenderPolicy,
     /// Optional target scale retained for realizers that need scale awareness.
     pub scale: Option<Scale>,
+    /// Optional caller-defined performance scale used by modal spine realizers.
+    pub modal_scale: Option<PlayerScale>,
     /// Optional target tuning retained for pitch/frequency-aware realizers.
     pub tuning: Option<Arc<dyn Tuning>>,
+    /// Optional contextual-sonance policy used by adaptation reports.
+    pub contextual_sonance: Option<ContextualSonanceOptions>,
     /// Optional per-voice register policy.
     pub register_bounds: BTreeMap<VoiceId, RegisterBounds>,
     /// Optional per-voice realization limits.
@@ -253,7 +258,9 @@ impl RealizationContext {
             specs,
             simultaneous_policy: SimultaneousRenderPolicy::PreserveOnset,
             scale: None,
+            modal_scale: None,
             tuning: None,
+            contextual_sonance: None,
             register_bounds: BTreeMap::new(),
             voice_bounds: BTreeMap::new(),
             parameter_tracks: BTreeMap::new(),
@@ -269,7 +276,9 @@ impl std::fmt::Debug for RealizationContext {
             .field("specs", &self.specs)
             .field("simultaneous_policy", &self.simultaneous_policy)
             .field("scale", &self.scale)
+            .field("modal_scale", &self.modal_scale)
             .field("tuning", &self.tuning.as_ref().map(|tuning| tuning.name()))
+            .field("contextual_sonance", &self.contextual_sonance)
             .field("register_bounds", &self.register_bounds)
             .field("voice_bounds", &self.voice_bounds)
             .field(
@@ -278,6 +287,15 @@ impl std::fmt::Debug for RealizationContext {
             )
             .field("services", &self.services)
             .finish()
+    }
+}
+
+impl RealizationContext {
+    /// Returns the effective modal scale for open serial adaptation, if any.
+    pub fn effective_modal_scale(&self) -> Option<PlayerScale> {
+        self.modal_scale
+            .clone()
+            .or_else(|| self.scale.map(PlayerScale::from_scale))
     }
 }
 

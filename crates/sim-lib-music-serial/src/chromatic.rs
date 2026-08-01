@@ -41,7 +41,7 @@ impl SerialRealizer for ChromaticSerialRealizer {
         plan: &SerialPlan,
         context: &RealizationContext,
     ) -> Result<SerialRealization, StrictRealizationError> {
-        realize_chromatic(self.id(), plan, context)
+        realize_chromatic_with_id(self.id(), plan, context)
     }
 }
 
@@ -64,7 +64,7 @@ struct EventUnit {
     key: UnitKey,
 }
 
-fn realize_chromatic(
+pub(crate) fn realize_chromatic_with_id(
     realizer_id: &RealizerId,
     plan: &SerialPlan,
     context: &RealizationContext,
@@ -190,19 +190,39 @@ fn realize_chromatic(
         EvidenceId::new("evidence/strict-specs").expect("evidence id"),
         EvidenceId::new("evidence/typed-origin").expect("evidence id"),
     ];
-    let ledger = InvariantLedger::new(vec![InvariantLedgerEntry::new(
-        realizer_id.clone(),
-        "every realized note retains typed serial provenance and explicit strict event specs",
-        format!(
-            "realized {} events and {} sounding notes through {}",
-            realized_events.len(),
-            notes.len(),
-            realizer_id
+    let ledger = InvariantLedger::new(vec![
+        InvariantLedgerEntry::new(
+            realizer_id.clone(),
+            "serial ordinal order remains identical to the planned order",
+            "chromatic realization kept the planned event and ordinal traversal order intact",
+            InvariantStatus::Preserved,
+            vec![EvidenceId::new("evidence/strict-ordinal-order").expect("evidence id")],
+            None,
+        )
+        .with_invariant_id("serial/ordinal-order"),
+        InvariantLedgerEntry::new(
+            realizer_id.clone(),
+            "the chromatic aggregate remains unchanged under strict realization",
+            "strict chromatic realization preserved every source pitch class exactly",
+            InvariantStatus::Preserved,
+            vec![EvidenceId::new("evidence/strict-chromatic-aggregate").expect("evidence id")],
+            None,
+        )
+        .with_invariant_id("serial/chromatic-aggregate"),
+        InvariantLedgerEntry::new(
+            realizer_id.clone(),
+            "every realized note retains typed serial provenance and explicit strict event specs",
+            format!(
+                "realized {} events and {} sounding notes through {}",
+                realized_events.len(),
+                notes.len(),
+                realizer_id
+            ),
+            InvariantStatus::Preserved,
+            evidence_ids,
+            None,
         ),
-        InvariantStatus::Preserved,
-        evidence_ids,
-        None,
-    )]);
+    ]);
 
     Ok(SerialRealization::new(
         plan.clone(),

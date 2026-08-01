@@ -83,6 +83,8 @@ pub enum InvariantStatus {
 pub struct InvariantLedgerEntry<R> {
     /// Stable rule identity.
     pub rule_id: R,
+    /// Stable invariant identity when the caller exposes one.
+    pub invariant_id: Option<String>,
     /// Human-readable expected fact.
     pub expected_fact: String,
     /// Human-readable observed fact.
@@ -106,12 +108,18 @@ impl<R> InvariantLedgerEntry<R> {
     ) -> Self {
         Self {
             rule_id,
+            invariant_id: None,
             expected_fact: expected_fact.into(),
             observed_fact: observed_fact.into(),
             status,
             evidence_ids,
             declared_waiver,
         }
+    }
+
+    pub(crate) fn with_invariant_id(mut self, invariant_id: impl Into<String>) -> Self {
+        self.invariant_id = Some(invariant_id.into());
+        self
     }
 }
 
@@ -130,5 +138,21 @@ impl<R> InvariantLedger<R> {
     /// Returns the recorded invariant entries in stable rule order.
     pub fn entries(&self) -> &[InvariantLedgerEntry<R>] {
         &self.entries
+    }
+
+    /// Returns `true` when the named invariant is present and preserved.
+    pub fn is_preserved(&self, invariant_id: &str) -> bool {
+        self.entries.iter().any(|entry| {
+            entry.invariant_id.as_deref() == Some(invariant_id)
+                && matches!(entry.status, InvariantStatus::Preserved)
+        })
+    }
+
+    /// Returns `true` when the named invariant is present and relaxed.
+    pub fn is_relaxed(&self, invariant_id: &str) -> bool {
+        self.entries.iter().any(|entry| {
+            entry.invariant_id.as_deref() == Some(invariant_id)
+                && matches!(entry.status, InvariantStatus::Relaxed { .. })
+        })
     }
 }

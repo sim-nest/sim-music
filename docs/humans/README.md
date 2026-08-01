@@ -37,6 +37,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
 | `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
 | `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 2 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
+| `feature/sim-music/open-serial-adaptation` | `crate/sim-lib-music-serial` | 1 | Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently. |
 
 ## Surfaces
 
@@ -222,6 +223,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/purpose.md`
 - `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`
 - `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/setup.rs`
 - `crates/sim-lib-music-serial/recipes/book.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md`
@@ -10011,4 +10016,18 @@ summary = "Realize and render a strict serial row statement without losing plann
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
 requires = ["music-serial", "pitch-serial", "music-core"]
+```
+
+### `feature/sim-music/open-serial-adaptation`
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`:
+
+```toml
+title = "Modal spine realization"
+summary = "Land one immutable serial plan onto modal and caller-defined scales while preserving ordinal identity and reporting aggregate relaxation explicitly."
+category = "Rust"
+tags = ["music", "serial", "modal", "adaptation", "realization", "rust", "framework"]
+requires = ["music-serial", "pitch-scale", "music-core"]
 ```

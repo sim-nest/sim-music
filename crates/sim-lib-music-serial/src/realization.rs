@@ -2,12 +2,13 @@
 
 use std::collections::BTreeMap;
 
-use sim_lib_music_core::{Note, Time};
+use sim_lib_music_core::{Note, Pitch, Time};
 use sim_lib_pitch_serial::RowForm;
 use thiserror::Error;
 
 use crate::{
-    InvariantLedger, OrdinalRef, RealizerId, SerialEventId, SerialPlan, StructuralLicense, VoiceId,
+    InvariantLedger, OrdinalRef, RealizerId, SerialEventId, SerialPlan, SerialSpineReport,
+    StructuralLicense, VoiceId,
 };
 
 /// Complete serial provenance for one realized sounding note.
@@ -58,21 +59,33 @@ pub struct RealizedSerialEvent {
 }
 
 /// Realized serial notes plus exact event spans, retaining the source plan unchanged.
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct SerialRealization {
     plan: SerialPlan,
     events: Vec<RealizedSerialEvent>,
     notes: Vec<RealizedSerialNote>,
     ledger: InvariantLedger<RealizerId>,
+    spine_report: Option<SerialSpineReport>,
 }
 
 impl SerialRealization {
     /// Builds one exact realization from the preserved plan, event spans, and notes.
     pub fn new(
         plan: SerialPlan,
+        events: Vec<RealizedSerialEvent>,
+        notes: Vec<RealizedSerialNote>,
+        ledger: InvariantLedger<RealizerId>,
+    ) -> Self {
+        Self::new_with_spine(plan, events, notes, ledger, None)
+    }
+
+    /// Builds one exact realization and attaches an optional adaptation report.
+    pub fn new_with_spine(
+        plan: SerialPlan,
         mut events: Vec<RealizedSerialEvent>,
         mut notes: Vec<RealizedSerialNote>,
         ledger: InvariantLedger<RealizerId>,
+        spine_report: Option<SerialSpineReport>,
     ) -> Self {
         events.sort_by(|left, right| {
             left.onset
@@ -92,6 +105,7 @@ impl SerialRealization {
             events,
             notes,
             ledger,
+            spine_report,
         }
     }
 
@@ -110,9 +124,19 @@ impl SerialRealization {
         &self.notes
     }
 
+    /// Returns the sounding pitches in canonical note order.
+    pub fn sounding_pitches(&self) -> Vec<Pitch> {
+        self.notes.iter().map(|note| note.note.pitch).collect()
+    }
+
     /// Returns the realizer invariant ledger recorded for this realization.
     pub fn ledger(&self) -> &InvariantLedger<RealizerId> {
         &self.ledger
+    }
+
+    /// Returns the optional serial-spine report attached by an adaptive realizer.
+    pub fn spine_report(&self) -> Option<&SerialSpineReport> {
+        self.spine_report.as_ref()
     }
 }
 
@@ -162,4 +186,10 @@ pub enum StrictRealizationError {
     /// Rendering through canonical music-core score conversion failed.
     #[error("music-core rendering failed: {0}")]
     MusicCore(String),
+    /// A modal or adapted realizer requires a scale context.
+    #[error("serial realizer {0} requires a modal scale in the realization context")]
+    MissingModalScale(RealizerId),
+    /// One adaptation pitch-map operation failed.
+    #[error("pitch-map adaptation failed: {0}")]
+    PitchMap(String),
 }

@@ -172,6 +172,10 @@
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/02-adaptation/chapter.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/purpose.md"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml"}
+{"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/setup.rs"}
 {"kind":"recipe","path":"crates/sim-lib-music-serial/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md"}

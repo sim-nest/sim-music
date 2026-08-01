@@ -2,13 +2,16 @@ use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use sim_lib_music_core::{Articulation, Channel, Score, Time};
+use sim_lib_pitch_core::PitchClass;
+use sim_lib_pitch_scale::{PlayerScale, Scale};
 
 use crate::tests::{quarter, strict_context, strict_plan, voice};
 use crate::{
     RealizationContext, RealizerId, RowInstanceId, SerialEventId, SerialPlan, SerialRealization,
-    SerialRealizer, SerialRealizerRegistry, SerialRenderOptions, StrictEventSpec,
-    StrictRealizationContext, realize_strict, render_serial_piano_roll, render_serial_score,
-    render_serial_staff, strict_chromatic_realizer_id,
+    SerialRealizer, SerialRealizerRegistry, SerialRenderOptions, SerialSpineKind, SerialSpineLabel,
+    StrictEventSpec, StrictRealizationContext, default_realizer_registry, realize_strict,
+    render_serial_piano_roll, render_serial_score, render_serial_staff,
+    strict_chromatic_realizer_id,
 };
 
 #[test]
@@ -16,7 +19,13 @@ fn strict_realization_preserves_plan_and_serial_origin() {
     let plan = strict_plan();
     let realization = realize_strict(&plan, &strict_context()).expect("realization");
     assert_eq!(realization.plan(), &plan);
-    assert_eq!(realization.ledger().entries().len(), 1);
+    assert_eq!(realization.ledger().entries().len(), 3);
+    assert!(realization.ledger().is_preserved("serial/ordinal-order"));
+    assert!(
+        realization
+            .ledger()
+            .is_preserved("serial/chromatic-aggregate")
+    );
     assert!(realization.notes().iter().all(|note| {
         plan.event(&note.event_id).is_some()
             && !note.origin.ordinals.is_empty()
@@ -73,6 +82,96 @@ fn custom_realizer_receives_open_context_data_without_production_registry_change
     assert_eq!(
         realization.ledger().entries()[0].rule_id.as_str(),
         "realizer/test-only"
+    );
+}
+
+#[test]
+fn modal_degree_cycle_realizers_preserve_plan_and_relax_chromatic_aggregate() {
+    let plan = strict_plan();
+    let registry = default_realizer_registry();
+    let mut dorian_context = strict_context();
+    dorian_context.modal_scale = Some(PlayerScale::from_scale(Scale::dorian(PitchClass::C)));
+    let mut lydian_context = strict_context();
+    lydian_context.modal_scale = Some(PlayerScale::from_scale(Scale::lydian(PitchClass::C)));
+
+    let dorian = registry
+        .realize_named("realizer/modal-degree-cycle", &plan, &dorian_context)
+        .expect("dorian modal realization");
+    let lydian = registry
+        .realize_named("realizer/modal-degree-cycle", &plan, &lydian_context)
+        .expect("lydian modal realization");
+
+    assert_eq!(dorian.plan(), lydian.plan());
+    assert_ne!(dorian.sounding_pitches(), lydian.sounding_pitches());
+    assert!(dorian.ledger().is_preserved("serial/ordinal-order"));
+    assert!(dorian.ledger().is_relaxed("serial/chromatic-aggregate"));
+
+    let report = dorian.spine_report().expect("spine report");
+    assert_eq!(report.kind, SerialSpineKind::DegreeCycle);
+    assert!(!report.modal_membership().is_empty());
+    assert!(!report.pitch_identity().is_empty());
+    assert!(
+        !report
+            .chromatic_aggregate_identity()
+            .lost_source_classes
+            .is_empty()
+    );
+    assert_eq!(report.ordinal_order().len(), dorian.notes().len());
+    assert!(!report.sonance_context().is_empty());
+}
+
+#[test]
+fn modal_realizers_support_marked_and_non_pitch_spines_plus_custom_scale() {
+    let plan = strict_plan();
+    let registry = default_realizer_registry();
+    let mut custom_context = strict_context();
+    custom_context.modal_scale =
+        Some(PlayerScale::custom(PitchClass::C, vec![0, 1, 4, 5, 7, 8, 10]).expect("custom scale"));
+
+    let marked = registry
+        .realize_named(
+            "realizer/modal-marked-chromatic-inflection",
+            &plan,
+            &custom_context,
+        )
+        .expect("marked realization");
+    let marked_report = marked.spine_report().expect("marked spine report");
+    assert_eq!(
+        marked_report.kind,
+        SerialSpineKind::MarkedChromaticInflection
+    );
+    assert!(marked_report.entries.iter().any(|entry| {
+        matches!(
+            entry.label,
+            SerialSpineLabel::ChromaticInflection {
+                semitone_delta,
+                ..
+            } if semitone_delta != 0
+        )
+    }));
+
+    let non_pitch = registry
+        .realize_named("realizer/modal-non-pitch-spine", &plan, &custom_context)
+        .expect("non-pitch realization");
+    let non_pitch_report = non_pitch.spine_report().expect("non-pitch report");
+    assert_eq!(non_pitch_report.kind, SerialSpineKind::NonPitchSpine);
+    assert!(
+        non_pitch_report
+            .entries
+            .iter()
+            .all(|entry| { matches!(entry.label, SerialSpineLabel::OrdinalToken { .. }) })
+    );
+
+    let nearest = registry
+        .realize_named("realizer/modal-nearest-scale-tone", &plan, &custom_context)
+        .expect("nearest realization");
+    let nearest_report = nearest.spine_report().expect("nearest report");
+    assert_eq!(nearest_report.kind, SerialSpineKind::NearestScaleTone);
+    assert!(
+        nearest_report
+            .entries
+            .iter()
+            .all(|entry| { matches!(entry.label, SerialSpineLabel::LandedPitch(_)) })
     );
 }
 

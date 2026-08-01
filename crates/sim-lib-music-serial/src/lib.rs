@@ -22,6 +22,7 @@ mod extract;
 mod hypothesis;
 mod integral;
 mod invariant;
+mod modal;
 mod nesting;
 mod order;
 mod origin;
@@ -36,6 +37,7 @@ mod referential;
 mod registry;
 mod render;
 mod report;
+mod spine;
 mod strict;
 mod techniques;
 mod time_point;
@@ -87,6 +89,10 @@ pub use integral::{
     ParameterStep, ParameterTrack, RegisterTrack, TimbreTrack,
 };
 pub use invariant::{EvidenceId, InvariantLedger, InvariantLedgerEntry, InvariantStatus, WaiverId};
+pub use modal::{
+    MarkedChromaticInflectionRealizer, ModalDegreeCycleRealizer, NearestScaleToneRealizer,
+    NonPitchSpineRealizer,
+};
 pub use nesting::{
     NestedSerialValue, NestingError, NestingExpansion, NestingLimits, expand_nested,
     rotate_sequence_left,
@@ -118,6 +124,10 @@ pub use render::{
     SerialRenderOptions, render_serial_piano_roll, render_serial_score, render_serial_staff,
 };
 pub use report::SerialPracticeReport;
+pub use spine::{
+    ChromaticAggregateIdentity, SerialRepeatedDegree, SerialSonanceContext, SerialSpineCollision,
+    SerialSpineEntry, SerialSpineKind, SerialSpineLabel, SerialSpineReport,
+};
 pub use strict::realize_strict;
 pub use time_point::{TimePointAlphabet, TimePointError, TimePointRow, TimePointSystem};
 
