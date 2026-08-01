@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-core"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 license = "MPL-2.0"
 description = "Core MIDI event, channel, tick-time, device, and in-memory transport models."

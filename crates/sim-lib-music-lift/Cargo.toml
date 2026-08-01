@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-lift"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Lifts MIDI files and tracks into progression, counterpoint, piano-roll, and diff views."

@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-shapes"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 license = "MPL-2.0"
 description = "Text codecs, citizen descriptors, and runtime shapes for SIM music objects."

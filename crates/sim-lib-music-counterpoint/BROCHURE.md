@@ -1,7 +1,6 @@
 # sim-lib-music-counterpoint
 
-In one line: It explains contrapuntal mistakes exactly, maps thematic overlap,
-and generates bounded reversible companion voices.
+In one line: Explains contrapuntal mistakes, maps thematic overlap, and generates bounded reversible companion voices.
 
 ## What it gives you
 
