@@ -247,13 +247,14 @@ pub fn analyze_partition_similarity(
                 .blocks()
                 .iter()
                 .enumerate()
-                .filter_map(move |(right_block_index, right_block)| {
-                    (left_block.ordinals() == right_block.ordinals()).then(|| PartitionBlockMatch {
+                .filter(move |(_, right_block)| left_block.ordinals() == right_block.ordinals())
+                .map(
+                    move |(right_block_index, _right_block)| PartitionBlockMatch {
                         left_block_index,
                         right_block_index,
                         ordinals: left_block.ordinals().to_vec(),
-                    })
-                })
+                    },
+                )
         })
         .collect();
 
