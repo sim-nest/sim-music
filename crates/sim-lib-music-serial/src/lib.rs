@@ -9,6 +9,7 @@
 #![deny(missing_docs)]
 
 mod anchor;
+mod array;
 mod canon;
 mod cycle;
 mod deploy;
@@ -18,9 +19,12 @@ mod event;
 mod evidence;
 mod extract;
 mod hypothesis;
+mod integral;
 mod invariant;
+mod nesting;
 mod order;
 mod origin;
+mod parameter;
 mod plan;
 mod practice;
 mod practice_builtin;
@@ -31,8 +35,13 @@ mod render;
 mod report;
 mod strict;
 mod techniques;
+mod time_point;
 
 pub use anchor::ReferentialEmphasis;
+pub use array::{
+    AggregateArrayReport, AggregatePartitionReport, ColumnPartition, PartitionCoverageReport,
+    SerialArray, SerialArrayError, SerialArrayRow, VerticalAggregateRequirement,
+};
 pub use canon::{
     CanonDeployment, CanonError, CanonOrchestration, CanonRealizationEvent, CanonSpec,
     CanonSymmetryCertificate, CanonSymmetryRequirement, CanonVoiceProfile, CanonVoiceSpec,
@@ -68,9 +77,19 @@ pub use hypothesis::{
     RankedSerialHypothesis, SerialAliasEvidence, SerialObservation, SerialObservationBlock,
     SerialReadingOrder, SerialStableRank, SerialTimeSpan,
 };
+pub use integral::{
+    ArticulationTrack, BoundParameterTrack, DurationTrack, DynamicsTrack, ErasedParameterBinding,
+    Exhaustion, IntegralError, IntegralPlan, ParameterOrdinalLedgerEntry, ParameterProjection,
+    ParameterStep, ParameterTrack, RegisterTrack, TimbreTrack,
+};
 pub use invariant::{EvidenceId, InvariantLedger, InvariantLedgerEntry, InvariantStatus, WaiverId};
+pub use nesting::{
+    NestedSerialValue, NestingError, NestingExpansion, NestingLimits, expand_nested,
+    rotate_sequence_left,
+};
 pub use order::PrecedenceGraph;
 pub use origin::{SerialOrigin, SerialRole};
+pub use parameter::{ParameterAlphabet, ParameterError, ParameterSeries, ParameterValue};
 pub use plan::SerialPlan;
 pub use practice::{
     BuiltInPracticeRule, DeclaredWaivers, PracticeId, PracticeRule, PracticeRuleId,
@@ -93,6 +112,7 @@ pub use strict::{
     EventSound, SimultaneousRenderPolicy, StrictEventSpec, StrictPitchLayout,
     StrictRealizationContext, TiePolicy, realize_strict,
 };
+pub use time_point::{TimePointAlphabet, TimePointError, TimePointRow, TimePointSystem};
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =
@@ -101,8 +121,12 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
+mod tests_array_time_point;
+#[cfg(test)]
 mod tests_deploy;
 #[cfg(test)]
 mod tests_extract;
+#[cfg(test)]
+mod tests_integral;
 #[cfg(test)]
 mod tests_techniques;
