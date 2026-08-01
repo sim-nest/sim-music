@@ -1,19 +1,20 @@
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
-use sim_lib_music_core::{Articulation, Channel, ObjectId, PitchClass, Score, Time};
+use sim_lib_music_core::{Articulation, Channel, ObjectId, PitchClass, Time};
+use sim_lib_pitch_scale::Scale;
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
+use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
     BuiltInPracticeRule, DeclaredWaivers, EventPlacement, InvariantStatus, OrdinalRef,
-    PlannedSerialEvent, PracticeId, PracticeRuleId, RowInstanceId, SerialEventId, SerialOrigin,
-    SerialPlan, SerialPlanError, SerialPractice, SerialReading, SerialRenderOptions, SerialRole,
+    PlannedSerialEvent, PracticeId, PracticeRuleId, RegisterBounds, RowInstanceId, SerialEventId,
+    SerialOrigin, SerialPlan, SerialPlanError, SerialPractice, SerialReading, SerialRole,
     SimultaneousGroupId, StrictEventSpec, StrictPitchLayout, StrictRealizationContext,
-    StructuralLicense, StructuralReadingId, TiePolicy, WaiverId, realize_strict,
-    render_serial_piano_roll, render_serial_score, render_serial_staff,
+    StructuralLicense, StructuralReadingId, TiePolicy, VoiceBounds, WaiverId,
 };
 
-fn op25_form() -> sim_lib_pitch_serial::RowForm {
+pub(crate) fn op25_form() -> sim_lib_pitch_serial::RowForm {
     let row = ToneRow::try_from_classes([
         PitchClass::E,
         PitchClass::F,
@@ -32,11 +33,11 @@ fn op25_form() -> sim_lib_pitch_serial::RowForm {
     row.apply(RowOperation::new(RowFamily::P, 0))
 }
 
-fn voice(name: &str) -> ObjectId {
+pub(crate) fn voice(name: &str) -> ObjectId {
     ObjectId::new(name).expect("voice id")
 }
 
-fn quarter() -> Time {
+pub(crate) fn quarter() -> Time {
     Time::new(1, 4)
 }
 
@@ -49,7 +50,7 @@ fn named_license(id: &str, rationale: &str) -> StructuralLicense {
         .expect("license")
 }
 
-fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
+pub(crate) fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
     let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
     event_for_row(row_id, id, ordinals, voice_name)
 }
@@ -225,7 +226,7 @@ fn serial_plan_rejects_missing_structural_coverage() {
     );
 }
 
-fn strict_plan() -> SerialPlan {
+pub(crate) fn strict_plan() -> SerialPlan {
     let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
     let mut rows = BTreeMap::new();
     rows.insert(row_id.clone(), op25_form());
@@ -442,7 +443,7 @@ fn practice_rules() -> Vec<Arc<dyn crate::PracticeRule>> {
     ]
 }
 
-fn strict_context() -> StrictRealizationContext {
+pub(crate) fn strict_context() -> StrictRealizationContext {
     let channel = Channel::new(0).expect("channel");
     let specs = [
         (
@@ -501,126 +502,23 @@ fn strict_context() -> StrictRealizationContext {
     .into_iter()
     .map(|(id, spec)| (SerialEventId::new(id).expect("event id"), spec))
     .collect();
-    StrictRealizationContext::new(specs)
-}
-
-#[test]
-fn strict_realization_preserves_plan_and_serial_origin() {
-    let plan = strict_plan();
-    let realization = realize_strict(&plan, &strict_context()).expect("realization");
-    assert_eq!(realization.plan(), &plan);
-    assert!(
-        realization.notes().iter().all(|note| {
-            plan.event(&note.event_id).is_some() && !note.origin.ordinals.is_empty()
-        })
+    let mut context = StrictRealizationContext::new(specs);
+    context.scale = Some(Scale::chromatic(PitchClass::C));
+    context.tuning = Some(Arc::new(EqualTemperament::default()));
+    context.register_bounds.insert(
+        voice("voice/high"),
+        RegisterBounds {
+            lowest: 4,
+            highest: 6,
+        },
     );
-    assert!(realization.events().iter().any(|event| event.is_rest));
-}
-
-#[test]
-fn strict_realization_renders_chords_crossings_and_equal_pitch_multiplicity() {
-    let realization = realize_strict(&strict_plan(), &strict_context()).expect("realization");
-    let staff = render_serial_staff(&realization).expect("staff");
-    let roll = render_serial_piano_roll(&realization).expect("roll");
-
-    assert_eq!(staff.voices.len(), 3);
-    assert!(
-        staff
-            .voices
-            .iter()
-            .find(|staff_voice| staff_voice.id == voice("voice/high"))
-            .expect("high voice")
-            .notes
-            .iter()
-            .any(|note| note.note.pitch.to_midi() == Some(48))
+    context.voice_bounds.insert(
+        voice("voice/high"),
+        VoiceBounds {
+            max_notes_per_event: Some(2),
+        },
     );
-    assert!(
-        staff
-            .voices
-            .iter()
-            .find(|staff_voice| staff_voice.id == voice("voice/low"))
-            .expect("low voice")
-            .notes
-            .iter()
-            .any(|note| note.note.pitch.to_midi() == Some(80))
-    );
-
-    let tied = realization
-        .notes()
-        .iter()
-        .find(|note| note.event_id == SerialEventId::new("event/tie-a").unwrap())
-        .expect("tied note");
-    assert_eq!(tied.note.duration, Time::new(1, 2));
-    assert!(
-        realization
-            .notes()
-            .iter()
-            .all(|note| note.event_id != SerialEventId::new("event/tie-b").unwrap())
-    );
-
-    assert!(roll.note_slices().into_iter().any(|slice| {
-        slice
-            .notes
-            .iter()
-            .filter(|note| note.timed.note.pitch.to_midi() == Some(71))
-            .count()
-            == 2
-    }));
-}
-
-#[test]
-fn strict_render_keeps_trailing_rest_duration_for_existing_voice() {
-    let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
-    let note_id = SerialEventId::new("event/opening").expect("event id");
-    let rest_id = SerialEventId::new("event/trailing-rest").expect("event id");
-    let mut rows = BTreeMap::new();
-    rows.insert(row_id.clone(), op25_form());
-    let events = [
-        event(
-            "event/opening",
-            &[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            "voice/high",
-        ),
-        event("event/trailing-rest", &[11], "voice/high"),
-    ]
-    .into_iter()
-    .map(|event| (event.id.clone(), event))
-    .collect();
-    let plan =
-        SerialPlan::try_new(rows, events, [(note_id.clone(), rest_id.clone())]).expect("plan");
-    let channel = Channel::new(0).expect("channel");
-    let context = StrictRealizationContext::new(
-        [
-            (
-                note_id,
-                StrictEventSpec::notes(4, quarter(), 96, channel, Articulation::Normal),
-            ),
-            (rest_id, StrictEventSpec::rest(Time::new(3, 4))),
-        ]
-        .into_iter()
-        .collect(),
-    );
-    let realization = realize_strict(&plan, &context).expect("realization");
-    let staff = render_serial_staff(&realization).expect("staff");
-    let high_voice = staff
-        .voices
-        .iter()
-        .find(|staff_voice| staff_voice.id == voice("voice/high"))
-        .expect("high voice");
-    assert_eq!(high_voice.duration, Time::from_integer(1));
-}
-
-#[test]
-fn strict_realization_wraps_the_canonical_piano_roll_in_a_score() {
-    let realization = realize_strict(&strict_plan(), &strict_context()).expect("realization");
-    let score = render_serial_score(&realization, &SerialRenderOptions::default()).expect("score");
-    assert_eq!(score.tempo_bpm, 60);
-    let Score { body, .. } = score;
-    let sim_lib_music_core::Music::PianoRoll(roll) = body else {
-        panic!("score should render to piano roll");
-    };
-    assert_eq!(roll.lanes.len(), 3);
-    assert!(roll.items.len() >= realization.notes().len());
+    context
 }
 
 #[test]

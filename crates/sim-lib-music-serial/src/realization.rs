@@ -6,11 +6,15 @@ use sim_lib_music_core::{Note, Time};
 use sim_lib_pitch_serial::RowForm;
 use thiserror::Error;
 
-use crate::{OrdinalRef, SerialEventId, SerialPlan, StructuralLicense, VoiceId};
+use crate::{
+    InvariantLedger, OrdinalRef, RealizerId, SerialEventId, SerialPlan, StructuralLicense, VoiceId,
+};
 
 /// Complete serial provenance for one realized sounding note.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct RealizedSerialOrigin {
+    /// Stable realizer identity that produced this note.
+    pub realizer_id: RealizerId,
     /// Structural readings that license the realized note.
     pub licenses: Vec<StructuralLicense>,
     /// Every structural ordinal cited by the planned event.
@@ -59,6 +63,7 @@ pub struct SerialRealization {
     plan: SerialPlan,
     events: Vec<RealizedSerialEvent>,
     notes: Vec<RealizedSerialNote>,
+    ledger: InvariantLedger<RealizerId>,
 }
 
 impl SerialRealization {
@@ -67,6 +72,7 @@ impl SerialRealization {
         plan: SerialPlan,
         mut events: Vec<RealizedSerialEvent>,
         mut notes: Vec<RealizedSerialNote>,
+        ledger: InvariantLedger<RealizerId>,
     ) -> Self {
         events.sort_by(|left, right| {
             left.onset
@@ -85,6 +91,7 @@ impl SerialRealization {
             plan,
             events,
             notes,
+            ledger,
         }
     }
 
@@ -102,11 +109,19 @@ impl SerialRealization {
     pub fn notes(&self) -> &[RealizedSerialNote] {
         &self.notes
     }
+
+    /// Returns the realizer invariant ledger recorded for this realization.
+    pub fn ledger(&self) -> &InvariantLedger<RealizerId> {
+        &self.ledger
+    }
 }
 
 /// Failure while realizing or rendering a strict serial plan.
 #[derive(Clone, Debug, PartialEq, Eq, Error)]
 pub enum StrictRealizationError {
+    /// A registry lookup named a missing realizer id.
+    #[error("serial realizer {0} is not registered")]
+    UnknownRealizer(RealizerId),
     /// One plan event lacked an explicit realization spec.
     #[error("plan event {0} is missing a strict realization spec")]
     MissingSpec(SerialEventId),

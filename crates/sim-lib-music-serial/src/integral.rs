@@ -289,7 +289,7 @@ impl<T: ParameterValue> BoundParameterTrack<T> {
 }
 
 /// Type-erased view of one parameter track bound into an integral plan.
-pub trait ErasedParameterBinding: Debug {
+pub trait ErasedParameterBinding: Debug + Send + Sync {
     /// Returns the stable parameter name.
     fn name(&self) -> &str;
     /// Returns the source alphabet identity retained by this binding.
@@ -312,7 +312,7 @@ pub trait ErasedParameterBinding: Debug {
     fn as_any(&self) -> &dyn Any;
 }
 
-impl<T: ParameterValue> ErasedParameterBinding for BoundParameterTrack<T> {
+impl<T: ParameterValue + Send + Sync> ErasedParameterBinding for BoundParameterTrack<T> {
     fn name(&self) -> &str {
         self.track.name()
     }
@@ -380,7 +380,7 @@ impl IntegralPlan {
     }
 
     /// Binds one typed parameter track while preserving its independent ordinal ledger.
-    pub fn bind_parameter<T: ParameterValue>(
+    pub fn bind_parameter<T: ParameterValue + Send + Sync + 'static>(
         &mut self,
         track: ParameterTrack<T>,
     ) -> Result<(), IntegralError> {

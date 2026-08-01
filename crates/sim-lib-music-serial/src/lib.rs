@@ -11,6 +11,7 @@
 mod anchor;
 mod array;
 mod canon;
+mod chromatic;
 mod cycle;
 mod deploy;
 mod derived;
@@ -30,7 +31,9 @@ mod practice;
 mod practice_builtin;
 mod reading;
 mod realization;
+mod realizer;
 mod referential;
+mod registry;
 mod render;
 mod report;
 mod strict;
@@ -47,6 +50,7 @@ pub use canon::{
     CanonSymmetryCertificate, CanonSymmetryRequirement, CanonVoiceProfile, CanonVoiceSpec,
     build_canon,
 };
+pub use chromatic::{ChromaticSerialRealizer, strict_chromatic_realizer_id};
 pub use cycle::{
     CyclicOrder, CyclicProjection, CyclicProjectionSpec, ParameterTrackKind, project_cyclic_order,
 };
@@ -100,18 +104,21 @@ pub use realization::{
     RealizedSerialEvent, RealizedSerialNote, RealizedSerialOrigin, SerialRealization,
     StrictRealizationError,
 };
+pub use realizer::{
+    EventSound, RealizationContext, RealizationService, RealizationServices, RealizerId,
+    RegisterBounds, SerialRealizer, SimultaneousRenderPolicy, StrictEventSpec, StrictPitchLayout,
+    StrictRealizationContext, TiePolicy, VoiceBounds,
+};
 pub use referential::{
     ReferentialClaim, ReferentialContextReport, ReferentialEvidence, ReferentialEvidenceKind,
     ReferentialRatioSummary, ReferentialReport, ReferentialRequest, analyze_referential_subset,
 };
+pub use registry::{SerialRealizerRegistry, default_realizer_registry};
 pub use render::{
     SerialRenderOptions, render_serial_piano_roll, render_serial_score, render_serial_staff,
 };
 pub use report::SerialPracticeReport;
-pub use strict::{
-    EventSound, SimultaneousRenderPolicy, StrictEventSpec, StrictPitchLayout,
-    StrictRealizationContext, TiePolicy, realize_strict,
-};
+pub use strict::realize_strict;
 pub use time_point::{TimePointAlphabet, TimePointError, TimePointRow, TimePointSystem};
 
 /// Cookbook recipes for this lib, embedded at build time.
@@ -128,5 +135,7 @@ mod tests_deploy;
 mod tests_extract;
 #[cfg(test)]
 mod tests_integral;
+#[cfg(test)]
+mod tests_realizer;
 #[cfg(test)]
 mod tests_techniques;
