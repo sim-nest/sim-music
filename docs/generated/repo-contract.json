@@ -2659,6 +2659,20 @@
         {
           "kind": "normal",
           "optional": false,
+          "package": "sim-lib-pitch-namer-forte",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-set",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
           "package": "sim-lib-serial-core",
           "rename": null,
           "target": null
@@ -4030,10 +4044,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "bcb7782228ab562974d452a81b13616edc19981c",
+    "git_commit": "d68fc92fa09e06f98c282af2846c0d483aa43120",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "bcb7782228ab562974d452a81b13616edc19981c",
+    "source_commit": "d68fc92fa09e06f98c282af2846c0d483aa43120",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -4046,9 +4060,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "79ee4df4dc3b286a",
+    "workspace_hash": "00c647cee338d340",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 838,
+    "workspace_hash_input_count": 842,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4661,14 +4675,18 @@
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs",
       "crates/sim-lib-pitch-serial/recipes/book.toml",
       "crates/sim-lib-pitch-serial/src/alphabet.rs",
+      "crates/sim-lib-pitch-serial/src/class.rs",
       "crates/sim-lib-pitch-serial/src/error.rs",
       "crates/sim-lib-pitch-serial/src/family.rs",
+      "crates/sim-lib-pitch-serial/src/interval.rs",
+      "crates/sim-lib-pitch-serial/src/invariance.rs",
       "crates/sim-lib-pitch-serial/src/label.rs",
       "crates/sim-lib-pitch-serial/src/lib.rs",
       "crates/sim-lib-pitch-serial/src/matrix.rs",
       "crates/sim-lib-pitch-serial/src/operation.rs",
       "crates/sim-lib-pitch-serial/src/render.rs",
       "crates/sim-lib-pitch-serial/src/row.rs",
+      "crates/sim-lib-pitch-serial/src/segment.rs",
       "crates/sim-lib-pitch-serial/tests/gate_row.rs",
       "crates/sim-lib-pitch-serial/tests/row_family_matrix_recipe.rs",
       "crates/sim-lib-pitch-set/Cargo.toml",
