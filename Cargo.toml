@@ -67,13 +67,40 @@ homepage = "https://github.com/sim-nest/sim-music"
 unsafe_code = "forbid"
 
 [patch.crates-io]
+sim-citizen = { path = "../sim-citizen/crates/sim-citizen" }
+sim-citizen-derive = { path = "../sim-citizen/crates/sim-citizen-derive" }
+sim-config = { path = "../sim-foundation/crates/sim-config" }
+sim-cookbook = { path = "../sim-foundation/crates/sim-cookbook" }
+sim-kernel = { path = "../sim-kernel" }
 sim-lib-discrete-graph = { git = "https://github.com/sim-nest/sim-discrete", rev = "b7e2772fa0eb560ff2a0c67c65e98a176da49702" }
+sim-lib-discrete-comb = { path = "../sim-discrete/crates/sim-lib-discrete-comb" }
 sim-lib-discrete-rank = { git = "https://github.com/sim-nest/sim-discrete", rev = "b7e2772fa0eb560ff2a0c67c65e98a176da49702" }
 sim-lib-discrete-search = { git = "https://github.com/sim-nest/sim-discrete", rev = "0a037cc4d12294c90d323bb473aaeb7150127b2e" }
+sim-lib-discrete-spectral = { path = "../sim-discrete/crates/sim-lib-discrete-spectral" }
+sim-codec = { path = "../sim-codecs/crates/sim-codec" }
+sim-codec-json = { path = "../sim-codecs/crates/sim-codec-json" }
+sim-codec-lisp = { path = "../sim-codecs/crates/sim-codec-lisp" }
+sim-test-support = { path = "../sim-codecs/crates/sim-test-support" }
+sim-wasm-abi = { path = "../sim-codecs/crates/sim-wasm-abi" }
 sim-lib-audio-dsp = { path = "../sim-audio-daw/crates/sim-lib-audio-dsp" }
 sim-lib-audio-graph-core = { path = "../sim-audio-daw/crates/sim-lib-audio-graph-core" }
 sim-lib-audio-graph-live = { path = "../sim-audio-daw/crates/sim-lib-audio-graph-live" }
+sim-lib-midi-core = { path = "crates/sim-lib-midi-core" }
+sim-lib-midi-live = { path = "crates/sim-lib-midi-live" }
+sim-lib-music-core = { path = "crates/sim-lib-music-core" }
+sim-lib-stream-midi = { path = "crates/sim-lib-stream-midi" }
+sim-value = { path = "../sim-foundation/crates/sim-value" }
+sim-lib-core = { path = "../sim-runtime/crates/sim-lib-core" }
+sim-lib-numbers-f64 = { path = "../sim-numbers/crates/sim-lib-numbers-f64" }
 sim-lib-numbers-signal = { git = "https://github.com/sim-nest/sim-numbers", rev = "c9e3cc7e2f52c44496a29973d359b64761d76b47" }
 sim-lib-numbers-stats = { git = "https://github.com/sim-nest/sim-numbers", rev = "c9e3cc7e2f52c44496a29973d359b64761d76b47" }
 sim-lib-plugin-core = { path = "../sim-audio-daw/crates/sim-lib-plugin-core" }
+sim-lib-rank = { path = "../sim-stream/crates/sim-lib-rank" }
+sim-lib-stream-clock = { path = "../sim-stream/crates/sim-lib-stream-clock" }
+sim-lib-stream-core = { path = "../sim-stream/crates/sim-lib-stream-core" }
+sim-lib-stream-host = { path = "../sim-stream-host" }
+sim-lib-stream-prelude = { path = "../sim-stream/crates/sim-lib-stream-prelude" }
 sim-lib-stream-audio = { path = "../sim-stream/crates/sim-lib-stream-audio" }
+sim-lib-topology = { path = "../sim-stream/crates/sim-lib-topology" }
+sim-lib-view-device = { path = "../sim-web/crates/sim-lib-view-device" }
+sim-shape = { path = "../sim-shape" }

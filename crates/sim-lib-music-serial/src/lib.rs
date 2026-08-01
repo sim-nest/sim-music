@@ -10,6 +10,9 @@
 
 mod error;
 mod event;
+mod evidence;
+mod extract;
+mod hypothesis;
 mod order;
 mod origin;
 mod plan;
@@ -21,6 +24,15 @@ pub use error::SerialPlanError;
 pub use event::{
     EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId,
     SimultaneousGroupId, VoiceId,
+};
+pub use evidence::{ExtractionEvidence, ExtractionOutcome};
+pub use extract::{
+    SerialExtractionError, SerialExtractionRequest, SerialExtractionServices,
+    extract_serial_hypotheses,
+};
+pub use hypothesis::{
+    RankedSerialHypothesis, SerialAliasEvidence, SerialObservation, SerialObservationBlock,
+    SerialReadingOrder, SerialStableRank, SerialTimeSpan,
 };
 pub use order::PrecedenceGraph;
 pub use origin::{SerialOrigin, SerialRole};
@@ -43,3 +55,5 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_extract;
