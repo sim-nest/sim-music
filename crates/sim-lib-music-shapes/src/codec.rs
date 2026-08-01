@@ -19,6 +19,7 @@ mod encode_arranger;
 mod filter;
 mod lift;
 mod parse;
+mod serial;
 
 use encode_arranger::encode_arranger_placement;
 
@@ -39,6 +40,7 @@ pub use parse::{
     decode_midi_track, decode_music, decode_music_file, decode_note, decode_piano_roll,
     decode_progression, decode_rest, decode_score, decode_time,
 };
+pub use serial::{SymbolSeries, decode_serial_series, encode_serial_series};
 
 /// Error raised while decoding a music `#(...)` form.
 #[derive(Debug, Error)]
@@ -61,6 +63,9 @@ pub enum MusicShapeError {
     /// A construction error surfaced from `sim-lib-music-core`.
     #[error(transparent)]
     Music(#[from] MusicError),
+    /// A finite serial alphabet, rule, or series failed semantic validation.
+    #[error(transparent)]
+    Serial(#[from] sim_lib_serial_core::SeriesError),
 }
 
 /// Encodes a `Time` as its `numer/denom` text form.

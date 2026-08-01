@@ -10,6 +10,8 @@ use sim_shape::{
     TableFieldSpec, TableShape, shape_value,
 };
 
+mod serial;
+
 const MUSIC_SHAPES_LIB_ID: &str = "music-shapes";
 
 type ShapeSpec = (Symbol, &'static str, Vec<&'static str>, Arc<dyn Shape>);
@@ -23,6 +25,17 @@ pub struct MusicShapesLib;
 
 impl Lib for MusicShapesLib {
     fn manifest(&self) -> LibManifest {
+        let mut exports = shape_specs()
+            .into_iter()
+            .map(|(symbol, _, _, _)| Export::Shape {
+                symbol,
+                shape_id: None,
+            })
+            .collect::<Vec<_>>();
+        exports.push(Export::Function {
+            symbol: music_serial_validate_symbol(),
+            function_id: None,
+        });
         LibManifest {
             id: Symbol::new(MUSIC_SHAPES_LIB_ID),
             version: Version(env!("CARGO_PKG_VERSION").to_owned()),
@@ -30,25 +43,25 @@ impl Lib for MusicShapesLib {
             target: LibTarget::HostRegistered,
             requires: Vec::new(),
             capabilities: Vec::new(),
-            exports: shape_specs()
-                .into_iter()
-                .map(|(symbol, _, _, _)| Export::Shape {
-                    symbol,
-                    shape_id: None,
-                })
-                .collect(),
+            exports,
         }
     }
 
-    fn load(&self, _cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
+    fn load(&self, cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
         for (symbol, name, details, inner) in shape_specs() {
             linker.shape_value(
                 symbol.clone(),
                 shape_value(symbol, Arc::new(DocumentedShape::new(name, details, inner))),
             )?;
         }
+        serial::load_validate_function(cx, linker)?;
         Ok(())
     }
+}
+
+/// Symbol of the pitch-independent Lisp series-validation callable.
+pub fn music_serial_validate_symbol() -> Symbol {
+    Symbol::qualified("music/serial", "validate")
 }
 
 /// Loads [`MusicShapesLib`] into `cx`, returning early if it is already present.
@@ -432,6 +445,15 @@ fn shape_specs() -> Vec<ShapeSpec> {
                 "browse/help metadata names the subset and lossiness contract",
             ],
             domain_form_shape("NotationCodec", Vec::new()),
+        ),
+        (
+            Symbol::qualified("music", "SerialSeries"),
+            "SerialSeries",
+            vec![
+                "finite symbol-bearing serial series",
+                "semantic validation delegates aggregate and rank rules to serial-core",
+            ],
+            serial::serial_series_shape(),
         ),
     ]
 }

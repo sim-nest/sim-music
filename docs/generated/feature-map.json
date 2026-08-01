@@ -281,6 +281,11 @@
       "package": "sim-lib-pitch-wasm-frame"
     },
     {
+      "features": [],
+      "group": "workspace",
+      "package": "sim-lib-serial-core"
+    },
+    {
       "features": [
         {
           "edges": [],

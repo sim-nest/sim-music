@@ -1,5 +1,5 @@
 {
-  "card_count": 54,
+  "card_count": 55,
   "cards": [
     {
       "id": "browse/catalog",
@@ -228,6 +228,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-wasm-frame",
       "summary": "Browser-safe pitch facade descriptors."
+    },
+    {
+      "id": "cookbook/serial-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-serial-core",
+      "summary": "Finite symbolic alphabets and aggregate validation evidence."
     },
     {
       "id": "cookbook/sim-music",

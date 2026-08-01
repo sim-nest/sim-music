@@ -4,7 +4,12 @@ use std::sync::Arc;
 
 mod custom_filter;
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, Value, read_construct_capability};
+use sim_codec::{Input, decode_eval_expr_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, Expr, ReadPolicy, Symbol, TrustLevel, Value,
+    read_construct_capability,
+};
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MidiEvent, MidiPayload, TickTime, U7, synthetic_origin,
 };
@@ -30,12 +35,13 @@ use crate::{
     decode_melody, decode_midi_file, decode_midi_realization_policy, decode_midi_track,
     decode_music, decode_music_file, decode_note, decode_piano_roll, decode_progression,
     decode_progression_lift_opts, decode_rest, decode_retrograde_mode, decode_score,
-    decode_voice_assignment, encode_arranger, encode_chord, encode_chord_window,
-    encode_chord_window_mode, encode_counterpoint, encode_counterpoint_lift_opts, encode_diff_roll,
-    encode_function_map, encode_label_strategy, encode_melody, encode_midi_file,
-    encode_midi_realization_policy, encode_midi_track, encode_music, encode_music_file,
-    encode_note, encode_par, encode_piano_roll, encode_progression, encode_progression_lift_opts,
-    encode_rest, encode_retrograde_mode, encode_score, encode_seq, encode_voice_assignment,
+    decode_serial_series, decode_voice_assignment, encode_arranger, encode_chord,
+    encode_chord_window, encode_chord_window_mode, encode_counterpoint,
+    encode_counterpoint_lift_opts, encode_diff_roll, encode_function_map, encode_label_strategy,
+    encode_melody, encode_midi_file, encode_midi_realization_policy, encode_midi_track,
+    encode_music, encode_music_file, encode_note, encode_par, encode_piano_roll,
+    encode_progression, encode_progression_lift_opts, encode_rest, encode_retrograde_mode,
+    encode_score, encode_seq, encode_serial_series, encode_voice_assignment,
     install_music_shapes_lib, music_chord_class_symbol, music_melody_class_symbol,
     music_note_class_symbol, music_par_class_symbol, music_score_class_symbol,
     music_seq_class_symbol,
@@ -353,6 +359,84 @@ fn music_runtime_shapes_reject_bad_domain_forms() {
         &score_shape,
         "#(Score tempo=120 time_sig=4/4 key=none body=[#(Rest dur=1/4)])",
     );
+}
+
+#[test]
+fn symbolic_serial_series_round_trips_and_fails_closed() {
+    let source = "#(SerialSeries alphabet_id=gesture/five-v1 symbols=[rise,fall,hold,turn,rest] rule=#(AggregateRule kind=ExhaustiveExactlyOnce) order=[turn,rise,rest,fall,hold])";
+    let series = decode_serial_series(source).expect("serial series");
+    let encoded = encode_serial_series(&series).expect("encode serial series");
+    assert_eq!(
+        decode_serial_series(&encoded)
+            .unwrap_or_else(|error| panic!("round trip rejected {encoded}: {error}")),
+        series
+    );
+    assert_eq!(series.permutation_rank().expect("rank").to_string(), "76");
+
+    let foreign = source.replace("hold])", "unknown])");
+    assert!(decode_serial_series(&foreign).is_err());
+    let repeated = source.replace("rest,fall,hold", "rest,fall,fall");
+    assert!(decode_serial_series(&repeated).is_err());
+}
+
+#[test]
+fn custom_alphabet_recipe_executes_through_lisp_runtime_surface() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_shapes_lib(&mut cx).expect("music shapes");
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
+    cx.load_lib(&lisp).expect("load lisp codec");
+
+    let recipes =
+        sim_cookbook::recipes_from_embedded(sim_lib_serial_core::RECIPES).expect("serial recipes");
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/custom-alphabet"))
+        .expect("custom alphabet recipe");
+    let source = String::from_utf8(recipe.setup.clone()).expect("UTF-8 recipe");
+    let expression = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .expect("decode recipe");
+    let output = cx.eval_expr(expression).expect("evaluate recipe");
+    let Expr::Map(fields) = output.object().as_expr(&mut cx).expect("result expression") else {
+        panic!("serial validation must return a ledger map");
+    };
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("alphabet-id")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("gesture/five-v1".to_owned()))
+    );
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("permutation-rank")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("76".to_owned()))
+    );
+
+    let shape = registered_music_shape(&cx, "SerialSeries");
+    let serial_source = decode_serial_call_source(&recipe.setup).expect("series source");
+    assert_shape_accepts(&mut cx, &shape, &serial_source);
+    assert_shape_rejects(
+        &mut cx,
+        &shape,
+        &serial_source.replace("hold])", "unknown])"),
+    );
+}
+
+fn decode_serial_call_source(source: &[u8]) -> Option<String> {
+    let text = std::str::from_utf8(source).ok()?;
+    let start = text.find('"')? + 1;
+    let end = text.rfind('"')?;
+    (start <= end).then(|| text[start..end].to_owned())
 }
 
 #[test]

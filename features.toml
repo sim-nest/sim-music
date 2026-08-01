@@ -503,6 +503,25 @@ supports = [
   "feature/sim-music/synth-performance-workbench",
 ]
 
+[[feature]]
+id = "feature/sim-music/serial-series-calculus"
+title = "Finite symbolic serial series calculus"
+summary = "Validate symbol-bearing finite alphabets and ordered series against explicit aggregate rules with retained evidence and shared permutation ranks."
+owner = "crate/sim-lib-serial-core"
+audiences = ["user", "code", "framework"]
+guidance = "Use sim-lib-serial-core when a musical technique orders a finite symbolic vocabulary without assuming pitch: construct a stable AlphabetId and SerialAlphabet, choose exhaustive-exactly-once, no-repeat, declared-multiplicity, declared-omissions, projected-aggregate, or free-order data, then inspect the Series AggregateLedger. Declarations accept symbols and the Series stores symbols; canonical positions remain a private adapter detail. Exactly-once permutation rank delegates to sim-lib-discrete-rank PermutationSpace, and generic enumeration or search remains in sim-discrete. Load MusicShapesLib for the music/SerialSeries Shape and music/serial/validate Lisp callable. The custom-alphabet recipe proves the same five-symbol non-pitch series through Rust, Shape, Lisp, and the shared rank owner."
+claims_anchors = [
+  "anchor/crate/sim-lib-serial-core",
+  "anchor/crate/sim-lib-music-shapes",
+  "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet",
+]
+
 [[route]]
 id = "route/analyze-tonnetz-path"
 task = "Find a bounded neo-Riemannian path between canonical chords"
@@ -511,6 +530,15 @@ steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch-set owner supplies canonical masks and typed set relations; the chord owner supplies rooted chord identity; the existing Riemann namer supplies projection-only labels." },
   { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "Music analysis applies enabled P/L/R generators over canonical major/minor identities and delegates deterministic shortest-path certificates to sim-lib-discrete-graph." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-analysis/01-basics/tonnetz-path", why = "The checked descriptor gives the concrete C-major to A-minor call, explicit move set and bound, identity policy, one-edge R result, and reusable certificate contract." },
+]
+
+[[route]]
+id = "route/transform-musical-series"
+task = "Validate a finite musical series before applying total symbolic transforms"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/serial-series-calculus", why = "The serial row owns stable finite alphabet identity, symbol-bearing order, aggregate-rule data, typed failures, validation ledgers, the Shape adapter, and the Lisp validation call while delegating generic permutation rank to sim-discrete." },
+  { specimen = "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet", why = "The checked Lisp recipe validates and ranks an exhaustive five-symbol gesture alphabet, proving that the reusable calculus has no pitch dependency." },
 ]
 
 [[route]]

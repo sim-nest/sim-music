@@ -10,7 +10,10 @@
 //!
 //! The codec is the canonical text bridge: `encode_*` functions render a music
 //! value to its `#(...)` form, and `decode_*` functions parse that form back
-//! into the corresponding `sim-lib-music-core` type.
+//! into the corresponding `sim-lib-music-core` type. The narrow serial adapter
+//! also validates pitch-independent [`SymbolSeries`] values through the
+//! `music/SerialSeries` Shape and `music/serial/validate` callable while the
+//! domain contract remains owned by `sim-lib-serial-core`.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 #![allow(deprecated)]
@@ -26,7 +29,7 @@ pub use citizen::{
     music_seq_class_symbol,
 };
 pub use codec::*;
-pub use runtime::{MusicShapesLib, install_music_shapes_lib};
+pub use runtime::{MusicShapesLib, install_music_shapes_lib, music_serial_validate_symbol};
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

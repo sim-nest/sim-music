@@ -34,6 +34,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 6 | Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence. |
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
+| `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 1 | Validate symbol-bearing finite alphabets and ordered series against explicit aggregate rules with retained evidence and shared permutation ranks. |
 
 ## Surfaces
 
@@ -371,6 +372,11 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-wasm-frame/recipes/01-basics/browser-facade/setup.siml`
 - `crates/sim-lib-pitch-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-wasm-frame/recipes/book.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/purpose.md`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/setup.siml`
+- `crates/sim-lib-serial-core/recipes/book.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/purpose.md`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/recipe.toml`
@@ -9909,4 +9915,21 @@ impl Drop for TempPath {
         let _ = fs::remove_file(&self.path);
     }
 }
+```
+
+### `feature/sim-music/serial-series-calculus`
+
+Specimen `recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml`:
+
+```toml
+id = "custom-alphabet"
+title = "Validate a five-symbol custom alphabet"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["serial", "alphabet", "aggregate", "non-pitch", "lisp", "framework"]
+requires = ["serial-core", "music-shapes", "discrete-rank", "codec/lisp"]
 ```

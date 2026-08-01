@@ -1,5 +1,5 @@
 {
-  "card_count": 54,
+  "card_count": 55,
   "cards": [
     {
       "id": "browse/catalog",
@@ -230,6 +230,12 @@
       "summary": "Browser-safe pitch facade descriptors."
     },
     {
+      "id": "cookbook/serial-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-serial-core",
+      "summary": "Finite symbolic alphabets and aggregate validation evidence."
+    },
+    {
       "id": "cookbook/sim-music",
       "kind": "cookbook-recipe",
       "owner": "sim-music",
@@ -370,6 +376,7 @@
       "sim-lib-pitch-set",
       "sim-lib-pitch-shapes",
       "sim-lib-pitch-wasm-frame",
+      "sim-lib-serial-core",
       "sim-lib-sound-audio-lift",
       "sim-lib-sound-bridge",
       "sim-lib-sound-core",
@@ -389,7 +396,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 50,
+  "package_count": 51,
   "packages": [
     {
       "crate_name": "music-algorithm-foundry",
@@ -1741,9 +1748,16 @@
           "package": "sim-lib-pitch-set",
           "rename": null,
           "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-serial-core",
+          "rename": null,
+          "target": null
         }
       ],
-      "description": "Text codecs, citizen descriptors, and runtime shapes for SIM music objects.",
+      "description": "Text codecs, citizen descriptors, runtime shapes, and symbolic serial adapters for SIM music.",
       "features": [],
       "group": "workspace",
       "manifest": "crates/sim-lib-music-shapes/Cargo.toml",
@@ -2833,6 +2847,44 @@
       ]
     },
     {
+      "crate_name": "sim_lib_serial_core",
+      "dependencies": [],
+      "description": "Finite symbolic alphabets, aggregate rules, and validated ordered series for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-serial-core/Cargo.toml",
+      "name": "sim-lib-serial-core",
+      "publish": "true",
+      "root": "crates/sim-lib-serial-core",
+      "rustdoc_summary": "Finite symbolic alphabets and validated ordered series.",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_serial_core",
+          "src": "crates/sim-lib-serial-core/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-serial-core/build.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "sim_lib_sound_audio_lift",
       "dependencies": [
         {
@@ -3879,10 +3931,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "7f88cabff827c46c6dea671605d5a144bc91c713",
+    "git_commit": "9ce57e37438465819eaf35410f74f89bc44b7f59",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "7f88cabff827c46c6dea671605d5a144bc91c713",
+    "source_commit": "9ce57e37438465819eaf35410f74f89bc44b7f59",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3895,9 +3947,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "b232df42b77edd23",
+    "workspace_hash": "f70ef0ea32fcfb1f",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 803,
+    "workspace_hash_input_count": 815,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4208,8 +4260,10 @@
       "crates/sim-lib-music-shapes/src/codec/filter.rs",
       "crates/sim-lib-music-shapes/src/codec/lift.rs",
       "crates/sim-lib-music-shapes/src/codec/parse.rs",
+      "crates/sim-lib-music-shapes/src/codec/serial.rs",
       "crates/sim-lib-music-shapes/src/codec.rs",
       "crates/sim-lib-music-shapes/src/lib.rs",
+      "crates/sim-lib-music-shapes/src/runtime/serial.rs",
       "crates/sim-lib-music-shapes/src/runtime.rs",
       "crates/sim-lib-music-shapes/src/tests/custom_filter.rs",
       "crates/sim-lib-music-shapes/src/tests.rs",
@@ -4530,6 +4584,16 @@
       "crates/sim-lib-pitch-wasm-frame/src/lib.rs",
       "crates/sim-lib-pitch-wasm-frame/src/model.rs",
       "crates/sim-lib-pitch-wasm-frame/src/tests.rs",
+      "crates/sim-lib-serial-core/Cargo.toml",
+      "crates/sim-lib-serial-core/build.rs",
+      "crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml",
+      "crates/sim-lib-serial-core/recipes/book.toml",
+      "crates/sim-lib-serial-core/src/aggregate.rs",
+      "crates/sim-lib-serial-core/src/alphabet.rs",
+      "crates/sim-lib-serial-core/src/error.rs",
+      "crates/sim-lib-serial-core/src/lib.rs",
+      "crates/sim-lib-serial-core/src/series.rs",
+      "crates/sim-lib-serial-core/src/tests.rs",
       "crates/sim-lib-sound-audio-lift/Cargo.toml",
       "crates/sim-lib-sound-audio-lift/build.rs",
       "crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/recipe.toml",
@@ -4704,7 +4768,7 @@
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 52,
+  "recipe_book_count": 53,
   "recipes": [
     {
       "book": "daw-session",
@@ -5794,6 +5858,26 @@
       ],
       "summary": "Browser-safe pitch facade descriptors.",
       "title": "Pitch Wasm"
+    },
+    {
+      "book": "serial-core",
+      "book_toml": "crates/sim-lib-serial-core/recipes/book.toml",
+      "card_id": "cookbook/serial-core",
+      "group": "workspace",
+      "package": "sim-lib-serial-core",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "serial-core/01-basics/custom-alphabet",
+          "codec": "lisp",
+          "id": "custom-alphabet",
+          "package": "sim-lib-serial-core",
+          "recipe_toml": "crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml",
+          "title": "Validate a five-symbol custom alphabet"
+        }
+      ],
+      "summary": "Finite symbolic alphabets and aggregate validation evidence.",
+      "title": "Serial Core"
     },
     {
       "book": "sound-audio-lift",
