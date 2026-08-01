@@ -1,8 +1,8 @@
 id = "row-family-matrix"
-title = "Compare operation and label identities for an Op. 25 row"
-codec = "lisp"
-setup = "setup.siml"
+title = "Build the complete family and matrix for an Op. 25 row"
+codec = "rust"
+setup = "setup.rs"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "labels", "lisp", "framework"]
-requires = ["pitch-serial", "pitch-core", "serial-core", "pitch-shapes", "codec/lisp"]
+tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "family", "matrix", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core", "serial-core"]

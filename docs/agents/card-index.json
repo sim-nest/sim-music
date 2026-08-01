@@ -309,7 +309,7 @@
     "crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml",
     "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md",
     "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
-    "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.siml",
+    "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs",
     "crates/sim-lib-pitch-serial/recipes/book.toml",
     "crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml",
     "crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md",

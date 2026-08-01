@@ -53,6 +53,14 @@ pub enum RowLabelConvention {
 }
 
 impl RowLabelConvention {
+    /// Returns the stable machine-readable convention name.
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::FirstLastPitch => "first-last-pitch",
+            Self::OperationIndex => "operation-index",
+        }
+    }
+
     /// Projects `form` to a label without changing its operation identity.
     pub fn label(self, form: &RowForm) -> RowLabel {
         let operation = form.operation();

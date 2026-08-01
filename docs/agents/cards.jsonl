@@ -306,7 +306,7 @@
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml"}
-{"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.siml"}
+{"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-serial/recipes/book.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml"}
 {"kind":"recipe","path":"crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md"}

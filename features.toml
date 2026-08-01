@@ -525,11 +525,11 @@ claims_specimens = [
 
 [[feature]]
 id = "feature/sim-music/twelve-tone-row-theory"
-title = "Strict twelve-tone rows and explicit form labels"
-summary = "Validate canonical twelve-pitch rows, apply total P/I/R/RI operations, and project operation-bearing forms through an explicit label convention."
+title = "Strict twelve-tone rows, complete families, and explicit matrices"
+summary = "Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices."
 owner = "crate/sim-lib-pitch-serial"
 audiences = ["user", "code", "framework"]
-guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The row-family-matrix Lisp specimen and GATE-ROW Rust tests use Schoenberg's Op. 25 values to prove zero/non-zero starts, every family and addend inverse law, malformed aggregate refusal, and operation/label disagreement. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
+guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. RowFamilySet preserves all 48 operation aliases in stable order and separately deduplicates equal ToneRow values, retaining each alias's distinct-form index when row symmetry collapses forms. RowMatrix retains its source and RowLabelConvention, exposes validated cell coordinates, P row and I column operations, and P/R/I/RI edge labels; render_data and render_ascii project that same matrix object. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The checked row-family-matrix Rust specimen and GATE-ROW tests use Schoenberg's Op. 25 values to prove every alias equation, symmetric reduction without alias loss, every matrix line against its operation, malformed aggregate refusal, and operation/label disagreement. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
 claims_anchors = [
   "anchor/crate/sim-lib-pitch-core",
   "anchor/crate/sim-lib-pitch-serial",
@@ -566,13 +566,13 @@ steps = [
 
 [[route]]
 id = "route/analyze-twelve-tone-row"
-task = "Validate and transform a twelve-tone row without conflating operations and labels"
+task = "Validate, transform, and inspect a twelve-tone row without losing aliases or label conventions"
 audiences = ["user", "code", "framework"]
 steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch vocabulary supplies the canonical PitchClass identity; unordered PitchClassMask and pitch-set analysis stay in their existing owners." },
   { feature = "feature/sim-music/serial-series-calculus", why = "The generic serial layer supplies stable finite alphabet identity and exhaustive exactly-once aggregate validation without assuming pitch." },
-  { feature = "feature/sim-music/twelve-tone-row-theory", why = "The pitch-serial layer owns strict ToneRow values, total normalized P/I/R/RI operations, operation-bearing RowForm values, explicit label conventions, and the narrow pitch/ToneRow Shape adapter." },
-  { specimen = "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix", why = "The checked Lisp specimen records the canonical Op. 25 values and exposes the intentional disagreement between affine operation indices and first/last-pitch labels." },
+  { feature = "feature/sim-music/twelve-tone-row-theory", why = "The pitch-serial layer owns strict ToneRow values, total normalized P/I/R/RI operations, alias-preserving RowFamilySet values, convention-explicit RowMatrix data and ASCII projection, operation-bearing RowForm values, explicit label conventions, and the narrow pitch/ToneRow Shape adapter." },
+  { specimen = "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix", why = "The checked Rust scenario proves all 48 Op. 25 aliases against their operations, retains symmetry aliases across distinct-form reduction, and projects one source-and-convention-bearing matrix to structured coordinates and ASCII." },
 ]
 
 [[route]]

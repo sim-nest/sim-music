@@ -215,7 +215,7 @@
       "id": "cookbook/pitch-serial",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-serial",
-      "summary": "Strict twelve-tone rows, total operations, and explicit labels."
+      "summary": "Strict tone rows, complete operation families, matrices, and explicit labels."
     },
     {
       "id": "cookbook/pitch-set",

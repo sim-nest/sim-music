@@ -35,7 +35,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
-| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, apply total P/I/R/RI operations, and project operation-bearing forms through an explicit label convention. |
+| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
 
 ## Surfaces
 
@@ -355,7 +355,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md`
 - `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`
-- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.siml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs`
 - `crates/sim-lib-pitch-serial/recipes/book.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md`
@@ -9966,11 +9966,11 @@ Source `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.t
 
 ```toml
 id = "row-family-matrix"
-title = "Compare operation and label identities for an Op. 25 row"
-codec = "lisp"
-setup = "setup.siml"
+title = "Build the complete family and matrix for an Op. 25 row"
+codec = "rust"
+setup = "setup.rs"
 purpose = "purpose.md"
 order = 10
-tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "labels", "lisp", "framework"]
-requires = ["pitch-serial", "pitch-core", "serial-core", "pitch-shapes", "codec/lisp"]
+tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "family", "matrix", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core", "serial-core"]
 ```

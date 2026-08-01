@@ -230,7 +230,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-pitch-serial/Cargo.toml",
       "package": "sim-lib-pitch-serial",
-      "summary": "Strict twelve-tone rows, total operations, and explicit label conventions."
+      "summary": "Strict twelve-tone rows, complete families, matrices, and explicit labels."
     },
     {
       "crate_name": "sim_lib_pitch_set",

@@ -13,6 +13,12 @@ unambiguous. Printed names are deliberately separate: choose traditional
 first/last-pitch labels or affine operation-index labels, and retain honest
 disagreement between them.
 
+Build the entire family without losing names: all 48 operation aliases remain
+available even when row symmetry collapses them to fewer distinct values. A
+`RowMatrix` carries its source, its explicit label convention, coordinate-bearing
+cells, and all four labeled edges. Its ASCII display is generated from the same
+structured data that applications can inspect.
+
 The documented Schoenberg Op. 25 row starts on E. Its identity operation is
 therefore `P0` as affine algebra and `P4` under first-pitch labeling. SIM keeps
 both facts instead of silently choosing one.
