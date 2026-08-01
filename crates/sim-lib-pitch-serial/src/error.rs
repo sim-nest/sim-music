@@ -1,6 +1,6 @@
 //! Typed tone-row construction failures.
 
-use sim_lib_serial_core::{AlphabetError, SeriesError};
+use sim_lib_serial_core::{AlphabetError, OrdinalMapError, SeriesError};
 use thiserror::Error;
 
 /// Failure while constructing the canonical alphabet or a strict tone row.
@@ -12,6 +12,9 @@ pub enum RowError {
     /// The supplied row failed canonical membership or exactly-once validation.
     #[error(transparent)]
     Aggregate(#[from] SeriesError),
+    /// A caller-supplied ordinal permutation was not a complete bijection.
+    #[error(transparent)]
+    OrdinalMap(#[from] OrdinalMapError),
     /// A contiguous row segment reached outside the twelve row positions.
     #[error("segment start {start} with length {len} is out of bounds for a twelve-tone row")]
     SegmentOutOfBounds {
@@ -31,6 +34,30 @@ pub enum RowError {
     InvalidOrdinal {
         /// Zero-based row ordinal that fell outside `0..12`.
         ordinal: usize,
+    },
+    /// A requested partition block contained no row ordinals.
+    #[error("partition block {block_index} is empty")]
+    EmptyPartitionBlock {
+        /// Zero-based block index in caller order.
+        block_index: usize,
+    },
+    /// A requested partition assigned one row ordinal to more than one block.
+    #[error(
+        "row ordinal {ordinal} appears in multiple partition blocks ({first_block_index} and {second_block_index})"
+    )]
+    DuplicatePartitionOrdinal {
+        /// Zero-based row ordinal that appeared more than once.
+        ordinal: u8,
+        /// First block index that claimed the ordinal.
+        first_block_index: usize,
+        /// Later block index that duplicated the ordinal.
+        second_block_index: usize,
+    },
+    /// A requested partition failed to cover the full row exactly once.
+    #[error("partition coverage is incomplete; missing row ordinals {missing:?}")]
+    PartitionCoverageMismatch {
+        /// Zero-based row ordinals that were not assigned to any block.
+        missing: Vec<u8>,
     },
     /// A derivation or combinatoriality partition size was unsupported.
     #[error("partition size {size} is invalid; expected one of 2, 3, 4, or 6")]

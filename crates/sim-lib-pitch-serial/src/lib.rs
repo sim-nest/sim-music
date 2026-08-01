@@ -7,6 +7,7 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod affine;
 mod all_interval;
 mod alphabet;
 mod class;
@@ -18,11 +19,17 @@ mod interval;
 mod invariance;
 mod label;
 mod matrix;
+mod mosaic;
+mod multiply;
 mod operation;
+mod partition;
 mod render;
+mod reservoir;
 mod row;
 mod segment;
+mod vertical;
 
+pub use affine::{AffinePitchMap, PitchTransformOutput};
 pub use all_interval::{AllIntervalMultiplicity, AllIntervalReport, analyze_all_interval};
 pub use alphabet::PitchClassAlphabet;
 pub use class::{FormEquivalence, RowClassAlias, RowClassReport, analyze_row_class};
@@ -42,10 +49,23 @@ pub use label::{RowLabel, RowLabelConvention};
 pub use matrix::{
     MatrixCoordinate, ROW_MATRIX_SIZE, RowMatrix, RowMatrixCell, RowMatrixEdgeLabels,
 };
+pub use mosaic::{MosaicBlock, MosaicReport, analyze_mosaic};
+pub use multiply::{BlockProductReservoir, multiply_partitions};
 pub use operation::{RowFamily, RowOperation};
+pub use partition::{
+    AggregateCoverageReport, BlockOrder, InterlockingPartitionReport, OrderKind,
+    PartitionBlockMatch, PartitionSimilarityReport, RowPartition, RowPartitionBlock,
+    analyze_aggregate_coverage, analyze_interlocking_partitions,
+    analyze_partition_aggregate_coverage, analyze_partition_similarity, try_partition,
+};
 pub use render::RowMatrixData;
+pub use reservoir::{
+    BlockProjection, BlockProjectionSource, InvariantDelta, OrderedPitchBlock, PitchInvariant,
+    PitchReservoir,
+};
 pub use row::{RowForm, ToneRow};
 pub use segment::{RowSegment, RowSegmentSource};
+pub use vertical::{VerticalCollection, VerticalSlice, verticalize};
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

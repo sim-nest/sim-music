@@ -1,10 +1,16 @@
+use std::collections::BTreeSet;
+
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_serial::{
-    DerivationKind, MatrixCoordinate, OrderedIntervalString, PitchClassAlphabet, ROW_MATRIX_SIZE,
-    RowError, RowFamily, RowFamilySet, RowLabel, RowLabelConvention, RowMatrix, RowOperation,
-    RowSegmentSource, ToneRow, analyze_combinatoriality_partition, analyze_derivation_partition,
-    analyze_invariance, analyze_row_class,
+    AffinePitchMap, BlockOrder, BlockProjectionSource, DerivationKind, MatrixCoordinate, OrderKind,
+    OrderedIntervalString, PitchClassAlphabet, PitchInvariant, PitchTransformOutput,
+    ROW_MATRIX_SIZE, RowError, RowFamily, RowFamilySet, RowLabel, RowLabelConvention, RowMatrix,
+    RowOperation, RowSegmentSource, ToneRow, analyze_combinatoriality_partition,
+    analyze_derivation_partition, analyze_interlocking_partitions, analyze_invariance,
+    analyze_mosaic, analyze_partition_aggregate_coverage, analyze_partition_similarity,
+    analyze_row_class, multiply_partitions, try_partition, verticalize,
 };
+use sim_lib_serial_core::OrdinalMapError;
 use sim_lib_serial_core::SeriesError;
 
 const CHROMATIC: [PitchClass; 12] = [
@@ -135,6 +141,34 @@ fn gate_row_total_p_i_r_ri_for_zero_and_nonzero_starts() {
 }
 
 #[test]
+fn gate_row_rotations_and_validated_ordinal_permutations_preserve_rows() {
+    let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+
+    let rotated = source.rotate(14);
+    assert_eq!(
+        values(rotated.classes()),
+        [7, 1, 6, 3, 8, 2, 11, 0, 9, 10, 4, 5]
+    );
+
+    let permuted = source
+        .try_permute_ordinals(vec![11, 0, 10, 1, 9, 2, 8, 3, 7, 4, 6, 5])
+        .expect("validated ordinal permutation");
+    assert_eq!(
+        values(permuted.classes()),
+        [10, 4, 9, 5, 0, 7, 11, 1, 2, 6, 8, 3]
+    );
+
+    assert_eq!(
+        source.try_permute_ordinals(vec![0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+        Err(RowError::OrdinalMap(OrdinalMapError::DuplicateInput {
+            input: 0,
+            first_output: 0,
+            duplicate_output: 1,
+        }))
+    );
+}
+
+#[test]
 fn gate_row_operations_obey_inverse_laws() {
     let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
     for family in [RowFamily::P, RowFamily::I, RowFamily::R, RowFamily::RI] {
@@ -149,6 +183,94 @@ fn gate_row_operations_obey_inverse_laws() {
             );
         }
     }
+}
+
+#[test]
+fn gate_affine_bijections_m1_m5_m7_m11_stay_strict_rows() {
+    let source = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let inverses = [(1, 1), (5, 5), (7, 7), (11, 11)];
+
+    for (multiplier, inverse_multiplier) in inverses {
+        for addend in 0..12 {
+            let transform = AffinePitchMap::new(multiplier, addend);
+            assert!(
+                transform.is_bijective(),
+                "M{multiplier} should be bijective"
+            );
+
+            let PitchTransformOutput::Row(transformed) = transform.apply(&source) else {
+                panic!("M{multiplier}T{addend} should preserve row identity");
+            };
+            assert_eq!(
+                transformed
+                    .classes()
+                    .iter()
+                    .copied()
+                    .collect::<BTreeSet<_>>()
+                    .len(),
+                12,
+                "M{multiplier}T{addend} must keep all twelve pitch classes"
+            );
+
+            let inverse_addend =
+                ((12 - (u16::from(inverse_multiplier) * u16::from(addend) % 12)) % 12) as u8;
+            let PitchTransformOutput::Row(restored) =
+                AffinePitchMap::new(inverse_multiplier, inverse_addend).apply(&transformed)
+            else {
+                panic!("inverse of M{multiplier}T{addend} should preserve row identity");
+            };
+            assert_eq!(
+                restored, source,
+                "inverse law failed for M{multiplier}T{addend}"
+            );
+        }
+    }
+}
+
+#[test]
+fn gate_non_bijective_affine_maps_return_ordered_reservoirs() {
+    let source = ToneRow::try_from_classes(CHROMATIC).expect("chromatic row");
+    let PitchTransformOutput::Reservoir(reservoir) = AffinePitchMap::new(2, 1).apply(&source)
+    else {
+        panic!("non-bijective affine map must not return a strict row");
+    };
+
+    assert_eq!(reservoir.blocks.len(), 6);
+    assert_eq!(
+        reservoir
+            .blocks
+            .iter()
+            .map(|block| block
+                .pitch_classes
+                .iter()
+                .map(|pitch| pitch.value())
+                .collect::<Vec<_>>())
+            .collect::<Vec<_>>(),
+        vec![
+            vec![1, 1],
+            vec![3, 3],
+            vec![5, 5],
+            vec![7, 7],
+            vec![9, 9],
+            vec![11, 11],
+        ]
+    );
+    assert!(!reservoir.invariant_delta.retains_total_order);
+    assert!(!reservoir.invariant_delta.retains_aggregate_identity);
+    assert_eq!(
+        reservoir.invariant_delta.relaxed_invariants,
+        vec![
+            PitchInvariant::TotalOrder,
+            PitchInvariant::AggregateIdentity
+        ]
+    );
+    assert!(matches!(
+        &reservoir.provenance[0].source,
+        BlockProjectionSource::OrdinalCollapse {
+            source_ordinals,
+            target_pitch_class,
+        } if source_ordinals == &vec![0, 6] && *target_pitch_class == PitchClass::CS
+    ));
 }
 
 #[test]
@@ -393,6 +515,218 @@ fn gate_row_partition_analyses_reject_invalid_requests() {
         analyze_combinatoriality_partition(&row, RowOperation::new(RowFamily::P, 0), 5),
         Err(RowError::InvalidPartitionSize { size: 5 })
     );
+    assert_eq!(
+        try_partition(vec![vec![0, 1], vec![2, 12]], BlockOrder::total()),
+        Err(RowError::InvalidOrdinal { ordinal: 12 })
+    );
+    assert_eq!(
+        try_partition(vec![vec![0, 1], vec![]], BlockOrder::total()),
+        Err(RowError::EmptyPartitionBlock { block_index: 1 })
+    );
+    assert_eq!(
+        try_partition(vec![vec![0, 1], vec![1, 2]], BlockOrder::total()),
+        Err(RowError::DuplicatePartitionOrdinal {
+            ordinal: 1,
+            first_block_index: 0,
+            second_block_index: 1,
+        })
+    );
+    assert_eq!(
+        try_partition(vec![vec![0, 1], vec![2, 3]], BlockOrder::total()),
+        Err(RowError::PartitionCoverageMismatch {
+            missing: vec![4, 5, 6, 7, 8, 9, 10, 11],
+        })
+    );
+}
+
+#[test]
+fn gate_row_partitions_validate_order_similarity_and_verticalization() {
+    let row = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let dyadic = try_partition(
+        vec![
+            vec![0, 1],
+            vec![2, 3],
+            vec![4, 5],
+            vec![6, 7],
+            vec![8, 9],
+            vec![10, 11],
+        ],
+        BlockOrder::new(OrderKind::Total, OrderKind::Partial),
+    )
+    .expect("dyadic partition");
+    let dyadic_reblocked = try_partition(
+        vec![
+            vec![1, 0],
+            vec![3, 2],
+            vec![5, 4],
+            vec![7, 6],
+            vec![9, 8],
+            vec![11, 10],
+        ],
+        BlockOrder::new(OrderKind::Partial, OrderKind::Absent),
+    )
+    .expect("reordered dyadic partition");
+
+    assert_eq!(
+        dyadic
+            .blocks()
+            .iter()
+            .flat_map(|block| block.ordinals().iter().copied())
+            .collect::<BTreeSet<_>>(),
+        (0_u8..12).collect()
+    );
+    assert_eq!(dyadic.order().within_blocks, OrderKind::Total);
+    assert_eq!(dyadic.order().between_blocks, OrderKind::Partial);
+
+    let similarity = analyze_partition_similarity(&dyadic, &dyadic_reblocked);
+    assert!(similarity.same_block_size_multiset);
+    assert!(!similarity.same_order_contract);
+    assert!(similarity.exact_block_matches.is_empty());
+    assert_eq!(similarity.overlap_matrix[0][0], 2);
+
+    let vertical = verticalize(&row, &dyadic);
+    assert_eq!(vertical.order, dyadic.order());
+    assert_eq!(vertical.slices.len(), 6);
+    assert_eq!(vertical.slices[0].ordinals, vec![0, 1]);
+    assert_eq!(
+        vertical.slices[0]
+            .pitch_classes
+            .iter()
+            .map(|pitch_class| pitch_class.value())
+            .collect::<Vec<_>>(),
+        vec![4, 5]
+    );
+    assert!(vertical.aggregate_coverage.complete);
+    assert_eq!(vertical.aggregate_coverage.missing.bits(), 0);
+}
+
+#[test]
+fn gate_row_partitions_support_dyadic_through_hexachordal_mosaics() {
+    let row = ToneRow::try_from_classes(OP_25).expect("Op. 25 row");
+    let dyadic = try_partition(
+        vec![
+            vec![0, 1],
+            vec![2, 3],
+            vec![4, 5],
+            vec![6, 7],
+            vec![8, 9],
+            vec![10, 11],
+        ],
+        BlockOrder::total(),
+    )
+    .expect("dyadic partition");
+    let trichordal = try_partition(
+        vec![vec![0, 1, 2], vec![3, 4, 5], vec![6, 7, 8], vec![9, 10, 11]],
+        BlockOrder::total(),
+    )
+    .expect("trichordal partition");
+    let tetrachordal = try_partition(
+        vec![vec![0, 1, 2, 3], vec![4, 5, 6, 7], vec![8, 9, 10, 11]],
+        BlockOrder::total(),
+    )
+    .expect("tetrachordal partition");
+    let hexachordal = try_partition(
+        vec![vec![0, 1, 2, 3, 4, 5], vec![6, 7, 8, 9, 10, 11]],
+        BlockOrder::unordered(),
+    )
+    .expect("hexachordal partition");
+
+    assert_eq!(dyadic.block_sizes(), vec![2, 2, 2, 2, 2, 2]);
+    assert_eq!(trichordal.block_sizes(), vec![3, 3, 3, 3]);
+    assert_eq!(tetrachordal.block_sizes(), vec![4, 4, 4]);
+    assert_eq!(hexachordal.block_sizes(), vec![6, 6]);
+
+    let mosaic = analyze_mosaic(
+        &row,
+        &[
+            dyadic.clone(),
+            trichordal.clone(),
+            tetrachordal.clone(),
+            hexachordal.clone(),
+        ],
+    );
+    assert_eq!(mosaic.blocks.len(), 15);
+    assert!(mosaic.aggregate_coverage.complete);
+
+    let hexachordal_coverage = analyze_partition_aggregate_coverage(&row, &hexachordal);
+    assert!(hexachordal_coverage.complete);
+    assert_eq!(hexachordal_coverage.covered.bits(), 0x0fff);
+}
+
+#[test]
+fn gate_row_partitions_report_interlocking_evidence() {
+    let interleave_a = try_partition(
+        vec![vec![0, 2, 4, 6, 8, 10], vec![1, 3, 5, 7, 9, 11]],
+        BlockOrder::unordered(),
+    )
+    .expect("even-odd partition");
+    let interleave_b = try_partition(
+        vec![vec![0, 1, 4, 5, 8, 9], vec![2, 3, 6, 7, 10, 11]],
+        BlockOrder::unordered(),
+    )
+    .expect("paired partition");
+
+    let report = analyze_interlocking_partitions(&interleave_a, &interleave_b);
+    assert!(report.is_interlocking);
+    assert_eq!(report.overlap_matrix, vec![vec![3, 3], vec![3, 3]]);
+    assert_eq!(report.left_to_right_links, vec![vec![0, 1], vec![0, 1]]);
+    assert_eq!(report.right_to_left_links, vec![vec![0, 1], vec![0, 1]]);
+}
+
+#[test]
+fn gate_block_multiplication_tracks_interval_projection_provenance() {
+    let row = ToneRow::try_from_classes(CHROMATIC).expect("chromatic row");
+    let anchors = try_partition(
+        vec![
+            vec![0, 1],
+            vec![2, 3],
+            vec![4, 5],
+            vec![6, 7],
+            vec![8, 9],
+            vec![10, 11],
+        ],
+        BlockOrder::total(),
+    )
+    .expect("anchor dyads");
+    let intervals = try_partition(
+        vec![
+            vec![0, 2],
+            vec![1, 3],
+            vec![4, 6],
+            vec![5, 7],
+            vec![8, 10],
+            vec![9, 11],
+        ],
+        BlockOrder::new(OrderKind::Total, OrderKind::Partial),
+    )
+    .expect("interval dyads");
+
+    let product = multiply_partitions(&row, &anchors, &intervals);
+    assert_eq!(product.reservoir.blocks.len(), 36);
+    assert_eq!(
+        product.reservoir.blocks[0]
+            .pitch_classes
+            .iter()
+            .map(|pitch| pitch.value())
+            .collect::<Vec<_>>(),
+        vec![0, 2, 1, 3]
+    );
+    assert_eq!(product.reservoir.blocks[0].mask.count_bits(), 4);
+    assert!(!product.reservoir.invariant_delta.retains_aggregate_identity);
+    assert!(matches!(
+        &product.reservoir.provenance[0].source,
+        BlockProjectionSource::BlockMultiplication {
+            anchor_block_index,
+            anchor_ordinals,
+            interval_block_index,
+            interval_ordinals,
+            interval_content,
+        } if *anchor_block_index == 0
+            && anchor_ordinals == &vec![0, 1]
+            && *interval_block_index == 0
+            && interval_ordinals == &vec![0, 2]
+            && interval_content == &vec![0, 2]
+    ));
 }
 
 #[test]
