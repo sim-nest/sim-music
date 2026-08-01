@@ -3,12 +3,13 @@ use sim_kernel::{Error, Expr, Result, Symbol};
 use sim_lib_pitch_chord::Chord;
 use sim_lib_pitch_core::{Interval, Pitch};
 use sim_lib_pitch_scale::Scale;
+use sim_lib_pitch_serial::ToneRow;
 use sim_lib_pitch_set::PitchClassMask;
 
 use crate::{
     PitchShapeError, decode_chord, decode_interval, decode_pitch, decode_pitch_class_mask,
-    decode_scale, encode_chord, encode_interval, encode_pitch, encode_pitch_class_mask,
-    encode_scale,
+    decode_scale, decode_tone_row, encode_chord, encode_interval, encode_pitch,
+    encode_pitch_class_mask, encode_scale, encode_tone_row,
 };
 
 macro_rules! text_citizen {
@@ -129,6 +130,15 @@ text_citizen!(
     "C4,E4,G4",
     canonical_chord
 );
+text_citizen!(
+    ToneRowDescriptor,
+    "pitch/ToneRow",
+    tone_row_class_symbol,
+    tone_row_form,
+    "tone_row_form",
+    "0,1,2,3,4,5,6,7,8,9,10,11",
+    canonical_tone_row
+);
 
 impl PitchDescriptor {
     /// Decodes the descriptor's text form into a [`Pitch`].
@@ -165,6 +175,13 @@ impl PitchChordDescriptor {
     }
 }
 
+impl ToneRowDescriptor {
+    /// Decodes the descriptor's text form into a strict [`ToneRow`].
+    pub fn row(&self) -> Result<ToneRow> {
+        decode_tone_row(&self.form).map_err(codec_error)
+    }
+}
+
 fn canonical_pitch(value: &str) -> Result<String> {
     decode_pitch(value).map(encode_pitch).map_err(codec_error)
 }
@@ -188,6 +205,12 @@ fn canonical_scale(value: &str) -> Result<String> {
 fn canonical_chord(value: &str) -> Result<String> {
     decode_chord(value)
         .map(|chord| encode_chord(&chord))
+        .map_err(codec_error)
+}
+
+fn canonical_tone_row(value: &str) -> Result<String> {
+    decode_tone_row(value)
+        .map(|row| encode_tone_row(&row))
         .map_err(codec_error)
 }
 

@@ -5,6 +5,7 @@ use thiserror::Error;
 use sim_lib_pitch_chord::{Chord, ChordSymbol, PitchChordError};
 use sim_lib_pitch_core::{Interval, Pitch, PitchError, parse_interval, parse_pitch};
 use sim_lib_pitch_scale::{Key, Mode, Scale};
+use sim_lib_pitch_serial::{RowError, ToneRow};
 use sim_lib_pitch_set::PitchClassMask;
 
 /// Error returned when encoding or decoding a pitch shape text form fails.
@@ -28,6 +29,12 @@ pub enum PitchShapeError {
     /// A chord form was malformed or empty.
     #[error("invalid chord")]
     InvalidChord,
+    /// A tone-row form did not contain exactly twelve comma-separated classes.
+    #[error("tone row must contain exactly twelve comma-separated pitch classes")]
+    InvalidToneRow,
+    /// A twelve-class tone-row aggregate repeated or omitted a canonical class.
+    #[error(transparent)]
+    Row(#[from] RowError),
 }
 
 /// Encodes a [`Pitch`] as its canonical chroma-plus-octave string (for example
@@ -186,4 +193,28 @@ pub fn decode_chord(value: &str) -> Result<Chord, PitchShapeError> {
         return Err(PitchShapeError::InvalidChord);
     }
     Ok(Chord::new(notes))
+}
+
+/// Encodes a strict [`ToneRow`] as twelve comma-separated canonical numeric classes.
+pub fn encode_tone_row(row: &ToneRow) -> String {
+    row.classes()
+        .iter()
+        .map(|class| class.value().to_string())
+        .collect::<Vec<_>>()
+        .join(",")
+}
+
+/// Decodes twelve comma-separated numeric classes into a strict [`ToneRow`].
+pub fn decode_tone_row(value: &str) -> Result<ToneRow, PitchShapeError> {
+    let classes = value
+        .split(',')
+        .map(|part| {
+            let value = u8::from_str(part).map_err(|_| PitchShapeError::InvalidToneRow)?;
+            sim_lib_pitch_core::PitchClass::new(value).map_err(PitchShapeError::from)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+    let classes: [sim_lib_pitch_core::PitchClass; 12] = classes
+        .try_into()
+        .map_err(|_| PitchShapeError::InvalidToneRow)?;
+    Ok(ToneRow::try_from_classes(classes)?)
 }

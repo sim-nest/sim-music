@@ -523,6 +523,27 @@ claims_specimens = [
   "recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms",
 ]
 
+[[feature]]
+id = "feature/sim-music/twelve-tone-row-theory"
+title = "Strict twelve-tone rows and explicit form labels"
+summary = "Validate canonical twelve-pitch rows, apply total P/I/R/RI operations, and project operation-bearing forms through an explicit label convention."
+owner = "crate/sim-lib-pitch-serial"
+audiences = ["user", "code", "framework"]
+guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The row-family-matrix Lisp specimen and GATE-ROW Rust tests use Schoenberg's Op. 25 values to prove zero/non-zero starts, every family and addend inverse law, malformed aggregate refusal, and operation/label disagreement. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
+claims_anchors = [
+  "anchor/crate/sim-lib-pitch-core",
+  "anchor/crate/sim-lib-pitch-serial",
+  "anchor/crate/sim-lib-pitch-shapes",
+  "anchor/crate/sim-lib-serial-core",
+  "anchor/runtime-lib/sim-lib-pitch-shapes/pitch-shapes-lib",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix",
+]
+
 [[route]]
 id = "route/analyze-tonnetz-path"
 task = "Find a bounded neo-Riemannian path between canonical chords"
@@ -541,6 +562,17 @@ steps = [
   { feature = "feature/sim-music/serial-series-calculus", why = "The serial row owns stable finite alphabet identity, symbol-bearing order, aggregate-rule data, typed failures, validation ledgers, validated ordinal and symbol bijections, total transform composition, algebra certificates, the Shape adapter, and the Lisp validation call while delegating generic permutation rank to sim-discrete." },
   { specimen = "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet", why = "The checked Lisp recipe validates and ranks an exhaustive five-symbol gesture alphabet, proving that the reusable calculus has no pitch dependency." },
   { specimen = "recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms", why = "The checked Rust recipe composes retrograde and rotation, applies the returned inverse, and proves exact source recovery with aggregate-preservation evidence." },
+]
+
+[[route]]
+id = "route/analyze-twelve-tone-row"
+task = "Validate and transform a twelve-tone row without conflating operations and labels"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch vocabulary supplies the canonical PitchClass identity; unordered PitchClassMask and pitch-set analysis stay in their existing owners." },
+  { feature = "feature/sim-music/serial-series-calculus", why = "The generic serial layer supplies stable finite alphabet identity and exhaustive exactly-once aggregate validation without assuming pitch." },
+  { feature = "feature/sim-music/twelve-tone-row-theory", why = "The pitch-serial layer owns strict ToneRow values, total normalized P/I/R/RI operations, operation-bearing RowForm values, explicit label conventions, and the narrow pitch/ToneRow Shape adapter." },
+  { specimen = "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix", why = "The checked Lisp specimen records the canonical Op. 25 values and exposes the intentional disagreement between affine operation indices and first/last-pitch labels." },
 ]
 
 [[route]]

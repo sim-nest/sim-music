@@ -65,6 +65,21 @@ fn chord_and_symbol_round_trip() {
 }
 
 #[test]
+fn tone_row_round_trip_and_aggregate_refusal() {
+    let form = "4,5,7,1,6,3,8,2,11,0,9,10";
+    let row = decode_tone_row(form).unwrap();
+    assert_eq!(encode_tone_row(&row), form);
+    assert!(matches!(
+        decode_tone_row("0,1,2"),
+        Err(PitchShapeError::InvalidToneRow)
+    ));
+    assert!(matches!(
+        decode_tone_row("0,0,0,0,0,0,0,0,0,0,0,0"),
+        Err(PitchShapeError::Row(_))
+    ));
+}
+
+#[test]
 fn install_pitch_shapes_lib_registers_runtime_shape_exports() {
     let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
     install_pitch_shapes_lib(&mut cx).unwrap();
@@ -162,6 +177,16 @@ fn pitch_citizens_accept_legacy_text_and_read_construct() {
     assert_eq!(
         chord.chord().unwrap().pitches(),
         decode_chord("C4,E4,G4").unwrap().pitches()
+    );
+
+    let row = read_construct::<ToneRowDescriptor>(
+        &mut cx,
+        tone_row_class_symbol(),
+        "4,5,7,1,6,3,8,2,11,0,9,10",
+    );
+    assert_eq!(
+        encode_tone_row(&row.row().unwrap()),
+        "4,5,7,1,6,3,8,2,11,0,9,10"
     );
 }
 

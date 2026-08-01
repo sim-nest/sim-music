@@ -35,6 +35,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
+| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, apply total P/I/R/RI operations, and project operation-bearing forms through an explicit label convention. |
 
 ## Surfaces
 
@@ -351,6 +352,11 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/recipe.toml`
 - `crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/setup.siml`
 - `crates/sim-lib-pitch-scale/recipes/book.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.siml`
+- `crates/sim-lib-pitch-serial/recipes/book.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml`
@@ -9950,4 +9956,21 @@ purpose = "purpose.md"
 order = 20
 tags = ["serial", "transform", "certificate", "bijection", "rust", "framework"]
 requires = ["serial-core", "discrete-rank"]
+```
+
+### `feature/sim-music/twelve-tone-row-theory`
+
+Specimen `recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`:
+
+```toml
+id = "row-family-matrix"
+title = "Compare operation and label identities for an Op. 25 row"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "labels", "lisp", "framework"]
+requires = ["pitch-serial", "pitch-core", "serial-core", "pitch-shapes", "codec/lisp"]
 ```

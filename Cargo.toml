@@ -33,6 +33,7 @@ members = [
   "crates/sim-lib-pitch-namer-roman",
   "crates/sim-lib-pitch-ratio",
   "crates/sim-lib-pitch-scale",
+  "crates/sim-lib-pitch-serial",
   "crates/sim-lib-pitch-set",
   "crates/sim-lib-pitch-shapes",
   "crates/sim-lib-pitch-wasm-frame",

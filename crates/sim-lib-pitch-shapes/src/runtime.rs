@@ -124,6 +124,15 @@ fn shape_specs() -> Vec<ShapeSpec> {
             ],
             text_shape(&[]),
         ),
+        (
+            Symbol::qualified("pitch", "ToneRow"),
+            "ToneRow",
+            vec![
+                "strict twelve-class row using canonical numeric pitch identities",
+                "citizen text form is twelve comma-separated classes",
+            ],
+            text_shape(&[]),
+        ),
     ]
 }
 

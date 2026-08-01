@@ -1,5 +1,5 @@
 {
-  "card_count": 55,
+  "card_count": 56,
   "cards": [
     {
       "id": "browse/catalog",
@@ -210,6 +210,12 @@
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-scale",
       "summary": "Scale and degree descriptors."
+    },
+    {
+      "id": "cookbook/pitch-serial",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-serial",
+      "summary": "Strict twelve-tone rows, total operations, and explicit labels."
     },
     {
       "id": "cookbook/pitch-set",

@@ -226,6 +226,13 @@
       "summary": "Scales, modes, and scale-locking for the SIM music libraries."
     },
     {
+      "crate_name": "sim_lib_pitch_serial",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-serial/Cargo.toml",
+      "package": "sim-lib-pitch-serial",
+      "summary": "Strict twelve-tone rows, total operations, and explicit label conventions."
+    },
+    {
       "crate_name": "sim_lib_pitch_set",
       "group": "workspace",
       "manifest": "crates/sim-lib-pitch-set/Cargo.toml",

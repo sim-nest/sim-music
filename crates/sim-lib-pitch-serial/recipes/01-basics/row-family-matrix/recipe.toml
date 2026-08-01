@@ -1,0 +1,8 @@
+id = "row-family-matrix"
+title = "Compare operation and label identities for an Op. 25 row"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "labels", "lisp", "framework"]
+requires = ["pitch-serial", "pitch-core", "serial-core", "pitch-shapes", "codec/lisp"]

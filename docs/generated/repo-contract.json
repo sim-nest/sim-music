@@ -1,5 +1,5 @@
 {
-  "card_count": 55,
+  "card_count": 56,
   "cards": [
     {
       "id": "browse/catalog",
@@ -212,6 +212,12 @@
       "summary": "Scale and degree descriptors."
     },
     {
+      "id": "cookbook/pitch-serial",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-serial",
+      "summary": "Strict twelve-tone rows, total operations, and explicit labels."
+    },
+    {
       "id": "cookbook/pitch-set",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-set",
@@ -373,6 +379,7 @@
       "sim-lib-pitch-namer-roman",
       "sim-lib-pitch-ratio",
       "sim-lib-pitch-scale",
+      "sim-lib-pitch-serial",
       "sim-lib-pitch-set",
       "sim-lib-pitch-shapes",
       "sim-lib-pitch-wasm-frame",
@@ -396,7 +403,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 51,
+  "package_count": 52,
   "packages": [
     {
       "crate_name": "music-algorithm-foundry",
@@ -2640,6 +2647,70 @@
       ]
     },
     {
+      "crate_name": "sim_lib_pitch_serial",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-serial-core",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "Strict twelve-tone rows, total row operations, and explicit label conventions for SIM.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-serial/Cargo.toml",
+      "name": "sim-lib-pitch-serial",
+      "publish": "true",
+      "root": "crates/sim-lib-pitch-serial",
+      "rustdoc_summary": "Strict twelve-tone rows, total operations, and explicit label conventions.",
+      "target_kinds": [
+        "custom-build",
+        "lib",
+        "test"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "lib"
+          ],
+          "kind": [
+            "lib"
+          ],
+          "name": "sim_lib_pitch_serial",
+          "src": "crates/sim-lib-pitch-serial/src/lib.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "gate_row",
+          "src": "crates/sim-lib-pitch-serial/tests/gate_row.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "custom-build"
+          ],
+          "name": "build-script-build",
+          "src": "crates/sim-lib-pitch-serial/build.rs"
+        }
+      ]
+    },
+    {
       "crate_name": "sim_lib_pitch_set",
       "dependencies": [
         {
@@ -2706,6 +2777,13 @@
           "kind": "normal",
           "optional": false,
           "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-serial",
           "rename": null,
           "target": null
         },
@@ -3942,10 +4020,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "0fc680c5c115ef25c1c931089c811df54999a065",
+    "git_commit": "f26e25f592b80d149db7e89421ac7b5772935e79",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "0fc680c5c115ef25c1c931089c811df54999a065",
+    "source_commit": "f26e25f592b80d149db7e89421ac7b5772935e79",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -3958,9 +4036,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "e398649536cca8a6",
+    "workspace_hash": "8863e1bbf069b9aa",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 822,
+    "workspace_hash_input_count": 833,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4567,6 +4645,17 @@
       "crates/sim-lib-pitch-scale/src/model.rs",
       "crates/sim-lib-pitch-scale/src/player.rs",
       "crates/sim-lib-pitch-scale/src/tests.rs",
+      "crates/sim-lib-pitch-serial/Cargo.toml",
+      "crates/sim-lib-pitch-serial/build.rs",
+      "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
+      "crates/sim-lib-pitch-serial/recipes/book.toml",
+      "crates/sim-lib-pitch-serial/src/alphabet.rs",
+      "crates/sim-lib-pitch-serial/src/error.rs",
+      "crates/sim-lib-pitch-serial/src/label.rs",
+      "crates/sim-lib-pitch-serial/src/lib.rs",
+      "crates/sim-lib-pitch-serial/src/operation.rs",
+      "crates/sim-lib-pitch-serial/src/row.rs",
+      "crates/sim-lib-pitch-serial/tests/gate_row.rs",
       "crates/sim-lib-pitch-set/Cargo.toml",
       "crates/sim-lib-pitch-set/build.rs",
       "crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml",
@@ -4786,7 +4875,7 @@
       "xtask/Cargo.toml"
     ]
   },
-  "recipe_book_count": 53,
+  "recipe_book_count": 54,
   "recipes": [
     {
       "book": "daw-session",
@@ -5800,6 +5889,26 @@
       ],
       "summary": "Scale and degree descriptors.",
       "title": "Pitch Scale"
+    },
+    {
+      "book": "pitch-serial",
+      "book_toml": "crates/sim-lib-pitch-serial/recipes/book.toml",
+      "card_id": "cookbook/pitch-serial",
+      "group": "workspace",
+      "package": "sim-lib-pitch-serial",
+      "recipe_count": 1,
+      "recipes": [
+        {
+          "card_id": "pitch-serial/01-basics/row-family-matrix",
+          "codec": "lisp",
+          "id": "row-family-matrix",
+          "package": "sim-lib-pitch-serial",
+          "recipe_toml": "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
+          "title": "Compare operation and label identities for an Op. 25 row"
+        }
+      ],
+      "summary": "Strict twelve-tone rows, total operations, and explicit labels.",
+      "title": "Pitch Serial"
     },
     {
       "book": "pitch-set",
