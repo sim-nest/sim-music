@@ -1,6 +1,6 @@
 //! Typed construction and validation failures.
 
-use crate::{AlphabetId, ProjectionId};
+use crate::{AggregateRuleKind, AlphabetId, ProjectionId};
 use sim_lib_discrete_rank::RankAdapterError;
 use thiserror::Error;
 
@@ -178,4 +178,163 @@ pub enum SeriesError {
     /// The shared discrete permutation-rank adapter rejected the request.
     #[error(transparent)]
     Rank(#[from] RankAdapterError),
+}
+
+/// Failure while validating or composing a finite ordinal map.
+#[derive(Clone, Debug, PartialEq, Eq, Error)]
+pub enum OrdinalMapError {
+    /// An ordinal selected a position outside the finite domain.
+    #[error("ordinal map output {output} selects input {input} outside 0..{cardinality}")]
+    OutOfRange {
+        /// Output position containing the invalid ordinal.
+        output: usize,
+        /// Rejected input position.
+        input: usize,
+        /// Finite domain cardinality.
+        cardinality: usize,
+    },
+    /// Two output positions selected the same input position.
+    #[error("ordinal map selects input {input} at outputs {first_output} and {duplicate_output}")]
+    DuplicateInput {
+        /// Repeated input position.
+        input: usize,
+        /// First output selecting it.
+        first_output: usize,
+        /// Later output selecting it.
+        duplicate_output: usize,
+    },
+    /// A map was applied to a slice with another cardinality.
+    #[error("ordinal map expects cardinality {expected}, got {found}")]
+    CardinalityMismatch {
+        /// Validated map cardinality.
+        expected: usize,
+        /// Supplied slice cardinality.
+        found: usize,
+    },
+    /// Two maps over different domains cannot be composed.
+    #[error("cannot compose ordinal maps of cardinalities {first} and {second}")]
+    CompositionCardinalityMismatch {
+        /// First map cardinality.
+        first: usize,
+        /// Second map cardinality.
+        second: usize,
+    },
+}
+
+/// Failure while validating an ordered block partition.
+#[derive(Clone, Debug, PartialEq, Eq, Error)]
+pub enum BlockPartitionError {
+    /// One declared block contained no positions.
+    #[error("block partition block {block} must not be empty")]
+    EmptyBlock {
+        /// Position of the empty block in declaration order.
+        block: usize,
+    },
+    /// Flattened blocks did not cover the declared finite domain.
+    #[error("block partition expects {expected} positions, got {found}")]
+    CardinalityMismatch {
+        /// Declared source cardinality.
+        expected: usize,
+        /// Number of declared positions.
+        found: usize,
+    },
+    /// Contiguous block lengths overflowed the platform cardinality.
+    #[error("block partition cardinality exceeds the supported series length")]
+    CardinalityOverflow,
+    /// The flattened block order was not a complete ordinal bijection.
+    #[error(transparent)]
+    OrdinalMap(#[from] OrdinalMapError),
+}
+
+/// Failure while validating a caller-supplied alphabet bijection.
+#[derive(Clone, Debug, PartialEq, Eq, Error)]
+pub enum SymbolBijectionError {
+    /// A source or target alphabet was invalid.
+    #[error(transparent)]
+    Alphabet(#[from] AlphabetError),
+    /// Source and target alphabets had different cardinalities.
+    #[error(
+        "symbol bijection source cardinality {source_cardinality} differs from target {target_cardinality}"
+    )]
+    CardinalityMismatch {
+        /// Source alphabet cardinality.
+        source_cardinality: usize,
+        /// Target alphabet or map cardinality.
+        target_cardinality: usize,
+    },
+    /// A supplied source symbol was outside the source alphabet.
+    #[error("symbol bijection contains a foreign source symbol for alphabet {alphabet_id}")]
+    ForeignSourceSymbol {
+        /// Source alphabet identity.
+        alphabet_id: AlphabetId,
+    },
+    /// A supplied target symbol was outside the target alphabet.
+    #[error("symbol bijection contains a foreign target symbol for alphabet {alphabet_id}")]
+    ForeignTargetSymbol {
+        /// Target alphabet identity.
+        alphabet_id: AlphabetId,
+    },
+    /// One source position was declared more than once.
+    #[error("symbol bijection repeats source position {position}")]
+    DuplicateSource {
+        /// Repeated source position.
+        position: usize,
+    },
+    /// Two source symbols selected the same target position.
+    #[error("symbol bijection repeats target position {position}")]
+    DuplicateTarget {
+        /// Repeated target position.
+        position: usize,
+    },
+    /// A source position had no mapping.
+    #[error("symbol bijection is missing source position {position}")]
+    MissingSource {
+        /// Unmapped source position.
+        position: usize,
+    },
+    /// A target position had no preimage.
+    #[error("symbol bijection is missing target position {position}")]
+    MissingTarget {
+        /// Unmapped target position.
+        position: usize,
+    },
+    /// The internal ordinal spelling was not a bijection.
+    #[error(transparent)]
+    OrdinalMap(#[from] OrdinalMapError),
+}
+
+/// Failure while applying, inverting, or composing a series transform.
+#[derive(Clone, Debug, PartialEq, Eq, Error)]
+pub enum SeriesTransformError {
+    /// A positional permutation was invalid for the series.
+    #[error(transparent)]
+    OrdinalMap(#[from] OrdinalMapError),
+    /// A symbolic relabeling was not a complete bijection.
+    #[error(transparent)]
+    Bijection(#[from] SymbolBijectionError),
+    /// Aggregate data could not be rebound to the target alphabet.
+    #[error(transparent)]
+    Rule(#[from] AggregateRuleError),
+    /// The transformed value did not satisfy its preserved aggregate rule.
+    #[error(transparent)]
+    Series(#[from] SeriesError),
+    /// An alphabet-bound relabeling was applied to another source alphabet.
+    #[error("transform expects source alphabet {expected}, got {found}")]
+    SourceAlphabetMismatch {
+        /// Alphabet bound into the relabeling.
+        expected: AlphabetId,
+        /// Alphabet retained by the supplied series.
+        found: AlphabetId,
+    },
+    /// Two alphabet relabelings did not meet at the same intermediate alphabet.
+    #[error("cannot compose relabeling to {first_target} with relabeling from {second_source}")]
+    CompositionAlphabetMismatch {
+        /// Target of the first relabeling.
+        first_target: AlphabetId,
+        /// Source of the second relabeling.
+        second_source: AlphabetId,
+    },
+    /// Private rule data disagreed with its public rule category.
+    #[error("aggregate rule data is missing for category {0:?}")]
+    RuleKindMismatch(AggregateRuleKind),
 }

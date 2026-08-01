@@ -251,7 +251,7 @@
       "group": "workspace",
       "manifest": "crates/sim-lib-serial-core/Cargo.toml",
       "package": "sim-lib-serial-core",
-      "summary": "Finite symbolic alphabets and validated ordered series."
+      "summary": "Finite symbolic alphabets, validated series, and certified total transforms."
     },
     {
       "crate_name": "sim_lib_sound_audio_lift",

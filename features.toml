@@ -506,10 +506,10 @@ supports = [
 [[feature]]
 id = "feature/sim-music/serial-series-calculus"
 title = "Finite symbolic serial series calculus"
-summary = "Validate symbol-bearing finite alphabets and ordered series against explicit aggregate rules with retained evidence and shared permutation ranks."
+summary = "Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates."
 owner = "crate/sim-lib-serial-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use sim-lib-serial-core when a musical technique orders a finite symbolic vocabulary without assuming pitch: construct a stable AlphabetId and SerialAlphabet, choose exhaustive-exactly-once, no-repeat, declared-multiplicity, declared-omissions, projected-aggregate, or free-order data, then inspect the Series AggregateLedger. Declarations accept symbols and the Series stores symbols; canonical positions remain a private adapter detail. Exactly-once permutation rank delegates to sim-lib-discrete-rank PermutationSpace, and generic enumeration or search remains in sim-discrete. Load MusicShapesLib for the music/SerialSeries Shape and music/serial/validate Lisp callable. The custom-alphabet recipe proves the same five-symbol non-pitch series through Rust, Shape, Lisp, and the shared rank owner."
+guidance = "Use sim-lib-serial-core when a musical technique orders a finite symbolic vocabulary without assuming pitch: construct a stable AlphabetId and SerialAlphabet, choose exhaustive-exactly-once, no-repeat, declared-multiplicity, declared-omissions, projected-aggregate, or free-order data, then inspect the Series AggregateLedger. Apply SeriesTransform for retrograde, rotation, exhaustive block partition, validated OrdinalMap permutation, cyclic relabeling, or a caller-supplied SymbolBijection. Every accepted application returns a TransformCertificate with stable source/target alphabet ids, exact output-to-source order map, aggregate preservation, inverse when present, and named relaxed invariants; composition has one deterministic canonical form. Declarations and bijections accept symbols and the Series stores symbols; raw ordinals exist only behind validated maps. Exactly-once permutation rank and exhaustive test fixtures delegate to sim-lib-discrete-rank PermutationSpace, and generic enumeration or search remains in sim-discrete. Load MusicShapesLib for the music/SerialSeries Shape and music/serial/validate Lisp callable. The custom-alphabet recipe proves the five-symbol non-pitch validation surface; the checked certified-transforms Rust recipe proves composition and exact inverse recovery."
 claims_anchors = [
   "anchor/crate/sim-lib-serial-core",
   "anchor/crate/sim-lib-music-shapes",
@@ -520,6 +520,7 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet",
+  "recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms",
 ]
 
 [[route]]
@@ -537,8 +538,9 @@ id = "route/transform-musical-series"
 task = "Validate a finite musical series before applying total symbolic transforms"
 audiences = ["user", "code", "framework"]
 steps = [
-  { feature = "feature/sim-music/serial-series-calculus", why = "The serial row owns stable finite alphabet identity, symbol-bearing order, aggregate-rule data, typed failures, validation ledgers, the Shape adapter, and the Lisp validation call while delegating generic permutation rank to sim-discrete." },
+  { feature = "feature/sim-music/serial-series-calculus", why = "The serial row owns stable finite alphabet identity, symbol-bearing order, aggregate-rule data, typed failures, validation ledgers, validated ordinal and symbol bijections, total transform composition, algebra certificates, the Shape adapter, and the Lisp validation call while delegating generic permutation rank to sim-discrete." },
   { specimen = "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet", why = "The checked Lisp recipe validates and ranks an exhaustive five-symbol gesture alphabet, proving that the reusable calculus has no pitch dependency." },
+  { specimen = "recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms", why = "The checked Rust recipe composes retrograde and rotation, applies the returned inverse, and proves exact source recovery with aggregate-preservation evidence." },
 ]
 
 [[route]]

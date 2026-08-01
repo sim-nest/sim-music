@@ -233,7 +233,7 @@
       "id": "cookbook/serial-core",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-serial-core",
-      "summary": "Finite symbolic alphabets and aggregate validation evidence."
+      "summary": "Finite symbolic alphabets, aggregate evidence, and total transforms."
     },
     {
       "id": "cookbook/sim-music",
