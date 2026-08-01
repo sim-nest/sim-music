@@ -17,6 +17,15 @@ Rendered serial notes retain their planned event and ordinal provenance, then
 pass through the canonical `sim-lib-music-core` staff, piano-roll, and score
 forms so equal-pitch occurrences and voice identity survive rendering.
 
+When one composition needs inspectable serial policy rather than a hidden style
+switch, compose a `SerialPractice` from open `PracticeRule` components and
+evaluate a named `SerialReading`: `StructuralPlan`, `DeclaredRoles`, or
+`AllSounding`. Built-in rules cover aggregate, order, repeats, doublings,
+simultaneity, row mixing, foreign material, and parameter exhaustion. The
+result is an explicit invariant ledger with the rule id, expected fact, observed
+fact, evidence ids, and any declared waiver for every preserved, relaxed, or
+violated policy.
+
 ```rust
 use std::collections::BTreeMap;
 

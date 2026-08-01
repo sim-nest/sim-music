@@ -1,13 +1,15 @@
 use std::collections::BTreeMap;
+use std::sync::Arc;
 
 use sim_lib_music_core::{Articulation, Channel, ObjectId, PitchClass, Score, Time};
 use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
 use crate::{
-    EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId, SerialOrigin,
-    SerialPlan, SerialPlanError, SerialRenderOptions, SerialRole, SimultaneousGroupId,
-    StrictEventSpec, StrictPitchLayout, StrictRealizationContext, TiePolicy, realize_strict,
-    render_serial_piano_roll, render_serial_score, render_serial_staff,
+    BuiltInPracticeRule, DeclaredWaivers, EventPlacement, InvariantStatus, OrdinalRef,
+    PlannedSerialEvent, PracticeId, PracticeRuleId, RowInstanceId, SerialEventId, SerialOrigin,
+    SerialPlan, SerialPlanError, SerialPractice, SerialReading, SerialRenderOptions, SerialRole,
+    SimultaneousGroupId, StrictEventSpec, StrictPitchLayout, StrictRealizationContext, TiePolicy,
+    WaiverId, realize_strict, render_serial_piano_roll, render_serial_score, render_serial_staff,
 };
 
 fn op25_form() -> sim_lib_pitch_serial::RowForm {
@@ -39,6 +41,15 @@ fn quarter() -> Time {
 
 fn event(id: &str, ordinals: &[usize], voice_name: &str) -> PlannedSerialEvent {
     let row_id = RowInstanceId::new("row/op25/p0").expect("row id");
+    event_for_row(row_id, id, ordinals, voice_name)
+}
+
+fn event_for_row(
+    row_id: RowInstanceId,
+    id: &str,
+    ordinals: &[usize],
+    voice_name: &str,
+) -> PlannedSerialEvent {
     PlannedSerialEvent {
         id: SerialEventId::new(id).expect("event id"),
         ordinals: ordinals
@@ -288,6 +299,135 @@ fn strict_plan() -> SerialPlan {
     .expect("plan")
 }
 
+fn practice_plan() -> SerialPlan {
+    let row_id = RowInstanceId::new("row/practice/p0").expect("row id");
+    let alt_row_id = RowInstanceId::new("row/practice/alt").expect("row id");
+    let mut rows = BTreeMap::new();
+    rows.insert(row_id.clone(), op25_form());
+    rows.insert(alt_row_id.clone(), op25_form());
+    let simult = SimultaneousGroupId::new("simul/practice").expect("group");
+    let structural_a = event_for_row(
+        row_id.clone(),
+        "event/struct-a",
+        &[0, 1, 2, 3, 4, 5],
+        "voice/high",
+    );
+    let structural_b = event_for_row(
+        row_id.clone(),
+        "event/struct-b",
+        &[6, 7, 8, 9, 10, 11],
+        "voice/low",
+    );
+    let structural_c = event_for_row(
+        alt_row_id.clone(),
+        "event/struct-c",
+        &[0, 1, 2, 3, 4, 5],
+        "voice/alto",
+    );
+    let structural_d = event_for_row(
+        alt_row_id.clone(),
+        "event/struct-d",
+        &[6, 7, 8, 9, 10, 11],
+        "voice/tenor",
+    );
+    let derived = PlannedSerialEvent {
+        id: SerialEventId::new("event/derived-repeat").expect("event id"),
+        ordinals: vec![
+            OrdinalRef::new(row_id.clone(), 0),
+            OrdinalRef::new(alt_row_id.clone(), 0),
+        ],
+        role: SerialRole::Derived,
+        origin: SerialOrigin::Derived {
+            technique: "partition-exchange".to_owned(),
+        },
+        voice: voice("voice/middle"),
+        placement: EventPlacement::simultaneous(simult),
+        parents: vec![
+            SerialEventId::new("event/struct-a").unwrap(),
+            SerialEventId::new("event/struct-c").unwrap(),
+        ],
+    };
+    let external = PlannedSerialEvent {
+        id: SerialEventId::new("event/external-citation").expect("event id"),
+        ordinals: vec![OrdinalRef::new(row_id, 11), OrdinalRef::new(alt_row_id, 0)],
+        role: SerialRole::External,
+        origin: SerialOrigin::External {
+            source: "quote".to_owned(),
+        },
+        voice: voice("voice/guest"),
+        placement: EventPlacement::independent(),
+        parents: vec![SerialEventId::new("event/derived-repeat").unwrap()],
+    };
+    let events = [
+        (structural_a.id.clone(), structural_a),
+        (structural_b.id.clone(), structural_b),
+        (structural_c.id.clone(), structural_c),
+        (structural_d.id.clone(), structural_d),
+        (derived.id.clone(), derived),
+        (external.id.clone(), external),
+    ]
+    .into_iter()
+    .collect();
+    SerialPlan::try_new(
+        rows,
+        events,
+        [
+            (
+                SerialEventId::new("event/struct-a").unwrap(),
+                SerialEventId::new("event/derived-repeat").unwrap(),
+            ),
+            (
+                SerialEventId::new("event/struct-b").unwrap(),
+                SerialEventId::new("event/derived-repeat").unwrap(),
+            ),
+            (
+                SerialEventId::new("event/struct-c").unwrap(),
+                SerialEventId::new("event/derived-repeat").unwrap(),
+            ),
+            (
+                SerialEventId::new("event/struct-d").unwrap(),
+                SerialEventId::new("event/external-citation").unwrap(),
+            ),
+            (
+                SerialEventId::new("event/derived-repeat").unwrap(),
+                SerialEventId::new("event/external-citation").unwrap(),
+            ),
+        ],
+    )
+    .expect("practice plan")
+}
+
+fn practice_rules() -> Vec<Arc<dyn crate::PracticeRule>> {
+    vec![
+        Arc::new(BuiltInPracticeRule::aggregate(
+            PracticeRuleId::new("rule/aggregate").expect("rule id"),
+        )),
+        Arc::new(BuiltInPracticeRule::order(
+            PracticeRuleId::new("rule/order").expect("rule id"),
+        )),
+        Arc::new(BuiltInPracticeRule::repeats(
+            PracticeRuleId::new("rule/repeats").expect("rule id"),
+        )),
+        Arc::new(BuiltInPracticeRule::doublings(
+            PracticeRuleId::new("rule/doublings").expect("rule id"),
+        )),
+        Arc::new(BuiltInPracticeRule::simultaneity(
+            PracticeRuleId::new("rule/simultaneity").expect("rule id"),
+            false,
+        )),
+        Arc::new(BuiltInPracticeRule::row_mixing(
+            PracticeRuleId::new("rule/row-mixing").expect("rule id"),
+        )),
+        Arc::new(BuiltInPracticeRule::foreign_material(
+            PracticeRuleId::new("rule/foreign").expect("rule id"),
+            false,
+        )),
+        Arc::new(BuiltInPracticeRule::parameter_exhaustion(
+            PracticeRuleId::new("rule/parameter-exhaustion").expect("rule id"),
+        )),
+    ]
+}
+
 fn strict_context() -> StrictRealizationContext {
     let channel = Channel::new(0).expect("channel");
     let specs = [
@@ -467,4 +607,78 @@ fn strict_realization_wraps_the_canonical_piano_roll_in_a_score() {
     };
     assert_eq!(roll.lanes.len(), 3);
     assert!(roll.items.len() >= realization.notes().len());
+}
+
+#[test]
+fn serial_practice_rules_are_inspectable() {
+    let practice = SerialPractice::new(
+        PracticeId::new("practice/op25/strict").expect("practice id"),
+        practice_rules(),
+    );
+    let specs = practice.rule_specs();
+    assert_eq!(specs.len(), 8);
+    assert_eq!(
+        specs[0].expected_fact,
+        "each structural ordinal appears exactly once"
+    );
+    assert_eq!(specs[4].parameters[0].name, "allow");
+    assert_eq!(specs[4].parameters[0].value, "false");
+}
+
+#[test]
+fn serial_practice_structural_reading_preserves_strict_statement() {
+    let practice = SerialPractice::new(
+        PracticeId::new("practice/op25/strict").expect("practice id"),
+        practice_rules(),
+    );
+    let report = practice.evaluate(
+        &practice_plan(),
+        SerialReading::StructuralPlan,
+        &DeclaredWaivers::default(),
+    );
+    assert!(!report.has_unwaived_violations());
+    assert!(report.ledger.entries().iter().all(|entry| {
+        matches!(
+            entry.status,
+            InvariantStatus::Preserved | InvariantStatus::NotApplicable
+        )
+    }));
+}
+
+#[test]
+fn serial_practice_all_sounding_makes_relaxations_explicit() {
+    let practice = SerialPractice::new(
+        PracticeId::new("practice/op25/strict").expect("practice id"),
+        practice_rules(),
+    );
+    let waivers = DeclaredWaivers::new([
+        (
+            PracticeRuleId::new("rule/simultaneity").expect("rule id"),
+            WaiverId::new("waiver/chords").expect("waiver id"),
+        ),
+        (
+            PracticeRuleId::new("rule/parameter-exhaustion").expect("rule id"),
+            WaiverId::new("waiver/post-aggregate").expect("waiver id"),
+        ),
+    ]);
+    let report = practice.evaluate(&practice_plan(), SerialReading::AllSounding, &waivers);
+    let entries = report.ledger.entries();
+    assert!(report.has_unwaived_violations());
+    assert!(
+        entries
+            .iter()
+            .any(|entry| matches!(entry.status, InvariantStatus::Relaxed { .. }))
+    );
+    assert!(
+        entries
+            .iter()
+            .any(|entry| entry.rule_id.as_str() == "rule/foreign"
+                && matches!(entry.status, InvariantStatus::Violated))
+    );
+    assert!(
+        entries
+            .iter()
+            .any(|entry| entry.rule_id.as_str() == "rule/row-mixing"
+                && matches!(entry.status, InvariantStatus::Violated))
+    );
 }
