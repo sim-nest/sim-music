@@ -1,0 +1,24 @@
+[package]
+name = "serial-workbench"
+version = "0.1.0"
+edition = "2024"
+license = "MPL-2.0"
+description = "End-to-end serial music workbench recipe over replaceable SIM music components."
+readme = "README.md"
+publish = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+sim-lib-discrete-search = { path = "../../../sim-discrete/crates/sim-lib-discrete-search" }
+sim-lib-music-core = { path = "../../crates/sim-lib-music-core" }
+sim-lib-music-lower = { path = "../../crates/sim-lib-music-lower" }
+sim-lib-music-notation = { path = "../../crates/sim-lib-music-notation" }
+sim-lib-music-serial = { path = "../../crates/sim-lib-music-serial" }
+sim-lib-music-transform = { path = "../../crates/sim-lib-music-transform" }
+sim-lib-pitch-core = { path = "../../crates/sim-lib-pitch-core" }
+sim-lib-pitch-scale = { path = "../../crates/sim-lib-pitch-scale" }
+sim-lib-pitch-serial = { path = "../../crates/sim-lib-pitch-serial" }
+toml = "0.8"
+
+[lints]
+workspace = true

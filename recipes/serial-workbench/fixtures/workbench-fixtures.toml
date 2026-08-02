@@ -1,0 +1,27 @@
+[[fixture]]
+id = "fixture/row-plan/op25-p0"
+source = "Pitch-class row facts only; no rhythmic or score excerpt material."
+data_status = "analysis-fixture"
+proves = "Immutable row-plan construction and strict serial realization."
+contains_copyrighted_score = false
+
+[[fixture]]
+id = "fixture/modal-profile/c-dorian"
+source = "Hand-authored replaceable modal realizer selection."
+data_status = "parameter-fixture"
+proves = "Registry-loaded modal realization without mutating the source plan."
+contains_copyrighted_score = false
+
+[[fixture]]
+id = "fixture/completion/addition-e4"
+source = "Hand-authored additive candidate over generated modal output."
+data_status = "parameter-fixture"
+proves = "Reversible serial completion, structural ledger stability, and patch undo."
+contains_copyrighted_score = false
+
+[[fixture]]
+id = "fixture/export/notation-smoke"
+source = "Generated export expectations over recipe-owned score data."
+data_status = "expectation"
+proves = "MIDI, LilyPond, and audition export surfaces stay live."
+contains_copyrighted_score = false

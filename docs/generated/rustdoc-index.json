@@ -2,6 +2,20 @@
   "generator": "xtask repo-contract v1",
   "packages": [
     {
+      "crate_name": "music-algorithm-foundry",
+      "group": "workspace",
+      "manifest": "recipes/music-algorithm-foundry/Cargo.toml",
+      "package": "music-algorithm-foundry",
+      "summary": "Data-planned composition recipe for the SIM music algorithm foundry."
+    },
+    {
+      "crate_name": "serial-workbench",
+      "group": "workspace",
+      "manifest": "recipes/serial-workbench/Cargo.toml",
+      "package": "serial-workbench",
+      "summary": "End-to-end serial music workbench recipe over replaceable SIM music components."
+    },
+    {
       "crate_name": "sim_lib_daw_session",
       "group": "workspace",
       "manifest": "crates/sim-lib-daw-session/Cargo.toml",
@@ -79,11 +93,25 @@
       "summary": "Composable music-transform combinators for the SIM music constellation."
     },
     {
+      "crate_name": "sim_lib_music_consonance",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-consonance/Cargo.toml",
+      "package": "sim-lib-music-consonance",
+      "summary": "Exact consonance evaluation and reversible additive completion."
+    },
+    {
       "crate_name": "sim_lib_music_core",
       "group": "workspace",
       "manifest": "crates/sim-lib-music-core/Cargo.toml",
       "package": "sim-lib-music-core",
       "summary": "Core music model layer for the SIM music constellation."
+    },
+    {
+      "crate_name": "sim_lib_music_counterpoint",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-counterpoint/Cargo.toml",
+      "package": "sim-lib-music-counterpoint",
+      "summary": "Exact counterpoint analysis and bounded constraint generation."
     },
     {
       "crate_name": "sim_lib_music_lift",
@@ -105,6 +133,13 @@
       "manifest": "crates/sim-lib-music-notation/Cargo.toml",
       "package": "sim-lib-music-notation",
       "summary": "Score and notation model for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_music_serial",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-music-serial/Cargo.toml",
+      "package": "sim-lib-music-serial",
+      "summary": "Immutable serial plans with stable identity, provenance, and partial order."
     },
     {
       "crate_name": "sim_lib_music_shapes",
@@ -191,11 +226,25 @@
       "summary": "Roman-numeral harmonic analysis for the SIM music libraries."
     },
     {
+      "crate_name": "sim_lib_pitch_ratio",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-ratio/Cargo.toml",
+      "package": "sim-lib-pitch-ratio",
+      "summary": "Exact positive musical ratio intervals."
+    },
+    {
       "crate_name": "sim_lib_pitch_scale",
       "group": "workspace",
       "manifest": "crates/sim-lib-pitch-scale/Cargo.toml",
       "package": "sim-lib-pitch-scale",
       "summary": "Scales, modes, and scale-locking for the SIM music libraries."
+    },
+    {
+      "crate_name": "sim_lib_pitch_serial",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-pitch-serial/Cargo.toml",
+      "package": "sim-lib-pitch-serial",
+      "summary": "Strict twelve-tone rows, complete families, matrices, and explicit labels."
     },
     {
       "crate_name": "sim_lib_pitch_set",
@@ -219,11 +268,18 @@
       "summary": "Pitch binary-frame facade descriptors."
     },
     {
+      "crate_name": "sim_lib_serial_core",
+      "group": "workspace",
+      "manifest": "crates/sim-lib-serial-core/Cargo.toml",
+      "package": "sim-lib-serial-core",
+      "summary": "Finite symbolic alphabets, validated series, and certified total transforms."
+    },
+    {
       "crate_name": "sim_lib_sound_audio_lift",
       "group": "workspace",
       "manifest": "crates/sim-lib-sound-audio-lift/Cargo.toml",
       "package": "sim-lib-sound-audio-lift",
-      "summary": "Audio-to-notes lifting for the SIM music constellation."
+      "summary": "Audio-to-feature and audio-to-notes lifting for the SIM music constellation."
     },
     {
       "crate_name": "sim_lib_sound_bridge",

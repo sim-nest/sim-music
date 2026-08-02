@@ -1,0 +1,5 @@
+title = "Third-party adaptation without source edits"
+summary = "Register a caller-defined alphabet, practice rule, and realizer entirely through public APIs, then prove the generic Lisp validation surface and open adaptation registry fail closed on unknown components."
+category = "Rust"
+tags = ["music", "serial", "adaptation", "registry", "lisp", "framework"]
+requires = ["music-serial", "music-shapes", "serial-core", "codec/lisp"]

@@ -5,7 +5,9 @@ use sim_lib_midi_core::{
     Channel, ChannelMessage, DEFAULT_US_PER_QUARTER, MetaBucket, MetaEvent, MidiEvent, MidiPayload,
     TickTime, U7, bpm_to_us_per_quarter, synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfError, SmfFile, SmfFormat, SmfTrack, write_smf as write_smf_bytes};
+use sim_lib_midi_smf::{
+    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTrack, write_smf as write_smf_bytes,
+};
 use sim_lib_music_core::{
     Articulation, AtomRef, Counterpoint, Music, MusicObject, Note, PianoRoll, Score, Time,
 };
@@ -260,11 +262,16 @@ fn build_lowered_file(
         } else {
             SmfFormat::SingleTrack
         },
-        tpq: opts.tpq,
+        division: metrical_division(opts.tpq)?,
         tracks,
     };
     file.canonicalize();
     Ok(file)
+}
+
+pub(crate) fn metrical_division(tpq: u32) -> Result<SmfDivision, LowerError> {
+    let tpq = u16::try_from(tpq).map_err(|_| SmfError::TpqOutOfRange(tpq))?;
+    SmfDivision::metrical(tpq).ok_or_else(|| SmfError::TpqOutOfRange(u32::from(tpq)).into())
 }
 
 fn score_tempo_map(score: &Score, opts_tempo_map: &TempoMap) -> TempoMap {

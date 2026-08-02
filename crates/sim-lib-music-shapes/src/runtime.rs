@@ -2,13 +2,15 @@ use std::sync::Arc;
 
 use sim_codec::parse_domain_form;
 use sim_kernel::{
-    AbiVersion, Cx, Export, Expr, Lib, LibManifest, LibTarget, Linker, Result, ShapeRef, Symbol,
-    Value, Version,
+    AbiVersion, Cx, Export, ExportKind, ExportRecord, ExportState, Expr, Lib, LibManifest,
+    LibTarget, Linker, Result, RuntimeId, ShapeRef, Symbol, Value, Version,
 };
 use sim_shape::{
     ExactExprShape, ExprKind, ExprKindShape, Shape, ShapeDoc, ShapeMatch, TableExtraPolicy,
     TableFieldSpec, TableShape, shape_value,
 };
+
+mod serial;
 
 const MUSIC_SHAPES_LIB_ID: &str = "music-shapes";
 
@@ -23,6 +25,26 @@ pub struct MusicShapesLib;
 
 impl Lib for MusicShapesLib {
     fn manifest(&self) -> LibManifest {
+        let mut exports = shape_specs()
+            .into_iter()
+            .map(|(symbol, _, _, _)| Export::Shape {
+                symbol,
+                shape_id: None,
+            })
+            .collect::<Vec<_>>();
+        exports.push(Export::Function {
+            symbol: music_serial_validate_symbol(),
+            function_id: None,
+        });
+        exports.push(Export::Function {
+            symbol: serial::music_serial_realize_symbol(),
+            function_id: None,
+        });
+        exports.extend(
+            serial::built_in_realizer_symbols()
+                .into_iter()
+                .map(|symbol| Export::Value { symbol }),
+        );
         LibManifest {
             id: Symbol::new(MUSIC_SHAPES_LIB_ID),
             version: Version(env!("CARGO_PKG_VERSION").to_owned()),
@@ -30,25 +52,25 @@ impl Lib for MusicShapesLib {
             target: LibTarget::HostRegistered,
             requires: Vec::new(),
             capabilities: Vec::new(),
-            exports: shape_specs()
-                .into_iter()
-                .map(|(symbol, _, _, _)| Export::Shape {
-                    symbol,
-                    shape_id: None,
-                })
-                .collect(),
+            exports,
         }
     }
 
-    fn load(&self, _cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
+    fn load(&self, cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
         for (symbol, name, details, inner) in shape_specs() {
             linker.shape_value(
                 symbol.clone(),
                 shape_value(symbol, Arc::new(DocumentedShape::new(name, details, inner))),
             )?;
         }
+        serial::load_validate_function(cx, linker)?;
         Ok(())
     }
+}
+
+/// Symbol of the pitch-independent Lisp series-validation callable.
+pub fn music_serial_validate_symbol() -> Symbol {
+    Symbol::qualified("music/serial", "validate")
 }
 
 /// Loads [`MusicShapesLib`] into `cx`, returning early if it is already present.
@@ -60,7 +82,20 @@ pub fn install_music_shapes_lib(cx: &mut Cx) -> Result<()> {
     {
         return Ok(());
     }
-    cx.load_lib(&MusicShapesLib).map(|_| ())
+    cx.load_lib(&MusicShapesLib)?;
+    for symbol in serial::built_in_realizer_symbols() {
+        cx.registry_mut().append_export_record(
+            &Symbol::new(MUSIC_SHAPES_LIB_ID),
+            ExportRecord {
+                kind: ExportKind::named("SerialRealizer"),
+                symbol,
+                state: ExportState::Resolved {
+                    id: RuntimeId::Value,
+                },
+            },
+        )?;
+    }
+    Ok(())
 }
 
 fn shape_specs() -> Vec<ShapeSpec> {
@@ -291,6 +326,59 @@ fn shape_specs() -> Vec<ShapeSpec> {
             domain_form_shape("LabelStrategy", vec![atom_field("value")]),
         ),
         (
+            Symbol::qualified("music", "OverlapPolicy"),
+            "OverlapPolicy",
+            vec![
+                "same-pitch MIDI note-on/note-off pairing policy",
+                "supports FIFO, LIFO, and reject modes",
+            ],
+            domain_form_shape("OverlapPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "SameTickPolicy"),
+            "SameTickPolicy",
+            vec![
+                "MIDI event ordering policy within one exact tick",
+                "supports encoded, note-offs-first, and note-ons-first order",
+            ],
+            domain_form_shape("SameTickPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "DanglingNotePolicy"),
+            "DanglingNotePolicy",
+            vec![
+                "end-of-timeline unmatched-note policy",
+                "closes notes diagnostically or rejects the realization",
+            ],
+            domain_form_shape("DanglingNotePolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "PedalPolicy"),
+            "PedalPolicy",
+            vec![
+                "MIDI hold-pedal realization policy",
+                "selects ignored, sustain, or sustain-and-sostenuto semantics",
+            ],
+            domain_form_shape("PedalPolicy", vec![atom_field("value")]),
+        ),
+        (
+            Symbol::qualified("music", "MidiRealizationPolicy"),
+            "MidiRealizationPolicy",
+            vec![
+                "deterministic MIDI note-realization policy bundle",
+                "encodes overlap, same-tick, dangling-note, and pedal choices",
+            ],
+            domain_form_shape(
+                "MidiRealizationPolicy",
+                vec![
+                    atom_field("overlap"),
+                    atom_field("same_tick"),
+                    atom_field("dangling_notes"),
+                    atom_field("pedals"),
+                ],
+            ),
+        ),
+        (
             Symbol::qualified("music", "ProgressionLiftOpts"),
             "ProgressionLiftOpts",
             vec![
@@ -379,6 +467,24 @@ fn shape_specs() -> Vec<ShapeSpec> {
                 "browse/help metadata names the subset and lossiness contract",
             ],
             domain_form_shape("NotationCodec", Vec::new()),
+        ),
+        (
+            Symbol::qualified("music", "SerialSeries"),
+            "SerialSeries",
+            vec![
+                "finite symbol-bearing serial series",
+                "semantic validation delegates aggregate and rank rules to serial-core",
+            ],
+            serial::serial_series_shape(),
+        ),
+        (
+            Symbol::qualified("music", "SerialPlan"),
+            "SerialPlan",
+            vec![
+                "immutable serial plan with stable row and event identity",
+                "semantic validation delegates precedence, coverage, and parent rules to music-serial",
+            ],
+            serial::serial_plan_shape(),
         ),
     ]
 }

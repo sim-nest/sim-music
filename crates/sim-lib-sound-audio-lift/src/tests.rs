@@ -2,11 +2,17 @@ use std::sync::Arc;
 
 // conformance: audio lift and render workflows expose checked audio analysis descriptors.
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_codec::{Input, decode_eval_expr_with_codec, encode_value_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, ExportKind, ReadPolicy, Symbol,
+    TrustLevel,
+};
 use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
-    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, install_sound_audio_lift_lib,
+    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, RECIPES,
+    install_sound_audio_lift_lib,
 };
 
 #[cfg(feature = "sound-music")]
@@ -138,6 +144,122 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
         record.kind == ExportKind::named("AudioLifter")
             && record.symbol == Symbol::qualified("sound", "HarmonicCombLifter")
     }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "pitch-track")
+    }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "analyze")
+    }));
+}
+
+#[test]
+fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/pitch-tracking"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "method pyin",
+        "interpolation parabolic",
+        "frequency",
+        "lower-frequency",
+        "upper-frequency",
+        "confidence",
+        "rejected",
+        "frame-index (expr:number numbers/i64 \"0\")",
+        "sample-rate (expr:number numbers/i64 \"8000\")",
+        "work-used",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
+}
+
+#[test]
+fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/onset-beat-harmony"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "features [onsets beats mfcc chroma key chords]",
+        "latency-samples",
+        "minimum-distance-samples",
+        "tempo-policy varying",
+        "tempo-candidates",
+        "meter-hypotheses",
+        "scale mel",
+        "log-floor",
+        "dct-normalization orthonormal",
+        "strategy posterior",
+        "strategy hmm",
+        "confidence",
+        "alternatives",
+        "posterior",
+        "work-used",
+        "seed (expr:number numbers/i64 \"21\")",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
 }
 
 fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, seconds: f64, noise: f64) -> Vec<f32> {

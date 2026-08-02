@@ -1,5 +1,5 @@
 book = "pitch-set"
 title = "Pitch Set"
-summary = "Pitch-class sets, masks, and normal-form descriptors."
+summary = "Pitch-class sets, canonical forms, typed relations, and graph descriptors."
 order = 211
 chapters = ["01-basics"]

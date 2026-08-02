@@ -6,7 +6,8 @@
 //! ([`MidiEvent`], [`MidiPayload`], [`ChannelMessage`], [`MetaEvent`],
 //! [`SysExEvent`]), and the streaming [`MidiSource`]/[`MidiSink`] traits with
 //! in-memory implementations. It also provides the [`NoteEchoPlayer`]
-//! transform, controller-number constants, tempo conversions, and the
+//! transform, controller-number constants, piecewise exact [`MidiTempoMap`]
+//! conversion among ticks, quarter beats, and wall time, and the
 //! host-registered [`MidiIoLib`] that exposes the in-memory cards to a running
 //! SIM [`Cx`](sim_kernel::Cx).
 //!

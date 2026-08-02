@@ -143,6 +143,14 @@ pub fn encode_spectrum_source(value: &SpectrumSource) -> String {
             "#(SpectrumSource kind=FromPcm window_size={} sample_rate={})",
             window_size, sample_rate
         ),
+        SpectrumSource::FromStft {
+            frame_size,
+            sample_rate,
+            onset_sample,
+        } => format!(
+            "#(SpectrumSource kind=FromStft frame_size={} sample_rate={} onset_sample={})",
+            frame_size, sample_rate, onset_sample
+        ),
         SpectrumSource::Synthetic => "#(SpectrumSource kind=Synthetic)".to_owned(),
     }
 }

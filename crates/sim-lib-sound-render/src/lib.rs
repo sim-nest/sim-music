@@ -4,17 +4,23 @@
 //! interleaved PCM audio. [`PcmRenderer`] renders single tones and mixes
 //! scheduled tones with per-tone timing and panning, and encodes the result as
 //! 16-bit WAV; [`RendererOptions`] configures the sample rate and channel
-//! count.
+//! count. It also composes the existing STFT and numbers-signal owners for
+//! policy-complete offline phase vocoding, and reports EBU R128 / ITU-R
+//! BS.1770 loudness, true peak, and transparent normalization gain.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
 mod error;
+mod loudness;
 mod model;
 mod runtime;
+mod vocoder;
 
 pub use error::*;
+pub use loudness::*;
 pub use model::*;
 pub use runtime::*;
+pub use vocoder::*;
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

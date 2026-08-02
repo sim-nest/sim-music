@@ -26,6 +26,8 @@ pub fn export_lilypond_report(score: &Score) -> Result<NotationReport<String>, N
     Ok(NotationReport {
         value: lines.join("\n"),
         diagnostics: Vec::new(),
+        identities: Vec::new(),
+        losses: Vec::new(),
     })
 }
 

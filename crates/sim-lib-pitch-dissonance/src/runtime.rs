@@ -65,6 +65,13 @@ fn model_symbols() -> Vec<Symbol> {
         Symbol::qualified("pitch", "ForteComplexity"),
         Symbol::qualified("pitch", "TonalFunctionDissonance"),
         Symbol::qualified("pitch", "TritoneDensity"),
+        Symbol::qualified("pitch", "ContextualRoughnessModel"),
+        Symbol::qualified("pitch", "CommonalityModel"),
+        Symbol::qualified("pitch", "LeadingModel"),
+        Symbol::qualified("pitch", "MotionModel"),
+        Symbol::qualified("pitch", "PseudoPartialModel"),
+        Symbol::qualified("pitch", "ContextualIntervalVectorModel"),
+        Symbol::qualified("pitch", "ExperimentalRatioModel"),
     ]
 }
 

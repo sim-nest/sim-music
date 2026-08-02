@@ -1,0 +1,8 @@
+id = "bounded-rewrite-catalogs"
+title = "Bounded rewrite and progression-tree catalogs"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 35
+tags = ["music", "combinators", "l-system", "progression-tree", "pitch-map", "rank", "bounded-search", "receipt", "sandbox-descriptor"]
+requires = ["music-combinators", "music-transform", "discrete-rank", "discrete-search", "codec/lisp"]

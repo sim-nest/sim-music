@@ -65,6 +65,7 @@ pub fn label_roman(
         Some("maj") => numeral.to_owned(),
         Some("min") => numeral.to_ascii_lowercase(),
         Some("dim") => format!("{}o", numeral.to_ascii_lowercase()),
+        Some("dim7") => format!("{}o7", numeral.to_ascii_lowercase()),
         Some("dom7") => format!("{numeral}7"),
         Some("maj7") => format!("{numeral}maj7"),
         Some("min7") => format!("{}7", numeral.to_ascii_lowercase()),
@@ -83,6 +84,7 @@ fn chord_quality(mask: PitchClassMask, root: PitchClass) -> Option<&'static str>
         0b0000_1001_0001 => Some("maj"),
         0b0000_1000_1001 => Some("min"),
         0b0000_0100_1001 => Some("dim"),
+        0b0010_0100_1001 => Some("dim7"),
         0b1000_1001_0001 => Some("maj7"),
         0b0100_1001_0001 => Some("dom7"),
         0b0100_1000_1001 => Some("min7"),
@@ -119,5 +121,28 @@ mod tests {
         )
         .expect("roman label");
         assert_eq!(label, "V7");
+    }
+
+    #[test]
+    fn labels_symmetric_diminished_with_explicit_root() {
+        let diminished_seventh = PitchClassMask::from_pitch_classes(&[
+            PitchClass::B,
+            PitchClass::D,
+            PitchClass::F,
+            PitchClass::GS,
+        ]);
+        let key = Some(Key {
+            tonic: PitchClass::C,
+            mode: Mode::Major,
+        });
+
+        assert_eq!(
+            label_roman(diminished_seventh, key, Some(PitchClass::B)).unwrap(),
+            "viio7"
+        );
+        assert_eq!(
+            label_roman(diminished_seventh, key, Some(PitchClass::D)).unwrap(),
+            "iio7"
+        );
     }
 }

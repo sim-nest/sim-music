@@ -4,6 +4,7 @@
 
 | Package | Group | Features | Workspace feature edges |
 | --- | --- | ---: | ---: |
+| `music-algorithm-foundry` | `workspace` | 0 | 0 |
 | `sim-lib-daw-session` | `workspace` | 0 | 0 |
 | `sim-lib-midi-ble` | `workspace` | 3 | 1 |
 | `sim-lib-midi-core` | `workspace` | 0 | 0 |
@@ -15,7 +16,9 @@
 | `sim-lib-midi-wasm-frame` | `workspace` | 2 | 0 |
 | `sim-lib-music-analysis` | `workspace` | 2 | 0 |
 | `sim-lib-music-combinators` | `workspace` | 0 | 0 |
+| `sim-lib-music-consonance` | `workspace` | 0 | 0 |
 | `sim-lib-music-core` | `workspace` | 0 | 0 |
+| `sim-lib-music-counterpoint` | `workspace` | 0 | 0 |
 | `sim-lib-music-lift` | `workspace` | 0 | 0 |
 | `sim-lib-music-lower` | `workspace` | 0 | 0 |
 | `sim-lib-music-notation` | `workspace` | 0 | 0 |
@@ -31,11 +34,12 @@
 | `sim-lib-pitch-namer-jazz` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-namer-riemann` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-namer-roman` | `workspace` | 0 | 0 |
+| `sim-lib-pitch-ratio` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-scale` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-set` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-shapes` | `workspace` | 0 | 0 |
 | `sim-lib-pitch-wasm-frame` | `workspace` | 2 | 0 |
-| `sim-lib-sound-audio-lift` | `workspace` | 2 | 2 |
+| `sim-lib-sound-audio-lift` | `workspace` | 2 | 1 |
 | `sim-lib-sound-bridge` | `workspace` | 0 | 0 |
 | `sim-lib-sound-core` | `workspace` | 0 | 0 |
 | `sim-lib-sound-dissonance` | `workspace` | 0 | 0 |

@@ -1,0 +1,3 @@
+title = "Composition"
+order = 25
+summary = "Checked reuse across timbre, offline rendering, PCM interchange, and realtime graph preview."

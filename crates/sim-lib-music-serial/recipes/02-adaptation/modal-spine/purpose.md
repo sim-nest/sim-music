@@ -1,0 +1,1 @@
+Land one serial plan onto modal or caller-defined scales without pretending the result remains strict twelve-tone. The recipe preserves the source plan and ordinal identity, adapts pitches through landed scale maps, and exposes collisions, repeated degrees, aggregate loss, and contextual sonance independently through the attached spine report.

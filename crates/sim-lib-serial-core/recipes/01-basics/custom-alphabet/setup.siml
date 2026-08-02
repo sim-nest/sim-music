@@ -1,0 +1,1 @@
+(music/serial/validate "#(SerialSeries alphabet_id=gesture/five-v1 symbols=[rise,fall,hold,turn,rest] rule=#(AggregateRule kind=ExhaustiveExactlyOnce) order=[turn,rise,rest,fall,hold])")

@@ -1,0 +1,1 @@
+"pitch-scale descriptor: (pitch/scale/generate :tetrachords '((0 2 4 5) (0 2 3 5)) :join '(whole half) :control {:work 10000 :results 32 :seed 0}) emits stable bounded tetrachord scales"

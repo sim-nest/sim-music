@@ -49,6 +49,26 @@ impl PerformanceInput {
     pub fn sustain(input_time: Tick, channel: Channel, down: bool) -> Self {
         Self::new(input_time, PerformanceIntent::Sustain { down, channel })
     }
+
+    /// Builds a sostenuto-pedal input with the pedal `down` state.
+    pub fn sostenuto(input_time: Tick, channel: Channel, down: bool) -> Self {
+        Self::new(input_time, PerformanceIntent::Sostenuto { down, channel })
+    }
+
+    /// Builds a channel-scoped All Notes Off input.
+    pub fn all_notes_off(input_time: Tick, channel: Channel) -> Self {
+        Self::new(input_time, PerformanceIntent::AllNotesOff { channel })
+    }
+
+    /// Builds a channel-scoped All Sound Off input.
+    pub fn all_sound_off(input_time: Tick, channel: Channel) -> Self {
+        Self::new(input_time, PerformanceIntent::AllSoundOff { channel })
+    }
+
+    /// Builds a channel-scoped Reset All Controllers input.
+    pub fn reset_controllers(input_time: Tick, channel: Channel) -> Self {
+        Self::new(input_time, PerformanceIntent::ResetControllers { channel })
+    }
 }
 
 /// A single live-performance gesture.
@@ -99,6 +119,28 @@ pub enum PerformanceIntent {
         /// Channel the pedal applies to.
         channel: Channel,
     },
+    /// Sets the sostenuto pedal state on a channel.
+    Sostenuto {
+        /// Whether the pedal is depressed.
+        down: bool,
+        /// Channel the pedal applies to.
+        channel: Channel,
+    },
+    /// Releases every key-down note on one channel, subject to hold pedals.
+    AllNotesOff {
+        /// Channel whose notes are released.
+        channel: Channel,
+    },
+    /// Silences every sounding note on one channel immediately.
+    AllSoundOff {
+        /// Channel whose sound is stopped.
+        channel: Channel,
+    },
+    /// Resets channel controllers and releases notes held only by pedals.
+    ResetControllers {
+        /// Channel whose controller state is reset.
+        channel: Channel,
+    },
     /// Sets a named parameter to an integer value.
     Parameter {
         /// Symbol naming the parameter target.
@@ -124,6 +166,10 @@ impl PerformanceIntent {
             Self::Aftertouch { .. } => "aftertouch",
             Self::PitchBend { .. } => "pitch-bend",
             Self::Sustain { .. } => "sustain",
+            Self::Sostenuto { .. } => "sostenuto",
+            Self::AllNotesOff { .. } => "all-notes-off",
+            Self::AllSoundOff { .. } => "all-sound-off",
+            Self::ResetControllers { .. } => "reset-controllers",
             Self::Parameter { .. } => "parameter",
             Self::Panic => "panic",
         }
@@ -172,8 +218,13 @@ impl PerformanceIntent {
                 ));
                 entries.push((Expr::Symbol(Symbol::new("channel")), channel_expr(*channel)));
             }
-            Self::Sustain { down, channel } => {
+            Self::Sustain { down, channel } | Self::Sostenuto { down, channel } => {
                 entries.push((Expr::Symbol(Symbol::new("down")), Expr::Bool(*down)));
+                entries.push((Expr::Symbol(Symbol::new("channel")), channel_expr(*channel)));
+            }
+            Self::AllNotesOff { channel }
+            | Self::AllSoundOff { channel }
+            | Self::ResetControllers { channel } => {
                 entries.push((Expr::Symbol(Symbol::new("channel")), channel_expr(*channel)));
             }
             Self::Parameter { target, value } => {
@@ -223,6 +274,21 @@ impl PerformanceIntent {
                 down: bool_field(entries, "down")?,
                 channel: channel_field(entries, "channel")?,
             }),
+            "sostenuto" | "music/performance-intent/sostenuto" => Ok(Self::Sostenuto {
+                down: bool_field(entries, "down")?,
+                channel: channel_field(entries, "channel")?,
+            }),
+            "all-notes-off" | "music/performance-intent/all-notes-off" => Ok(Self::AllNotesOff {
+                channel: channel_field(entries, "channel")?,
+            }),
+            "all-sound-off" | "music/performance-intent/all-sound-off" => Ok(Self::AllSoundOff {
+                channel: channel_field(entries, "channel")?,
+            }),
+            "reset-controllers" | "music/performance-intent/reset-controllers" => {
+                Ok(Self::ResetControllers {
+                    channel: channel_field(entries, "channel")?,
+                })
+            }
             "parameter" | "music/performance-intent/parameter" => Ok(Self::Parameter {
                 target: symbol_field(entries, "target")?.clone(),
                 value: i64_field(entries, "value")?,

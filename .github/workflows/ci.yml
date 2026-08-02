@@ -4,8 +4,46 @@ on:
   pull_request: {}
   push:
     branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
-  check:
+  scope:
+    name: select validation scope
+    runs-on: ubuntu-latest
+    outputs:
+      run-heavy: ${{ steps.scope.outputs.run-heavy }}
+    steps:
+      - id: scope
+        name: Avoid duplicate PR and main validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          run_heavy=true
+          if [ "$EVENT_NAME" = pull_request ]; then
+            sleep 15
+            state="$(gh api "repos/$REPOSITORY/pulls/$PR_NUMBER" --jq .state)"
+            sole="$(gh api "repos/$REPOSITORY/pulls/$PR_NUMBER" \
+              --jq 'any(.labels[]; .name == "roadmap-sole-contributor")')"
+            if [ "$state" != open ] || [ "$sole" = true ]; then
+              run_heavy=false
+            fi
+          fi
+          echo "run-heavy=$run_heavy" >> "$GITHUB_OUTPUT"
+
+  heavy:
+    name: heavy validation
+    needs: scope
+    if: ${{ needs.scope.outputs.run-heavy == 'true' }}
     runs-on: ubuntu-latest
     env:
       SIMDOC_TOOLING_MANIFEST: ${{ github.workspace }}/sim-tooling/Cargo.toml
@@ -31,3 +69,19 @@ jobs:
       - run: cargo clippy --workspace --all-features --all-targets -- -D warnings
       - run: cargo test --workspace --all-features
       - run: cargo run -p xtask -- simdoc --check
+
+  check:
+    name: check
+    if: ${{ always() }}
+    needs: [scope, heavy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require heavy validation when enabled
+        env:
+          HEAVY_RESULT: ${{ needs.heavy.result }}
+          RUN_HEAVY: ${{ needs.scope.outputs.run-heavy }}
+        run: |
+          if [ "$RUN_HEAVY" != true ]; then
+            exit 0
+          fi
+          test "$HEAVY_RESULT" = success

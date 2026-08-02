@@ -1,0 +1,3 @@
+title = "Basics"
+order = 10
+summary = "Immutable plans, strict realization, arrays, and time-point rows."

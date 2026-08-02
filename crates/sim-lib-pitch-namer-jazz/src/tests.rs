@@ -52,3 +52,17 @@ fn matcher_finds_dominant_seventh() {
     let matched = match_jazz_symbol(symbol.mask(), Some(symbol.root)).expect("match");
     assert_eq!(matched.quality, JazzQuality::Dominant7);
 }
+
+#[test]
+fn matcher_honors_preferred_roots_for_symmetric_chords() {
+    let augmented = parse_jazz_symbol("C:aug").expect("symbol");
+
+    let canonical = match_jazz_symbol(augmented.mask(), None).expect("canonical match");
+    assert_eq!(canonical.root, PitchClass::C);
+    assert_eq!(canonical.quality, JazzQuality::Augmented);
+
+    let preferred = match_jazz_symbol(augmented.mask(), Some(PitchClass::E))
+        .expect("preferred symmetric match");
+    assert_eq!(preferred.root, PitchClass::E);
+    assert_eq!(preferred.quality, JazzQuality::Augmented);
+}

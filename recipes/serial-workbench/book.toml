@@ -1,0 +1,5 @@
+book = "serial-workbench"
+title = "Serial Workbench"
+summary = "End-to-end serial planning, realization, completion, export, and audition over replaceable components."
+order = 271
+chapters = ["01-end-to-end"]

@@ -247,3 +247,48 @@ fn recipe_sources_are_registered_for_generated_docs() {
         assert!(source.contains("codec = \"lisp\""));
     }
 }
+
+#[test]
+fn bounded_harmonization_recipe_declares_strategy_and_all_controls() {
+    let source = include_str!("../recipes/01-basics/bounded-harmonization/setup.siml");
+    assert!(source.contains("(music/harmonize melody"));
+    assert!(source.contains(":strategy 'layered-dp"));
+    assert!(source.contains(":work 100000"));
+    assert!(source.contains(":results 4"));
+    assert!(source.contains(":seed 12"));
+}
+
+#[test]
+fn carpet_recipe_names_shared_rank_transform_and_loss_contracts() {
+    let source = include_str!("../recipes/01-basics/carpet-relative/setup.siml");
+    assert!(source.contains("MusicCarpet"));
+    assert!(source.contains("mixed-radix rank"));
+    assert!(source.contains("TransformChain"));
+    assert!(source.contains("ConversionLoss"));
+}
+
+#[test]
+fn rewrite_catalog_recipe_declares_data_bounds_rank_search_and_receipts() {
+    let source = include_str!("../recipes/01-basics/bounded-rewrite-catalogs/setup.siml");
+    for required in [
+        ":alphabet",
+        ":productions",
+        ":context",
+        ":scale-states",
+        ":pitch-map",
+        ":generations 2",
+        ":symbols-per-generation 4",
+        ":total-symbols 8",
+        ":seed 30",
+        ":work 100000",
+        ":results 16",
+        ":frontier 256",
+        ":memory-nodes 512",
+        ":progression-tree",
+        ":rank mixed-radix",
+        "derivation-tree",
+        "search-receipt",
+    ] {
+        assert!(source.contains(required), "missing {required}");
+    }
+}

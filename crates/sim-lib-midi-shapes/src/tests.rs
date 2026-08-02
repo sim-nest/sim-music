@@ -3,7 +3,7 @@ use sim_lib_midi_core::{
     Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent,
     TickTime, U7, U14, synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, SmpteRate};
 use std::sync::Arc;
 
 use crate::{
@@ -135,7 +135,7 @@ fn smf_track_round_trip() {
 fn smf_file_round_trip() {
     let file = SmfFile {
         format: SmfFormat::Simultaneous,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![
             SmfTrack {
                 events: vec![MidiEvent {
@@ -162,6 +162,16 @@ fn smf_file_round_trip() {
     let encoded = encode_smf_file(&file);
     let decoded = decode_smf_file(&encoded).expect("decode");
     assert_eq!(decoded, file);
+
+    let smpte = SmfFile {
+        format: SmfFormat::Independent,
+        division: SmfDivision::smpte(SmpteRate::Fps29Drop, 80).unwrap(),
+        tracks: Vec::new(),
+    };
+    assert_eq!(
+        decode_smf_file(&encode_smf_file(&smpte)).expect("decode SMPTE"),
+        smpte
+    );
 }
 
 #[test]
@@ -277,7 +287,7 @@ fn midi_citizens_accept_legacy_text_and_read_construct() {
         decode_smf_track(track_text).unwrap()
     );
 
-    let file_text = "#(SmfFile SingleTrack 480 #(SmfTrack))";
+    let file_text = "#(SmfFile SingleTrack #(SmfDivision Metrical 480) #(SmfTrack))";
     let file =
         read_construct::<MidiSmfFileDescriptor>(&mut cx, midi_smf_file_class_symbol(), file_text);
     assert_eq!(file.file().unwrap(), decode_smf_file(file_text).unwrap());

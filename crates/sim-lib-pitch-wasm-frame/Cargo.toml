@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-wasm-frame"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "Pitch binary-frame facade descriptors."
@@ -27,4 +27,3 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
-

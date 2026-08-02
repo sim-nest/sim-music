@@ -36,18 +36,24 @@ pub fn decode_vlq<R: Read>(reader: &mut R) -> Result<u32, SmfError> {
     Err(SmfError::InvalidVlq { offset: 0 })
 }
 
-pub(crate) fn decode_vlq_at(bytes: &[u8], pos: &mut usize) -> Result<u32, SmfError> {
+pub(crate) fn decode_vlq_at(
+    bytes: &[u8],
+    pos: &mut usize,
+    base_offset: usize,
+) -> Result<u32, SmfError> {
     let start = *pos;
     let mut value = 0u32;
     for _ in 0..4 {
-        let byte = *bytes
-            .get(*pos)
-            .ok_or(SmfError::UnexpectedEof { offset: *pos })?;
+        let byte = *bytes.get(*pos).ok_or(SmfError::UnexpectedEof {
+            offset: base_offset + *pos,
+        })?;
         *pos += 1;
         value = (value << 7) | u32::from(byte & 0x7f);
         if byte & 0x80 == 0 {
             return Ok(value);
         }
     }
-    Err(SmfError::InvalidVlq { offset: start })
+    Err(SmfError::InvalidVlq {
+        offset: base_offset + start,
+    })
 }

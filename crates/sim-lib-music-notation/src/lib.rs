@@ -4,15 +4,22 @@
 //!
 //! This crate is the notation codec surface: it converts between a
 //! `sim_lib_music_core::Score` (and related music objects such as melodies,
-//! progressions, and counterpoint) and a LilyPond-subset text rendering. The
-//! [`NotationCodec`] type is the codec entry point, exposing import and export
-//! in both plain and report (diagnostic-carrying) forms, and
-//! [`install_music_notation_lib`] registers the codec as a loadable runtime lib.
+//! progressions, and counterpoint) and bounded LilyPond or MusicXML notation.
+//! MusicXML remains a fail-closed profile with explicit resource limits and
+//! identity/loss sidecars; it is not a second score model or a general XML
+//! codec. [`NotationCodec`] is the Rust entry point, while
+//! [`install_music_notation_lib`] registers the Shape-described
+//! `music/notation/import` runtime callable.
 #![allow(deprecated)]
 
 mod export;
 mod import;
 mod model;
+mod musicxml;
+mod musicxml_export;
+mod musicxml_import;
+mod musicxml_note;
+mod musicxml_support;
 mod runtime;
 mod spell;
 
@@ -21,7 +28,14 @@ pub use export::{
     export_progression_lilypond,
 };
 pub use import::{import_lilypond, import_lilypond_report};
-pub use model::{NotationCodec, NotationError, NotationReport};
+pub use model::{
+    MusicXmlLimits, NotationCodec, NotationError, NotationIdentity, NotationIdentityKind,
+    NotationLoss, NotationLossKind, NotationReport,
+};
+pub use musicxml::{
+    export_musicxml_partwise, export_musicxml_partwise_report, import_musicxml_partwise,
+    import_musicxml_partwise_report,
+};
 pub use runtime::*;
 
 /// Cookbook recipes for this lib, embedded at build time.

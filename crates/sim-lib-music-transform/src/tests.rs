@@ -1,8 +1,10 @@
 use num_rational::Ratio;
 use std::any::Any;
 
+mod exact;
 mod filter;
 mod remap;
+mod serial;
 
 use sim_lib_midi_core::{ChannelMessage, MidiPayload};
 use sim_lib_music_core::{

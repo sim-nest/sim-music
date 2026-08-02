@@ -20,6 +20,8 @@ pub fn import_lilypond_report(source: &str) -> Result<NotationReport<Score>, Not
     Ok(NotationReport {
         value: score,
         diagnostics: Vec::new(),
+        identities: Vec::new(),
+        losses: Vec::new(),
     })
 }
 

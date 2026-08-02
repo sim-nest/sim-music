@@ -24,6 +24,7 @@ mod ps3300_control;
 mod ps3300_tone;
 mod ps3300_wrapper;
 mod registry;
+mod reuse;
 mod system55;
 mod system55_control;
 mod system55_filter;

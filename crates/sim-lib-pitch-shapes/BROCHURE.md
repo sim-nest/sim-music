@@ -1,10 +1,10 @@
 # sim-lib-pitch-shapes
 
-In one line: Gives pitches, scales, chords, and keys a readable text form and makes them objects the SIM runtime can hold.
+In one line: Gives pitches, scales, chords, keys, and strict tone rows a readable text form and makes them objects the SIM runtime can hold.
 
 ## What it gives you
 
-This is the text and runtime surface for the pitch theory tools. It provides string round-trips for pitches, intervals, pitch-class masks, scales, keys, chords, and chord symbols, wraps each canonical form in a citizen descriptor for read-and-construct evaluation, and exposes the types as SIM shapes through a loadable library. In short, a scale or chord becomes something you can write down, read back exactly, and hand to the runtime as a named object.
+This is the text and runtime surface for the pitch theory tools. It provides string round-trips for pitches, intervals, pitch-class masks, scales, keys, chords, chord symbols, and strict twelve-class tone rows, wraps each canonical form in a citizen descriptor for read-and-construct evaluation, and exposes the types as SIM shapes through a loadable library. In short, a scale, chord, or row becomes something you can write down, read back exactly, and hand to the runtime as a named object.
 
 ## Why you will be glad
 

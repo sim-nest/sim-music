@@ -1,0 +1,1 @@
+"pitch-ratio descriptor: root 1/1 with tones 1/1 5/4 3/2 yields directed matrix entries 5/4, 3/2, 6/5, and 5/3; relation-tree search emits cycle-safe fifth/fourth paths under SearchControl"

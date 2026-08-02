@@ -105,7 +105,7 @@ pub enum AtomRef<'a> {
 }
 
 /// Performance articulation applied to a note.
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Articulation {
     /// Default articulation with no modification.
     Normal,

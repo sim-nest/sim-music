@@ -203,12 +203,14 @@ pub fn render_score_demo(
     let smf = lower_score(score, &LowerOpts::default())?;
     let events = smf
         .merged_events()
+        .map_err(|_| SoundWasmError::Pump)?
         .into_iter()
         .map(|tracked| tracked.event)
         .collect();
-    let mut source = MemoryMidiSource::new(smf.tpq, events);
+    let tpq = smf.ticks_per_quarter().ok_or(SoundWasmError::Pump)?;
+    let mut source = MemoryMidiSource::new(tpq, events);
     let mut bridge = MidiToSoundBridge::new(
-        smf.tpq,
+        tpq,
         bank.clone(),
         Box::new(FrozenTuning::from_tuning(tuning)?),
         BridgeOptions::default(),

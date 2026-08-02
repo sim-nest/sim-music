@@ -1,0 +1,8 @@
+id = "additive-consonance-completion"
+title = "Complete consonance with reversible additions"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 20
+tags = ["music", "consonance", "completion", "bounded-search", "reversible", "sandbox-descriptor"]
+requires = ["music-consonance", "music-transform", "discrete-search", "codec/lisp"]

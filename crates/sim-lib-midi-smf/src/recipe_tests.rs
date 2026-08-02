@@ -3,7 +3,8 @@ use sim_lib_midi_core::{
 };
 
 use crate::{
-    SmfError, SmfFile, SmfFormat, SmfTrack, SmfWriteOptions, read_smf, write_smf_with_options,
+    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTrack, SmfWriteOptions, read_smf,
+    write_smf_with_options,
 };
 
 fn event(ticks: i64, payload: MidiPayload) -> MidiEvent {
@@ -40,7 +41,7 @@ fn note_off(ticks: i64, key: u8) -> MidiEvent {
 fn note_echo_frozen_midi_recipe_has_byte_stable_export() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: vec![
                 event(
@@ -81,7 +82,7 @@ fn note_echo_frozen_midi_recipe_has_byte_stable_export() {
 fn unsupported_export_recipe_rejects_mismatched_format_zero_tracks() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![
             SmfTrack { events: Vec::new() },
             SmfTrack { events: Vec::new() },
@@ -97,10 +98,15 @@ fn unsupported_export_recipe_rejects_mismatched_format_zero_tracks() {
 #[test]
 fn smf_recipe_sources_are_registered_for_generated_docs() {
     for source in [
+        include_str!("../recipes/01-basics/file-metadata/recipe.toml"),
+        include_str!("../recipes/01-basics/smpte-timecode/recipe.toml"),
         include_str!("../recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml"),
         include_str!("../recipes/02-export-fixtures/unsupported-export-failure/recipe.toml"),
     ] {
         assert!(source.contains("smf") || source.contains("failure"));
         assert!(source.contains("codec = \"lisp\""));
     }
+    assert!(
+        include_str!("../recipes/01-basics/smpte-timecode/setup.siml").contains("29.97 drop-frame")
+    );
 }

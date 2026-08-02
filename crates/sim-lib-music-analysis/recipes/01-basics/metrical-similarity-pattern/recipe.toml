@@ -1,0 +1,8 @@
+id = "metrical-similarity-pattern"
+title = "Exact quantization, similarity, and pattern evidence"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["music", "analysis", "quantization", "similarity", "pattern", "dtw", "correlation", "bounded-search", "sandbox-descriptor"]
+requires = ["music-analysis", "music-core", "discrete-graph", "discrete-search", "numbers-signal", "codec/lisp"]

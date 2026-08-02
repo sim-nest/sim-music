@@ -163,3 +163,42 @@ fn captured_performance_take_imports_as_editable_cells() {
     };
     assert_eq!(clip, roll);
 }
+
+#[test]
+fn note_slices_preserve_equal_pitch_multiplicity_and_occurrence_identity() {
+    let unison = |lane: &str, duration| {
+        PianoRollLane::new(
+            LaneId::new(lane),
+            LaneKind::Note,
+            vec![PianoRollCell::Note(TimedNote {
+                onset: Ratio::new(0, 1),
+                note: Note::new(
+                    duration,
+                    crate::Pitch::from_midi(60),
+                    100,
+                    Channel::new(0).expect("channel"),
+                    Articulation::Normal,
+                )
+                .expect("note"),
+            })],
+        )
+        .expect("lane")
+    };
+    let roll = PianoRoll::from_lanes(vec![
+        unison("voice-a", Ratio::new(1, 2)),
+        unison("voice-b", Ratio::new(1, 4)),
+    ])
+    .expect("roll");
+
+    let slices = roll.note_slices();
+    assert_eq!(slices.len(), 2);
+    assert_eq!(slices[0].notes.len(), 2);
+    assert_eq!(slices[0].notes[0].timed.note.pitch.to_midi(), Some(60));
+    assert_eq!(slices[0].notes[1].timed.note.pitch.to_midi(), Some(60));
+    assert_ne!(slices[0].notes[0].occurrence, slices[0].notes[1].occurrence);
+    assert_eq!(slices[1].notes.len(), 1);
+    assert_eq!(
+        (slices[1].at, slices[1].until),
+        (Ratio::new(1, 4), Ratio::new(1, 2))
+    );
+}

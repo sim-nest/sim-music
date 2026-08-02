@@ -1,16 +1,18 @@
 # sim-lib-music-transform
 
-In one line: Reworks musical material with the classic moves -- transpose, invert, reverse, stretch, and compress.
+In one line: Reworks musical material with classic and exact score-aware moves, with an identity-addressed edit report every time.
 
 ## What it gives you
 
-This applies transformations to music. It covers the classic operations a composer reaches for -- transpose, invert, retrograde, augment, and diminish -- plus configurable remaps of pitch and time, pattern mutators, and a gated custom event-filter pipeline for bespoke changes. Each transform reads a music object into a canonical piano roll and returns new music, optionally paired with diagnostics that describe what changed, so edits stay traceable rather than mysterious.
+This applies transformations to music. It covers the classic operations a composer reaches for -- transpose, invert, retrograde, augment, and diminish -- plus exact staff sustain, slur, expansion, delayed-note voice separation, register unwrapping, progression multiplication/overlay/slice/repeat, periodic rhythm masks, configurable remaps of pitch and time, pattern mutators, and a gated custom event-filter pipeline. Certified voice leading works directly over stable voice, note, and event identities, including unequal voice counts, doubling, crossing policy, deterministic ties, and adjacent-path evidence. Exact staff transforms keep rational time and report every duration, onset, articulation, pitch, voice, removal, and repeated-identity edit.
 
 ## Why you will be glad
 
 - Transpose or invert a passage with a single operation.
 - Stretch or compress timing to reshape a phrase.
-- See a record of what each transform changed.
+- Prove duration, composition, slicing, and rhythm-mask laws over exact time.
+- Compare greedy movement with a certified global assignment and independently verify the optimum.
+- Reverse register edits from their identity-addressed report.
 
 ## Where it fits
 

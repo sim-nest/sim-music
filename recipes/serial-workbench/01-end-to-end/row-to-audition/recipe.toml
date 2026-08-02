@@ -1,0 +1,11 @@
+title = "Run a serial music workbench from row to audition"
+summary = "Load replaceable realization components, build a row plan, realize it strictly and modally, complete it reversibly, audit ledgers, export MIDI and LilyPond notation, and audition it."
+category = "Rust"
+tags = ["music", "serial", "workbench", "end-to-end", "notation", "midi", "rust", "framework"]
+requires = [
+  "music-serial",
+  "music-notation",
+  "music-transform",
+  "pitch-scale",
+]
+purpose = "purpose.md"

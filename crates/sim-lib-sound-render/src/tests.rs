@@ -8,6 +8,11 @@ use sim_lib_sound_timbre::pure_sine;
 
 use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
 
+mod loudness_tests;
+mod vocoder_tests;
+
+// conformance: sound rendering reuse produces deterministic offline PCM.
+
 #[test]
 fn render_tone_produces_non_zero_samples_for_sine() {
     let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
@@ -87,6 +92,36 @@ fn render_timbre_preview_uses_pcm_renderer() {
         )
         .expect("preview");
     assert_eq!(samples.len(), 80);
+}
+
+#[test]
+fn catalog_timbres_render_deterministically_to_offline_pcm() {
+    use sim_lib_sound_timbre::{fm_pair, harmonic_expansion, karplus_strong};
+
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    for timbre in [
+        harmonic_expansion(6, 0.5, 0.0),
+        karplus_strong(0.8),
+        fm_pair(2.0, 1.5),
+    ] {
+        let first = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("first preview");
+        let second = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("second preview");
+        assert_eq!(first, second);
+        assert!(first.iter().all(|sample| sample.is_finite()));
+        assert!(first.iter().any(|sample| sample.abs() > 0.0));
+    }
 }
 
 #[test]

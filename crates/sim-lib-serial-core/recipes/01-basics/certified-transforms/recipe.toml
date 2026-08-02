@@ -1,0 +1,8 @@
+id = "certified-transforms"
+title = "Transform a symbolic series with inverse evidence"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
+order = 20
+tags = ["serial", "transform", "certificate", "bijection", "rust", "framework"]
+requires = ["serial-core", "discrete-rank"]

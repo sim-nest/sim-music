@@ -1,0 +1,6 @@
+title = "Analyze serial arrays and time-point rows"
+summary = "Keep horizontal row order, vertical aggregate evidence, and onset order explicit without collapsing them into one score model."
+category = "Rust"
+tags = ["music", "serial", "array", "time-point", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "serial-core", "music-core"]
+purpose = "purpose.md"

@@ -1,16 +1,20 @@
 //! Music transformation layer for the SIM music constellation.
 //!
 //! This crate applies transformations to musical material: classic operations
-//! such as transpose, invert, retrograde, augment, and diminish; configurable
-//! pitch and time remaps; pattern mutators; and a capability-gated custom event
-//! filter pipeline. Transforms read a `MusicObject` into a canonical
-//! `PianoRoll` and return new `Music`, optionally paired with diagnostics in a
-//! [`TransformReport`].
+//! such as transpose, invert, retrograde, augment, and diminish; exact
+//! identity-preserving staff operations for sustain, slur, expansion,
+//! delayed-note voice separation, register unwrapping, slicing, composition,
+//! and rhythm masks; configurable pitch and time remaps; pattern mutators; and
+//! a capability-gated custom event filter pipeline. Every exact staff operation
+//! returns a [`MusicTransform`] with stable identities and explicit edits.
+//! General object transforms return new `Music`, optionally paired with
+//! diagnostics in a [`TransformReport`].
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
 mod arranger;
 mod diagnostic;
+mod exact;
 mod filter;
 mod filter_eval;
 mod model;
@@ -18,15 +22,18 @@ mod mutator;
 mod pitch_map;
 mod player;
 mod remap;
+mod serial;
 
 pub use arranger::*;
 pub use diagnostic::*;
+pub use exact::*;
 pub use filter::*;
 pub use model::*;
 pub use mutator::*;
 pub use pitch_map::*;
 pub use player::*;
 pub use remap::*;
+pub use serial::*;
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

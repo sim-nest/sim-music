@@ -1,0 +1,143 @@
+(expr:map
+  [harmony/tag harmony/program]
+  [harmony/id "catalog/harmonizer"]
+  [harmony/palette
+    (expr:map
+      [harmony/tag harmony/palette]
+      [harmony/id "catalog/harmonizer-palette"]
+      [harmony/entries
+        [(expr:map
+           [harmony/tag harmony/chord]
+           [harmony/id "c-major"]
+           [harmony/source
+             (expr:map
+               [harmony/tag harmony/source-symbol]
+               [harmony/symbol "C"]
+               [harmony/octave "0"])]
+           [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+           [harmony/ratios
+             [(expr:map [harmony/tag harmony/ratio] [harmony/numerator "1"] [harmony/denominator "1"])
+              (expr:map [harmony/tag harmony/ratio] [harmony/numerator "5"] [harmony/denominator "4"])
+              (expr:map [harmony/tag harmony/ratio] [harmony/numerator "3"] [harmony/denominator "2"])]])
+         (expr:map
+           [harmony/tag harmony/chord]
+           [harmony/id "doubled-tritone-substitute"]
+           [harmony/source
+             (expr:map
+               [harmony/tag harmony/source-pitch-classes]
+               [harmony/classes ["1" "5" "7" "1"]]
+               [harmony/root-octave "0"])]
+           [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+           [harmony/ratios []])]]
+      [harmony/templates
+        [(expr:map
+           [harmony/tag harmony/template]
+           [harmony/id "cadence/primary"]
+           [harmony/chords
+             [(expr:map
+                [harmony/tag harmony/chord]
+                [harmony/id "cadence/subdominant"]
+                [harmony/source
+                  (expr:map
+                    [harmony/tag harmony/source-scale-degrees]
+                    [harmony/scale
+                      (expr:map
+                        [harmony/tag harmony/scale]
+                        [harmony/tonic "0"]
+                        [harmony/mode harmony/major])]
+                    [harmony/degrees ["4" "6" "8"]]
+                    [harmony/root-octave "0"])]
+                [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+                [harmony/ratios []])
+              (expr:map
+                [harmony/tag harmony/chord]
+                [harmony/id "cadence/dominant"]
+                [harmony/source
+                  (expr:map
+                    [harmony/tag harmony/source-symbol]
+                    [harmony/symbol "G7"]
+                    [harmony/octave "0"])]
+                [harmony/voicing (expr:map [harmony/tag harmony/voicing-closed])]
+                [harmony/ratios []])
+              (expr:map
+                [harmony/tag harmony/chord]
+                [harmony/id "cadence/tonic"]
+                [harmony/source
+                  (expr:map
+                    [harmony/tag harmony/source-pitch-set]
+                    [harmony/mask "145"]
+                    [harmony/root "0"]
+                    [harmony/root-octave "0"])]
+                [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+                [harmony/ratios []])]])]]
+      [harmony/algebra (expr:map [harmony/tag harmony/algebra-explicit])])]
+  [harmony/rules
+    (expr:map
+      [harmony/tag harmony/rule-set]
+      [harmony/hard
+        [(expr:map [harmony/tag harmony/constraint] [harmony/id "accept-all"] [harmony/predicate (expr:map [harmony/tag harmony/always])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "melody-in-chord"] [harmony/predicate (expr:map [harmony/tag harmony/melody-in-chord])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "position-is"] [harmony/predicate (expr:map [harmony/tag harmony/chord-at] [harmony/position "2"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "first-is"] [harmony/predicate (expr:map [harmony/tag harmony/chord-at] [harmony/position "0"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "last-is"] [harmony/predicate (expr:map [harmony/tag harmony/chord-at] [harmony/position "-1"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "not-position-is"] [harmony/predicate (expr:map [harmony/tag harmony/chord-everywhere-except] [harmony/position "2"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "not-position-is-not"] [harmony/predicate (expr:map [harmony/tag harmony/chord-only-at] [harmony/position "-1"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "at-position"] [harmony/predicate (expr:map [harmony/tag harmony/at-position] [harmony/position "3"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "distinct-note-count"] [harmony/predicate (expr:map [harmony/tag harmony/distinct-pitch-classes] [harmony/count (expr:map [harmony/tag harmony/count-range] [harmony/min "3"] [harmony/max "4"])])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "common-notes"] [harmony/predicate (expr:map [harmony/tag harmony/common-notes] [harmony/count (expr:map [harmony/tag harmony/count-range] [harmony/min "2"] [harmony/max "3"])])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "common-note-rhythm"] [harmony/predicate (expr:map [harmony/tag harmony/common-note-pattern] [harmony/counts ["3" "2" "3" "1"]])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "minimum-chord-distance"] [harmony/predicate (expr:map [harmony/tag harmony/minimum-chord-distance] [harmony/distance "2"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "maximum-chord-distance"] [harmony/predicate (expr:map [harmony/tag harmony/maximum-chord-distance] [harmony/distance "4"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "minimum-type-distance"] [harmony/predicate (expr:map [harmony/tag harmony/minimum-type-distance] [harmony/distance "1"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "chord-variation"] [harmony/predicate (expr:map [harmony/tag harmony/periodic-variation] [harmony/period "4"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "chord-commonality"] [harmony/predicate (expr:map [harmony/tag harmony/periodic-commonality] [harmony/period "4"] [harmony/count (expr:map [harmony/tag harmony/count-range] [harmony/min "1"] [harmony/max "3"])])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "minimum-scale-duration"] [harmony/predicate (expr:map [harmony/tag harmony/inside-scale-window] [harmony/scale (expr:map [harmony/tag harmony/scale] [harmony/tonic "0"] [harmony/mode harmony/major])] [harmony/length "4"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "maximum-scale-duration"] [harmony/predicate (expr:map [harmony/tag harmony/outside-scale-window] [harmony/scale (expr:map [harmony/tag harmony/scale] [harmony/tonic "0"] [harmony/mode harmony/major])] [harmony/length "8"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "template-length"] [harmony/predicate (expr:map [harmony/tag harmony/template-length])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "will-connect"] [harmony/predicate (expr:map [harmony/tag harmony/templates-connect])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "template-melody-in-chord"] [harmony/predicate (expr:map [harmony/tag harmony/template-melody-in-chord])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "observe-depth"] [harmony/predicate (expr:map [harmony/tag harmony/observe-depth])])
+         (expr:map
+           [harmony/tag harmony/constraint]
+           [harmony/id "boolean-composition"]
+           [harmony/predicate
+             (expr:map
+               [harmony/tag harmony/all]
+               [harmony/predicates
+                 [(expr:map [harmony/tag harmony/always])
+                  (expr:map
+                    [harmony/tag harmony/any]
+                    [harmony/predicates
+                      [(expr:map [harmony/tag harmony/at-position] [harmony/position "0"])
+                       (expr:map [harmony/tag harmony/not] [harmony/predicate (expr:map [harmony/tag harmony/at-position] [harmony/position "1"])])]])]])])]]
+      [harmony/soft
+        [(expr:map [harmony/tag harmony/weighted] [harmony/id "distinct-score"] [harmony/weight "1"] [harmony/metric (expr:map [harmony/tag harmony/metric-distinct-pitches])])
+         (expr:map [harmony/tag harmony/weighted] [harmony/id "common-score"] [harmony/weight "-1"] [harmony/metric (expr:map [harmony/tag harmony/metric-common-notes])])
+         (expr:map [harmony/tag harmony/weighted] [harmony/id "voice-leading-score"] [harmony/weight "1"] [harmony/metric (expr:map [harmony/tag harmony/metric-voice-leading])])
+         (expr:map [harmony/tag harmony/weighted] [harmony/id "dissonance-score"] [harmony/weight "1"] [harmony/metric (expr:map [harmony/tag harmony/metric-pitch-dissonance] [harmony/model "interval-vector"])])
+         (expr:map [harmony/tag harmony/weighted] [harmony/id "sonance-score"] [harmony/weight "-1"] [harmony/metric (expr:map [harmony/tag harmony/metric-contextual-sonance] [harmony/model "commonality"])])
+         (expr:map [harmony/tag harmony/weighted] [harmony/id "ratio-score"] [harmony/weight "1"] [harmony/metric (expr:map [harmony/tag harmony/metric-ratio-complexity] [harmony/exponent-milli "2000"])])]])]
+  [harmony/voicing-changes
+    (expr:map
+      [harmony/tag harmony/voicing-change-palette]
+      [harmony/id "catalog/voicing-changes"]
+      [harmony/entries
+        [(expr:map
+           [harmony/tag harmony/voicing-change]
+           [harmony/id "catalog/voicing-changes/c-to-substitute"]
+           [harmony/source "doubled-tritone-substitute"]
+           [harmony/target "doubled-tritone-substitute"]
+           [harmony/leading ["0" "1" "2" "3"]]
+           [harmony/cost "0"]
+           [harmony/octave "12"])]] )]
+  [harmony/render
+    (expr:map
+      [harmony/tag harmony/render-profile]
+      [harmony/id "catalog/organ-trumpet-render"]
+      [harmony/chord-transpose "48"]
+      [harmony/melody-transpose "60"]
+      [harmony/duration-multiplier "4"]
+      [harmony/chord-program "19"]
+      [harmony/melody-program "56"]
+      [harmony/tempo-bpm "60"]
+      [harmony/time-signature ["4" "4"]])])

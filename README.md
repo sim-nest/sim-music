@@ -25,6 +25,12 @@ primitive shared across the pitch crates. (Doctest:
 The full SIM walkthrough, including how to run the `sim` CLI (`cargo install
 sim-run`), lives in `sim-say`.
 
+`sim-music` also ships a checked end-to-end serial recipe:
+`cargo run -p serial-workbench`. It validates its fixture manifest, freezes one
+immutable row plan, realizes it strictly and modally through a replaceable
+registry-selected component, completes the modal result reversibly, exports MIDI
+plus LilyPond, and lowers an audition score.
+
 ## How it works
 
 `sim-music` is the music and audio domain of the SIM constellation. SIM is an
@@ -92,8 +98,9 @@ loadable SIM libs.
   invert, retrograde, augment, diminish, pitch/time remaps, pattern mutators,
   and a capability-gated custom event filter pipeline.
 - `sim-lib-music-analysis` -- structural views over music objects: the
-  `DiffRoll` per-event analysis, `ChordWindow` segmentation, and optional
-  Walsh-Hadamard spectral analysis of melodies and contours.
+  `DiffRoll` per-event analysis, `ChordWindow` segmentation, exact metrical
+  quantization, DTW/correlation melody and rhythm similarity, bounded repeated
+  pattern discovery, and optional Walsh-Hadamard spectral analysis.
 - `sim-lib-music-lift` -- lifts low-level representations (parsed MIDI/SMF) into
   richer music: piano rolls, diff rolls, chord progressions, and counterpoint,
   each with a diagnostic `LiftReport`.
@@ -127,8 +134,10 @@ loadable SIM libs.
   produces `ScheduledTone`s, resolving programs, tunings, and polyphony.
 - `sim-lib-sound-render` -- renders synthesized tones into interleaved PCM,
   mixing scheduled tones and encoding 16-bit WAV.
-- `sim-lib-sound-audio-lift` -- audio-to-notes lifting: analyzes raw PCM and
-  lifts it into pitched note candidates via FFT-peak and harmonic-comb lifters.
+- `sim-lib-sound-audio-lift` -- audio-to-notes lifting: analyzes raw PCM with
+  YIN/pYIN contours or bounded assignment/DTW partial tracks, extending the
+  FFT-peak and harmonic-comb lifters with uncertainty and frame provenance;
+  exports the loadable `sound/lift/pitch-track` Lisp call.
 - `sim-lib-sound-shapes` -- the sound-layer text codec: `#(...)` round-trips for
   the sound types, citizen descriptors, and a runtime lib.
 - `sim-lib-sound-wasm-frame` -- frame-safe sound descriptors and stable wasm engine
@@ -181,7 +190,8 @@ reverse, rendering a structured music object or `Score` back down to a playable
 Standard MIDI File. Transforms operate on the canonical `PianoRoll` in the
 middle, so analysis, transformation, and rendering all share one model.
 `sim-lib-sound-audio-lift` extends the same idea below MIDI, lifting raw PCM
-audio into pitched note candidates that feed the music layer.
+audio into confidence-bearing monophonic contours and bounded polyphonic
+partial tracks that feed the music layer.
 
 ## Validation
 

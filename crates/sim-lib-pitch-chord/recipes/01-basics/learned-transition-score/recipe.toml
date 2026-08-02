@@ -1,0 +1,8 @@
+id = "learned-transition-score"
+title = "Inspectable learned transition score"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 30
+tags = ["pitch", "chord", "harmony", "markov", "provenance", "soft-metric", "sandbox-descriptor"]
+requires = ["pitch-chord", "numbers/stats", "codec/lisp"]

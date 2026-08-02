@@ -4,12 +4,17 @@ In one line: Builds chords from notes, scale degrees, or jazz symbols, voices th
 
 ## What it gives you
 
-This is the chord workshop. It builds chords from raw pitches, from scale degrees, or from jazz-style symbols, then reshapes them with voicing and velocity policies to sit and sound the way you want. Generative players harmonize incoming pitches against a chosen scale, and on top sit a wire-serializable chord-progression sequencer and a roman-numeral-aware harmony suggester that proposes what might come next.
+This is the chord workshop. It builds chords from raw pitches, from scale degrees, or from jazz-style symbols, then reshapes them with voicing and velocity policies to sit and sound the way you want. Chord and voicing palettes remove exact duplicates while keeping stable identities. Complete harmony programs stay as editable data: cadence chains, hard rules, weighted preferences, voice changes, and render settings travel together with evidence for every decision. Optional learned-transition preferences are transparent finite counts with smoothing, held-out scores, stable serialization, and corpus provenance; they never become legality gates. The same finite harmonization problem runs through exhaustive, factored-backtracking, certified layered-DP, or beam strategies under explicit controls. Generative players harmonize incoming pitches against a chosen scale, and a chord-progression sequencer plus a roman-numeral-aware suggester carries a progression forward.
 
 ## Why you will be glad
 
 - Spell a chord from a jazz symbol like Cmaj7 in one step.
 - Voice and shape chords so they land where you want them.
+- Build deterministic, duplicate-free voicing palettes for downstream exact voice-leading plans.
+- Edit a harmony vocabulary and its rules as data without rebuilding the library.
+- Inspect why every hard rule passed or failed separately from musical preference scores.
+- Add a reproducible learned-transition preference without accepting opaque weights.
+- Compare exact and heuristic harmonizers through deterministic cost and receipt evidence.
 - Get harmony suggestions to carry a progression forward.
 
 ## Where it fits

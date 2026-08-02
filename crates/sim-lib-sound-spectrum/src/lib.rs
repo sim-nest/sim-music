@@ -3,7 +3,9 @@
 //! This crate defines the [`Spectrum`] type -- a frequency-domain magnitude
 //! representation built either from a synthesized [`Tone`](sim_lib_sound_core::Tone)
 //! or from PCM samples -- along with common spectral descriptors: peaks,
-//! centroid, flatness, rolloff, and flux.
+//! centroid, flatness, rolloff, and flux. PCM construction is the sound-domain
+//! adapter over the generic `sim-lib-numbers-signal` real FFT; this crate owns
+//! physical frequency and provenance, not a second transform implementation.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 

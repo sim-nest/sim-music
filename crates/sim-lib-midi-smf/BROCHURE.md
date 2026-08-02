@@ -4,13 +4,16 @@ In one line: Reads and writes ordinary .mid files, the standard way music moves 
 
 ## What it gives you
 
-This handles the on-disk Standard MIDI File format in both directions. It parses .mid and .smf bytes into an in-memory song model and serialises that model straight back to bytes, reusing the shared MIDI event types. It covers all three file formats, the variable-length timing encoding, running-status compression, and cleaning up or merging tracks. Timing is read in the common ticks-per-quarter form; the rarer SMPTE timing is refused rather than mishandled.
+This handles the on-disk Standard MIDI File format in both directions. It parses .mid and .smf bytes into an in-memory song model and serialises that model straight back to bytes, reusing the shared MIDI event types. It preserves all three file formats, metrical and SMPTE time divisions, unknown valid meta and system events, variable-length timing, and running-status compression. Defensive read limits bound files, tracks, chunks, events, and payload allocation before untrusted sizes are copied.
 
 ## Why you will be glad
 
 - Open MIDI files exported by other music software.
 - Save your work as a file any sequencer can load.
-- Trust the round-trip, since bytes in and bytes out stay faithful.
+- Retain timecode files and independent format-2 patterns without pretending
+  that they share a metrical timeline.
+- Trust malformed or oversized input to fail closed with the exact byte offset.
+- Trust canonical files to round-trip faithfully, including extension events.
 
 ## Where it fits
 

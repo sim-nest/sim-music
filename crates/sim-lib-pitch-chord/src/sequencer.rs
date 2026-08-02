@@ -447,6 +447,7 @@ fn mode_from_wire(value: &str) -> Result<Mode, PitchChordError> {
 
 fn voicing_to_wire(voicing: VoicingPolicy) -> String {
     match voicing {
+        VoicingPolicy::Preserve => "preserve".to_owned(),
         VoicingPolicy::Closed => "closed".to_owned(),
         VoicingPolicy::Open { spread } => format!("open:{spread}"),
         VoicingPolicy::Drop {
@@ -457,6 +458,9 @@ fn voicing_to_wire(voicing: VoicingPolicy) -> String {
 }
 
 fn voicing_from_wire(value: &str) -> Result<VoicingPolicy, PitchChordError> {
+    if value == "preserve" {
+        return Ok(VoicingPolicy::Preserve);
+    }
     if value == "closed" {
         return Ok(VoicingPolicy::Closed);
     }

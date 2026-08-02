@@ -11,7 +11,7 @@ use sim_lib_midi_core::{
     Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
     TickTime, U7, synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
 use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
 use sim_lib_stream_core::{
     BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
@@ -26,6 +26,10 @@ use crate::{
     stream_to_cassette_expr, validate_cassette_fixture_path, write_smf_stream,
 };
 
+// conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
+
+mod pcm_convert_tests;
+
 #[test]
 fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
     let temp = TempPath::new("input.mid");
@@ -38,7 +42,7 @@ fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
 
     let stream =
         read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/smf-read")).unwrap();
-    let mut sink = MemoryMidiSink::new(decoded.tpq);
+    let mut sink = MemoryMidiSink::new(decoded.ticks_per_quarter().unwrap());
     let count = midi_stream_to_sink(&stream, &mut sink).unwrap();
 
     assert_eq!(count, expected.len());
@@ -78,6 +82,7 @@ fn wav_to_pcm_packet_spine_to_memory_sink_round_trips() {
     let spec = pcm_spec();
     let buffers = vec![pcm_buffer(&[1, -1, 2, -2]), pcm_buffer(&[3, -3])];
     let bytes = pcm_buffers_to_wav_bytes(spec, &buffers).unwrap();
+    assert_eq!(bytes, pcm_buffers_to_wav_bytes(spec, &buffers).unwrap());
     fs::write(temp.path(), bytes).unwrap();
     let mut cx = cx(&[stream_file_read_capability()]);
 
@@ -331,7 +336,7 @@ fn data_metadata(id: &str) -> StreamMetadata {
 fn smf_fixture() -> SmfFile {
     SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: SmfDivision::metrical(480).unwrap(),
         tracks: vec![SmfTrack {
             events: midi_events_with_end(),
         }],
@@ -370,6 +375,7 @@ fn midi_event(ticks: i64, payload: MidiPayload) -> MidiEvent {
 
 fn merged_events(file: &SmfFile) -> Vec<MidiEvent> {
     file.merged_events()
+        .unwrap()
         .into_iter()
         .map(|tracked| tracked.event)
         .collect()

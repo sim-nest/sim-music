@@ -1,0 +1,7 @@
+id = "generated-functional-harmony-v1"
+source = "deterministic synthetic I-IV-V state transitions"
+license = "CC0-1.0"
+content = "generated-harmony-transitions.tsv"
+content_hash = "fnv1a64:2a739276a9d8c13c"
+representation = "key label followed by hexadecimal pitch-class masks"
+opaque_weights = false

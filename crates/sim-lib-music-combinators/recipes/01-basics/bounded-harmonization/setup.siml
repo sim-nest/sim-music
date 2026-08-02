@@ -1,0 +1,5 @@
+(music/harmonize melody
+  :palette palette
+  :rules rules
+  :strategy 'layered-dp
+  :control {:work 100000 :results 4 :seed 12})

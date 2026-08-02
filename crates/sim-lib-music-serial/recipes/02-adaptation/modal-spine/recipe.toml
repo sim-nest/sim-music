@@ -1,0 +1,5 @@
+title = "Modal spine realization"
+summary = "Land one immutable serial plan onto modal and caller-defined scales while preserving ordinal identity and reporting aggregate relaxation explicitly."
+category = "Rust"
+tags = ["music", "serial", "modal", "adaptation", "realization", "rust", "framework"]
+requires = ["music-serial", "pitch-scale", "music-core"]

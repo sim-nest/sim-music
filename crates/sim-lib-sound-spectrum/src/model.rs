@@ -1,6 +1,52 @@
-use std::time::Duration;
+use std::{error::Error, fmt, time::Duration};
 
+use sim_lib_numbers_signal::{
+    Normalization, SignalBuffer, SignalView, SpectrumPacking, TransformKind, TransformPlan,
+    transform,
+};
 use sim_lib_sound_core::{Amplitude, Frequency, Tone};
+
+/// Failure to project an STFT frame into a sound-domain spectrum.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum SpectrumError {
+    /// The physical sample rate was zero.
+    InvalidSampleRate,
+    /// The transform frame size was zero.
+    InvalidFrameSize,
+    /// The Hermitian-half bin count did not match the declared frame size.
+    BinCount {
+        /// Required number of bins for the declared frame size.
+        expected: usize,
+        /// Number of bins supplied by the caller.
+        actual: usize,
+    },
+    /// One complex bin contained a non-finite component.
+    NonFiniteBin {
+        /// Zero-based index of the rejected bin.
+        index: usize,
+    },
+}
+
+impl fmt::Display for SpectrumError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::InvalidSampleRate => formatter.write_str("sample rate must be positive"),
+            Self::InvalidFrameSize => formatter.write_str("STFT frame size must be positive"),
+            Self::BinCount { expected, actual } => write!(
+                formatter,
+                "STFT frame needs {expected} Hermitian-half bins, received {actual}"
+            ),
+            Self::NonFiniteBin { index } => {
+                write!(
+                    formatter,
+                    "STFT bin {index} contains a non-finite component"
+                )
+            }
+        }
+    }
+}
+
+impl Error for SpectrumError {}
 
 /// Records how a [`Spectrum`] was produced.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -16,6 +62,15 @@ pub enum SpectrumSource {
         window_size: usize,
         /// Sample rate of the source PCM, in hertz.
         sample_rate: u32,
+    },
+    /// Projected from one phase-preserving short-time Fourier frame.
+    FromStft {
+        /// Number of samples transformed in the frame.
+        frame_size: usize,
+        /// Sample rate of the source PCM, in hertz.
+        sample_rate: u32,
+        /// Signed frame onset relative to the unpadded source.
+        onset_sample: i64,
     },
     /// Constructed directly rather than derived from audio.
     Synthetic,
@@ -70,23 +125,49 @@ impl Spectrum {
         }
     }
 
-    /// Builds a magnitude spectrum from PCM `samples` by a direct discrete
-    /// Fourier transform over the first `window_size` samples.
+    /// Builds a magnitude spectrum from PCM `samples` through the generic
+    /// numbers-signal real FFT over the first `window_size` samples.
+    ///
+    /// This remains the sound-domain adapter: it assigns physical frequencies,
+    /// amplitudes, and [`SpectrumSource`] while the reusable number library owns
+    /// transform conventions and execution.
     pub fn from_pcm(samples: &[f32], sample_rate: u32, window_size: usize) -> Self {
         let window = window_size.min(samples.len()).max(1);
-        let mut bins = Vec::with_capacity(window / 2 + 1);
-        for bin in 0..=window / 2 {
-            let mut real = 0.0;
-            let mut imag = 0.0;
-            for (index, sample) in samples.iter().take(window).enumerate() {
-                let angle = std::f64::consts::TAU * bin as f64 * index as f64 / window as f64;
-                real += f64::from(*sample) * angle.cos();
-                imag -= f64::from(*sample) * angle.sin();
-            }
-            let magnitude = (real * real + imag * imag).sqrt() / window as f64;
-            let frequency = Frequency(bin as f64 * f64::from(sample_rate) / window as f64);
-            bins.push((frequency, Amplitude(magnitude)));
-        }
+        let samples = samples
+            .iter()
+            .take(window)
+            .copied()
+            .map(f64::from)
+            .collect::<Vec<_>>();
+        let magnitudes = if samples.iter().all(|sample| sample.is_finite()) {
+            let mut padded = vec![0.0; window];
+            padded[..samples.len()].copy_from_slice(&samples);
+            let mut plan = TransformPlan::new(TransformKind::RealFft, window);
+            plan.normalization = Normalization::Forward;
+            plan.packing = SpectrumPacking::HermitianHalf;
+            let SignalBuffer::Complex(spectrum) = transform(&plan, SignalView::Real(&padded))
+                .expect("a finite, exact-length real FFT plan is valid")
+            else {
+                unreachable!("a real FFT returns complex coefficients")
+            };
+            spectrum
+                .as_slice()
+                .iter()
+                .map(|(real, imaginary)| real.hypot(*imaginary))
+                .collect::<Vec<_>>()
+        } else {
+            // Preserve the legacy infallible API's non-finite observation while
+            // keeping all valid transform work in numbers-signal.
+            vec![f64::NAN; window / 2 + 1]
+        };
+        let bins = magnitudes
+            .into_iter()
+            .enumerate()
+            .map(|(bin, magnitude)| {
+                let frequency = Frequency(bin as f64 * f64::from(sample_rate) / window as f64);
+                (frequency, Amplitude(magnitude))
+            })
+            .collect();
         Self {
             bins,
             source: SpectrumSource::FromPcm {
@@ -94,6 +175,59 @@ impl Spectrum {
                 sample_rate,
             },
         }
+    }
+
+    /// Projects normalized Hermitian-half FFT `bins` into the stable sound
+    /// spectrum descriptor without discarding their STFT provenance.
+    ///
+    /// The caller owns framing, windowing, and transform policy. In SIM that
+    /// caller is sound-audio-lift, which delegates the transform itself to
+    /// numbers-signal. Existing peak, centroid, flatness, rolloff, and flux
+    /// methods then remain domain summaries over the shared transform.
+    pub fn from_stft_bins(
+        bins: &[(f64, f64)],
+        sample_rate: u32,
+        frame_size: usize,
+        onset_sample: i64,
+    ) -> Result<Self, SpectrumError> {
+        if sample_rate == 0 {
+            return Err(SpectrumError::InvalidSampleRate);
+        }
+        if frame_size == 0 {
+            return Err(SpectrumError::InvalidFrameSize);
+        }
+        let expected = frame_size / 2 + 1;
+        if bins.len() != expected {
+            return Err(SpectrumError::BinCount {
+                expected,
+                actual: bins.len(),
+            });
+        }
+        if let Some(index) = bins
+            .iter()
+            .position(|(real, imaginary)| !real.is_finite() || !imaginary.is_finite())
+        {
+            return Err(SpectrumError::NonFiniteBin { index });
+        }
+        let bins = bins
+            .iter()
+            .copied()
+            .enumerate()
+            .map(|(bin, (real, imaginary))| {
+                (
+                    Frequency(bin as f64 * f64::from(sample_rate) / frame_size as f64),
+                    Amplitude(real.hypot(imaginary)),
+                )
+            })
+            .collect();
+        Ok(Self {
+            bins,
+            source: SpectrumSource::FromStft {
+                frame_size,
+                sample_rate,
+                onset_sample,
+            },
+        })
     }
 
     /// Returns the `n` highest-amplitude bins, strongest first.

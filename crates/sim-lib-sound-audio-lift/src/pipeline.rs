@@ -203,25 +203,74 @@ fn harmonic_candidates(
     tuning: &dyn Tuning,
     opts: &AudioLiftOptions,
 ) -> Vec<PitchCandidate> {
-    let mut candidates = fft_candidates(spectrum, peaks, tuning);
-    for candidate in &mut candidates {
-        let mut harmonic_count = 0usize;
-        let mut harmonic_score = 0.0;
+    let tonality = (1.0 - spectrum.flatness()).clamp(0.0, 1.0);
+    let max_amplitude = peaks
+        .iter()
+        .map(|peak| peak.amplitude.0)
+        .fold(0.0_f64, f64::max)
+        .max(1e-12);
+    let mut fundamentals = Vec::<Frequency>::new();
+    for peak in peaks {
         for harmonic in 1..=6 {
-            let expected = Frequency(candidate.frequency.0 * harmonic as f64);
-            if let Some(peak) = peaks.iter().find(|peak| {
-                peak.frequency.cents_above(expected).abs() <= opts.harmonic_tolerance_cents
+            let frequency = Frequency(peak.frequency.0 / harmonic as f64);
+            if frequency.0 < 40.0 {
+                continue;
+            }
+            if fundamentals.iter().all(|existing| {
+                frequency.cents_above(*existing).abs() > opts.harmonic_tolerance_cents
             }) {
-                harmonic_count += 1;
-                harmonic_score += peak.amplitude.0 / harmonic as f64;
+                fundamentals.push(frequency);
             }
         }
-        candidate.harmonic_count = harmonic_count.max(1);
-        let comb_bonus = (harmonic_score / candidate.amplitude.0.max(1e-9)).min(3.0) / 3.0;
-        let boosted = candidate.confidence + 0.18 * comb_bonus;
-        candidate.confidence = boosted.clamp(candidate.confidence, 1.0);
     }
+
+    let mut candidates = fundamentals
+        .into_iter()
+        .filter_map(|frequency| {
+            let mut matches = Vec::new();
+            let mut weighted_amplitude = 0.0;
+            for harmonic in 1..=8 {
+                let expected = Frequency(frequency.0 * harmonic as f64);
+                if let Some(peak) = peaks.iter().min_by(|left, right| {
+                    left.frequency
+                        .cents_above(expected)
+                        .abs()
+                        .total_cmp(&right.frequency.cents_above(expected).abs())
+                }) && peak.frequency.cents_above(expected).abs() <= opts.harmonic_tolerance_cents
+                {
+                    matches.push((harmonic, peak));
+                    weighted_amplitude += peak.amplitude.0 / harmonic as f64;
+                }
+            }
+            if matches.is_empty() {
+                return None;
+            }
+            let harmonic_count = matches.len();
+            let fundamental_present = matches.iter().any(|(harmonic, _)| *harmonic == 1);
+            let amplitude = matches
+                .iter()
+                .map(|(_, peak)| peak.amplitude)
+                .max_by(|left, right| left.0.total_cmp(&right.0))
+                .unwrap_or(Amplitude(0.0));
+            let support = (harmonic_count as f64 / 3.0).min(1.0);
+            let comb_strength = (weighted_amplitude / max_amplitude).min(1.0);
+            let confidence = (0.35 * tonality)
+                + (0.35 * support)
+                + (0.25 * comb_strength)
+                + if fundamental_present { 0.13 } else { 0.0 };
+            let pitch = tuning.pitch_of(frequency);
+            Some(PitchCandidate {
+                pitch,
+                frequency,
+                amplitude,
+                confidence: confidence.clamp(0.0, 1.0),
+                cents_error: frequency.cents_above(tuning.frequency_of(pitch)),
+                harmonic_count,
+            })
+        })
+        .collect::<Vec<_>>();
     candidates.sort_by(|left, right| right.confidence.total_cmp(&left.confidence));
+    candidates.truncate(opts.max_peaks);
     candidates
 }
 

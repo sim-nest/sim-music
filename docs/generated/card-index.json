@@ -1,5 +1,5 @@
 {
-  "card_count": 50,
+  "card_count": 57,
   "cards": [
     {
       "id": "browse/catalog",
@@ -71,7 +71,7 @@
       "id": "cookbook/midi-smf",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-midi-smf",
-      "summary": "Standard MIDI File structure and metadata descriptors."
+      "summary": "Bounded Standard MIDI File parsing, lossless time division, and metadata descriptors."
     },
     {
       "id": "cookbook/midi-sysex",
@@ -89,7 +89,7 @@
       "id": "cookbook/music-analysis",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-analysis",
-      "summary": "Pitch-class, histogram, and chord-window analysis descriptors."
+      "summary": "Exact structural, harmonic, metrical, similarity, pattern, and transformational analysis descriptors."
     },
     {
       "id": "cookbook/music-combinators",
@@ -98,10 +98,22 @@
       "summary": "Sequence, parallel, repeat, and transform combinator descriptors."
     },
     {
+      "id": "cookbook/music-consonance",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-consonance",
+      "summary": "Identity-bearing sounding windows with separate consonance metrics."
+    },
+    {
       "id": "cookbook/music-core",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-core",
       "summary": "Score, melody, note, and duration descriptors."
+    },
+    {
+      "id": "cookbook/music-counterpoint",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-counterpoint",
+      "summary": "Exact rule evidence, graph-backed overlap, and bounded reversible generation."
     },
     {
       "id": "cookbook/music-lift",
@@ -122,6 +134,12 @@
       "summary": "Notation import and export descriptors."
     },
     {
+      "id": "cookbook/music-serial",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-music-serial",
+      "summary": "Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques."
+    },
+    {
       "id": "cookbook/music-shapes",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-shapes",
@@ -131,7 +149,7 @@
       "id": "cookbook/music-transform",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-transform",
-      "summary": "Pure music transformation descriptors."
+      "summary": "Exact music transformation and voice-leading descriptors."
     },
     {
       "id": "cookbook/music-wasm",
@@ -143,7 +161,7 @@
       "id": "cookbook/pitch-chord",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-chord",
-      "summary": "Chord spelling and quality descriptors."
+      "summary": "Chord spelling, voicing, and declarative harmony descriptors."
     },
     {
       "id": "cookbook/pitch-core",
@@ -188,16 +206,28 @@
       "summary": "Roman numeral analysis descriptors."
     },
     {
+      "id": "cookbook/pitch-ratio",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-ratio",
+      "summary": "Exact musical ratio interval descriptors."
+    },
+    {
       "id": "cookbook/pitch-scale",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-scale",
       "summary": "Scale and degree descriptors."
     },
     {
+      "id": "cookbook/pitch-serial",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-pitch-serial",
+      "summary": "Strict tone rows, complete operation families, matrices, and explicit labels."
+    },
+    {
       "id": "cookbook/pitch-set",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-pitch-set",
-      "summary": "Pitch-class sets, masks, and normal-form descriptors."
+      "summary": "Pitch-class sets, canonical forms, typed relations, and graph descriptors."
     },
     {
       "id": "cookbook/pitch-shapes",
@@ -212,10 +242,22 @@
       "summary": "Browser-safe pitch facade descriptors."
     },
     {
+      "id": "cookbook/serial-core",
+      "kind": "cookbook-recipe",
+      "owner": "sim-lib-serial-core",
+      "summary": "Finite symbolic alphabets, aggregate evidence, and total transforms."
+    },
+    {
+      "id": "cookbook/sim-music",
+      "kind": "cookbook-recipe",
+      "owner": "sim-music",
+      "summary": "Runnable recipes composing the loadable SIM music libraries."
+    },
+    {
       "id": "cookbook/sound-audio-lift",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-sound-audio-lift",
-      "summary": "Descriptors that lift PCM into sound and music features."
+      "summary": "Checked framed transforms and descriptors that lift PCM into sound and music features."
     },
     {
       "id": "cookbook/sound-bridge",
@@ -245,7 +287,7 @@
       "id": "cookbook/sound-render",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-sound-render",
-      "summary": "Offline PCM render descriptors."
+      "summary": "Offline PCM render, phase-vocoder, loudness, and normalization descriptors."
     },
     {
       "id": "cookbook/sound-shapes",
@@ -287,7 +329,7 @@
       "id": "cookbook/stream-file",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-stream-file",
-      "summary": "Capability-gated WAV and SMF stream adapters."
+      "summary": "Capability-gated WAV and SMF streams with explicit PCM16 conversion policy."
     },
     {
       "id": "cookbook/stream-midi",

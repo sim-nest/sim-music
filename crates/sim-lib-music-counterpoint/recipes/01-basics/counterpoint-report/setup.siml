@@ -1,0 +1,3 @@
+(music/counterpoint/analyze
+  :counterpoint "#(Counterpoint voice_names=[\"Upper\",\"Lower\"] voices=[#(Melody items=[#(Note dur=1/1 pitch=C5 vel=100 channel=0 articulation=Normal),#(Note dur=1/1 pitch=D5 vel=100 channel=0 articulation=Normal)]),#(Melody items=[#(Note dur=1/1 pitch=C4 vel=100 channel=1 articulation=Normal),#(Note dur=1/1 pitch=D4 vel=100 channel=1 articulation=Normal)])])"
+  :rules 'species-one)

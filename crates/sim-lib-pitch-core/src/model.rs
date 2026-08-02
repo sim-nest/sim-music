@@ -218,12 +218,24 @@ impl PitchClass {
 ///
 /// The octave follows the MIDI convention in which middle C (`C4`) is MIDI note
 /// 60, so [`Pitch::semitone`] returns a continuous semitone index across octaves.
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Pitch {
     /// The mod-12 pitch class.
     pub class: PitchClass,
     /// The octave number, with `C4` (MIDI 60) in octave 4.
     pub octave: i16,
+}
+
+impl PartialOrd for Pitch {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Pitch {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.semitone().cmp(&other.semitone())
+    }
 }
 
 impl Pitch {

@@ -152,6 +152,17 @@ pub fn decode_spectrum_source(value: &str) -> Result<SpectrumSource, SoundShapeE
                 .parse()
                 .map_err(|_| SoundShapeError::InvalidSoundShape)?,
         }),
+        "FromStft" => Ok(SpectrumSource::FromStft {
+            frame_size: field_atom(&node, "frame_size")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            sample_rate: field_atom(&node, "sample_rate")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+            onset_sample: field_atom(&node, "onset_sample")?
+                .parse()
+                .map_err(|_| SoundShapeError::InvalidSoundShape)?,
+        }),
         "Synthetic" => Ok(SpectrumSource::Synthetic),
         _ => Err(SoundShapeError::InvalidSoundShape),
     }

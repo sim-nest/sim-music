@@ -1,0 +1,5 @@
+title = "Strict row realization"
+summary = "Realize and render a strict serial row statement without losing planned event, voice, or ordinal identity."
+category = "Rust"
+tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]

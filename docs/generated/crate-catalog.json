@@ -1,6 +1,6 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 46,
+  "package_count": 47,
   "packages": [
     {
       "description": "Headless DAW session surface for SIM audio graph workspaces.",
@@ -348,6 +348,19 @@
       "publish": "true",
       "readme": "crates/sim-lib-pitch-namer/README.md",
       "root": "crates/sim-lib-pitch-namer",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
+      "description": "Exact positive musical ratio intervals with prime-limit ranking and bounded approximation search.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-pitch-ratio/Cargo.toml",
+      "name": "sim-lib-pitch-ratio",
+      "publish": "true",
+      "readme": "crates/sim-lib-pitch-ratio/README.md",
+      "root": "crates/sim-lib-pitch-ratio",
       "target_kinds": [
         "custom-build",
         "lib"

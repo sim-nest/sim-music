@@ -88,6 +88,25 @@ impl PitchClassMask {
         Self(out)
     }
 
+    /// Returns the conventional set-theory inversion `TnI`, where each pitch
+    /// class `p` maps to `index - p (mod 12)`.
+    ///
+    /// Unlike [`PitchClassMask::invert`], this accepts every integer inversion
+    /// index, including odd indices whose geometric axis lies between pitch
+    /// classes.
+    pub fn invert_tni(self, index: u8) -> Self {
+        let index = i32::from(index % 12);
+        let classes: Vec<_> = self
+            .pitch_classes()
+            .into_iter()
+            .map(|pitch_class| {
+                PitchClass::new((index - i32::from(pitch_class.value())).rem_euclid(12) as u8)
+                    .expect("TnI folds to a valid pitch class")
+            })
+            .collect();
+        Self::from_pitch_classes(&classes)
+    }
+
     /// Returns the rotation of this mask with the smallest numeric value, a
     /// transposition-invariant normal form.
     pub fn normalize(self) -> Self {
@@ -124,6 +143,31 @@ impl PitchClassMask {
     /// Returns the complement of this set in the twelve pitch-class universe.
     pub fn complement(self) -> Self {
         Self(!self.0 & Self::VALID_BITS)
+    }
+
+    /// Returns the union of this set and `other`.
+    pub fn union(self, other: Self) -> Self {
+        Self(self.0 | other.0)
+    }
+
+    /// Returns the pitch classes shared by this set and `other`.
+    pub fn intersection(self, other: Self) -> Self {
+        Self(self.0 & other.0)
+    }
+
+    /// Returns the pitch classes in this set but not in `other`.
+    pub fn difference(self, other: Self) -> Self {
+        Self(self.0 & !other.0)
+    }
+
+    /// Returns the pitch classes belonging to exactly one of the two sets.
+    pub fn symmetric_difference(self, other: Self) -> Self {
+        Self(self.0 ^ other.0)
+    }
+
+    /// Returns `true` when this set and `other` share no pitch classes.
+    pub fn is_disjoint_from(self, other: Self) -> bool {
+        self.intersection(other).bits() == 0
     }
 
     /// Returns transpositions that map this set onto itself.

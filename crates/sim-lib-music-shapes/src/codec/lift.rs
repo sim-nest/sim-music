@@ -1,7 +1,8 @@
 use std::str::FromStr;
 
 use sim_lib_music_lift::{
-    CounterpointLiftOpts, LabelStrategy, ProgressionLiftOpts, VoiceAssignment,
+    CounterpointLiftOpts, DanglingNotePolicy, LabelStrategy, MidiRealizationPolicy, OverlapPolicy,
+    PedalPolicy, ProgressionLiftOpts, SameTickPolicy, VoiceAssignment,
 };
 use sim_lib_pitch_scale::Key;
 
@@ -32,6 +33,79 @@ pub fn decode_voice_assignment(value: &str) -> Result<VoiceAssignment, MusicShap
         "LowestFirst" => Ok(VoiceAssignment::LowestFirst),
         _ => Err(MusicShapeError::InvalidMusic),
     }
+}
+
+/// Decodes a `#(OverlapPolicy ...)` form into an `OverlapPolicy`.
+pub fn decode_overlap_policy(value: &str) -> Result<OverlapPolicy, MusicShapeError> {
+    let node = parse_node(value)?;
+    ensure_form(&node, "OverlapPolicy")?;
+    match field_atom(&node, "value")?.as_str() {
+        "Fifo" => Ok(OverlapPolicy::Fifo),
+        "Lifo" => Ok(OverlapPolicy::Lifo),
+        "Reject" => Ok(OverlapPolicy::Reject),
+        _ => Err(MusicShapeError::InvalidMusic),
+    }
+}
+
+/// Decodes a `#(SameTickPolicy ...)` form into a `SameTickPolicy`.
+pub fn decode_same_tick_policy(value: &str) -> Result<SameTickPolicy, MusicShapeError> {
+    let node = parse_node(value)?;
+    ensure_form(&node, "SameTickPolicy")?;
+    match field_atom(&node, "value")?.as_str() {
+        "Encoded" => Ok(SameTickPolicy::Encoded),
+        "NoteOffsFirst" => Ok(SameTickPolicy::NoteOffsFirst),
+        "NoteOnsFirst" => Ok(SameTickPolicy::NoteOnsFirst),
+        _ => Err(MusicShapeError::InvalidMusic),
+    }
+}
+
+/// Decodes a `#(DanglingNotePolicy ...)` form into a `DanglingNotePolicy`.
+pub fn decode_dangling_note_policy(value: &str) -> Result<DanglingNotePolicy, MusicShapeError> {
+    let node = parse_node(value)?;
+    ensure_form(&node, "DanglingNotePolicy")?;
+    match field_atom(&node, "value")?.as_str() {
+        "CloseAtEnd" => Ok(DanglingNotePolicy::CloseAtEnd),
+        "Reject" => Ok(DanglingNotePolicy::Reject),
+        _ => Err(MusicShapeError::InvalidMusic),
+    }
+}
+
+/// Decodes a `#(PedalPolicy ...)` form into a `PedalPolicy`.
+pub fn decode_pedal_policy(value: &str) -> Result<PedalPolicy, MusicShapeError> {
+    let node = parse_node(value)?;
+    ensure_form(&node, "PedalPolicy")?;
+    match field_atom(&node, "value")?.as_str() {
+        "Ignore" => Ok(PedalPolicy::Ignore),
+        "Sustain" => Ok(PedalPolicy::Sustain),
+        "SustainAndSostenuto" => Ok(PedalPolicy::SustainAndSostenuto),
+        _ => Err(MusicShapeError::InvalidMusic),
+    }
+}
+
+/// Decodes a `#(MidiRealizationPolicy ...)` form into a policy bundle.
+pub fn decode_midi_realization_policy(
+    value: &str,
+) -> Result<MidiRealizationPolicy, MusicShapeError> {
+    let node = parse_node(value)?;
+    ensure_form(&node, "MidiRealizationPolicy")?;
+    Ok(MidiRealizationPolicy {
+        overlap: decode_overlap_policy(&format!(
+            "#(OverlapPolicy value={})",
+            field_atom(&node, "overlap")?
+        ))?,
+        same_tick: decode_same_tick_policy(&format!(
+            "#(SameTickPolicy value={})",
+            field_atom(&node, "same_tick")?
+        ))?,
+        dangling_notes: decode_dangling_note_policy(&format!(
+            "#(DanglingNotePolicy value={})",
+            field_atom(&node, "dangling_notes")?
+        ))?,
+        pedals: decode_pedal_policy(&format!(
+            "#(PedalPolicy value={})",
+            field_atom(&node, "pedals")?
+        ))?,
+    })
 }
 
 /// Decodes a `#(ProgressionLiftOpts ...)` form into a `ProgressionLiftOpts`.

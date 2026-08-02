@@ -1,10 +1,16 @@
 #![forbid(unsafe_code)]
 
-use std::cmp::Ordering;
+use std::{
+    cmp::Ordering,
+    num::{NonZeroU8, NonZeroU16},
+};
 
 use sim_lib_midi_core::{
-    ChannelMessage, MetaEvent, MidiEvent, MidiPayload, TickTime, TrackedMidiEvent, synthetic_origin,
+    ChannelMessage, MetaEvent, MidiError, MidiEvent, MidiPayload, MidiTempoMap, TickTime,
+    TrackedMidiEvent, synthetic_origin,
 };
+
+use crate::SmfError;
 
 /// The SMF header format field: how the file's tracks relate.
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
@@ -17,6 +23,170 @@ pub enum SmfFormat {
     Independent,
 }
 
+impl SmfFormat {
+    /// Returns the relationship between track-local times in this format.
+    pub const fn time_semantics(self) -> SmfTimeSemantics {
+        match self {
+            Self::SingleTrack | Self::Simultaneous => SmfTimeSemantics::SharedTimeline,
+            Self::Independent => SmfTimeSemantics::IndependentPatterns,
+        }
+    }
+}
+
+/// How track-local event times relate in an SMF format.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SmfTimeSemantics {
+    /// All tracks share one time origin and may be merged chronologically.
+    SharedTimeline,
+    /// Every track is a separate pattern whose time starts at that track's
+    /// origin; tracks must not be merged as though they played together.
+    IndependentPatterns,
+}
+
+/// A valid SMPTE frame rate encoded by the signed high byte of an SMF
+/// division.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SmpteRate {
+    /// 24 frames per second (`-24`).
+    Fps24,
+    /// 25 frames per second (`-25`).
+    Fps25,
+    /// 29.97 drop-frame timecode (`-29` in the SMF header).
+    Fps29Drop,
+    /// 30 frames per second (`-30`).
+    Fps30,
+}
+
+impl SmpteRate {
+    pub(crate) const fn from_header_byte(value: u8) -> Option<Self> {
+        match value as i8 {
+            -24 => Some(Self::Fps24),
+            -25 => Some(Self::Fps25),
+            -29 => Some(Self::Fps29Drop),
+            -30 => Some(Self::Fps30),
+            _ => None,
+        }
+    }
+
+    pub(crate) const fn header_byte(self) -> u8 {
+        match self {
+            Self::Fps24 => (-24_i8) as u8,
+            Self::Fps25 => (-25_i8) as u8,
+            Self::Fps29Drop => (-29_i8) as u8,
+            Self::Fps30 => (-30_i8) as u8,
+        }
+    }
+
+    /// Returns the exact frame-rate ratio as frames per second.
+    pub const fn frames_per_second_ratio(self) -> (u32, u32) {
+        match self {
+            Self::Fps24 => (24, 1),
+            Self::Fps25 => (25, 1),
+            Self::Fps29Drop => (30_000, 1_001),
+            Self::Fps30 => (30, 1),
+        }
+    }
+
+    const fn nominal_frames_per_second(self) -> u32 {
+        match self {
+            Self::Fps24 => 24,
+            Self::Fps25 => 25,
+            Self::Fps29Drop | Self::Fps30 => 30,
+        }
+    }
+}
+
+/// The lossless time-division field from an SMF header.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+pub enum SmfDivision {
+    /// Metrical timing in ticks per quarter note.
+    Metrical {
+        /// Non-zero ticks per quarter note.
+        ticks_per_quarter: NonZeroU16,
+    },
+    /// Timecode timing in subdivisions of an SMPTE frame.
+    Smpte {
+        /// One of the four frame rates permitted by SMF.
+        frames_per_second: SmpteRate,
+        /// Non-zero subdivisions per frame.
+        ticks_per_frame: NonZeroU8,
+    },
+}
+
+impl SmfDivision {
+    /// Constructs a metrical division, returning `None` for zero or a value
+    /// with the SMPTE high bit set.
+    pub const fn metrical(ticks_per_quarter: u16) -> Option<Self> {
+        if ticks_per_quarter >= 0x8000 {
+            return None;
+        }
+        match NonZeroU16::new(ticks_per_quarter) {
+            Some(ticks_per_quarter) => Some(Self::Metrical { ticks_per_quarter }),
+            None => None,
+        }
+    }
+
+    /// Constructs an SMPTE division, returning `None` for zero ticks per frame.
+    pub const fn smpte(frames_per_second: SmpteRate, ticks_per_frame: u8) -> Option<Self> {
+        match NonZeroU8::new(ticks_per_frame) {
+            Some(ticks_per_frame) => Some(Self::Smpte {
+                frames_per_second,
+                ticks_per_frame,
+            }),
+            None => None,
+        }
+    }
+
+    /// Returns metrical ticks per quarter note, or `None` for SMPTE timing.
+    pub const fn ticks_per_quarter(self) -> Option<NonZeroU16> {
+        match self {
+            Self::Metrical { ticks_per_quarter } => Some(ticks_per_quarter),
+            Self::Smpte { .. } => None,
+        }
+    }
+
+    /// Returns the exact number of SMF ticks per second as a ratio, or `None`
+    /// for metrical timing whose tempo is carried by events.
+    pub const fn ticks_per_second_ratio(self) -> Option<(u32, u32)> {
+        match self {
+            Self::Metrical { .. } => None,
+            Self::Smpte {
+                frames_per_second,
+                ticks_per_frame,
+            } => {
+                let (numerator, denominator) = frames_per_second.frames_per_second_ratio();
+                Some((numerator * ticks_per_frame.get() as u32, denominator))
+            }
+        }
+    }
+
+    /// Returns the resolution used in each event's [`TickTime`].
+    ///
+    /// For metrical files this is ticks per quarter note. For SMPTE files it
+    /// is nominal ticks per second (30 fps for the `-29` drop-frame code);
+    /// [`ticks_per_second_ratio`](Self::ticks_per_second_ratio) retains the
+    /// exact `30_000 / 1_001` rate for duration calculations.
+    pub const fn event_time_base(self) -> u32 {
+        match self {
+            Self::Metrical { ticks_per_quarter } => ticks_per_quarter.get() as u32,
+            Self::Smpte {
+                frames_per_second,
+                ticks_per_frame,
+            } => frames_per_second.nominal_frames_per_second() * ticks_per_frame.get() as u32,
+        }
+    }
+
+    pub(crate) const fn header_word(self) -> u16 {
+        match self {
+            Self::Metrical { ticks_per_quarter } => ticks_per_quarter.get(),
+            Self::Smpte {
+                frames_per_second,
+                ticks_per_frame,
+            } => u16::from_be_bytes([frames_per_second.header_byte(), ticks_per_frame.get()]),
+        }
+    }
+}
+
 /// One track: an ordered list of timestamped events.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SmfTrack {
@@ -24,15 +194,28 @@ pub struct SmfTrack {
     pub events: Vec<MidiEvent>,
 }
 
-/// A parsed Standard MIDI File: its format, resolution, and tracks.
+/// A parsed Standard MIDI File: its format, time division, and tracks.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct SmfFile {
     /// Header format field.
     pub format: SmfFormat,
-    /// Resolution in ticks per quarter note.
-    pub tpq: u32,
+    /// Lossless metrical or SMPTE time division.
+    pub division: SmfDivision,
     /// Tracks in file order.
     pub tracks: Vec<SmfTrack>,
+}
+
+/// Tempo-map topology implied by an SMF file's format.
+///
+/// Formats 0 and 1 have one shared performance timeline. Format 2 retains one
+/// independent tempo map per track so callers cannot accidentally flatten
+/// unrelated patterns.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum SmfTempoMaps {
+    /// One map shared by every simultaneous track.
+    Shared(MidiTempoMap),
+    /// One track-local map per independent format-2 pattern, in track order.
+    Independent(Vec<MidiTempoMap>),
 }
 
 /// Options controlling SMF serialisation.
@@ -54,30 +237,87 @@ pub struct SmfMergeCursor<'a> {
 }
 
 impl SmfFile {
+    /// Returns this file's metrical ticks per quarter note, or `None` when its
+    /// division is SMPTE.
+    pub const fn ticks_per_quarter(&self) -> Option<u32> {
+        match self.division.ticks_per_quarter() {
+            Some(value) => Some(value.get() as u32),
+            None => None,
+        }
+    }
+
+    /// Builds exact tempo maps from the file's ordered tempo meta events.
+    ///
+    /// Metrical formats 0 and 1 produce one shared map. Format 2 produces one
+    /// map per independent track. SMPTE divisions have a direct timecode chart
+    /// rather than a tempo map and return [`MidiError::MetricalTempoRequired`].
+    pub fn tempo_maps(&self) -> Result<SmfTempoMaps, MidiError> {
+        let tpq = self
+            .ticks_per_quarter()
+            .ok_or(MidiError::MetricalTempoRequired)?;
+        if self.format == SmfFormat::Independent {
+            let maps = self
+                .tracks
+                .iter()
+                .map(|track| MidiTempoMap::from_ordered_events(tpq, &track.events))
+                .collect::<Result<Vec<_>, _>>()?;
+            return Ok(SmfTempoMaps::Independent(maps));
+        }
+
+        let mut events = self
+            .tracks
+            .iter()
+            .enumerate()
+            .flat_map(|(track, contents)| {
+                contents
+                    .events
+                    .iter()
+                    .enumerate()
+                    .map(move |(index, event)| (track, index, event))
+            })
+            .collect::<Vec<_>>();
+        events.sort_by(|left, right| {
+            compare_event_order(left.2, left.0, right.2, right.0).then_with(|| left.1.cmp(&right.1))
+        });
+        Ok(SmfTempoMaps::Shared(MidiTempoMap::from_ordered_events(
+            tpq,
+            events.into_iter().map(|(_, _, event)| event),
+        )?))
+    }
+
     /// Sorts every track into canonical order and ensures each ends with an
     /// end-of-track meta event.
     pub fn canonicalize(&mut self) {
         for track in &mut self.tracks {
-            canonicalize_track(track, self.tpq);
+            canonicalize_track(track, self.division.event_time_base());
         }
     }
 
-    /// Returns a cursor that merges all tracks into one time-ordered stream.
-    pub fn merge_cursor(&self) -> SmfMergeCursor<'_> {
-        SmfMergeCursor {
+    /// Returns a cursor that merges tracks sharing one timeline.
+    ///
+    /// Format-2 tracks are independent patterns, so merging them would invent
+    /// a relationship between their local time origins and is rejected.
+    pub fn merge_cursor(&self) -> Result<SmfMergeCursor<'_>, SmfError> {
+        if self.format.time_semantics() == SmfTimeSemantics::IndependentPatterns {
+            return Err(SmfError::IndependentPatternsCannotMerge);
+        }
+        Ok(SmfMergeCursor {
             file: self,
             next_index: vec![0; self.tracks.len()],
-        }
+        })
     }
 
     /// Collects every track's events into a single time-ordered,
     /// track-tagged vector.
-    pub fn merged_events(&self) -> Vec<TrackedMidiEvent> {
+    ///
+    /// Format-2 files return [`SmfError::IndependentPatternsCannotMerge`];
+    /// callers must choose and process a track as an independent pattern.
+    pub fn merged_events(&self) -> Result<Vec<TrackedMidiEvent>, SmfError> {
         let mut merged = Vec::new();
-        for event in self.merge_cursor() {
+        for event in self.merge_cursor()? {
             merged.push(event);
         }
-        merged
+        Ok(merged)
     }
 }
 

@@ -1,0 +1,57 @@
+(expr:map
+  [harmony/tag harmony/program]
+  [harmony/id "catalog/chord-cycle"]
+  [harmony/palette
+    (expr:map
+      [harmony/tag harmony/palette]
+      [harmony/id "catalog/chord-cycle-palette"]
+      [harmony/entries
+        [(expr:map
+           [harmony/tag harmony/chord]
+           [harmony/id "cycle/c-major"]
+           [harmony/source (expr:map [harmony/tag harmony/source-symbol] [harmony/symbol "C"] [harmony/octave "0"])]
+           [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+           [harmony/ratios []])
+         (expr:map
+           [harmony/tag harmony/chord]
+           [harmony/id "cycle/f-major"]
+           [harmony/source (expr:map [harmony/tag harmony/source-symbol] [harmony/symbol "F"] [harmony/octave "0"])]
+           [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+           [harmony/ratios []])
+         (expr:map
+           [harmony/tag harmony/chord]
+           [harmony/id "cycle/g-major"]
+           [harmony/source (expr:map [harmony/tag harmony/source-symbol] [harmony/symbol "G"] [harmony/octave "0"])]
+           [harmony/voicing (expr:map [harmony/tag harmony/voicing-preserve])]
+           [harmony/ratios []])]]
+      [harmony/templates []]
+      [harmony/algebra
+        (expr:map
+          [harmony/tag harmony/algebra-transpose]
+          [harmony/source "catalog/major-triad"]
+          [harmony/offsets ["0" "5" "7"]])])]
+  [harmony/rules
+    (expr:map
+      [harmony/tag harmony/rule-set]
+      [harmony/hard
+        [(expr:map [harmony/tag harmony/constraint] [harmony/id "constant-common-notes"] [harmony/predicate (expr:map [harmony/tag harmony/common-notes] [harmony/count (expr:map [harmony/tag harmony/count-range] [harmony/min "1"] [harmony/max "1"])])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "minimum-type-distance"] [harmony/predicate (expr:map [harmony/tag harmony/minimum-type-distance] [harmony/distance "1"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "required-first"] [harmony/predicate (expr:map [harmony/tag harmony/chord-at] [harmony/position "0"] [harmony/chord "145"])])
+         (expr:map [harmony/tag harmony/constraint] [harmony/id "final-chord-only"] [harmony/predicate (expr:map [harmony/tag harmony/chord-only-at] [harmony/position "-1"] [harmony/chord "145"])])]]
+      [harmony/soft []])]
+  [harmony/voicing-changes
+    (expr:map
+      [harmony/tag harmony/voicing-change-palette]
+      [harmony/id "catalog/chord-cycle-changes"]
+      [harmony/entries []])]
+  [harmony/render
+    (expr:map
+      [harmony/tag harmony/render-profile]
+      [harmony/id "catalog/chord-cycle-render"]
+      [harmony/chord-transpose "48"]
+      [harmony/melody-transpose "60"]
+      [harmony/duration-multiplier "4"]
+      [harmony/chord-program "19"]
+      [harmony/melody-program "56"]
+      [harmony/tempo-bpm "60"]
+      [harmony/time-signature ["4" "4"]])])

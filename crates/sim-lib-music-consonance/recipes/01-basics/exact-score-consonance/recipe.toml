@@ -1,0 +1,8 @@
+id = "exact-score-consonance"
+title = "Inspect exact score consonance"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "consonance", "exact-time", "identity", "analysis"]
+requires = ["music-consonance", "music-shapes", "codec/lisp"]

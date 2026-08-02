@@ -1,0 +1,8 @@
+id = "onset-beat-harmony"
+title = "Bounded onset, beat, MFCC, key, and chord lifting"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 40
+tags = ["sound", "onset", "beat", "mfcc", "chroma", "key", "chord", "hmm", "loadable-callable"]
+requires = ["sound-audio-lift", "sound-tuning", "numbers-signal", "numbers-stats", "discrete-graph", "codec/lisp"]

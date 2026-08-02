@@ -1,0 +1,6 @@
+title = "Project integral parameter tracks with explicit ledgers"
+summary = "Bind builtin and custom parameter tracks through one typed surface and inspect phase, exhaustion, and transform evidence."
+category = "Rust"
+tags = ["music", "serial", "integral", "parameters", "rust", "framework"]
+requires = ["music-serial", "music-core", "serial-core"]
+purpose = "purpose.md"

@@ -15,11 +15,13 @@
 mod citizen;
 mod codec;
 mod runtime;
+mod serial_runtime;
 
 pub use citizen::{
     PitchChordDescriptor, PitchClassMaskDescriptor, PitchDescriptor, PitchIntervalDescriptor,
-    PitchScaleDescriptor, pitch_chord_class_symbol, pitch_class_mask_class_symbol,
-    pitch_class_symbol, pitch_interval_class_symbol, pitch_scale_class_symbol,
+    PitchScaleDescriptor, ToneRowDescriptor, pitch_chord_class_symbol,
+    pitch_class_mask_class_symbol, pitch_class_symbol, pitch_interval_class_symbol,
+    pitch_scale_class_symbol, tone_row_class_symbol,
 };
 pub use codec::*;
 pub use runtime::{PitchShapesLib, install_pitch_shapes_lib};

@@ -1,0 +1,10 @@
+(music/stretto/graph
+  :subject "#(Melody items=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal),#(Note dur=1/4 pitch=E4 vel=100 channel=0 articulation=Normal),#(Note dur=1/4 pitch=G4 vel=100 channel=0 articulation=Normal),#(Note dur=1/4 pitch=C5 vel=100 channel=0 articulation=Normal)])"
+  :policy '(expr:map
+    [:delays ["1/4" "1/2"]]
+    [:transpositions ["0" "7"]]
+    [:minimum-overlap "1/4"]
+    [:minimum-cluster-voices "3"]
+    [:max-entries "8"]
+    [:max-clusters "16"]
+    [:max-chain-length "4"]))

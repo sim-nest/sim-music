@@ -2,14 +2,18 @@
 //!
 //! This crate defines the [`DissonanceModel`] trait and a family of sensory
 //! dissonance estimators -- Plomp-Levelt, Sethares, Helmholtz beating, and
-//! harmonic entropy -- plus a [`DissonanceRegistry`] for looking them up by
-//! name and a runtime surface that installs them as a SIM lib.
+//! harmonic entropy -- plus bounded sonance fitting reports,
+//! a [`DissonanceRegistry`] for looking models up by name, and a runtime surface
+//! that installs them as a SIM lib.
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod fit;
+mod fit_digest;
 mod model;
 mod runtime;
 
+pub use fit::*;
 pub use model::*;
 pub use runtime::*;
 

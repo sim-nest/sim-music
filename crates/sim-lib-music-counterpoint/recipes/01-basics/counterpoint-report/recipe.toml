@@ -1,0 +1,8 @@
+id = "counterpoint-report"
+title = "Explain exact counterpoint violations"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["music", "counterpoint", "analysis", "exact-time", "evidence"]
+requires = ["music-counterpoint", "music-shapes", "codec/lisp"]

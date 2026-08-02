@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-sysex"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 license = "MPL-2.0"
 description = "System-exclusive MIDI message models, checksums, and device payload helpers."

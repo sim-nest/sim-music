@@ -1,0 +1,5 @@
+book = "serial-core"
+title = "Serial Core"
+summary = "Finite symbolic alphabets, aggregate evidence, and total transforms."
+order = 268
+chapters = ["01-basics"]

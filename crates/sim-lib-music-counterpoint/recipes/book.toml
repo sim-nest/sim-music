@@ -1,0 +1,5 @@
+book = "music-counterpoint"
+title = "Counterpoint Analysis and Generation"
+summary = "Exact rule evidence, graph-backed overlap, and bounded reversible generation."
+order = 254
+chapters = ["01-basics"]

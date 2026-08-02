@@ -17,6 +17,18 @@ fn midi_round_trip() {
 }
 
 #[test]
+fn pitch_order_follows_absolute_semitones_across_classes_and_octaves() {
+    let c5 = Pitch::from_midi(72);
+    let f4 = Pitch::from_midi(65);
+    let b3 = Pitch::from_midi(59);
+    assert!(c5 > f4);
+    assert!(f4 > b3);
+    let mut pitches = vec![c5, b3, f4];
+    pitches.sort();
+    assert_eq!(pitches, vec![b3, f4, c5]);
+}
+
+#[test]
 fn transposition_composition_holds() {
     let pitch = Pitch::from_midi(60);
     assert_eq!(pitch.transpose(7).transpose(-7), pitch);

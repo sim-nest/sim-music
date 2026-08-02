@@ -10,6 +10,8 @@ use sim_shape::{
     TableExtraPolicy, TableFieldSpec, TableShape, shape_value,
 };
 
+use crate::serial_runtime;
+
 const PITCH_SHAPES_LIB_ID: &str = "pitch-shapes";
 
 type ShapeSpec = (Symbol, &'static str, Vec<&'static str>, Arc<dyn Shape>);
@@ -19,6 +21,27 @@ pub struct PitchShapesLib;
 
 impl Lib for PitchShapesLib {
     fn manifest(&self) -> LibManifest {
+        let mut exports = shape_specs()
+            .into_iter()
+            .map(|(symbol, _, _, _)| Export::Shape {
+                symbol,
+                shape_id: None,
+            })
+            .collect::<Vec<_>>();
+        exports.extend([
+            Export::Function {
+                symbol: serial_runtime::serial_row_symbol(),
+                function_id: None,
+            },
+            Export::Function {
+                symbol: serial_runtime::serial_matrix_symbol(),
+                function_id: None,
+            },
+            Export::Function {
+                symbol: serial_runtime::serial_analyze_row_symbol(),
+                function_id: None,
+            },
+        ]);
         LibManifest {
             id: Symbol::new(PITCH_SHAPES_LIB_ID),
             version: Version(env!("CARGO_PKG_VERSION").to_owned()),
@@ -26,23 +49,18 @@ impl Lib for PitchShapesLib {
             target: LibTarget::HostRegistered,
             requires: Vec::new(),
             capabilities: Vec::new(),
-            exports: shape_specs()
-                .into_iter()
-                .map(|(symbol, _, _, _)| Export::Shape {
-                    symbol,
-                    shape_id: None,
-                })
-                .collect(),
+            exports,
         }
     }
 
-    fn load(&self, _cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
+    fn load(&self, cx: &mut sim_kernel::LoadCx, linker: &mut Linker<'_>) -> Result<()> {
         for (symbol, name, details, inner) in shape_specs() {
             linker.shape_value(
                 symbol.clone(),
                 shape_value(symbol, Arc::new(DocumentedShape::new(name, details, inner))),
             )?;
         }
+        serial_runtime::load_serial_functions(cx, linker)?;
         Ok(())
     }
 }
@@ -121,6 +139,15 @@ fn shape_specs() -> Vec<ShapeSpec> {
             vec![
                 "symbolic harmony surface routed through pitch-chord parsing",
                 "codec helper provides string round-trips",
+            ],
+            text_shape(&[]),
+        ),
+        (
+            Symbol::qualified("pitch", "ToneRow"),
+            "ToneRow",
+            vec![
+                "strict twelve-class row using canonical numeric pitch identities",
+                "citizen text form is twelve comma-separated classes",
             ],
             text_shape(&[]),
         ),

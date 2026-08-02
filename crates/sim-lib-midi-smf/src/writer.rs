@@ -4,6 +4,7 @@ use sim_lib_midi_core::{MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent}
 
 use crate::{
     SmfError, SmfFile, SmfFormat, SmfTrack, SmfWriteOptions, canonicalize_track, encode_vlq,
+    reader::{is_realtime_status, system_data_len},
 };
 
 /// Largest value that SMF permits in a four-byte variable-length quantity.
@@ -23,12 +24,15 @@ pub fn write_smf_with_options(
     file: &SmfFile,
     options: SmfWriteOptions,
 ) -> Result<Vec<u8>, SmfError> {
-    if matches!(file.format, SmfFormat::SingleTrack) && file.tracks.len() != 1 {
+    if file.tracks.is_empty()
+        || (matches!(file.format, SmfFormat::SingleTrack) && file.tracks.len() != 1)
+    {
         return Err(SmfError::FormatTrackMismatch);
     }
     let track_count = u16::try_from(file.tracks.len())
         .map_err(|_| SmfError::TrackCountOutOfRange(file.tracks.len()))?;
-    let tpq = checked_tpq(file.tpq)?;
+    let division = file.division.header_word();
+    let event_time_base = file.division.event_time_base();
     let mut out = Vec::new();
     out.extend_from_slice(b"MThd");
     out.extend_from_slice(&6u32.to_be_bytes());
@@ -39,9 +43,9 @@ pub fn write_smf_with_options(
     };
     out.extend_from_slice(&format.to_be_bytes());
     out.extend_from_slice(&track_count.to_be_bytes());
-    out.extend_from_slice(&tpq.to_be_bytes());
+    out.extend_from_slice(&division.to_be_bytes());
     for track in &file.tracks {
-        let body = write_track(track, file.tpq, options)?;
+        let body = write_track(track, event_time_base, options)?;
         out.extend_from_slice(b"MTrk");
         out.extend_from_slice(&checked_chunk_len(body.len())?.to_be_bytes());
         out.extend_from_slice(&body);
@@ -114,8 +118,12 @@ fn write_payload(
             Ok(None)
         }
         MidiPayload::Raw(raw) => {
-            write_raw(out, raw);
-            Ok(None)
+            write_raw(out, raw)?;
+            Ok(if is_realtime_status(raw.status) {
+                last_status
+            } else {
+                None
+            })
         }
     }
 }
@@ -161,14 +169,6 @@ fn encode_meta(event: &MetaEvent) -> (u8, Vec<u8>) {
     }
 }
 
-/// Checks that a ticks-per-quarter value fits the SMF metrical division field.
-pub(crate) fn checked_tpq(tpq: u32) -> Result<u16, SmfError> {
-    if tpq == 0 || tpq >= 0x8000 {
-        return Err(SmfError::TpqOutOfRange(tpq));
-    }
-    u16::try_from(tpq).map_err(|_| SmfError::TpqOutOfRange(tpq))
-}
-
 /// Checks that a delta fits the SMF four-byte VLQ range.
 pub(crate) fn checked_delta(delta: i64) -> Result<u32, SmfError> {
     if delta > i64::from(MAX_SMF_VLQ) {
@@ -195,7 +195,24 @@ fn masked_u8(value: u32) -> u8 {
     u8::try_from(value & 0xff).expect("masked MIDI byte fits u8")
 }
 
-fn write_raw(out: &mut Vec<u8>, raw: &RawBytes) {
+fn write_raw(out: &mut Vec<u8>, raw: &RawBytes) -> Result<(), SmfError> {
+    let expected = system_data_len(raw.status).ok_or(SmfError::InvalidSystemEvent {
+        offset: out.len(),
+        status: raw.status,
+    })?;
+    if raw.data.len() != expected {
+        return Err(SmfError::InvalidSystemEvent {
+            offset: out.len(),
+            status: raw.status,
+        });
+    }
+    if let Some(index) = raw.data.iter().position(|byte| *byte >= 0x80) {
+        return Err(SmfError::InvalidSystemEvent {
+            offset: out.len() + 1 + index,
+            status: raw.status,
+        });
+    }
     out.push(raw.status);
     out.extend_from_slice(&raw.data);
+    Ok(())
 }

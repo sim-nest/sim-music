@@ -18,17 +18,35 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | Feature | Subject | Specimens | Summary |
 | --- | --- | ---: | --- |
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
-| `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 1 | Describe synth presets, streaming render fixtures, and placement choices for local or browser-backed performance. |
-| `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 1 | Lift, lower, inspect, and export musical material across MIDI files, live MIDI fixtures, and notation forms. |
-| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, scales, pitch sets, timbres, spectra, and tuning facts through worked musical descriptors and bounded timbre families. |
-| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 2 | Analyze exact music objects into pitch histograms, chord windows, and piano-roll views, then transform exact sequences with reusable operations and explicit pitch maps. |
-| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 1 | Lift PCM audio into sound features, reuse spectral summaries, and render finite sound buffers or WAV/SMF stream files through current sound libraries. |
+| `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 5 | Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations. |
+| `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
+| `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, classify pitch-set relations, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
+| `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
+| `feature/sim-music/bounded-harmonization` | `crate/sim-lib-pitch-chord` | 1 | Plan legal chord progressions with exhaustive, factored-backtracking, certified layered-DP, or declared-heuristic beam strategies and inspectable receipts. |
+| `feature/sim-music/exact-music-analysis-and-transform` | `crate/sim-lib-music-analysis` | 6 | Convert exact score forms with loss and identity evidence, decode harmonic sequences, quantize declared lattices, compare melody/rhythm features, discover bounded repeated patterns, find certified graph paths, and audit exact transforms. |
+| `feature/sim-music/algorithm-foundry` | `crate/sim-lib-music-analysis` | 1 | Execute a data recipe by selecting independently loaded MIDI, analysis, harmony, counterpoint, render, and optional preview stages through open Shape-ranked runtime registrations. |
+| `feature/sim-music/carpet-composition` | `crate/sim-lib-music-combinators` | 2 | Compose exact music on finite named axes with sparse cells, algebraic layout transforms, shared mixed-radix addresses, and loss-audited relative pitch/time encodings. |
+| `feature/sim-music/bounded-rewrite-catalogs` | `crate/sim-lib-music-combinators` | 1 | Derive context-aware musical grammars, scale-following pitch-map programs, and finite progression-tree catalogs with explicit bounds, shared rank/search, derivation trees, and receipts. |
+| `feature/sim-music/exact-score-consonance` | `crate/sim-lib-music-consonance` | 1 | Slice canonical scores and realized MIDI into identity-bearing half-open sounding windows and inspect pitch, acoustic, ratio, commonality, and leading metrics separately. |
+| `feature/sim-music/reversible-consonance-completion` | `crate/sim-lib-music-consonance` | 1 | Search typed note, ornament, chord, pedal, doubling, and voice additions under explicit metric and style bounds, returning an exactly removable content-bound patch. |
+| `feature/sim-music/music-counterpoint` | `crate/sim-lib-music-counterpoint` | 1 | Analyze existing voices, derive graph-backed stretto relations, and generate one or more analyzer-legal voices through a finite bounded CSP and reversible additions. |
+| `feature/sim-music/sound-spectrum-adapter` | `crate/sim-lib-sound-spectrum` | 1 | Retain physical frequency, amplitude, PCM/STFT provenance, and sound descriptors while delegating transform math to the generic numbers-signal real FFT. |
+| `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 6 | Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence. |
+| `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
+| `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
+| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 2 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
+| `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 8 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
+| `feature/sim-music/open-serial-adaptation` | `crate/sim-lib-music-serial` | 2 | Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently. |
+| `feature/sim-music/serial-consonance-completion` | `crate/sim-lib-music-serial` | 1 | Filter bounded additive completion candidates through serial allowances, preserve the immutable structural plan, and return separate structural and all-sounding post-completion ledgers. |
+| `feature/sim-music/serial-music-workbench` | `repo/sim-music` | 1 | Assemble one immutable row plan, registry-selected realization components, reversible completion, ledger audit, notation and MIDI export, and audition lowering into one checked workbench recipe. |
 
 ## Surfaces
 
 | Surface | Kind | Subject |
 | --- | --- | --- |
+| `cli/music-algorithm-foundry` | `cli` | `crate/music-algorithm-foundry` |
+| `cli/serial-workbench` | `cli` | `crate/serial-workbench` |
 | `cli/xtask` | `cli` | `crate/xtask` |
 | `docs/sim-music/generated` | `docs` | `doc-set/sim-music/generated` |
 
@@ -84,6 +102,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/purpose.md`
 - `crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/recipe.toml`
 - `crates/sim-lib-midi-smf/recipes/01-basics/file-metadata/setup.siml`
+- `crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/purpose.md`
+- `crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/recipe.toml`
+- `crates/sim-lib-midi-smf/recipes/01-basics/smpte-timecode/setup.siml`
 - `crates/sim-lib-midi-smf/recipes/02-export-fixtures/chapter.toml`
 - `crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/purpose.md`
 - `crates/sim-lib-midi-smf/recipes/02-export-fixtures/note-echo-frozen-midi/recipe.toml`
@@ -103,11 +124,29 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-midi-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-midi-wasm-frame/recipes/book.toml`
 - `crates/sim-lib-music-analysis/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/purpose.md`
+- `crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/recipe.toml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/metrical-similarity-pattern/setup.siml`
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/purpose.md`
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/recipe.toml`
 - `crates/sim-lib-music-analysis/recipes/01-basics/pitch-histogram/setup.siml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/purpose.md`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/recipe.toml`
+- `crates/sim-lib-music-analysis/recipes/01-basics/tonnetz-path/setup.siml`
 - `crates/sim-lib-music-analysis/recipes/book.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-harmonization/setup.siml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-rewrite-catalogs/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-rewrite-catalogs/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/bounded-rewrite-catalogs/setup.siml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/carpet-relative/setup.siml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/purpose.md`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/recipe.toml`
+- `crates/sim-lib-music-combinators/recipes/01-basics/declarative-harmony-evidence/setup.siml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/purpose.md`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/recipe.toml`
 - `crates/sim-lib-music-combinators/recipes/01-basics/sequence-tools/setup.siml`
@@ -125,6 +164,14 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/recipe.toml`
 - `crates/sim-lib-music-combinators/recipes/02-player-recipes/polystep-quad-note-seeded/setup.siml`
 - `crates/sim-lib-music-combinators/recipes/book.toml`
+- `crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/purpose.md`
+- `crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/recipe.toml`
+- `crates/sim-lib-music-consonance/recipes/01-basics/additive-consonance-completion/setup.siml`
+- `crates/sim-lib-music-consonance/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/purpose.md`
+- `crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/recipe.toml`
+- `crates/sim-lib-music-consonance/recipes/01-basics/exact-score-consonance/setup.siml`
+- `crates/sim-lib-music-consonance/recipes/book.toml`
 - `crates/sim-lib-music-core/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-core/recipes/01-basics/melody-note/purpose.md`
 - `crates/sim-lib-music-core/recipes/01-basics/melody-note/recipe.toml`
@@ -143,6 +190,17 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/recipe.toml`
 - `crates/sim-lib-music-core/recipes/02-golden-fixtures/pattern-mutator-locked-take/setup.siml`
 - `crates/sim-lib-music-core/recipes/book.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/purpose.md`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/recipe.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/bounded-generation/setup.siml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/purpose.md`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/recipe.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/counterpoint-report/setup.siml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/stretto-graph/purpose.md`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/stretto-graph/recipe.toml`
+- `crates/sim-lib-music-counterpoint/recipes/01-basics/stretto-graph/setup.siml`
+- `crates/sim-lib-music-counterpoint/recipes/book.toml`
 - `crates/sim-lib-music-lift/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-lift/recipes/01-basics/from-midi-track/purpose.md`
 - `crates/sim-lib-music-lift/recipes/01-basics/from-midi-track/recipe.toml`
@@ -157,7 +215,48 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/purpose.md`
 - `crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/recipe.toml`
 - `crates/sim-lib-music-notation/recipes/01-basics/lilypond-export/setup.siml`
+- `crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/purpose.md`
+- `crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/recipe.toml`
+- `crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/setup.siml`
 - `crates/sim-lib-music-notation/recipes/book.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/purpose.md`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/setup.rs`
+- `crates/sim-lib-music-serial/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/purpose.md`
+- `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/setup.rs`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/purpose.md`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/setup.rs`
+- `crates/sim-lib-music-serial/recipes/03-parameters/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/purpose.md`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/setup.rs`
+- `crates/sim-lib-music-serial/recipes/book.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/recipe.toml`
@@ -171,6 +270,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/purpose.md`
 - `crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/recipe.toml`
 - `crates/sim-lib-music-synth/recipes/02-dx7/synthetic-patch-render/setup.siml`
+- `crates/sim-lib-music-synth/recipes/03-composition/chapter.toml`
+- `crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/purpose.md`
+- `crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/recipe.toml`
+- `crates/sim-lib-music-synth/recipes/03-composition/offline-realtime-preview/setup.siml`
 - `crates/sim-lib-music-synth/recipes/book.toml`
 - `crates/sim-lib-music-synth/recipes/placement/all-local/purpose.md`
 - `crates/sim-lib-music-synth/recipes/placement/all-local/recipe.toml`
@@ -211,6 +314,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/recipe.toml`
 - `crates/sim-lib-music-synth/recipes/system700/synthetic-main-console/setup.siml`
 - `crates/sim-lib-music-transform/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/purpose.md`
+- `crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/recipe.toml`
+- `crates/sim-lib-music-transform/recipes/01-basics/optimal-voice-leading/setup.siml`
 - `crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/purpose.md`
 - `crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/recipe.toml`
 - `crates/sim-lib-music-transform/recipes/01-basics/sequence-transform/setup.siml`
@@ -221,6 +327,12 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-wasm-frame/recipes/book.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/purpose.md`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/recipe.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/declarative-harmony-program/setup.siml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/purpose.md`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/recipe.toml`
+- `crates/sim-lib-pitch-chord/recipes/01-basics/learned-transition-score/setup.siml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/purpose.md`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/recipe.toml`
 - `crates/sim-lib-pitch-chord/recipes/01-basics/major-triad/setup.siml`
@@ -237,6 +349,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/purpose.md`
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/recipe.toml`
 - `crates/sim-lib-pitch-dissonance/recipes/01-basics/tritone-score/setup.siml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/chapter.toml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/purpose.md`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/recipe.toml`
+- `crates/sim-lib-pitch-dissonance/recipes/02-scenarios/contextual-sonance/setup.siml`
 - `crates/sim-lib-pitch-dissonance/recipes/book.toml`
 - `crates/sim-lib-pitch-namer-forte/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-namer-forte/recipes/01-basics/forte-number/purpose.md`
@@ -263,12 +379,41 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/recipe.toml`
 - `crates/sim-lib-pitch-namer/recipes/01-basics/name-registry/setup.siml`
 - `crates/sim-lib-pitch-namer/recipes/book.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/purpose.md`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/recipe.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/chord-relations/setup.siml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/purpose.md`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/recipe.toml`
+- `crates/sim-lib-pitch-ratio/recipes/01-basics/exact-ratio/setup.siml`
+- `crates/sim-lib-pitch-ratio/recipes/book.toml`
 - `crates/sim-lib-pitch-scale/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/purpose.md`
 - `crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/recipe.toml`
 - `crates/sim-lib-pitch-scale/recipes/01-basics/major-degrees/setup.siml`
+- `crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/purpose.md`
+- `crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/recipe.toml`
+- `crates/sim-lib-pitch-scale/recipes/01-basics/scale-generate/setup.siml`
 - `crates/sim-lib-pitch-scale/recipes/book.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/purpose.md`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/recipe.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/setup.rs`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`
+- `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/chapter.toml`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/purpose.md`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/setup.rs`
+- `crates/sim-lib-pitch-serial/recipes/book.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md`
+- `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/recipe.toml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/setup.siml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/purpose.md`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/recipe.toml`
+- `crates/sim-lib-pitch-set/recipes/01-basics/set-relations/setup.siml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/purpose.md`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/recipe.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/triad-mask/setup.siml`
@@ -283,10 +428,27 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-wasm-frame/recipes/01-basics/browser-facade/setup.siml`
 - `crates/sim-lib-pitch-wasm-frame/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-wasm-frame/recipes/book.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/certified-transforms/purpose.md`
+- `crates/sim-lib-serial-core/recipes/01-basics/certified-transforms/recipe.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/certified-transforms/setup.rs`
+- `crates/sim-lib-serial-core/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/purpose.md`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml`
+- `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/setup.siml`
+- `crates/sim-lib-serial-core/recipes/book.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/purpose.md`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/recipe.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/onset-beat-harmony/setup.siml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/purpose.md`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/recipe.toml`
 - `crates/sim-lib-sound-audio-lift/recipes/01-basics/pcm-features/setup.siml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/purpose.md`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/recipe.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/pitch-tracking/setup.siml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/purpose.md`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/recipe.toml`
+- `crates/sim-lib-sound-audio-lift/recipes/01-basics/stft-cqt-chroma/setup.siml`
 - `crates/sim-lib-sound-audio-lift/recipes/book.toml`
 - `crates/sim-lib-sound-bridge/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-sound-bridge/recipes/01-basics/gm-voice/purpose.md`
@@ -302,6 +464,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/purpose.md`
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/recipe.toml`
 - `crates/sim-lib-sound-dissonance/recipes/01-basics/roughness-model/setup.siml`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/purpose.md`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/recipe.toml`
+- `crates/sim-lib-sound-dissonance/recipes/01-basics/sonance-fit/setup.siml`
 - `crates/sim-lib-sound-dissonance/recipes/book.toml`
 - `crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/purpose.md`
 - `crates/sim-lib-sound-gm/recipes/01-basics/acoustic-grand/recipe.toml`
@@ -312,6 +477,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/purpose.md`
 - `crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/recipe.toml`
 - `crates/sim-lib-sound-render/recipes/01-basics/offline-buffer/setup.siml`
+- `crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/purpose.md`
+- `crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/recipe.toml`
+- `crates/sim-lib-sound-render/recipes/01-basics/phase-vocoder-loudness/setup.siml`
 - `crates/sim-lib-sound-render/recipes/book.toml`
 - `crates/sim-lib-sound-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-sound-shapes/recipes/01-basics/shape-family/purpose.md`
@@ -344,6 +512,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-stream-bridge/recipes/01-basics/offline-bridge/setup.siml`
 - `crates/sim-lib-stream-bridge/recipes/book.toml`
 - `crates/sim-lib-stream-file/recipes/01-basics/chapter.toml`
+- `crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/purpose.md`
+- `crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/recipe.toml`
+- `crates/sim-lib-stream-file/recipes/01-basics/pcm16-conversion/setup.siml`
 - `crates/sim-lib-stream-file/recipes/01-basics/wav-smf/purpose.md`
 - `crates/sim-lib-stream-file/recipes/01-basics/wav-smf/recipe.toml`
 - `crates/sim-lib-stream-file/recipes/01-basics/wav-smf/setup.siml`
@@ -353,6 +524,24 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-stream-midi/recipes/01-basics/packetize/recipe.toml`
 - `crates/sim-lib-stream-midi/recipes/01-basics/packetize/setup.siml`
 - `crates/sim-lib-stream-midi/recipes/book.toml`
+- `recipes/book.toml`
+- `recipes/music-algorithm-foundry/Cargo.toml`
+- `recipes/music-algorithm-foundry/README.md`
+- `recipes/music-algorithm-foundry/recipe.toml`
+- `recipes/music-algorithm-foundry/setup.siml`
+- `recipes/music-algorithm-foundry/src/foundry.rs`
+- `recipes/music-algorithm-foundry/src/foundry/codec.rs`
+- `recipes/music-algorithm-foundry/src/foundry/tests.rs`
+- `recipes/music-algorithm-foundry/src/main.rs`
+- `recipes/serial-workbench/01-end-to-end/chapter.toml`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/purpose.md`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/setup.rs`
+- `recipes/serial-workbench/Cargo.toml`
+- `recipes/serial-workbench/README.md`
+- `recipes/serial-workbench/book.toml`
+- `recipes/serial-workbench/fixtures/workbench-fixtures.toml`
+- `recipes/serial-workbench/src/main.rs`
 
 ## Worked Examples
 
@@ -557,6 +746,866 @@ fn recipe_exists(path: &str) -> bool {
 }
 ```
 
+Specimen `spec-test/sim-music/crates/sim-lib-music-synth/src/tests/reuse` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-synth/src/tests/reuse.rs`:
+
+```rust
+use std::sync::Arc;
+
+use sim_codec::{Input, decode_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, ReadPolicy, Symbol};
+
+// conformance: catalog synthesis reuse composes checked owners without copied DSP.
+
+#[test]
+fn catalog_reuse_composition_recipe_is_bounded_and_non_destructive() {
+    let source = include_str!("../../recipes/03-composition/offline-realtime-preview/setup.siml");
+    let plan = decode_plan(source);
+    let catalog = as_vector(field(&plan, "catalog"));
+    assert_eq!(catalog.len(), 9);
+    for row in catalog {
+        let row = as_map(Some(row));
+        assert!(field(row, "need").is_some());
+        assert!(field(row, "owner").is_some());
+        assert!(matches!(field(row, "specimen"), Some(Expr::String(_))));
+    }
+
+    let input = as_map(field(&plan, "input"));
+    assert_eq!(symbol_text(field(input, "kind")), "table/dir");
+    assert_eq!(string_text(field(input, "dir-handle")), "music-inputs");
+    assert_eq!(string_text(field(input, "value-handle")), "fm-bell-notes");
+
+    let offline = as_map(field(&plan, "offline"));
+    assert_eq!(symbol_text(field(offline, "owner")), "sim-lib-sound-render");
+    assert_eq!(number_text(field(offline, "sample-rate")), "48000");
+    assert_non_destructive_output(as_map(field(offline, "output")));
+
+    let realtime = as_map(field(&plan, "realtime"));
+    assert_eq!(
+        symbol_text(field(realtime, "runner-owner")),
+        "sim-lib-audio-graph-live"
+    );
+    let effects = as_vector(field(realtime, "effects"));
+    assert_eq!(effects.len(), 2);
+    assert_eq!(symbol_text(Some(&effects[0])), "audio-dsp/BiquadFilter");
+    assert_eq!(symbol_text(Some(&effects[1])), "audio-dsp/Limiter");
+    let callback = as_map(field(realtime, "callback"));
+    assert_eq!(field(callback, "preallocated"), Some(&Expr::Bool(true)));
+    assert_eq!(field(callback, "locks"), Some(&Expr::Bool(false)));
+    assert_eq!(field(callback, "io"), Some(&Expr::Bool(false)));
+    assert_non_destructive_output(as_map(field(realtime, "preview-output")));
+
+    let wav = as_map(field(&plan, "wav"));
+    assert_eq!(symbol_text(field(wav, "owner")), "sim-lib-stream-file");
+    assert_eq!(symbol_text(field(wav, "input-format")), "pcm16");
+    assert_non_destructive_output(as_map(field(wav, "output")));
+    let deferred = as_map(field(wav, "deferred"));
+    for policy in ["sample-conversion", "dither"] {
+        assert_eq!(string_text(field(deferred, policy)), "MUSICALGOS4.43");
+    }
+
+    assert!(!source.contains(":path"));
+    assert!(!source.contains("shell"));
+    assert!(!source.contains("exec"));
+}
+
+fn decode_plan(source: &str) -> Vec<(Expr, Expr)> {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    sim_test_support::register_core_classes(&mut cx);
+    sim_test_support::register_f64_number_domain(&mut cx);
+    let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
+    cx.load_lib(&codec).expect("load lisp codec");
+    let decoded = decode_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source.trim().to_owned()),
+        ReadPolicy::default(),
+    )
+    .expect("decode composition recipe");
+    let Expr::Quote { expr, .. } = decoded else {
+        panic!("composition recipe must be quoted data");
+    };
+    let Expr::Map(plan) = *expr else {
+        panic!("composition recipe must contain a map");
+    };
+    plan
+}
+
+fn assert_non_destructive_output(output: &[(Expr, Expr)]) {
+    assert!(matches!(field(output, "dir-handle"), Some(Expr::String(_))));
+    assert!(matches!(
+        field(output, "value-handle"),
+        Some(Expr::String(_))
+    ));
+    assert_eq!(field(output, "replace"), Some(&Expr::Bool(false)));
+}
+
+fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Option<&'a Expr> {
+    entries.iter().find_map(|(key, value)| match key {
+        Expr::Symbol(symbol) if symbol.name.as_ref() == name => Some(value),
+        _ => None,
+    })
+}
+
+fn as_map(value: Option<&Expr>) -> &[(Expr, Expr)] {
+    let Some(Expr::Map(entries)) = value else {
+        panic!("expected map, got {value:?}");
+    };
+    entries
+}
+
+fn as_vector(value: Option<&Expr>) -> &[Expr] {
+    let Some(Expr::Vector(items)) = value else {
+        panic!("expected vector, got {value:?}");
+    };
+    items
+}
+
+fn symbol_text(value: Option<&Expr>) -> String {
+    let Some(Expr::Symbol(symbol)) = value else {
+        panic!("expected symbol, got {value:?}");
+    };
+    symbol.as_qualified_str()
+}
+
+fn string_text(value: Option<&Expr>) -> &str {
+    let Some(Expr::String(value)) = value else {
+        panic!("expected string, got {value:?}");
+    };
+    value
+}
+
+fn number_text(value: Option<&Expr>) -> String {
+    let Some(Expr::Number(value)) = value else {
+        panic!("expected number, got {value:?}");
+    };
+    value.canonical.clone()
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-render/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-render/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+use sim_kernel::Cx;
+use sim_kernel::{DefaultFactory, EagerPolicy};
+use sim_lib_sound_bridge::ScheduledTone;
+use sim_lib_sound_core::{Frequency, Tone};
+use sim_lib_sound_timbre::pure_sine;
+
+use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
+
+mod loudness_tests;
+mod vocoder_tests;
+
+// conformance: sound rendering reuse produces deterministic offline PCM.
+
+#[test]
+fn render_tone_produces_non_zero_samples_for_sine() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(25));
+    let rendered = renderer.render_tone(&tone);
+    assert!(rendered.iter().any(|sample| sample.abs() > 0.0));
+}
+
+#[test]
+fn write_wav_emits_valid_riff_wave_header() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(5));
+    let rendered = renderer.render_tone(&tone);
+    let wav = renderer.write_wav(&rendered, Vec::new()).unwrap();
+    assert_eq!(&wav[0..4], b"RIFF");
+    assert_eq!(&wav[8..12], b"WAVE");
+}
+
+#[test]
+fn write_wav_rejects_channel_misaligned_samples() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+
+    let err = renderer.write_wav(&[0.0], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::ChannelMisalignedSamples);
+}
+
+#[test]
+fn write_wav_uses_checked_header_arithmetic() {
+    let renderer = PcmRenderer::new(RendererOptions::new(u32::MAX, 2).unwrap()).unwrap();
+
+    let err = renderer.write_wav(&[], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::BufferTooLarge);
+}
+
+#[test]
+fn pcm_renderer_exposes_validated_options_through_accessors() {
+    let renderer = PcmRenderer::new(RendererOptions::new(22_050, 1).unwrap()).unwrap();
+
+    assert_eq!(renderer.sample_rate(), 22_050);
+    assert_eq!(renderer.channels(), 1);
+}
+
+#[test]
+fn render_mix_respects_scheduled_start_and_pan() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tones = vec![
+        ScheduledTone {
+            start: std::time::Duration::ZERO,
+            tone: Tone::sine(Frequency(220.0), std::time::Duration::from_millis(10)),
+            pan: -1.0,
+            channel: 0,
+            key: 57,
+        },
+        ScheduledTone {
+            start: std::time::Duration::from_millis(5),
+            tone: Tone::sine(Frequency(440.0), std::time::Duration::from_millis(10)),
+            pan: 1.0,
+            channel: 1,
+            key: 69,
+        },
+    ];
+    let mix = renderer.render_mix(&tones);
+    assert!(mix.len() > renderer.render_tone(&tones[0].tone).len());
+    assert!(mix.iter().any(|sample| sample.abs() > 0.0));
+}
+
+#[test]
+fn render_timbre_preview_uses_pcm_renderer() {
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    let samples = renderer
+        .render_timbre_preview(
+            &pure_sine(),
+            Frequency(440.0),
+            std::time::Duration::from_millis(10),
+        )
+        .expect("preview");
+    assert_eq!(samples.len(), 80);
+}
+
+#[test]
+fn catalog_timbres_render_deterministically_to_offline_pcm() {
+    use sim_lib_sound_timbre::{fm_pair, harmonic_expansion, karplus_strong};
+
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    for timbre in [
+        harmonic_expansion(6, 0.5, 0.0),
+        karplus_strong(0.8),
+        fm_pair(2.0, 1.5),
+    ] {
+        let first = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("first preview");
+        let second = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("second preview");
+        assert_eq!(first, second);
+        assert!(first.iter().all(|sample| sample.is_finite()));
+        assert!(first.iter().any(|sample| sample.abs() > 0.0));
+    }
+}
+
+#[test]
+fn runtime_install_is_idempotent() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_render_lib(&mut cx).unwrap();
+    install_sound_render_lib(&mut cx).unwrap();
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-timbre/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-timbre/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+use std::time::Duration;
+
+use super::*;
+use sim_kernel::{DefaultFactory, EagerPolicy, Symbol};
+use sim_lib_discrete_search::{SearchControl, SearchStatus};
+use sim_lib_sound_core::{Amplitude, Frequency, PartialTag, Phase};
+
+// conformance: timbre reuse covers additive, filtered, Karplus-Strong, and FM synthesis.
+
+#[test]
+fn builtins_render_non_empty_tones() {
+    let builtins = vec![
+        pure_sine(),
+        sawtooth(6),
+        square(6),
+        triangle(6),
+        organ_pipe(&[1.0, 2.0, 3.0]),
+        karplus_strong(0.8),
+        fm_pair(2.0, 1.5),
+        bell_inharmonic(&[1.0, 2.7, 5.8]),
+    ];
+    for timbre in builtins {
+        let tone = timbre.render(Frequency(220.0), Duration::from_secs(1));
+        assert!(!tone.partials.is_empty());
+    }
+}
+
+#[test]
+fn filters_change_partial_amplitude() {
+    let timbre = sawtooth(4).with_filter(Filter::LowPass {
+        cutoff: Frequency(300.0),
+        q: 0.7,
+    });
+    let tone = timbre.render(Frequency(220.0), Duration::from_secs(1));
+    assert!(tone.partials[1].amplitude.0 < 0.5);
+}
+
+#[test]
+fn harmonic_and_undertone_expansions_keep_tags() {
+    let harmonic =
+        harmonic_expansion(3, 0.5, 0.25).render(Frequency(100.0), Duration::from_secs(1));
+    assert_eq!(harmonic.partials[0].tag, PartialTag::Harmonic(1));
+    assert_eq!(harmonic.partials[2].frequency, Frequency(300.0));
+    assert!(harmonic.partials[1].phase.0 > harmonic.partials[0].phase.0);
+
+    let undertone =
+        undertone_expansion(3, 0.5, 0.0).render(Frequency(300.0), Duration::from_secs(1));
+    assert_eq!(undertone.partials[1].tag, PartialTag::Undertone(2));
+    assert_eq!(undertone.partials[1].frequency, Frequency(150.0));
+}
+
+#[test]
+fn sampled_timbres_declare_pitch_policy() {
+    let partials = vec![
+        SampledPartial {
+            ratio: 1.0,
+            amplitude: Amplitude(1.0),
+            phase: Phase(0.0),
+            tag: PartialTag::Source,
+        },
+        SampledPartial {
+            ratio: 2.0,
+            amplitude: Amplitude(0.5),
+            phase: Phase(0.5),
+            tag: PartialTag::Harmonic(2),
+        },
+    ];
+    let reject = sampled_timbre(
+        Frequency(220.0),
+        &partials,
+        SampleInterpolation::Linear,
+        SamplePitchPolicy::Reject,
+    );
+    assert_eq!(
+        reject.try_render(Frequency(440.0), Duration::from_secs(1)),
+        Err(TimbreRenderError::SamplePitchRejected)
+    );
+
+    let resample = sampled_timbre(
+        Frequency(220.0),
+        &partials,
+        SampleInterpolation::Linear,
+        SamplePitchPolicy::Resample,
+    );
+    let tone = resample
+        .try_render(Frequency(440.0), Duration::from_secs(1))
+        .expect("render");
+    assert_eq!(tone.partials[0].frequency, Frequency(440.0));
+    assert!(tone.partials.len() > partials.len());
+}
+
+#[test]
+fn timbre_cache_is_caller_owned_and_byte_bounded() {
+    let timbre = sawtooth(8);
+    let mut cache = TimbreCache::new(512);
+    let first = timbre
+        .render_cached(Frequency(220.0), Duration::from_millis(20), &mut cache)
+        .expect("first render");
+    let second = timbre
+        .render_cached(Frequency(220.0), Duration::from_millis(20), &mut cache)
+        .expect("cached render");
+    assert_eq!(first, second);
+    assert!(cache.used_bytes() <= cache.max_bytes);
+    assert_eq!(cache.len(), 1);
+}
+
+#[test]
+fn enumerate_timbres_uses_search_control_bounds() {
+    let family = TimbreFamily::new(
+        "bench",
+        vec![
+            TimbreRecipe::PureSine,
+            TimbreRecipe::Sawtooth { partials: 3 },
+            TimbreRecipe::Square { partials: 3 },
+        ],
+    );
+    let run = enumerate_timbres(&family, SearchControl::default().with_max_results(2));
+    assert_eq!(run.outputs.len(), 2);
+    assert_eq!(run.receipt.status, SearchStatus::Partial);
+    assert_eq!(run.receipt.reason.as_deref(), Some("result bound reached"));
+}
+
+#[test]
+fn layer_merge_policy_combines_coincident_partials() {
+    let tone = pure_sine()
+        .layer_with_policy(
+            pure_sine(),
+            0.25,
+            MergePolicy::SumCoincidentPreferLoudestPhase,
+        )
+        .render(Frequency(220.0), Duration::from_millis(20));
+    assert_eq!(tone.partials.len(), 1);
+    assert!((tone.partials[0].amplitude.0 - 1.0).abs() < 1.0e-9);
+}
+
+#[test]
+fn install_sound_timbre_lib_registers_builtin_timbres() {
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_timbre_lib(&mut cx).expect("install");
+    install_sound_timbre_lib(&mut cx).expect("install");
+    assert!(
+        cx.resolve_value(&Symbol::qualified("sound", "PureSine"))
+            .is_ok()
+    );
+    assert!(
+        cx.resolve_value(&Symbol::qualified("sound", "TimbreRegistry"))
+            .is_ok()
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-stream-file/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-stream-file/src/tests.rs`:
+
+```rust
+use std::{
+    convert::TryFrom,
+    fs,
+    path::{Path, PathBuf},
+    sync::Arc,
+    time::{SystemTime, UNIX_EPOCH},
+};
+
+use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol};
+use sim_lib_midi_core::{
+    Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
+    TickTime, U7, synthetic_origin,
+};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
+use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
+use sim_lib_stream_core::{
+    BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
+    StreamPacket, StreamValue, TransportProfile,
+};
+use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
+
+use crate::cap::stream_file_filesystem_effect_kind;
+use crate::{
+    cassette_expr_to_stream, pcm_buffers_to_wav_bytes, read_smf_stream, read_wav_stream,
+    stream_file_read_capability, stream_file_write_capability, stream_to_cassette,
+    stream_to_cassette_expr, validate_cassette_fixture_path, write_smf_stream,
+};
+
+// conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
+
+mod pcm_convert_tests;
+
+#[test]
+fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
+    let temp = TempPath::new("input.mid");
+    let file = smf_fixture();
+    let bytes = write_smf(&file).unwrap();
+    fs::write(temp.path(), &bytes).unwrap();
+    let decoded = read_smf(&bytes).unwrap();
+    let expected = merged_events(&decoded);
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let stream =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/smf-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(decoded.ticks_per_quarter().unwrap());
+    let count = midi_stream_to_sink(&stream, &mut sink).unwrap();
+
+    assert_eq!(count, expected.len());
+    assert_eq!(sink.events(), expected.as_slice());
+}
+
+#[test]
+fn memory_midi_source_to_smf_to_read_back_round_trips() {
+    let temp = TempPath::new("roundtrip.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/smf-write")).unwrap();
+    let mut cx = cx(&[
+        stream_file_write_capability(),
+        stream_file_read_capability(),
+    ]);
+
+    let count = write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back = read_smf_stream(
+        &mut cx,
+        temp.path(),
+        3,
+        midi_metadata("stream/smf-read-back"),
+    )
+    .unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(count, events.len());
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn wav_to_pcm_packet_spine_to_memory_sink_round_trips() {
+    let temp = TempPath::new("input.wav");
+    let spec = pcm_spec();
+    let buffers = vec![pcm_buffer(&[1, -1, 2, -2]), pcm_buffer(&[3, -3])];
+    let bytes = pcm_buffers_to_wav_bytes(spec, &buffers).unwrap();
+    assert_eq!(bytes, pcm_buffers_to_wav_bytes(spec, &buffers).unwrap());
+    fs::write(temp.path(), bytes).unwrap();
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let wav = read_wav_stream(&mut cx, temp.path(), 2, pcm_metadata("stream/wav-read")).unwrap();
+    let mut sink = MemoryPcmSink::new(spec);
+    let summary = stream_to_pcm_sink(wav.stream(), &mut sink).unwrap();
+
+    assert_eq!(wav.spec(), spec);
+    assert_eq!(summary.buffers(), 2);
+    assert_eq!(summary.frames(), 3);
+    assert_eq!(sink.buffers(), buffers.as_slice());
+}
+
+#[test]
+fn midi_control_stream_cassette_replays_from_file_expression_format() {
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/cassette-midi")).unwrap();
+
+    let cassette_expr =
+        stream_to_cassette_expr(&stream, TransportProfile::lan_midi_control()).unwrap();
+    let replay = cassette_expr_to_stream(&cassette_expr).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let replayed = midi_stream_to_sink(&replay, &mut sink).unwrap();
+
+    assert_eq!(replayed, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn buffered_pcm_preview_cassette_replays_as_golden_fixture() {
+    let items = vec![
+        StreamItem::new(StreamPacket::Pcm(
+            PcmPacket::i16(2, 1, vec![1, -1]).unwrap(),
+        )),
+        StreamItem::new(StreamPacket::Pcm(
+            PcmPacket::i16(2, 1, vec![2, -2]).unwrap(),
+        )),
+    ];
+    let stream =
+        sim_lib_stream_core::StreamValue::pull(pcm_metadata("stream/cassette-pcm"), items.clone());
+
+    let cassette =
+        stream_to_cassette(&stream, TransportProfile::lan_buffered_audio_preview()).unwrap();
+    let report = validate_cassette_fixture_path(
+        &cassette,
+        "fixtures/streams/golden/buffered-preview.simcassette",
+    )
+    .unwrap();
+    let replay = cassette.replay_stream_value().unwrap();
+
+    assert_eq!(report.packet_count, 2);
+    assert_eq!(replay.take_packets(4).unwrap(), items);
+}
+
+#[test]
+fn cassette_fixture_validation_requires_redacted_sensitive_payloads() {
+    let payload = Expr::Map(vec![
+        (
+            Expr::Symbol(Symbol::new("path")),
+            Expr::String("private-path=session.mid".to_owned()),
+        ),
+        (
+            Expr::Symbol(Symbol::new("token")),
+            Expr::String("token=abc123".to_owned()),
+        ),
+    ]);
+    let stream = StreamValue::pull(
+        data_metadata("stream/sensitive-cassette"),
+        vec![StreamItem::new(StreamPacket::data(
+            Symbol::qualified("stream/data", "expr"),
+            payload,
+        ))],
+    );
+
+    let cassette = stream_to_cassette(&stream, TransportProfile::remote_stream_fabric()).unwrap();
+    assert!(
+        validate_cassette_fixture_path(&cassette, "fixtures/streams/golden/sensitive.simcassette")
+            .is_err()
+    );
+    let redacted = cassette.redacted().unwrap();
+    let report =
+        validate_cassette_fixture_path(&redacted, "fixtures/streams/golden/sensitive.simcassette")
+            .unwrap();
+
+    assert_eq!(report.packet_count, 1);
+    assert!(matches!(
+        redacted.items().unwrap()[0].packet(),
+        StreamPacket::Data(data)
+            if data.kind == Symbol::qualified("stream/data", "redacted")
+    ));
+}
+
+#[test]
+fn malformed_file_returns_diagnostic_error() {
+    let temp = TempPath::new("bad.mid");
+    fs::write(temp.path(), b"not an smf").unwrap();
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let err = match read_smf_stream(&mut cx, temp.path(), 1, midi_metadata("stream/bad-smf")) {
+        Ok(_) => panic!("malformed SMF unexpectedly decoded"),
+        Err(err) => err,
+    };
+
+    assert!(format!("{err}").contains("malformed SMF file"));
+}
+
+#[test]
+fn file_effects_and_capabilities_are_recorded() {
+    let temp = TempPath::new("cap.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events);
+    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/cap-write")).unwrap();
+    let mut write_cx = cx(&[stream_file_write_capability()]);
+
+    write_smf_stream(&mut write_cx, temp.path(), &stream, 480).unwrap();
+
+    let records = write_cx.effect_ledger().records();
+    assert_eq!(records.len(), 1);
+    assert!(!records[0].aborted);
+    let recorded = write_cx.effect_ledger().effect(&records[0].effect).unwrap();
+    assert_eq!(recorded.kind, stream_file_filesystem_effect_kind());
+    assert!(recorded.requires.contains(&stream_file_write_capability()));
+
+    let mut read_cx = cx(&[]);
+    let err = match read_smf_stream(
+        &mut read_cx,
+        temp.path(),
+        1,
+        midi_metadata("stream/cap-read"),
+    ) {
+        Ok(_) => panic!("missing read capability unexpectedly succeeded"),
+        Err(err) => err,
+    };
+    assert!(matches!(
+        err,
+        Error::CapabilityDenied { capability } if capability == stream_file_read_capability()
+    ));
+    let denied = read_cx.effect_ledger().records();
+    assert_eq!(denied.len(), 1);
+    assert!(denied[0].aborted);
+}
+
+#[test]
+fn compatibility_stream_file_capability_aliases_are_accepted() {
+    let temp = TempPath::new("compat-caps.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/compat-write")).unwrap();
+    let mut cx = cx(&[
+        CapabilityName::new("stream.file.write"),
+        CapabilityName::new("stream.file.read"),
+    ]);
+
+    write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/compat-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn directory_aliases_do_not_authorize_file_writes() {
+    for alias in ["table.fs.mkdir", "table.fs.rmdir"] {
+        let suffix = format!("directory-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events);
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/dir-alias-write")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias)]);
+
+        let err = match write_smf_stream(&mut cx, temp.path(), &stream, 480) {
+            Ok(_) => panic!("{alias} unexpectedly authorized an SMF file write"),
+            Err(err) => err,
+        };
+
+        assert!(matches!(
+            err,
+            Error::CapabilityDenied { capability } if capability == stream_file_write_capability()
+        ));
+        assert!(!temp.path().exists());
+    }
+}
+
+#[test]
+fn compatibility_file_write_aliases_are_accepted() {
+    for alias in ["table.fs.write", "file-write"] {
+        let suffix = format!("write-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events.clone());
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/write-alias")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias), stream_file_read_capability()]);
+
+        write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+        let read_back =
+            read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/read-alias")).unwrap();
+        let mut sink = MemoryMidiSink::new(480);
+        let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+        assert_eq!(read_count, events.len());
+        assert_eq!(sink.events(), events.as_slice());
+    }
+}
+
+fn cx(capabilities: &[CapabilityName]) -> Cx {
+    let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
+    for capability in capabilities {
+        cx.grant(capability.clone());
+    }
+    cx
+}
+
+fn midi_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Midi,
+        StreamDirection::Source,
+        Symbol::qualified("clock", "midi"),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn pcm_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Pcm,
+        StreamDirection::Source,
+        ClockDomain::Sample.symbol(),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn data_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Data,
+        StreamDirection::Source,
+        ClockDomain::ServerFrame.symbol(),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn smf_fixture() -> SmfFile {
+    SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: midi_events_with_end(),
+        }],
+    }
+}
+
+fn midi_events_with_end() -> Vec<MidiEvent> {
+    vec![
+        midi_event(
+            0,
+            MidiPayload::Channel(ChannelMessage::NoteOn {
+                ch: Channel::new(0).unwrap(),
+                key: U7::try_from(60).unwrap(),
+                vel: U7::try_from(100).unwrap(),
+            }),
+        ),
+        midi_event(
+            240,
+            MidiPayload::Channel(ChannelMessage::NoteOff {
+                ch: Channel::new(0).unwrap(),
+                key: U7::try_from(60).unwrap(),
+                vel: U7::try_from(0).unwrap(),
+            }),
+        ),
+        midi_event(240, MidiPayload::Meta(MetaEvent::EndOfTrack)),
+    ]
+}
+
+fn midi_event(ticks: i64, payload: MidiPayload) -> MidiEvent {
+    MidiEvent {
+        time: TickTime::new(ticks, 480).unwrap(),
+        origin: synthetic_origin(),
+        payload,
+    }
+}
+
+fn merged_events(file: &SmfFile) -> Vec<MidiEvent> {
+    file.merged_events()
+        .unwrap()
+        .into_iter()
+        .map(|tracked| tracked.event)
+        .collect()
+}
+
+fn pcm_spec() -> PcmSpec {
+    PcmSpec::i16(2, 48_000).unwrap()
+}
+
+fn pcm_buffer(samples: &[i16]) -> PcmBuffer {
+    PcmBuffer::i16(pcm_spec(), samples.len() / 2, samples.to_vec()).unwrap()
+}
+
+struct TempPath {
+    path: PathBuf,
+}
+
+impl TempPath {
+    fn new(suffix: &str) -> Self {
+        let nanos = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let path = std::env::temp_dir().join(format!(
+            "sim-stream-file-{}-{nanos}-{suffix}",
+            std::process::id()
+        ));
+        Self { path }
+    }
+
+    fn path(&self) -> &Path {
+        &self.path
+    }
+}
+
+impl Drop for TempPath {
+    fn drop(&mut self) {
+        let _ = fs::remove_file(&self.path);
+    }
+}
+```
+
 ### `feature/sim-music/midi-notation-workflows`
 
 Specimen `spec-test/sim-music/crates/sim-lib-midi-core/src/tests` is checked by `cargo test`.
@@ -730,6 +1779,55 @@ fn unknown_meta_and_sysex_preserve_bytes() {
 }
 
 #[test]
+fn tempo_map_converts_ticks_beats_and_piecewise_wall_time_exactly() {
+    let tempo = |ticks, us_per_quarter| MidiEvent {
+        time: TickTime::new(ticks, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    let events = [tempo(0, 500_000), tempo(480, 400_000), tempo(480, 250_000)];
+    let map = MidiTempoMap::from_ordered_events(480, &events).expect("tempo map");
+
+    assert_eq!(map.segments().len(), 2);
+    assert_eq!(map.segments()[1].us_per_quarter, 250_000);
+    let tick = TickTime::new(960, 480).expect("tick");
+    assert_eq!(
+        map.beat_for_tick(tick).expect("beat"),
+        MidiBeat::new(2, 1).expect("beat")
+    );
+    assert_eq!(
+        map.tick_for_beat(MidiBeat::new(2, 1).expect("beat"))
+            .expect("tick"),
+        tick
+    );
+    let wall = map.wall_time_for_tick(tick).expect("wall time");
+    assert_eq!((wall.numerator(), wall.denominator()), (3, 4));
+    assert_eq!(map.tick_for_wall_time(wall).expect("tick"), tick);
+}
+
+#[test]
+fn tempo_map_rejects_zero_tempo_unordered_events_and_inexact_ticks() {
+    let event = |ticks, us_per_quarter| MidiEvent {
+        time: TickTime::new(ticks, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    assert_eq!(
+        MidiTempoMap::from_ordered_events(480, &[event(0, 0)]),
+        Err(MidiError::ZeroTempo)
+    );
+    assert_eq!(
+        MidiTempoMap::from_ordered_events(480, &[event(10, 500_000), event(9, 400_000)]),
+        Err(MidiError::TempoEventsOutOfOrder)
+    );
+    let map = MidiTempoMap::from_ordered_events(480, std::iter::empty()).expect("map");
+    assert_eq!(
+        map.tick_for_beat(MidiBeat::new(1, 7).expect("beat")),
+        Err(MidiError::InexactTempoTick)
+    );
+}
+
+#[test]
 fn meta_bucket_views_are_lossless() {
     let track_name = meta_view::make_track_name("piano");
     assert_eq!(meta_view::as_track_name(&track_name), Some("piano"));
@@ -820,6 +1918,1746 @@ fn install_midi_io_lib_registers_runtime_exports() {
 }
 ```
 
+Specimen `spec-test/sim-music/crates/sim-lib-midi-smf/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-midi-smf/src/tests.rs`:
+
+```rust
+//! Defensive SMF conformance: lossless divisions and extension events plus
+//! bounded, fail-closed parsing of adversarial input.
+
+use std::io::Cursor;
+
+use sim_lib_midi_core::{
+    Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent,
+    TickTime, U7, synthetic_origin,
+};
+
+use crate::test_support::{
+    canonical_format_zero_fixture, format_one_merge_fixture, metrical_division, minimal_track,
+    wrap_track, wrap_track_raw,
+};
+use crate::writer::{MAX_SMF_VLQ, checked_chunk_len, checked_payload_len};
+use crate::{
+    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTempoMaps, SmfTimeSemantics, SmfTrack,
+    SmfWriteOptions, SmpteRate, decode_vlq, encode_vlq, read_smf, write_smf_with_options,
+};
+
+#[test]
+fn vlq_known_vectors_decode_and_encode_exactly() {
+    assert_eq!(encode_vlq(0), vec![0x00]);
+    assert_eq!(encode_vlq(0x7f), vec![0x7f]);
+    assert_eq!(encode_vlq(0x80), vec![0x81, 0x00]);
+    assert_eq!(encode_vlq(0x3fff), vec![0xff, 0x7f]);
+    assert_eq!(
+        decode_vlq(&mut Cursor::new(vec![0x81, 0x00])).unwrap(),
+        0x80
+    );
+    assert_eq!(
+        decode_vlq(&mut Cursor::new(vec![0xff, 0x7f])).unwrap(),
+        0x3fff
+    );
+}
+
+#[test]
+fn malformed_running_status_returns_structured_error() {
+    let bytes = [
+        b'M', b'T', b'h', b'd', 0, 0, 0, 6, 0, 0, 0, 1, 1, 0xE0, b'M', b'T', b'r', b'k', 0, 0, 0,
+        4, 0x00, 0x3c, 0x40, 0xff, 0x2f, 0x00,
+    ];
+    let error = read_smf(&bytes).unwrap_err();
+    assert_eq!(error, SmfError::MalformedRunningStatus { offset: 23 });
+}
+
+#[test]
+fn smf_headers_round_trip_for_formats_0_1_and_2() {
+    for (format, tracks) in [
+        (SmfFormat::SingleTrack, vec![minimal_track(480)]),
+        (
+            SmfFormat::Simultaneous,
+            vec![minimal_track(480), minimal_track(480)],
+        ),
+        (
+            SmfFormat::Independent,
+            vec![minimal_track(480), minimal_track(480)],
+        ),
+    ] {
+        let file = SmfFile {
+            format,
+            division: metrical_division(),
+            tracks,
+        };
+        let bytes = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
+        let decoded = read_smf(&bytes).unwrap();
+        assert_eq!(decoded.format, format);
+        assert_eq!(decoded.division, metrical_division());
+        assert_eq!(decoded.tracks.len(), file.tracks.len());
+        assert_eq!(
+            decoded.format.time_semantics(),
+            if format == SmfFormat::Independent {
+                SmfTimeSemantics::IndependentPatterns
+            } else {
+                SmfTimeSemantics::SharedTimeline
+            }
+        );
+    }
+}
+
+#[test]
+fn canonical_fixtures_round_trip_byte_identically_without_running_status() {
+    let fixture = canonical_format_zero_fixture(false);
+    let decoded = read_smf(&fixture).unwrap();
+    let encoded = write_smf_with_options(&decoded, SmfWriteOptions::default()).unwrap();
+    assert_eq!(encoded, fixture);
+}
+
+#[test]
+fn canonical_fixtures_round_trip_byte_identically_with_running_status() {
+    let fixture = canonical_format_zero_fixture(true);
+    let decoded = read_smf(&fixture).unwrap();
+    let encoded = write_smf_with_options(
+        &decoded,
+        SmfWriteOptions {
+            running_status: true,
+        },
+    )
+    .unwrap();
+    assert_eq!(encoded, fixture);
+}
+
+#[test]
+fn running_status_files_read_correctly() {
+    let fixture = canonical_format_zero_fixture(true);
+    let decoded = read_smf(&fixture).unwrap();
+    let events = &decoded.tracks[0].events;
+    assert!(matches!(
+        events[1].payload,
+        MidiPayload::Channel(ChannelMessage::NoteOn { .. })
+    ));
+    assert!(matches!(
+        events[2].payload,
+        MidiPayload::Channel(ChannelMessage::NoteOn { .. })
+    ));
+}
+
+#[test]
+fn multi_track_reader_emits_time_sorted_events_and_preserves_last_track() {
+    let file = read_smf(&format_one_merge_fixture()).unwrap();
+    let merged = file.merged_events().unwrap();
+    let pairs = merged
+        .iter()
+        .map(|tracked| {
+            (
+                tracked.last_track,
+                tracked.event.time.ticks,
+                tracked.event.payload.clone(),
+            )
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(pairs[0].0, 0);
+    assert_eq!(pairs[1].0, 1);
+    assert_eq!(pairs[2].0, 0);
+    assert_eq!(pairs[3].0, 1);
+    assert!(pairs.windows(2).all(|window| window[0].1 <= window[1].1));
+}
+
+#[test]
+fn merge_cursor_skips_exhausted_earlier_tracks() {
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        division: metrical_division(),
+        tracks: vec![
+            SmfTrack {
+                events: vec![MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Meta(MetaEvent::Tempo {
+                        us_per_quarter: 500_000,
+                    }),
+                }],
+            },
+            SmfTrack {
+                events: vec![
+                    MidiEvent {
+                        time: TickTime::new(120, 480).unwrap(),
+                        origin: synthetic_origin(),
+                        payload: MidiPayload::Channel(ChannelMessage::NoteOn {
+                            ch: Channel::new(1).unwrap(),
+                            key: U7(64),
+                            vel: U7(90),
+                        }),
+                    },
+                    MidiEvent {
+                        time: TickTime::new(240, 480).unwrap(),
+                        origin: synthetic_origin(),
+                        payload: MidiPayload::Channel(ChannelMessage::NoteOff {
+                            ch: Channel::new(1).unwrap(),
+                            key: U7(64),
+                            vel: U7(0),
+                        }),
+                    },
+                ],
+            },
+        ],
+    };
+
+    let merged = file.merged_events().unwrap();
+    let pairs = merged
+        .iter()
+        .map(|tracked| (tracked.last_track, tracked.event.time.ticks))
+        .collect::<Vec<_>>();
+
+    assert_eq!(pairs, vec![(0, 0), (1, 120), (1, 240)]);
+}
+
+#[test]
+fn format_two_patterns_cannot_be_merged_onto_a_shared_timeline() {
+    let file = SmfFile {
+        format: SmfFormat::Independent,
+        division: metrical_division(),
+        tracks: vec![minimal_track(480), minimal_track(480)],
+    };
+
+    assert_eq!(
+        file.merged_events().unwrap_err(),
+        SmfError::IndependentPatternsCannotMerge
+    );
+}
+
+#[test]
+fn tempo_maps_keep_format_two_patterns_independent() {
+    let tempo = |us_per_quarter| MidiEvent {
+        time: TickTime::new(0, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    let file = SmfFile {
+        format: SmfFormat::Independent,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![
+            SmfTrack {
+                events: vec![tempo(500_000)],
+            },
+            SmfTrack {
+                events: vec![tempo(250_000)],
+            },
+        ],
+    };
+
+    let SmfTempoMaps::Independent(maps) = file.tempo_maps().expect("tempo maps") else {
+        panic!("format 2 must retain independent tempo maps");
+    };
+    assert_eq!(maps.len(), 2);
+    assert_eq!(maps[0].segments()[0].us_per_quarter, 500_000);
+    assert_eq!(maps[1].segments()[0].us_per_quarter, 250_000);
+    let first = maps[0]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    let second = maps[1]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    assert_eq!((first.numerator(), first.denominator()), (1, 2));
+    assert_eq!((second.numerator(), second.denominator()), (1, 4));
+}
+
+#[test]
+fn every_valid_smpte_division_round_trips_byte_identically() {
+    for (rate, rate_byte) in [
+        (SmpteRate::Fps24, 0xe8),
+        (SmpteRate::Fps25, 0xe7),
+        (SmpteRate::Fps29Drop, 0xe3),
+        (SmpteRate::Fps30, 0xe2),
+    ] {
+        let raw_division = u16::from_be_bytes([rate_byte, 80]);
+        let fixture = wrap_track_raw(
+            SmfFormat::SingleTrack,
+            raw_division,
+            vec![vec![0x00, 0xff, 0x2f, 0x00]],
+        );
+        let decoded = read_smf(&fixture).unwrap();
+        assert_eq!(decoded.division, SmfDivision::smpte(rate, 80).unwrap());
+        assert_eq!(
+            write_smf_with_options(&decoded, SmfWriteOptions::default()).unwrap(),
+            fixture
+        );
+    }
+
+    assert_eq!(
+        SmfDivision::smpte(SmpteRate::Fps29Drop, 80)
+            .unwrap()
+            .ticks_per_second_ratio(),
+        Some((2_400_000, 1_001))
+    );
+}
+
+#[test]
+fn invalid_smpte_rate_and_zero_subframes_are_rejected_at_the_division_offset() {
+    for raw in [0xe600, 0xe800] {
+        let fixture = wrap_track_raw(
+            SmfFormat::SingleTrack,
+            raw,
+            vec![vec![0x00, 0xff, 0x2f, 0x00]],
+        );
+        assert_eq!(
+            read_smf(&fixture).unwrap_err(),
+            SmfError::InvalidDivision { offset: 12, raw }
+        );
+    }
+}
+
+#[test]
+fn writer_rejects_too_many_tracks() {
+    let tracks = (0..=u16::MAX)
+        .map(|_| minimal_track(480))
+        .collect::<Vec<_>>();
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        division: metrical_division(),
+        tracks,
+    };
+
+    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+
+    assert_eq!(error, SmfError::TrackCountOutOfRange(65_536));
+}
+
+#[test]
+fn writer_rejects_delta_above_four_byte_vlq_limit() {
+    let delta = i64::from(MAX_SMF_VLQ) + 1;
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: metrical_division(),
+        tracks: vec![SmfTrack {
+            events: vec![MidiEvent {
+                time: TickTime::new(delta, 480).unwrap(),
+                origin: synthetic_origin(),
+                payload: MidiPayload::Meta(MetaEvent::EndOfTrack),
+            }],
+        }],
+    };
+
+    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+
+    assert_eq!(error, SmfError::DeltaOutOfRange(delta));
+}
+
+#[test]
+fn writer_length_guards_reject_unrepresentable_lengths() {
+    if let Some(chunk_len) = usize::try_from(u32::MAX).unwrap().checked_add(1) {
+        assert_eq!(
+            checked_chunk_len(chunk_len),
+            Err(SmfError::ChunkTooLarge(chunk_len))
+        );
+    }
+
+    let payload_len = usize::try_from(MAX_SMF_VLQ).unwrap() + 1;
+    assert_eq!(
+        checked_payload_len(payload_len),
+        Err(SmfError::PayloadTooLarge(payload_len))
+    );
+}
+
+#[test]
+fn unknown_meta_and_sysex_round_trip() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: metrical_division(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Meta(MetaEvent::Other(MetaBucket {
+                        type_byte: 0x7f,
+                        data: vec![1, 2, 3],
+                    })),
+                },
+                MidiEvent {
+                    time: TickTime::new(120, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::SysEx(SysExEvent::F0 {
+                        data: vec![0x7d, 0x10, 0x11],
+                    }),
+                },
+            ],
+        }],
+    };
+    let bytes = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
+    let decoded = read_smf(&bytes).unwrap();
+    assert_eq!(
+        decoded.tracks[0].events[0].payload,
+        file.tracks[0].events[0].payload
+    );
+    assert_eq!(
+        decoded.tracks[0].events[1].payload,
+        file.tracks[0].events[1].payload
+    );
+}
+
+#[test]
+fn unknown_meta_and_valid_system_events_round_trip() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: metrical_division(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Meta(MetaEvent::Other(MetaBucket {
+                        type_byte: 0x6f,
+                        data: vec![0x80, 0xff, 0x01],
+                    })),
+                },
+                MidiEvent {
+                    time: TickTime::new(1, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Raw(RawBytes {
+                        status: 0xf2,
+                        data: vec![0x01, 0x7f],
+                    }),
+                },
+                MidiEvent {
+                    time: TickTime::new(2, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Raw(RawBytes {
+                        status: 0xf8,
+                        data: Vec::new(),
+                    }),
+                },
+            ],
+        }],
+    };
+
+    let encoded = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
+    let decoded = read_smf(&encoded).unwrap();
+    assert_eq!(decoded.tracks[0].events[..3], file.tracks[0].events[..]);
+    assert_eq!(
+        write_smf_with_options(&decoded, SmfWriteOptions::default()).unwrap(),
+        encoded
+    );
+}
+
+#[test]
+fn realtime_system_events_do_not_cancel_running_status() {
+    let fixture = wrap_track(
+        SmfFormat::SingleTrack,
+        480,
+        vec![vec![
+            0x00, 0x90, 0x3c, 0x40, 0x01, 0xf8, 0x01, 0x3d, 0x41, 0x00, 0xff, 0x2f, 0x00,
+        ]],
+    );
+    let decoded = read_smf(&fixture).unwrap();
+    assert_eq!(
+        write_smf_with_options(
+            &decoded,
+            SmfWriteOptions {
+                running_status: true,
+            },
+        )
+        .unwrap(),
+        fixture
+    );
+}
+
+#[test]
+fn writer_rejects_illegal_raw_system_status_lengths_and_data_bytes() {
+    for raw in [
+        RawBytes {
+            status: 0xf4,
+            data: Vec::new(),
+        },
+        RawBytes {
+            status: 0xf2,
+            data: vec![0x01],
+        },
+        RawBytes {
+            status: 0xf1,
+            data: vec![0x80],
+        },
+    ] {
+        let status = raw.status;
+        let file = SmfFile {
+            format: SmfFormat::SingleTrack,
+            division: metrical_division(),
+            tracks: vec![SmfTrack {
+                events: vec![MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Raw(raw),
+                }],
+            }],
+        };
+        assert!(matches!(
+            write_smf_with_options(&file, SmfWriteOptions::default()),
+            Err(SmfError::InvalidSystemEvent {
+                status: actual,
+                ..
+            }) if actual == status
+        ));
+    }
+}
+
+#[test]
+fn malformed_lengths_vlqs_running_status_and_data_bytes_fail_closed() {
+    let cases = [
+        (
+            vec![0x00, 0xff, 0x51, 0x02, 0x07, 0xa1],
+            SmfError::InvalidMetaLength {
+                offset: 24,
+                type_byte: 0x51,
+                expected: 3,
+                actual: 2,
+            },
+        ),
+        (
+            vec![0x81, 0x80, 0x80, 0x80, 0x00],
+            SmfError::InvalidVlq { offset: 22 },
+        ),
+        (
+            vec![0x00, 0x90, 0x3c, 0x80],
+            SmfError::InvalidChannelData { offset: 25 },
+        ),
+        (
+            vec![
+                0x00, 0x90, 0x3c, 0x40, 0x00, 0xff, 0x01, 0x00, 0x00, 0x3d, 0x40,
+            ],
+            SmfError::MalformedRunningStatus { offset: 31 },
+        ),
+        (
+            vec![0x00, 0x90, 0x3c, 0x40],
+            SmfError::MissingEndOfTrack { offset: 26 },
+        ),
+    ];
+
+    for (track, expected) in cases {
+        let bytes = wrap_track(SmfFormat::SingleTrack, 480, vec![track]);
+        assert_eq!(read_smf(&bytes).unwrap_err(), expected);
+    }
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-lift/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-lift/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+// conformance: MIDI notation workflows realize exact tempo, pedal, overlap, and note-slice policy.
+
+use num_rational::Ratio;
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_lib_midi_core::{
+    CC_ALL_NOTES_OFF, CC_RESET_ALL_CONTROLLERS, CC_SOSTENUTO, CC_SUSTAIN_PEDAL, Channel,
+    ChannelMessage, MetaEvent, MidiEvent, MidiPayload, TickTime, U7, U14, meta_view,
+    synthetic_origin,
+};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, SmpteRate};
+use sim_lib_music_analysis::ChordWindowMode;
+use sim_lib_music_core::{Chord, MusicObject, Progression};
+use sim_lib_music_lower::{LowerOpts, lower};
+use sim_lib_pitch_core::PitchClass;
+use sim_lib_pitch_scale::{Key, Mode};
+
+use crate::{
+    CounterpointLiftOpts, DanglingNotePolicy, LabelStrategy, MidiLifter, MidiNoteEnd,
+    MidiRealizationPolicy, MidiTimelineId, MidiToCounterpoint, OverlapPolicy, PedalPolicy,
+    ProgressionLiftOpts, SameTickPolicy, VoiceAssignment, install_music_lift_lib,
+    lift_to_counterpoint_report, lift_to_diff_roll_report, lift_to_piano_roll_report,
+    lift_to_progression, lift_to_progression_report, realize_midi, realize_midi_pattern,
+};
+
+fn event(time: i64, payload: MidiPayload) -> MidiEvent {
+    MidiEvent {
+        time: TickTime::new(time, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload,
+    }
+}
+
+fn note_on(time: i64, key: u8, channel: u8) -> MidiEvent {
+    event(
+        time,
+        MidiPayload::Channel(ChannelMessage::NoteOn {
+            ch: Channel::new(channel).expect("channel"),
+            key: U7(key),
+            vel: U7(100),
+        }),
+    )
+}
+
+fn note_off(time: i64, key: u8, channel: u8) -> MidiEvent {
+    event(
+        time,
+        MidiPayload::Channel(ChannelMessage::NoteOff {
+            ch: Channel::new(channel).expect("channel"),
+            key: U7(key),
+            vel: U7(0),
+        }),
+    )
+}
+
+fn eot(time: i64) -> MidiEvent {
+    event(time, MidiPayload::Meta(MetaEvent::EndOfTrack))
+}
+
+#[test]
+fn note_on_without_note_off_is_closed_at_eot_with_diagnostic() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![note_on(0, 60, 0), eot(480)],
+        }],
+    };
+    let report = lift_to_piano_roll_report(&file).expect("lift");
+    assert_eq!(report.value.items.len(), 1);
+    assert_eq!(report.value.items[0].note.duration, Ratio::new(1, 4));
+    assert!(
+        report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.message.contains("closed at end-of-track"))
+    );
+}
+
+#[test]
+fn overlapping_notes_split_under_highest_first() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                note_on(0, 60, 0),
+                note_on(120, 67, 0),
+                note_off(240, 67, 0),
+                note_off(480, 60, 0),
+                eot(480),
+            ],
+        }],
+    };
+    let report = lift_to_counterpoint_report(
+        &file,
+        CounterpointLiftOpts {
+            min_rest_to_close: Ratio::new(1, 64),
+            max_voices_per_track: 4,
+            voice_assignment: VoiceAssignment::HighestFirst,
+        },
+    )
+    .expect("counterpoint");
+    assert_eq!(report.value.voices.len(), 2);
+    let lifted_pitches = report
+        .value
+        .voices
+        .iter()
+        .flat_map(|voice| voice.items.iter())
+        .filter_map(|item| match item {
+            sim_lib_music_core::MelodyItem::Note(note) => Some(note.pitch.to_midi().expect("midi")),
+            sim_lib_music_core::MelodyItem::Rest(_) => None,
+        })
+        .collect::<Vec<_>>();
+    assert!(lifted_pitches.contains(&60));
+    assert!(lifted_pitches.contains(&67));
+}
+
+#[test]
+fn channel_only_never_splits_a_track() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                note_on(0, 60, 0),
+                note_on(0, 64, 0),
+                note_off(240, 60, 0),
+                note_off(240, 64, 0),
+                eot(240),
+            ],
+        }],
+    };
+    let report = lift_to_counterpoint_report(
+        &file,
+        CounterpointLiftOpts {
+            min_rest_to_close: Ratio::new(1, 64),
+            max_voices_per_track: 4,
+            voice_assignment: VoiceAssignment::ChannelOnly,
+        },
+    )
+    .expect("counterpoint");
+    assert!(report.value.voices.len() <= 1);
+    assert!(
+        report
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.message.contains("rejected"))
+    );
+}
+
+#[test]
+fn progression_lifter_can_use_multiple_label_strategies() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                note_on(0, 60, 0),
+                note_on(0, 64, 0),
+                note_on(0, 67, 0),
+                note_off(480, 60, 0),
+                note_off(480, 64, 0),
+                note_off(480, 67, 0),
+                eot(480),
+            ],
+        }],
+    };
+    for strategy in [
+        LabelStrategy::JazzChord,
+        LabelStrategy::Functional,
+        LabelStrategy::SetClass,
+    ] {
+        let report = lift_to_progression_report(
+            &file,
+            ProgressionLiftOpts {
+                key_hint: Some(Key {
+                    tonic: PitchClass::C,
+                    mode: Mode::Major,
+                }),
+                label_strategy: strategy,
+                ..ProgressionLiftOpts::default()
+            },
+        )
+        .expect("progression");
+        assert_eq!(report.value.chords.len(), 1);
+        assert!(!report.value.chords[0].symbol.contains('?'));
+    }
+}
+
+#[test]
+fn lift_lower_lift_is_stable_for_simple_progression() {
+    let progression = Progression::new(
+        Some("C-major".to_owned()),
+        vec![
+            Chord::new(
+                Ratio::new(1, 4),
+                "C",
+                vec![
+                    sim_lib_music_core::Pitch::from_midi(60),
+                    sim_lib_music_core::Pitch::from_midi(64),
+                    sim_lib_music_core::Pitch::from_midi(67),
+                ],
+                100,
+                Channel::new(0).expect("channel"),
+            )
+            .expect("chord"),
+            Chord::new(
+                Ratio::new(1, 4),
+                "G",
+                vec![
+                    sim_lib_music_core::Pitch::from_midi(67),
+                    sim_lib_music_core::Pitch::from_midi(71),
+                    sim_lib_music_core::Pitch::from_midi(74),
+                ],
+                100,
+                Channel::new(0).expect("channel"),
+            )
+            .expect("chord"),
+        ],
+    )
+    .expect("progression");
+    let smf = lower(&progression, &LowerOpts::default()).expect("lower");
+    let lifted = lift_to_progression(
+        &smf,
+        ProgressionLiftOpts {
+            grid: Ratio::new(1, 4),
+            key_hint: Some(Key {
+                tonic: PitchClass::C,
+                mode: Mode::Major,
+            }),
+            label_strategy: LabelStrategy::JazzChord,
+            window_mode: ChordWindowMode::StartingNotes,
+            ..ProgressionLiftOpts::default()
+        },
+    )
+    .expect("lift");
+    assert_eq!(lifted.chords.len(), 2);
+    assert_eq!(lifted.duration(), progression.duration());
+}
+
+#[test]
+fn midi_to_diff_roll_emits_expected_masks() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                note_on(0, 60, 0),
+                note_on(240, 64, 0),
+                note_off(480, 60, 0),
+                note_off(720, 64, 0),
+                eot(720),
+            ],
+        }],
+    };
+    let report = lift_to_diff_roll_report(&file).expect("diff");
+    assert_eq!(report.value.frames.len(), 4);
+    assert_eq!(report.value.frames[0].started.bits, 1u128 << 60);
+    assert_eq!(report.value.frames[1].started.bits, 1u128 << 64);
+}
+
+#[test]
+fn install_music_lift_lib_registers_runtime_exports() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_lift_lib(&mut cx).expect("install");
+    install_music_lift_lib(&mut cx).expect("install");
+    let lib = cx
+        .registry()
+        .lib(&Symbol::new("music-lift"))
+        .expect("music-lift lib");
+    assert!(lib.exports.iter().any(|record| {
+        record.kind == ExportKind::named("MidiLifter")
+            && record.symbol == Symbol::qualified("music", "MidiToProgression")
+    }));
+}
+
+#[test]
+fn midi_to_counterpoint_trait_symbol_is_stable() {
+    let lifter = MidiToCounterpoint::default();
+    assert_eq!(lifter.symbol(), "music:MidiToCounterpoint");
+}
+
+#[test]
+fn midi_to_piano_roll_lifts_control_pitch_and_pressure_lanes() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: vec![
+                note_on(0, 60, 0),
+                event(
+                    120,
+                    MidiPayload::Channel(ChannelMessage::ControlChange {
+                        ch: Channel::new(0).expect("channel"),
+                        cc: U7(74),
+                        value: U7(64),
+                    }),
+                ),
+                event(
+                    180,
+                    MidiPayload::Channel(ChannelMessage::PitchBend {
+                        ch: Channel::new(0).expect("channel"),
+                        value: U14(8192),
+                    }),
+                ),
+                event(
+                    240,
+                    MidiPayload::Channel(ChannelMessage::PolyAftertouch {
+                        ch: Channel::new(0).expect("channel"),
+                        key: U7(60),
+                        pressure: U7(70),
+                    }),
+                ),
+                note_off(480, 60, 0),
+                eot(480),
+            ],
+        }],
+    };
+
+    let report = lift_to_piano_roll_report(&file).expect("lift");
+    let control_lane = report
+        .value
+        .lanes
+        .iter()
+        .find(|lane| lane.kind == sim_lib_music_core::LaneKind::Control)
+        .expect("control lane");
+
+    assert_eq!(report.value.items.len(), 1);
+    assert!(
+        control_lane
+            .cells
+            .iter()
+            .any(|cell| matches!(cell, sim_lib_music_core::PianoRollCell::ControlChange(_)))
+    );
+    assert!(
+        control_lane
+            .cells
+            .iter()
+            .any(|cell| matches!(cell, sim_lib_music_core::PianoRollCell::PitchBend(_)))
+    );
+    assert!(
+        control_lane
+            .cells
+            .iter()
+            .any(|cell| matches!(cell, sim_lib_music_core::PianoRollCell::PolyPressure(_)))
+    );
+}
+
+#[test]
+fn track_names_become_voice_names_when_available() {
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![
+            SmfTrack {
+                events: vec![
+                    event(
+                        0,
+                        MidiPayload::Meta(MetaEvent::Other(meta_view::make_track_name("Soprano"))),
+                    ),
+                    note_on(0, 72, 0),
+                    note_off(240, 72, 0),
+                    eot(240),
+                ],
+            },
+            SmfTrack {
+                events: vec![
+                    event(
+                        0,
+                        MidiPayload::Meta(MetaEvent::Other(meta_view::make_track_name("Bass"))),
+                    ),
+                    note_on(0, 48, 1),
+                    note_off(240, 48, 1),
+                    eot(240),
+                ],
+            },
+        ],
+    };
+    let report = lift_to_counterpoint_report(&file, CounterpointLiftOpts::default()).expect("cp");
+    assert_eq!(
+        report.value.voice_names,
+        vec!["Soprano".to_owned(), "Bass".to_owned()]
+    );
+}
+
+fn control(time: i64, controller: U7, value: u8) -> MidiEvent {
+    event(
+        time,
+        MidiPayload::Channel(ChannelMessage::ControlChange {
+            ch: Channel::new(0).expect("channel"),
+            cc: controller,
+            value: U7(value),
+        }),
+    )
+}
+
+fn single_track(events: Vec<MidiEvent>) -> SmfFile {
+    SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![SmfTrack { events }],
+    }
+}
+
+#[test]
+fn sustain_and_sostenuto_release_only_the_notes_each_pedal_holds() {
+    let file = single_track(vec![
+        note_on(0, 60, 0),
+        control(100, CC_SUSTAIN_PEDAL, 127),
+        note_off(200, 60, 0),
+        control(300, CC_SOSTENUTO, 127),
+        control(400, CC_SUSTAIN_PEDAL, 0),
+        note_on(450, 64, 0),
+        note_off(500, 64, 0),
+        control(600, CC_SOSTENUTO, 0),
+        eot(600),
+    ]);
+    let realization = realize_midi(&file, MidiRealizationPolicy::default()).expect("realization");
+    let notes = &realization.timelines[0].notes;
+
+    assert_eq!(notes.len(), 2);
+    assert_eq!(notes[0].id.event_index, 0);
+    assert_eq!(notes[0].key_release, Some(Ratio::new(5, 48)));
+    assert_eq!(notes[0].sounding_until, Ratio::new(5, 16));
+    assert_eq!(notes[0].ended_by, MidiNoteEnd::SostenutoRelease);
+    assert_eq!(notes[1].note.pitch.to_midi(), Some(64));
+    assert_eq!(notes[1].sounding_until, Ratio::new(25, 96));
+    assert_eq!(notes[1].ended_by, MidiNoteEnd::NoteOff);
+}
+
+#[test]
+fn all_notes_off_obeys_pedals_and_reset_releases_deferred_notes() {
+    let file = single_track(vec![
+        note_on(0, 60, 0),
+        control(100, CC_SUSTAIN_PEDAL, 127),
+        control(200, CC_ALL_NOTES_OFF, 0),
+        control(300, CC_RESET_ALL_CONTROLLERS, 0),
+        eot(300),
+    ]);
+    let realization = realize_midi(&file, MidiRealizationPolicy::default()).expect("realization");
+    let note = &realization.timelines[0].notes[0];
+
+    assert_eq!(note.key_release, Some(Ratio::new(5, 48)));
+    assert_eq!(note.sounding_until, Ratio::new(5, 32));
+    assert_eq!(note.ended_by, MidiNoteEnd::ResetControllers);
+}
+
+#[test]
+fn same_tick_policy_controls_whether_a_note_off_sees_pedal_down() {
+    let file = single_track(vec![
+        note_on(0, 60, 0),
+        control(480, CC_SUSTAIN_PEDAL, 127),
+        note_off(480, 60, 0),
+        control(960, CC_SUSTAIN_PEDAL, 0),
+        eot(960),
+    ]);
+    let encoded = realize_midi(
+        &file,
+        MidiRealizationPolicy {
+            same_tick: SameTickPolicy::Encoded,
+            ..MidiRealizationPolicy::default()
+        },
+    )
+    .expect("encoded realization");
+    let offs_first =
+        realize_midi(&file, MidiRealizationPolicy::default()).expect("ordered realization");
+
+    assert_eq!(
+        encoded.timelines[0].notes[0].sounding_until,
+        Ratio::new(1, 2)
+    );
+    assert_eq!(
+        offs_first.timelines[0].notes[0].sounding_until,
+        Ratio::new(1, 4)
+    );
+}
+
+#[test]
+fn overlap_pairing_is_explicit_and_reject_mode_fails_closed() {
+    let file = single_track(vec![
+        note_on(0, 60, 0),
+        note_on(120, 60, 0),
+        note_off(240, 60, 0),
+        note_off(360, 60, 0),
+        eot(360),
+    ]);
+    let realized = |overlap| {
+        realize_midi(
+            &file,
+            MidiRealizationPolicy {
+                overlap,
+                pedals: PedalPolicy::Ignore,
+                ..MidiRealizationPolicy::default()
+            },
+        )
+    };
+    let fifo = realized(OverlapPolicy::Fifo).expect("FIFO");
+    let lifo = realized(OverlapPolicy::Lifo).expect("LIFO");
+
+    assert_eq!(fifo.timelines[0].notes[0].id.event_index, 0);
+    assert_eq!(fifo.timelines[0].notes[0].sounding_until, Ratio::new(1, 8));
+    assert_eq!(lifo.timelines[0].notes[0].id.event_index, 0);
+    assert_eq!(lifo.timelines[0].notes[0].sounding_until, Ratio::new(3, 16));
+    assert!(matches!(
+        realized(OverlapPolicy::Reject),
+        Err(crate::LiftError::OverlappingNote {
+            tick: 120,
+            channel: 0,
+            key: 60
+        })
+    ));
+}
+
+#[test]
+fn unmatched_notes_are_diagnostic_or_rejected_by_policy() {
+    let file = single_track(vec![note_off(0, 62, 0), note_on(120, 60, 0), eot(480)]);
+    let closed = realize_midi(&file, MidiRealizationPolicy::default()).expect("diagnostic close");
+
+    assert_eq!(closed.timelines[0].notes.len(), 1);
+    assert_eq!(
+        closed.timelines[0].notes[0].ended_by,
+        MidiNoteEnd::EndOfTimeline
+    );
+    assert_eq!(closed.timelines[0].diagnostics.len(), 2);
+    assert!(
+        closed.timelines[0]
+            .diagnostics
+            .iter()
+            .any(|diagnostic| diagnostic.message.contains("unmatched note-off"))
+    );
+    assert!(matches!(
+        realize_midi(
+            &file,
+            MidiRealizationPolicy {
+                dangling_notes: DanglingNotePolicy::Reject,
+                ..MidiRealizationPolicy::default()
+            }
+        ),
+        Err(crate::LiftError::DanglingNotes { count: 1 })
+    ));
+}
+
+#[test]
+fn format_two_realization_returns_independent_identity_bearing_timelines() {
+    let file = SmfFile {
+        format: SmfFormat::Independent,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![
+            SmfTrack {
+                events: vec![note_on(0, 60, 0), note_off(480, 60, 0), eot(480)],
+            },
+            SmfTrack {
+                events: vec![note_on(0, 67, 0), note_off(240, 67, 0), eot(240)],
+            },
+        ],
+    };
+    let realization = realize_midi(&file, MidiRealizationPolicy::default()).expect("realization");
+
+    assert_eq!(realization.timelines.len(), 2);
+    assert_eq!(realization.timelines[0].id, MidiTimelineId::Pattern(0));
+    assert_eq!(realization.timelines[1].id, MidiTimelineId::Pattern(1));
+    assert_eq!(realization.timelines[0].notes[0].id.track, 0);
+    assert_eq!(realization.timelines[1].notes[0].id.track, 1);
+    assert_eq!(
+        realize_midi_pattern(&file, 1, MidiRealizationPolicy::default())
+            .expect("pattern")
+            .id,
+        MidiTimelineId::Pattern(1)
+    );
+    assert!(matches!(
+        realize_midi_pattern(&file, 2, MidiRealizationPolicy::default()),
+        Err(crate::LiftError::PatternOutOfRange {
+            pattern: 2,
+            patterns: 2
+        })
+    ));
+    assert!(matches!(
+        lift_to_piano_roll_report(&file),
+        Err(crate::LiftError::IndependentPatternsRequireSelection)
+    ));
+}
+
+#[test]
+fn smpte_realization_requires_an_explicit_metrical_adapter() {
+    let file = SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::smpte(SmpteRate::Fps25, 40).expect("SMPTE division"),
+        tracks: vec![SmfTrack { events: Vec::new() }],
+    };
+
+    assert!(matches!(
+        realize_midi(&file, MidiRealizationPolicy::default()),
+        Err(crate::LiftError::MetricalTimingRequired)
+    ));
+}
+
+#[test]
+fn realized_note_slices_preserve_same_pitch_multiplicity_and_source_ids() {
+    let file = SmfFile {
+        format: SmfFormat::Simultaneous,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![
+            SmfTrack {
+                events: vec![note_on(0, 60, 0), note_off(480, 60, 0), eot(480)],
+            },
+            SmfTrack {
+                events: vec![note_on(0, 60, 0), note_off(240, 60, 0), eot(240)],
+            },
+        ],
+    };
+    let realization = realize_midi(&file, MidiRealizationPolicy::default()).expect("realization");
+    let slices = realization.timelines[0].note_slices();
+
+    assert_eq!(slices.len(), 2);
+    assert_eq!(slices[0].notes.len(), 2);
+    assert_eq!(slices[0].notes[0].note.pitch.to_midi(), Some(60));
+    assert_eq!(slices[0].notes[1].note.pitch.to_midi(), Some(60));
+    assert_ne!(slices[0].notes[0].id, slices[0].notes[1].id);
+    assert_eq!(slices[1].notes.len(), 1);
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-notation/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-notation/src/tests.rs`:
+
+```rust
+//! LilyPond and bounded MusicXML notation profile conformance: exact exchange,
+//! strict rejection, stable identity, explicit loss, and runtime construction.
+
+use num_rational::Ratio;
+use std::sync::Arc;
+
+use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, Symbol};
+use sim_lib_music_core::{
+    AmbiguousConversionPolicy, Articulation, Channel, Chord, Melody, MelodyItem, Music, Note,
+    Progression, Score, ScoreForm, ScoreFormKind, convert_score,
+};
+use sim_lib_music_serial::{
+    EventPlacement, OrdinalRef, RowInstanceId, SerialEventId, SerialOrigin, SerialPlan, SerialRole,
+    StrictEventSpec, StrictRealizationContext, StructuralLicense, StructuralReadingId,
+    realize_strict, render_serial_staff,
+};
+use sim_lib_music_shapes::{decode_score, encode_score};
+use sim_lib_pitch_core::Pitch;
+use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
+
+use crate::{
+    MusicXmlLimits, NotationCodec, NotationError, NotationIdentityKind, NotationLossKind,
+    export_counterpoint_lilypond, export_lilypond, export_lilypond_report, export_melody_lilypond,
+    export_musicxml_partwise_report, export_progression_lilypond, import_lilypond,
+    import_musicxml_partwise_report, install_music_notation_lib, notation_import_symbol,
+};
+
+fn quarter() -> Ratio<i64> {
+    Ratio::new(1, 4)
+}
+
+fn channel() -> Channel {
+    Channel::new(0).expect("channel")
+}
+
+fn note(midi: u8, duration: Ratio<i64>) -> Note {
+    Note::new(
+        duration,
+        Pitch::from_midi(midi),
+        100,
+        channel(),
+        Articulation::Normal,
+    )
+    .expect("note")
+}
+
+fn exchange_score() -> Score {
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(sim_lib_music_core::Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(64, Ratio::new(1, 2))),
+    ])
+    .expect("melody");
+    Score::new(
+        120,
+        (4, 4),
+        Some("C major".to_owned()),
+        Music::Melody(melody),
+    )
+    .expect("score")
+}
+
+fn canonical_score(score: &Score) -> String {
+    encode_score(score).expect("canonical score")
+}
+
+fn serial_notation_score() -> Score {
+    let row_id = RowInstanceId::new("row/notation/p0").expect("row id");
+    let row = ToneRow::try_from_classes([
+        sim_lib_pitch_core::PitchClass::C,
+        sim_lib_pitch_core::PitchClass::CS,
+        sim_lib_pitch_core::PitchClass::D,
+        sim_lib_pitch_core::PitchClass::DS,
+        sim_lib_pitch_core::PitchClass::E,
+        sim_lib_pitch_core::PitchClass::F,
+        sim_lib_pitch_core::PitchClass::FS,
+        sim_lib_pitch_core::PitchClass::G,
+        sim_lib_pitch_core::PitchClass::GS,
+        sim_lib_pitch_core::PitchClass::A,
+        sim_lib_pitch_core::PitchClass::AS,
+        sim_lib_pitch_core::PitchClass::B,
+    ])
+    .expect("row")
+    .apply(RowOperation::new(RowFamily::P, 0));
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/notation").expect("reading"),
+        "notation statement",
+    )
+    .expect("license");
+    let events = (0usize..12)
+        .map(|ordinal| {
+            let id = format!("event/note-{ordinal}");
+            let event_id = SerialEventId::new(&id).expect("event id");
+            (
+                event_id.clone(),
+                sim_lib_music_serial::PlannedSerialEvent {
+                    id: event_id,
+                    ordinals: vec![OrdinalRef::new(row_id.clone(), ordinal)],
+                    role: SerialRole::Structural,
+                    origin: SerialOrigin::Structural {
+                        rationale: "notation".to_owned(),
+                    },
+                    voice: sim_lib_music_core::ObjectId::new("voice/solo").expect("voice"),
+                    placement: EventPlacement::independent(),
+                    parents: Vec::new(),
+                    licenses: vec![license.clone()],
+                },
+            )
+        })
+        .collect();
+    let precedence = (0usize..11).map(|ordinal| {
+        (
+            SerialEventId::new(format!("event/note-{ordinal}")).expect("from"),
+            SerialEventId::new(format!("event/note-{}", ordinal + 1)).expect("to"),
+        )
+    });
+    let plan = SerialPlan::try_new([(row_id, row)].into_iter().collect(), events, precedence)
+        .expect("plan");
+    let context = StrictRealizationContext::new(
+        (0usize..12)
+            .map(|ordinal| {
+                (
+                    SerialEventId::new(format!("event/note-{ordinal}")).expect("event id"),
+                    StrictEventSpec::notes(4, quarter(), 96, channel(), Articulation::Normal),
+                )
+            })
+            .collect(),
+    );
+    let realization = realize_strict(&plan, &context).expect("realization");
+    let staff = render_serial_staff(&realization).expect("staff");
+    let report = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Counterpoint,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("counterpoint");
+    let ScoreForm::Counterpoint(counterpoint) = report.value else {
+        unreachable!("counterpoint conversion returns counterpoint");
+    };
+    Score::new(
+        72,
+        (12, 4),
+        Some("C".to_owned()),
+        Music::Counterpoint(counterpoint),
+    )
+    .expect("score")
+}
+
+#[test]
+fn simple_melody_exports_valid_lilypond_text() {
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(sim_lib_music_core::Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(62, Ratio::new(3, 8))),
+    ])
+    .expect("melody");
+    let score = Score::new(
+        120,
+        (4, 4),
+        Some("C major".to_owned()),
+        Music::Melody(melody),
+    )
+    .expect("score");
+    let text = export_lilypond(&score).expect("export");
+    assert!(text.contains("\\score"));
+    assert!(text.contains("\\tempo 4 = 120"));
+    assert!(text.contains("\\key c \\major"));
+    assert!(text.contains("c'4"));
+    assert!(text.contains("r4"));
+    assert!(text.contains("d'4 ~ d'8"));
+}
+
+#[test]
+fn serial_notation_exports_replay_deterministically_and_keep_sidecars() {
+    let score = serial_notation_score();
+    let lily = export_lilypond_report(&score).expect("lily");
+    assert!(lily.value.contains("\\new Voice"));
+
+    let xml_a = export_musicxml_partwise_report(&score, &[]).expect("xml");
+    let xml_b = export_musicxml_partwise_report(&score, &xml_a.identities).expect("xml replay");
+    assert_eq!(xml_a.value, xml_b.value);
+    assert!(!xml_a.identities.is_empty());
+}
+
+#[test]
+fn four_voice_counterpoint_exports_four_voices_with_names() {
+    let voice = Melody::new(vec![MelodyItem::Note(note(60, quarter()))]).expect("melody");
+    let counterpoint = sim_lib_music_core::Counterpoint::new(
+        vec![voice.clone(), voice.clone(), voice.clone(), voice],
+        vec![
+            "Soprano".to_owned(),
+            "Alto".to_owned(),
+            "Tenor".to_owned(),
+            "Bass".to_owned(),
+        ],
+    )
+    .expect("counterpoint");
+    let text = export_counterpoint_lilypond(&counterpoint, Some("C major")).expect("export");
+    assert!(text.contains("\\new Voice = \"Soprano\""));
+    assert!(text.contains("\\new Voice = \"Bass\""));
+}
+
+#[test]
+fn export_then_import_preserves_supported_subset() {
+    let progression = Progression::new(
+        Some("C major".to_owned()),
+        vec![
+            Chord::new(
+                quarter(),
+                "C",
+                vec![
+                    Pitch::from_midi(60),
+                    Pitch::from_midi(64),
+                    Pitch::from_midi(67),
+                ],
+                100,
+                channel(),
+            )
+            .expect("chord"),
+            Chord::new(
+                Ratio::new(1, 2),
+                "F",
+                vec![
+                    Pitch::from_midi(65),
+                    Pitch::from_midi(69),
+                    Pitch::from_midi(72),
+                ],
+                100,
+                channel(),
+            )
+            .expect("chord"),
+        ],
+    )
+    .expect("progression");
+    let score = Score::new(
+        96,
+        (3, 4),
+        Some("C major".to_owned()),
+        Music::Progression(progression.clone()),
+    )
+    .expect("score");
+    let lily = export_lilypond(&score).expect("export");
+    let imported = import_lilypond(&lily).expect("import");
+    assert_eq!(imported.tempo_bpm, score.tempo_bpm);
+    assert_eq!(imported.time_signature, score.time_signature);
+    assert_eq!(imported.key, score.key);
+    match imported.body {
+        Music::Progression(value) => {
+            assert_eq!(value.chords.len(), progression.chords.len());
+            assert_eq!(value.chords[0].pitches, progression.chords[0].pitches);
+            assert_eq!(value.chords[1].duration, progression.chords[1].duration);
+        }
+        other => panic!("expected progression, got {other:?}"),
+    }
+}
+
+#[test]
+fn enharmonic_spelling_survives_within_same_key() {
+    let melody = Melody::new(vec![MelodyItem::Note(note(66, quarter()))]).expect("melody");
+    let exported = export_melody_lilypond(&melody, Some("G major")).expect("export");
+    assert!(exported.contains("fis'4"));
+    let score =
+        format!("\\score {{\n  \\tempo 4 = 100\n  \\key g \\major\n  \\time 4/4\n  {exported}\n}}");
+    let imported = import_lilypond(&score).expect("import");
+    let reexported = NotationCodec.export_lilypond(&imported).expect("re-export");
+    assert!(reexported.contains("fis'4"));
+}
+
+#[test]
+fn unsupported_syntax_reports_diagnostic_not_panic() {
+    let err = import_lilypond("\\score { \\relative c' { c4 } }").expect_err("unsupported");
+    match err {
+        NotationError::UnsupportedSyntax { diagnostics } => {
+            assert!(!diagnostics.is_empty());
+            assert!(diagnostics[0].message.contains("unsupported"));
+            assert!(diagnostics[0].span.is_some());
+        }
+        other => panic!("unexpected error: {other:?}"),
+    }
+}
+
+#[test]
+fn progression_export_helper_uses_chord_bodies() {
+    let progression = Progression::new(
+        Some("Bb major".to_owned()),
+        vec![
+            Chord::new(
+                quarter(),
+                "Bb",
+                vec![
+                    Pitch::from_midi(58),
+                    Pitch::from_midi(62),
+                    Pitch::from_midi(65),
+                ],
+                100,
+                channel(),
+            )
+            .expect("chord"),
+        ],
+    )
+    .expect("progression");
+    let text = export_progression_lilypond(&progression, Some("Bb major")).expect("export");
+    assert!(text.contains("<bes d' f'>4"));
+}
+
+#[test]
+fn install_music_notation_lib_registers_codec_surface() {
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_notation_lib(&mut cx).expect("install");
+    install_music_notation_lib(&mut cx).expect("install");
+    let value = cx
+        .resolve_value(&Symbol::qualified("music", "LilyPondSubsetCodec"))
+        .expect("value");
+    let expr = value.object().as_expr(&mut cx).expect("expr");
+    let Expr::Map(entries) = expr else {
+        panic!("expected browse table");
+    };
+    assert!(entries.iter().any(|(key, value)| {
+        *key == Expr::Symbol(Symbol::new("shape"))
+            && *value == Expr::Symbol(Symbol::qualified("music", "NotationCodec"))
+    }));
+    assert!(cx.resolve_function(&notation_import_symbol()).is_ok());
+}
+
+#[test]
+fn musicxml_partwise_round_trip_retains_exact_score_and_stable_ids() {
+    let score = exchange_score();
+    let exported = export_musicxml_partwise_report(&score, &[]).expect("export");
+    assert!(exported.losses.is_empty());
+    assert_eq!(
+        exported
+            .identities
+            .iter()
+            .filter(|identity| identity.kind == NotationIdentityKind::Event)
+            .count(),
+        3
+    );
+
+    let source = exported
+        .value
+        .replace("P1-E1", "lead-note")
+        .replace("P1-E2", "lead-rest")
+        .replace("P1-E3", "lead-final")
+        .replace("id=\"P1\"", "id=\"lead-part\"");
+    let imported = import_musicxml_partwise_report(source.as_bytes(), MusicXmlLimits::default())
+        .expect("import");
+    assert_eq!(canonical_score(&imported.value), canonical_score(&score));
+    assert!(imported.losses.is_empty());
+    assert!(
+        imported
+            .identities
+            .iter()
+            .any(|identity| identity.xml_id == "lead-note")
+    );
+
+    let reexported =
+        export_musicxml_partwise_report(&imported.value, &imported.identities).expect("re-export");
+    assert!(reexported.value.contains("id=\"lead-part\""));
+    assert!(reexported.value.contains("id=\"lead-note\""));
+    assert!(reexported.value.contains("id=\"lead-rest\""));
+    assert!(reexported.value.contains("id=\"lead-final\""));
+
+    let mut wrong_kind = imported.identities;
+    wrong_kind[0].kind = NotationIdentityKind::Event;
+    assert!(export_musicxml_partwise_report(&imported.value, &wrong_kind).is_err());
+}
+
+#[test]
+fn musicxml_profile_rejects_dtd_entities_extensions_and_resource_overruns() {
+    let internal_dtd = br#"<?xml version="1.0"?>
+<!DOCTYPE score-partwise [<!ENTITY boom "expanded">]>
+<score-partwise version="4.0"><part-list><score-part id="P1"><part-name>&boom;</part-name></score-part></part-list><part id="P1"><measure number="1"/></part></score-partwise>"#;
+    let empty_dtd = br#"<!DOCTYPE score-partwise>
+<score-partwise version="4.0"/>"#;
+    for dtd in [internal_dtd.as_slice(), empty_dtd.as_slice()] {
+        assert!(matches!(
+            import_musicxml_partwise_report(dtd, MusicXmlLimits::default()),
+            Err(NotationError::UnsupportedMusicXml { diagnostics })
+                if diagnostics[0].message.contains("DTD")
+        ));
+    }
+
+    let score = exchange_score();
+    let source = export_musicxml_partwise_report(&score, &[])
+        .expect("export")
+        .value;
+    let extension = source.replace("<note id=\"P1-E1\">", "<harmony/><note id=\"P1-E1\">");
+    assert!(matches!(
+        import_musicxml_partwise_report(extension.as_bytes(), MusicXmlLimits::default()),
+        Err(NotationError::UnsupportedMusicXml { diagnostics })
+            if diagnostics[0].message.contains("<harmony>")
+    ));
+    let processing_instruction = source.replace(
+        "<note id=\"P1-E1\">",
+        "<?sim extension?><note id=\"P1-E1\">",
+    );
+    assert!(matches!(
+        import_musicxml_partwise_report(
+            processing_instruction.as_bytes(),
+            MusicXmlLimits::default()
+        ),
+        Err(NotationError::UnsupportedMusicXml { diagnostics })
+            if diagnostics[0].message.contains("processing instruction")
+    ));
+    let mixed_text = source.replace("<part id=\"P1\">", "<part id=\"P1\">extension");
+    assert!(matches!(
+        import_musicxml_partwise_report(mixed_text.as_bytes(), MusicXmlLimits::default()),
+        Err(NotationError::UnsupportedMusicXml { diagnostics })
+            if diagnostics[0].message.contains("mixed text")
+    ));
+    let duplicate_pitch_step = source.replace("<step>C</step>", "<step>C</step><step>C</step>");
+    assert!(matches!(
+        import_musicxml_partwise_report(
+            duplicate_pitch_step.as_bytes(),
+            MusicXmlLimits::default()
+        ),
+        Err(NotationError::UnsupportedMusicXml { diagnostics })
+            if diagnostics[0].message.contains("exactly one <step>")
+    ));
+
+    let limits = MusicXmlLimits {
+        bytes: source.len() - 1,
+        ..MusicXmlLimits::default()
+    };
+    assert!(matches!(
+        import_musicxml_partwise_report(source.as_bytes(), limits),
+        Err(NotationError::MusicXmlLimit { limit: "bytes", .. })
+    ));
+    let limits = MusicXmlLimits {
+        depth: 3,
+        ..MusicXmlLimits::default()
+    };
+    assert!(matches!(
+        import_musicxml_partwise_report(source.as_bytes(), limits),
+        Err(NotationError::MusicXmlLimit { limit: "depth", .. })
+    ));
+    let limits = MusicXmlLimits {
+        events: 2,
+        ..MusicXmlLimits::default()
+    };
+    assert!(import_musicxml_partwise_report(source.as_bytes(), limits).is_err());
+}
+
+#[test]
+fn musicxml_reports_accepted_import_metadata_loss() {
+    let source = export_musicxml_partwise_report(&exchange_score(), &[])
+        .expect("export")
+        .value
+        .replace(
+            "<part-name>Music</part-name>",
+            "<part-name>Solo</part-name>",
+        )
+        .replace(
+            "<pitch><step>C</step><octave>4</octave></pitch>",
+            "<pitch><step>B</step><alter>1</alter><octave>3</octave></pitch>",
+        );
+    let report = import_musicxml_partwise_report(source.as_bytes(), MusicXmlLimits::default())
+        .expect("import");
+    assert!(
+        report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == NotationLossKind::PartName)
+    );
+    assert!(
+        report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == NotationLossKind::PitchSpelling)
+    );
+    assert_eq!(report.diagnostics.len(), report.losses.len());
+}
+
+#[test]
+fn musicxml_reports_every_accepted_export_loss() {
+    let lossy_note = Note::new(
+        Ratio::new(1, 1),
+        Pitch::from_midi(60),
+        73,
+        Channel::new(4).expect("channel"),
+        Articulation::Normal,
+    )
+    .expect("note");
+    let score = Score::new(90, (4, 4), None, Music::Note(lossy_note)).expect("score");
+    let report = export_musicxml_partwise_report(&score, &[]).expect("export");
+    assert_eq!(report.losses.len(), 2);
+    assert!(
+        report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == NotationLossKind::Velocity)
+    );
+    assert!(
+        report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == NotationLossKind::Channel)
+    );
+    assert_eq!(report.diagnostics.len(), report.losses.len());
+}
+
+#[test]
+fn lilypond_musicxml_and_sim_forms_round_trip_on_their_shared_domain() {
+    let score = exchange_score();
+    let lily = export_lilypond(&score).expect("LilyPond export");
+    let from_lily = import_lilypond(&lily).expect("LilyPond import");
+    let xml = export_musicxml_partwise_report(&from_lily, &[]).expect("MusicXML export");
+    let from_xml = import_musicxml_partwise_report(xml.value.as_bytes(), MusicXmlLimits::default())
+        .expect("MusicXML import")
+        .value;
+    let sim_form = encode_score(&from_xml).expect("SIM expression encode");
+    let from_sim = decode_score(&sim_form).expect("SIM expression decode");
+    assert_eq!(canonical_score(&from_sim), canonical_score(&score));
+}
+
+#[test]
+fn runtime_import_is_shape_described_and_returns_score_read_construct() {
+    let score = exchange_score();
+    let source = export_musicxml_partwise_report(&score, &[])
+        .expect("export")
+        .value
+        .into_bytes();
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_notation_lib(&mut cx).expect("install");
+    let function = cx
+        .resolve_function(&notation_import_symbol())
+        .expect("notation import function");
+    let callable = function.object().as_callable().expect("callable");
+    let args = vec![
+        Expr::Symbol(Symbol::new(":format")),
+        Expr::Quote {
+            mode: QuoteMode::Quote,
+            expr: Box::new(Expr::Symbol(Symbol::new("musicxml-partwise"))),
+        },
+        Expr::Symbol(Symbol::new(":source")),
+        Expr::Bytes(source),
+        Expr::Symbol(Symbol::new(":limits")),
+        Expr::Map(vec![
+            (
+                Expr::Symbol(Symbol::new(":bytes")),
+                Expr::String("4000000".to_owned()),
+            ),
+            (
+                Expr::Symbol(Symbol::new(":nodes")),
+                Expr::String("200000".to_owned()),
+            ),
+            (
+                Expr::Symbol(Symbol::new(":depth")),
+                Expr::String("64".to_owned()),
+            ),
+        ]),
+    ];
+    let shape = callable
+        .browse_args_shape(&mut cx)
+        .expect("args shape")
+        .expect("shape");
+    assert!(
+        shape
+            .object()
+            .as_shape()
+            .expect("shape protocol")
+            .check_expr(&mut cx, &Expr::List(args.clone()))
+            .expect("shape check")
+            .accepted
+    );
+
+    let value = callable
+        .call_exprs(&mut cx, sim_kernel::RawArgs::new(args))
+        .expect("runtime import");
+    let Expr::Map(entries) = value.object().as_expr(&mut cx).expect("report expression") else {
+        panic!("expected report map");
+    };
+    let score = entries
+        .iter()
+        .find_map(|(key, value)| match key {
+            Expr::Symbol(symbol) if symbol.name.as_ref() == "score" => Some(value),
+            _ => None,
+        })
+        .expect("score field");
+    assert!(matches!(
+        score,
+        Expr::Extension { tag, .. }
+            if *tag == Symbol::qualified("citizen", "read-construct")
+    ));
+}
+```
+
 ### `feature/sim-music/pitch-and-sound-vocabulary`
 
 Specimen `spec-test/sim-music/crates/sim-lib-pitch-core/src/tests` is checked by `cargo test`.
@@ -843,6 +3681,18 @@ fn midi_round_trip() {
     for midi in 0..=127u8 {
         assert_eq!(Pitch::from_midi(midi).to_midi(), Some(midi));
     }
+}
+
+#[test]
+fn pitch_order_follows_absolute_semitones_across_classes_and_octaves() {
+    let c5 = Pitch::from_midi(72);
+    let f4 = Pitch::from_midi(65);
+    let b3 = Pitch::from_midi(59);
+    assert!(c5 > f4);
+    assert!(f4 > b3);
+    let mut pitches = vec![c5, b3, f4];
+    pitches.sort();
+    assert_eq!(pitches, vec![b3, f4, c5]);
 }
 
 #[test]
@@ -958,7 +3808,931 @@ fn folded_distance_uses_explicit_tie_policy() {
 }
 ```
 
+### `feature/sim-music/declarative-harmony`
+
+Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-pitch-chord/src/harmony_conformance.rs`:
+
+```rust
+//! Checked conformance for the declarative catalog's Lisp data fixtures.
+
+use std::sync::Arc;
+
+use sim_codec::{Input, decode_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ReadPolicy, Symbol};
+
+use crate::{HarmonyMetric, HarmonyPredicate, HarmonyProgram, PaletteAlgebra};
+
+fn decode_fixture(source: &str) -> HarmonyProgram {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    sim_test_support::register_core_classes(&mut cx);
+    sim_test_support::register_f64_number_domain(&mut cx);
+    let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&codec).unwrap();
+    let expr = decode_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source.to_owned()),
+        ReadPolicy::default(),
+    )
+    .unwrap();
+    HarmonyProgram::from_expr(&expr).unwrap()
+}
+
+#[test]
+fn catalog_harmonizer_lisp_fixture_covers_every_filter_and_render_setting() {
+    let program = decode_fixture(include_str!("../tests/fixtures/catalog-harmonizer.sx"));
+    let ids = program
+        .rules
+        .hard
+        .iter()
+        .map(|rule| rule.id.as_str())
+        .collect::<Vec<_>>();
+
+    assert_eq!(program.id, "catalog/harmonizer");
+    assert_eq!(ids.len(), 23);
+    for required in [
+        "melody-in-chord",
+        "position-is",
+        "not-position-is",
+        "not-position-is-not",
+        "common-note-rhythm",
+        "minimum-chord-distance",
+        "maximum-chord-distance",
+        "minimum-type-distance",
+        "chord-variation",
+        "chord-commonality",
+        "minimum-scale-duration",
+        "maximum-scale-duration",
+        "template-length",
+        "will-connect",
+        "template-melody-in-chord",
+    ] {
+        assert!(ids.contains(&required), "{required}");
+    }
+    assert!(program.rules.hard.iter().any(|rule| {
+        matches!(
+            rule.predicate,
+            HarmonyPredicate::All(_) | HarmonyPredicate::Any(_) | HarmonyPredicate::Not(_)
+        )
+    }));
+    assert!(
+        program
+            .rules
+            .soft
+            .iter()
+            .any(|metric| { matches!(metric.value, HarmonyMetric::PitchDissonance { .. }) })
+    );
+    assert!(
+        program
+            .rules
+            .soft
+            .iter()
+            .any(|metric| { matches!(metric.value, HarmonyMetric::ContextualSonance { .. }) })
+    );
+    assert_eq!(program.render.chord_transpose, 48);
+    assert_eq!(program.render.melody_transpose, 60);
+    assert_eq!(program.render.duration_multiplier, 4);
+    assert_eq!(program.render.tempo_bpm, 60);
+    assert_eq!(program.render.time_signature, (4, 4));
+}
+
+#[test]
+fn catalog_chord_cycle_lisp_fixture_names_transposed_palette_and_filter_chain() {
+    let program = decode_fixture(include_str!("../tests/fixtures/catalog-chord-cycle.sx"));
+
+    assert_eq!(program.id, "catalog/chord-cycle");
+    assert!(matches!(
+        program.palette.algebra,
+        PaletteAlgebra::Transpose { .. }
+    ));
+    assert_eq!(
+        program
+            .rules
+            .hard
+            .iter()
+            .map(|rule| rule.id.as_str())
+            .collect::<Vec<_>>(),
+        vec![
+            "constant-common-notes",
+            "minimum-type-distance",
+            "required-first",
+            "final-chord-only",
+        ]
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_markov_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-pitch-chord/src/harmony_markov_tests.rs`:
+
+```rust
+use sim_lib_numbers_stats::{CorpusProvenance, MarkovPolicy};
+use sim_lib_pitch_core::PitchClass;
+use sim_lib_pitch_scale::{Key, Mode};
+use sim_lib_pitch_set::PitchClassMask;
+
+use crate::harmony_rule_expr::{rule_set_from_expr, rule_set_to_expr};
+use crate::{
+    ChordTemplate, CoreHarmonyMetricResolver, CountRange, HarmonyConstraint, HarmonyCorpusSequence,
+    HarmonyEvaluationContext, HarmonyMetric, HarmonyPredicate, HarmonyRuleSet,
+    LearnedTransitionResolver, Weighted, evaluate_harmony, fit_harmony_markov,
+};
+
+// conformance: music states adapt the generic transparent Markov estimator.
+
+const FIXTURE: &[u8] = include_bytes!("../fixtures/generated-harmony-transitions.tsv");
+
+fn key() -> Key {
+    Key {
+        tonic: PitchClass::C,
+        mode: Mode::Major,
+    }
+}
+
+fn chord(id: &str, classes: &[PitchClass]) -> ChordTemplate {
+    ChordTemplate::from_pitch_classes(id, classes.to_vec(), 4)
+}
+
+fn c() -> ChordTemplate {
+    chord("c", &[PitchClass::C, PitchClass::E, PitchClass::G])
+}
+
+fn f() -> ChordTemplate {
+    chord("f", &[PitchClass::F, PitchClass::A, PitchClass::C])
+}
+
+fn g() -> ChordTemplate {
+    chord("g", &[PitchClass::G, PitchClass::B, PitchClass::D])
+}
+
+fn corpus() -> Vec<HarmonyCorpusSequence> {
+    vec![
+        HarmonyCorpusSequence::new(key(), vec![c(), f(), g(), c()]),
+        HarmonyCorpusSequence::new(key(), vec![c(), g(), c(), f(), g(), c()]),
+        HarmonyCorpusSequence::new(key(), vec![f(), g(), c(), g(), c()]),
+    ]
+}
+
+fn report() -> sim_lib_numbers_stats::ModelReport<
+    sim_lib_numbers_stats::MarkovModel<crate::HarmonyTransitionState>,
+> {
+    let provenance = CorpusProvenance::from_bytes(
+        "generated-functional-harmony-v1",
+        "deterministic synthetic I-IV-V chord-state fixture",
+        "CC0-1.0",
+        FIXTURE,
+    )
+    .unwrap();
+    assert_eq!(provenance.content_hash, "fnv1a64:2a739276a9d8c13c");
+    fit_harmony_markov(&corpus(), MarkovPolicy::new(0.5, 1, provenance).unwrap()).unwrap()
+}
+
+#[test]
+fn chord_key_adapter_has_reproducible_held_out_evidence() {
+    let report = report();
+    let held_out = report.held_out_score.unwrap();
+    assert_eq!(report.training_sequences, 2);
+    assert_eq!(held_out.transitions, 4);
+    let held_out_probability = (5.0 / 7.0) * (7.0 / 9.0) * (1.0 / 3.0) * (7.0 / 9.0);
+    let expected_perplexity = f64::powf(held_out_probability, -0.25);
+    assert!((held_out.perplexity - expected_perplexity).abs() < 1.0e-12);
+
+    let first = report
+        .model
+        .to_stable_text(crate::HarmonyTransitionState::stable_label)
+        .unwrap();
+    let second = report
+        .model
+        .to_stable_text(crate::HarmonyTransitionState::stable_label)
+        .unwrap();
+    assert_eq!(first, second);
+}
+
+#[test]
+fn learned_metric_descriptor_round_trips_as_declared_rule_data() {
+    let rules = HarmonyRuleSet {
+        hard: Vec::new(),
+        soft: vec![Weighted::new(
+            "learned",
+            0.25,
+            HarmonyMetric::LearnedTransition {
+                model: "functional-v1".to_owned(),
+            },
+        )],
+    };
+
+    assert_eq!(
+        rule_set_from_expr(&rule_set_to_expr(&rules)).unwrap(),
+        rules
+    );
+}
+
+#[test]
+fn learned_transition_is_only_an_optional_soft_metric() {
+    let report = report();
+    let progression = vec![c(), g()];
+    let resolver = LearnedTransitionResolver::new(
+        "functional-v1",
+        key(),
+        &report.model,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let rules = HarmonyRuleSet {
+        hard: vec![HarmonyConstraint::new(
+            "impossible-four-notes",
+            HarmonyPredicate::DistinctPitchClasses {
+                count: CountRange::new(4, 4).unwrap(),
+            },
+        )],
+        soft: vec![
+            Weighted::new("declared-common-notes", -1.0, HarmonyMetric::CommonNotes),
+            Weighted::new(
+                "learned-functional-transition",
+                0.25,
+                HarmonyMetric::LearnedTransition {
+                    model: "functional-v1".to_owned(),
+                },
+            ),
+        ],
+    };
+    let result = evaluate_harmony(
+        &rules,
+        HarmonyEvaluationContext::progression(
+            &[PitchClassMask::from_pitch_classes(&[PitchClass::C])],
+            &progression,
+        ),
+        &resolver,
+    )
+    .unwrap();
+
+    assert!(!result.legal);
+    assert_eq!(result.hard.len(), 1);
+    assert_eq!(result.soft.len(), 2);
+    assert!(result.soft[1].value.is_finite());
+    assert!(
+        result.soft[1]
+            .facts
+            .iter()
+            .any(|fact| fact.contains("license=CC0-1.0"))
+    );
+}
+```
+
+### `feature/sim-music/bounded-harmonization`
+
+Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmonize_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-pitch-chord/src/harmonize_tests.rs`:
+
+```rust
+// conformance: bounded local and global planners share rules, ties, optima, and receipts.
+
+use sim_lib_discrete_search::{NeverInterrupt, SearchControl, SearchStatus};
+use sim_lib_pitch_core::{Pitch, PitchClass};
+use sim_lib_pitch_set::PitchClassMask;
+
+use crate::{
+    ChordPalette, ChordTemplate, CoreHarmonyMetricResolver, CountRange, HarmonizationRequest,
+    HarmonizationStrategy, HarmonyConstraint, HarmonyHeuristic, HarmonyMetric, HarmonyPredicate,
+    HarmonyRuleSet, Weighted, plan_harmony,
+};
+
+fn chord(id: &str, midi: &[u8]) -> ChordTemplate {
+    ChordTemplate::from_pitches(id, midi.iter().copied().map(Pitch::from_midi).collect())
+}
+
+fn note(class: PitchClass) -> PitchClassMask {
+    PitchClassMask::from_pitch_classes(&[class])
+}
+
+fn fixture(length: usize) -> HarmonizationRequest {
+    let palette = ChordPalette::explicit(
+        "planner-palette",
+        vec![
+            chord("c", &[48, 52, 55, 60]),
+            chord("f", &[53, 57, 60, 65]),
+            chord("g7", &[55, 59, 62, 65]),
+            chord("am", &[57, 60, 64, 69]),
+        ],
+        Vec::new(),
+    )
+    .unwrap();
+    let phrase = [PitchClass::C, PitchClass::A, PitchClass::G, PitchClass::C];
+    let melody = (0..length)
+        .map(|index| note(phrase[index % phrase.len()]))
+        .collect();
+    HarmonizationRequest {
+        melody,
+        palette,
+        rules: HarmonyRuleSet {
+            hard: vec![
+                HarmonyConstraint::new("melody-fit", HarmonyPredicate::MelodyInChord),
+                HarmonyConstraint::new(
+                    "common-tone",
+                    HarmonyPredicate::CommonNotes {
+                        count: CountRange::new(1, 3).unwrap(),
+                    },
+                ),
+                HarmonyConstraint::new(
+                    "register",
+                    HarmonyPredicate::PitchRange {
+                        min_midi: 48,
+                        max_midi: 72,
+                    },
+                ),
+                HarmonyConstraint::new(
+                    "repetition",
+                    HarmonyPredicate::MinimumChordDistance { distance: 1 },
+                ),
+                HarmonyConstraint::new(
+                    "cadence",
+                    HarmonyPredicate::ChordAt {
+                        position: -1,
+                        chord: PitchClassMask::from_pitch_classes(&[
+                            PitchClass::C,
+                            PitchClass::E,
+                            PitchClass::G,
+                        ]),
+                    },
+                ),
+            ],
+            soft: vec![
+                Weighted::new("voice-leading", 1.0, HarmonyMetric::VoiceLeading),
+                Weighted::new("common-reward", -2.0, HarmonyMetric::CommonNotes),
+            ],
+        },
+    }
+}
+
+#[test]
+fn recursive_factored_and_layered_share_the_optimal_small_problem() {
+    let request = fixture(4);
+    let exhaustive = plan_harmony(
+        &request,
+        HarmonizationStrategy::RecursiveExhaustive,
+        SearchControl::default().with_max_work(100_000),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let factored = plan_harmony(
+        &request,
+        HarmonizationStrategy::FactoredBacktracking,
+        SearchControl::default().with_max_work(100_000),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let layered = plan_harmony(
+        &request,
+        HarmonizationStrategy::LayeredDp,
+        SearchControl::default()
+            .with_max_work(1_000_000)
+            .with_max_memory_nodes(10_000),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let beam = plan_harmony(
+        &request,
+        HarmonizationStrategy::Beam {
+            width: 512,
+            heuristic: HarmonyHeuristic {
+                id: "common-tone-floor".to_owned(),
+                lower_bound_per_remaining_micros: -8_000_000,
+                admissible: true,
+            },
+        },
+        SearchControl::default()
+            .with_max_work(1_000_000)
+            .with_max_memory_nodes(10_000)
+            .with_branch_and_bound(true),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+
+    assert_eq!(exhaustive.receipt.status, SearchStatus::Complete);
+    assert_eq!(factored.receipt.status, SearchStatus::Complete);
+    assert_eq!(beam.receipt.status, SearchStatus::Complete);
+    assert_eq!(
+        exhaustive
+            .results
+            .iter()
+            .map(|result| &result.palette_indices)
+            .collect::<Vec<_>>(),
+        factored
+            .results
+            .iter()
+            .map(|result| &result.palette_indices)
+            .collect::<Vec<_>>()
+    );
+    assert_eq!(
+        factored.results[0].score_micros,
+        exhaustive.results[0].score_micros
+    );
+    assert_eq!(factored.receipt.work_used, exhaustive.receipt.work_used);
+    assert_eq!(
+        layered.results[0].score_micros,
+        exhaustive.results[0].score_micros
+    );
+    assert_eq!(
+        layered.results[0].palette_indices,
+        exhaustive.results[0].palette_indices
+    );
+    assert_eq!(
+        beam.results[0].score_micros,
+        exhaustive.results[0].score_micros
+    );
+    assert_eq!(
+        beam.results[0].palette_indices,
+        exhaustive.results[0].palette_indices
+    );
+    assert!(exhaustive.receipt.work_used > 0);
+    assert!(factored.receipt.work_used > 0);
+    assert!(layered.receipt.work_used > 0);
+    assert!(beam.receipt.work_used > 0);
+    assert!(exhaustive.receipt.evaluated_candidates > 0);
+    assert!(factored.receipt.evaluated_candidates > 0);
+    assert!(layered.receipt.evaluated_candidates > 0);
+    assert!(beam.receipt.evaluated_candidates > 0);
+    assert!(layered.receipt.optimal);
+    assert!(layered.receipt.optimality.is_some());
+    assert!(!beam.receipt.optimal);
+    assert!(matches!(
+        beam.receipt.strategy,
+        HarmonizationStrategy::Beam {
+            heuristic: HarmonyHeuristic {
+                admissible: true,
+                ..
+            },
+            ..
+        }
+    ));
+    assert!(
+        layered
+            .receipt
+            .rejections
+            .iter()
+            .any(|rejection| rejection.rule_id == "melody-fit")
+    );
+}
+
+#[test]
+fn beam_is_deterministic_and_large_bounded_runs_keep_partial_receipts() {
+    let request = fixture(24);
+    let strategy = HarmonizationStrategy::Beam {
+        width: 8,
+        heuristic: HarmonyHeuristic::zero("declared-zero", false),
+    };
+    let control = SearchControl::default()
+        .with_seed(12)
+        .with_max_work(100_000)
+        .with_max_results(1)
+        .with_max_frontier(128)
+        .with_max_memory_nodes(256);
+    let first = plan_harmony(
+        &request,
+        strategy.clone(),
+        control.clone(),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+    let second = plan_harmony(
+        &request,
+        strategy,
+        control,
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+
+    assert_eq!(first, second);
+    assert_eq!(first.receipt.status, SearchStatus::Partial);
+    assert_eq!(
+        first.receipt.reason.as_deref(),
+        Some("result bound reached")
+    );
+    assert_eq!(first.results.len(), 1);
+    assert!(first.results[0].complete);
+    assert!(first.receipt.work_used <= 100_000);
+    assert!(!first.receipt.optimal);
+}
+
+#[test]
+fn layered_budget_stop_returns_inspectable_longest_prefixes() {
+    let run = plan_harmony(
+        &fixture(8),
+        HarmonizationStrategy::LayeredDp,
+        SearchControl::default()
+            .with_max_work(20)
+            .with_max_results(2),
+        &NeverInterrupt,
+        &CoreHarmonyMetricResolver,
+    )
+    .unwrap();
+
+    assert_eq!(run.receipt.status, SearchStatus::Partial);
+    assert_eq!(run.receipt.reason.as_deref(), Some("work bound reached"));
+    assert!(!run.results.is_empty());
+    assert!(run.results.iter().all(|result| !result.complete));
+    assert!(!run.receipt.rejections.is_empty());
+}
+```
+
 ### `feature/sim-music/exact-music-analysis-and-transform`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/harmonic_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-analysis/src/harmonic_tests.rs`:
+
+```rust
+use crate::{
+    HarmonicDecodePlan, HarmonicDecodeStrategy, HarmonicFeatureFrame, HarmonicTemplate,
+    decode_chords, decode_harmonic_sequence, decode_keys,
+};
+
+// conformance: music adapters retain generic HMM posterior and alternative evidence.
+
+#[test]
+fn declared_templates_decode_through_generic_hmm_with_alternatives() {
+    let templates = vec![
+        HarmonicTemplate::new("bright", vec![1.0, 0.1, 0.0]).unwrap(),
+        HarmonicTemplate::new("dark", vec![0.0, 0.1, 1.0]).unwrap(),
+    ];
+    let frames = vec![
+        HarmonicFeatureFrame {
+            at_sample: 0,
+            values: vec![1.0, 0.2, 0.0],
+        },
+        HarmonicFeatureFrame {
+            at_sample: 256,
+            values: vec![0.8, 0.2, 0.1],
+        },
+        HarmonicFeatureFrame {
+            at_sample: 512,
+            values: vec![0.0, 0.2, 1.0],
+        },
+    ];
+    let plan = HarmonicDecodePlan {
+        strategy: HarmonicDecodeStrategy::Viterbi,
+        stay_probability: 0.7,
+        max_alternatives: 2,
+        ..HarmonicDecodePlan::default()
+    };
+    let decoded = decode_harmonic_sequence(&frames, &templates, None, &plan).unwrap();
+
+    assert_eq!(decoded.frames[0].label, "bright");
+    assert_eq!(decoded.frames[2].label, "dark");
+    assert!(decoded.frames.iter().all(|frame| {
+        frame.confidence > 0.0
+            && frame.alternatives.len() == 2
+            && frame
+                .alternatives
+                .iter()
+                .all(|alternative| alternative.posterior > 0.0)
+    }));
+    assert!(decoded.evidence.path_log_probability.is_some());
+    assert_eq!(decoded.evidence.normalized_steps, frames.len());
+    assert!(decoded.evidence.work_used <= decoded.evidence.work_limit);
+}
+
+#[test]
+fn standard_key_and_chord_templates_name_clear_profiles() {
+    let c_major = HarmonicFeatureFrame {
+        at_sample: 0,
+        values: vec![1.0, 0.0, 0.1, 0.0, 0.9, 0.2, 0.0, 0.8, 0.0, 0.1, 0.0, 0.1],
+    };
+    let keys = decode_keys(
+        &[c_major.clone(), c_major.clone()],
+        &HarmonicDecodePlan::default(),
+    )
+    .unwrap();
+    let chords =
+        decode_chords(&[c_major.clone(), c_major], &HarmonicDecodePlan::default()).unwrap();
+
+    assert_eq!(keys.frames[0].label, "C major");
+    assert_eq!(chords.frames[0].label, "C:maj");
+    assert!(keys.frames[0].alternatives.len() > 1);
+    assert!(chords.frames[0].alternatives.len() > 1);
+}
+
+#[test]
+fn harmonic_decode_refuses_unbounded_or_malformed_requests() {
+    let frame = HarmonicFeatureFrame {
+        at_sample: 0,
+        values: vec![1.0, 0.0],
+    };
+    let template = HarmonicTemplate::new("one", vec![1.0, 0.0]).unwrap();
+    let error = decode_harmonic_sequence(
+        &[frame],
+        &[template],
+        None,
+        &HarmonicDecodePlan {
+            max_work: 1,
+            ..HarmonicDecodePlan::default()
+        },
+    )
+    .unwrap_err();
+    assert!(matches!(
+        error,
+        crate::HarmonicDecodeError::WorkLimit { .. }
+    ));
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/sequence_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-analysis/src/sequence_tests.rs`:
+
+```rust
+use sim_lib_discrete_graph::{AlgorithmControl, AlignmentWindow};
+use sim_lib_discrete_search::{SearchControl, SearchStatus};
+use sim_lib_music_core::{
+    Articulation, Channel, Note, ObjectId, Pitch, Staff, StaffNote, StaffVoice, Time,
+};
+
+use crate::{
+    AnalysisError, AnalysisEvent, AnalysisTransform, Meter, MetricalLattice,
+    PatternDiscoveryPolicy, PatternOverlapPolicy, QuantizationPlan, SimilarityFeature,
+    SimilarityInvariances, SimilarityPlan, SwingPolicy, analysis_events, compare_sequences,
+    discover_patterns, quantize_staff,
+};
+
+// conformance: exact quantization, similarity, and bounded pattern evidence retain policy and identity.
+
+fn id(value: impl Into<String>) -> ObjectId {
+    ObjectId::new(value).expect("identity")
+}
+
+fn note(event: &str, onset: Time, duration: Time, semitone: i32) -> StaffNote {
+    StaffNote {
+        voice_id: id("voice/main"),
+        note_id: id(format!("note/{event}")),
+        event_id: id(format!("event/{event}")),
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_semitone(semitone),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+fn staff(notes: Vec<StaffNote>) -> Staff {
+    let duration = notes
+        .iter()
+        .map(StaffNote::end)
+        .max()
+        .unwrap_or_else(|| Time::from_integer(0));
+    Staff::new(vec![StaffVoice {
+        id: id("voice/main"),
+        name: "main".to_owned(),
+        duration,
+        notes,
+    }])
+    .expect("staff")
+}
+
+fn event(index: usize, onset: Time, duration: Time, pitch: i32) -> AnalysisEvent {
+    AnalysisEvent {
+        voice_id: id("voice/sequence"),
+        note_id: id(format!("note/sequence/{index}")),
+        event_id: id(format!("event/sequence/{index}")),
+        onset,
+        duration,
+        pitch: Pitch::from_semitone(pitch),
+    }
+}
+
+#[test]
+fn metrical_quantization_uses_swing_tuplets_and_lists_every_exact_edit() {
+    let source = staff(vec![
+        note("zero", Time::new(0, 1), Time::new(1, 32), 60),
+        note("triplet", Time::new(2, 25), Time::new(1, 32), 62),
+        note("swing", Time::new(17, 100), Time::new(1, 32), 64),
+    ]);
+    let plan = QuantizationPlan {
+        lattice: MetricalLattice {
+            tempo_bpm: Time::from_integer(120),
+            meter: Meter {
+                beats_per_bar: 4,
+                beat_unit: 4,
+            },
+            subdivision: 2,
+            swing: SwingPolicy::Ratio { long: 2, short: 1 },
+            tuplets: vec![3],
+        },
+        tolerance: Time::new(1, 100),
+        max_alternatives: 3,
+        max_lattice_points: 1_000,
+        control: AlgorithmControl::default()
+            .with_max_work(100_000)
+            .with_max_memory_cells(10_000),
+    };
+    let report = quantize_staff(&source, &plan).expect("quantized");
+    let times = report
+        .output
+        .notes()
+        .map(|note| note.onset)
+        .collect::<Vec<_>>();
+    assert_eq!(
+        times,
+        vec![Time::new(0, 1), Time::new(1, 12), Time::new(1, 6)]
+    );
+    assert_eq!(report.transform.edits.len(), 2);
+    assert_eq!(report.plan, plan);
+    assert_eq!(report.decisions.len(), 3);
+    assert!(
+        report
+            .decisions
+            .iter()
+            .all(|decision| !decision.alternatives.is_empty())
+    );
+    assert!(report.cost > 0.0);
+    assert!(report.alignment.receipt.work_used > 0);
+    assert_eq!(
+        source.notes().map(|note| note.onset).collect::<Vec<_>>(),
+        vec![Time::new(0, 1), Time::new(2, 25), Time::new(17, 100),]
+    );
+
+    let strict = QuantizationPlan {
+        tolerance: Time::new(1, 1000),
+        ..plan
+    };
+    let strict = quantize_staff(&source, &strict).expect("strict quantization");
+    assert!(strict.transform.edits.is_empty());
+    assert_eq!(strict.output, source);
+    assert!(
+        strict
+            .decisions
+            .iter()
+            .skip(1)
+            .all(|decision| decision.selected.is_none())
+    );
+}
+
+#[test]
+fn melody_and_rhythm_similarity_state_invariances_and_keep_both_engines() {
+    let left = vec![
+        event(0, Time::new(0, 1), Time::new(1, 8), 60),
+        event(1, Time::new(1, 4), Time::new(1, 8), 62),
+        event(2, Time::new(1, 2), Time::new(1, 8), 65),
+    ];
+    let right = vec![
+        event(10, Time::new(1, 1), Time::new(1, 16), 65),
+        event(11, Time::new(9, 8), Time::new(1, 16), 67),
+        event(12, Time::new(5, 4), Time::new(1, 16), 70),
+    ];
+    let base = SimilarityPlan {
+        feature: SimilarityFeature::AbsolutePitch,
+        invariances: SimilarityInvariances {
+            transposition: true,
+            time_scale: true,
+        },
+        gap_cost: 12.0,
+        alignment_window: AlignmentWindow::Unbounded,
+        control: AlgorithmControl::default()
+            .with_max_work(100_000)
+            .with_max_memory_cells(10_000),
+        max_alternatives: 4,
+    };
+    let melody = compare_sequences(&left, &right, &base).expect("melody similarity");
+    assert_eq!(melody.invariances, base.invariances);
+    assert_eq!(melody.plan, base);
+    assert_eq!(
+        melody.selected().transform,
+        AnalysisTransform {
+            transposition: -5,
+            time_scale: Time::from_integer(2),
+            time_shift: Time::from_integer(-2),
+        }
+    );
+    assert!(melody.alternatives.len() >= 2);
+    assert_eq!(melody.selected().alignment.score, 0.0);
+    assert!(melody.selected().correlation.coefficient > 0.99);
+    assert!(melody.selected().alignment.receipt.work_used > 0);
+    assert!(!melody.selected().correlation.result.lags.is_empty());
+
+    let rhythm = compare_sequences(
+        &left,
+        &right,
+        &SimilarityPlan {
+            feature: SimilarityFeature::InterOnsetRhythm,
+            invariances: SimilarityInvariances {
+                transposition: false,
+                time_scale: true,
+            },
+            ..base
+        },
+    )
+    .expect("rhythm similarity");
+    assert_eq!(
+        rhythm.selected().transform.time_scale,
+        Time::from_integer(2)
+    );
+    assert_eq!(rhythm.selected().alignment.score, 0.0);
+}
+
+#[test]
+fn pattern_discovery_hash_filters_then_exact_verifies_bounded_occurrences() {
+    let events = vec![
+        event(0, Time::new(0, 1), Time::new(1, 8), 60),
+        event(1, Time::new(1, 4), Time::new(1, 8), 62),
+        event(2, Time::new(1, 2), Time::new(1, 8), 64),
+        event(3, Time::new(1, 1), Time::new(1, 4), 65),
+        event(4, Time::new(3, 2), Time::new(1, 4), 67),
+        event(5, Time::new(2, 1), Time::new(1, 4), 69),
+    ];
+    let policy = PatternDiscoveryPolicy {
+        min_events: 3,
+        max_events: 3,
+        min_support: 2,
+        invariances: SimilarityInvariances {
+            transposition: true,
+            time_scale: true,
+        },
+        overlap: PatternOverlapPolicy::DisallowSharedEvents,
+        max_windows: 100,
+        max_candidate_pairs: 100,
+        max_hash_bytes: 100_000,
+        search: SearchControl::default()
+            .with_max_work(10_000)
+            .with_max_memory_nodes(1_000),
+    };
+    let report = discover_patterns(&events, &policy).expect("patterns");
+    assert_eq!(report.search.status, SearchStatus::Complete);
+    assert_eq!(report.policy, policy);
+    assert!(report.resources.windows > 0);
+    assert!(report.resources.candidate_pairs > 0);
+    let pattern = report
+        .patterns
+        .iter()
+        .find(|pattern| pattern.prototype_event_ids[0].as_str() == "event/sequence/0")
+        .expect("three-note motif");
+    assert_eq!(pattern.event_count, 3);
+    assert_eq!(pattern.occurrences.len(), 2);
+    assert_eq!(pattern.occurrences[0].cost, 0.0);
+    assert_eq!(pattern.occurrences[1].transform.transposition, 5);
+    assert_eq!(
+        pattern.occurrences[1].transform.time_scale,
+        Time::from_integer(2)
+    );
+    assert_eq!(
+        pattern.occurrences[1].event_ids[0].as_str(),
+        "event/sequence/3"
+    );
+    assert_ne!(
+        pattern.occurrences[0].occurrence_id,
+        pattern.occurrences[1].occurrence_id
+    );
+
+    let bounded = PatternDiscoveryPolicy {
+        max_windows: 1,
+        ..policy.clone()
+    };
+    assert!(matches!(
+        discover_patterns(&events, &bounded),
+        Err(AnalysisError::ResourceLimit {
+            resource: "pattern windows",
+            ..
+        })
+    ));
+
+    let unbounded_search = PatternDiscoveryPolicy {
+        search: SearchControl::default(),
+        ..policy
+    };
+    assert!(matches!(
+        discover_patterns(&events, &unbounded_search),
+        Err(AnalysisError::InvalidPolicy {
+            field: "pattern search",
+            ..
+        })
+    ));
+}
+
+#[test]
+fn staff_projection_retains_all_occurrence_identities() {
+    let staff = staff(vec![
+        note("a", Time::new(0, 1), Time::new(1, 4), 60),
+        note("b", Time::new(1, 4), Time::new(1, 4), 62),
+    ]);
+    let projected = analysis_events(&staff);
+    assert_eq!(projected[0].voice_id.as_str(), "voice/main");
+    assert_eq!(projected[0].note_id.as_str(), "note/a");
+    assert_eq!(projected[1].event_id.as_str(), "event/b");
+}
+```
 
 Specimen `spec-test/sim-music/crates/sim-lib-music-analysis/src/tests` is checked by `cargo test`.
 
@@ -970,10 +4744,15 @@ use num_rational::Ratio;
 // conformance: exact music analysis and transform exposes checked analysis descriptors.
 
 use sim_lib_music_core::{Articulation, Channel, Note, PianoRoll, TimedNote};
+use sim_lib_pitch_chord::ChordSymbol;
 use sim_lib_pitch_core::{Pitch, PitchClass};
 
 use crate::{
     ChordWindowMode, DiffRoll, chord_windows_from_diff_roll, chord_windows_from_piano_roll,
+    tonnetz::{
+        CanonicalTriad, TonnetzError, TonnetzMove, TriadQuality, analyze_tonnetz,
+        tonnetz_riemann_label, verify_tonnetz_path,
+    },
 };
 
 fn note(midi: u8, onset: Ratio<i64>, duration: Ratio<i64>) -> TimedNote {
@@ -1043,6 +4822,906 @@ fn diff_roll_and_window_extraction_agree() {
         chord_windows_from_piano_roll(&roll, ChordWindowMode::StartingNotes),
         chord_windows_from_diff_roll(&diff, ChordWindowMode::StartingNotes)
     );
+}
+
+#[test]
+fn plr_generators_are_involutions_and_commute_with_transposition() {
+    let operations = [
+        TonnetzMove::Parallel,
+        TonnetzMove::LeadingToneExchange,
+        TonnetzMove::Relative,
+    ];
+    for root in 0..12 {
+        let root = PitchClass::new(root).expect("pitch class");
+        for quality in [TriadQuality::Major, TriadQuality::Minor] {
+            let triad = CanonicalTriad::new(root, quality);
+            for operation in operations {
+                assert_eq!(triad.apply(operation).apply(operation), triad);
+                let shifted = CanonicalTriad::new(root.transpose(5), quality);
+                let transformed_then_shifted = triad.apply(operation);
+                assert_eq!(
+                    shifted.apply(operation),
+                    CanonicalTriad::new(
+                        transformed_then_shifted.root.transpose(5),
+                        transformed_then_shifted.quality,
+                    )
+                );
+            }
+        }
+    }
+
+    let triad = CanonicalTriad::new(PitchClass::F, TriadQuality::Minor);
+    let left = [TonnetzMove::Parallel, TonnetzMove::LeadingToneExchange];
+    let right = [TonnetzMove::Relative, TonnetzMove::Parallel];
+    let concatenated: Vec<_> = left.into_iter().chain(right).collect();
+    assert_eq!(triad.apply_moves(&[]), triad);
+    assert_eq!(
+        triad.apply_moves(&concatenated),
+        triad.apply_moves(&left).apply_moves(&right)
+    );
+}
+
+#[test]
+fn c_major_to_a_minor_is_a_reproducible_relative_path() {
+    let from = ChordSymbol::parse("C").unwrap().to_chord(4);
+    let to = ChordSymbol::parse("Am").unwrap().to_chord(4);
+    let moves = [
+        TonnetzMove::Parallel,
+        TonnetzMove::LeadingToneExchange,
+        TonnetzMove::Relative,
+    ];
+    let path = analyze_tonnetz(&from, &to, &moves, 8).expect("Tonnetz path");
+
+    assert_eq!(path.distance, 1);
+    assert_eq!(path.steps[0].operation, TonnetzMove::Relative);
+    assert_eq!(path.riemann_labels(), vec!["T(C)", "t(A)"]);
+    verify_tonnetz_path(&path, &moves, 8).expect("verified graph path");
+
+    let repeated = analyze_tonnetz(&from, &to, &moves, 8).expect("repeated path");
+    assert_eq!(repeated, path);
+}
+
+#[test]
+fn identity_drives_transform_while_labels_remain_projection() {
+    let triad = CanonicalTriad::new(PitchClass::CS, TriadQuality::Major);
+    let parallel = triad.apply(TonnetzMove::Parallel);
+    assert_eq!(parallel.root, PitchClass::CS);
+    assert_eq!(parallel.quality, TriadQuality::Minor);
+    assert_eq!(tonnetz_riemann_label(triad), "T(C#)");
+    assert_eq!(tonnetz_riemann_label(parallel), "t(C#)");
+}
+
+#[test]
+fn tonnetz_bounds_and_induced_graph_reachability_fail_closed() {
+    let c_major = ChordSymbol::parse("C").unwrap().to_chord(4);
+    let a_minor = ChordSymbol::parse("Am").unwrap().to_chord(4);
+    assert_eq!(
+        analyze_tonnetz(&c_major, &a_minor, &[TonnetzMove::Relative], 0),
+        Err(TonnetzError::LimitExceeded {
+            limit: 0,
+            required: 1,
+        })
+    );
+    assert_eq!(
+        analyze_tonnetz(&c_major, &a_minor, &[TonnetzMove::Parallel], 8),
+        Err(TonnetzError::Unreachable)
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-core/src/tests/score` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-core/src/tests/score.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: catalog score conversions preserve identities or report every exact loss.
+
+use crate::{
+    AmbiguousConversionPolicy, Articulation, AutomationCell, Channel, Chord, ConversionError,
+    ConversionLossKind, LaneId, LaneKind, Melody, MelodyItem, MusicObject, Note, ObjectId,
+    PianoRoll, PianoRollCell, PianoRollLane, Pitch, Progression, Rest, ScoreForm, ScoreFormKind,
+    Staff, StaffNote, StaffVoice, Time, TimeGrid, convert_score,
+};
+
+fn quarter() -> Time {
+    Ratio::new(1, 4)
+}
+
+fn note(midi: u8, duration: Time) -> Note {
+    Note::new(
+        duration,
+        Pitch::from_midi(midi),
+        96,
+        Channel::new(0).expect("channel"),
+        Articulation::Normal,
+    )
+    .expect("note")
+}
+
+fn staff_note(path: &str, voice: &ObjectId, onset: Time, midi: u8) -> StaffNote {
+    StaffNote {
+        voice_id: voice.clone(),
+        note_id: ObjectId::new(format!("note/{path}")).expect("note id"),
+        event_id: ObjectId::new(format!("event/{path}")).expect("event id"),
+        onset,
+        note: note(midi, quarter()),
+    }
+}
+
+fn polyphonic_staff() -> Staff {
+    let high = ObjectId::new("voice/high").expect("voice");
+    let low = ObjectId::new("voice/low").expect("voice");
+    Staff::new(vec![
+        StaffVoice {
+            id: high.clone(),
+            name: "High".to_owned(),
+            duration: Time::from_integer(1),
+            notes: vec![
+                staff_note("high/0", &high, Time::from_integer(0), 72),
+                staff_note("high/1", &high, quarter(), 74),
+            ],
+        },
+        StaffVoice {
+            id: low.clone(),
+            name: "Low".to_owned(),
+            duration: Time::from_integer(1),
+            notes: vec![
+                staff_note("low/0", &low, Time::from_integer(0), 48),
+                staff_note("low/1", &low, quarter(), 50),
+            ],
+        },
+    ])
+    .expect("staff")
+}
+
+#[test]
+fn melody_staff_round_trip_keeps_exact_time_and_audits_rest_boundaries() {
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(64, Ratio::new(1, 2))),
+    ])
+    .expect("melody");
+
+    let staff = convert_score(
+        &ScoreForm::Melody(melody.clone()),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("to staff");
+    assert_eq!(staff.value.kind(), ScoreFormKind::Staff);
+    assert_eq!(staff.losses.len(), 1);
+    assert_eq!(staff.losses[0].kind, ConversionLossKind::ExplicitRest);
+    let ScoreForm::Staff(staff_value) = staff.value else {
+        panic!("staff");
+    };
+    assert_eq!(staff_value.duration(), Time::from_integer(1));
+
+    let restored = convert_score(
+        &ScoreForm::Staff(staff_value),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("to melody");
+    assert_eq!(restored.value, ScoreForm::Melody(melody));
+}
+
+#[test]
+fn snapshots_and_changes_round_trip_staff_identities() {
+    let staff = polyphonic_staff();
+    for kind in [ScoreFormKind::Snapshot, ScoreFormKind::ChangeStream] {
+        let encoded = convert_score(
+            &ScoreForm::Staff(staff.clone()),
+            kind,
+            AmbiguousConversionPolicy::Reject,
+        )
+        .expect("encode event form");
+        assert!(encoded.is_lossless());
+        assert_eq!(encoded.preserved, staff.object_ids());
+
+        let decoded = convert_score(
+            &encoded.value,
+            ScoreFormKind::Staff,
+            AmbiguousConversionPolicy::Reject,
+        )
+        .expect("decode event form");
+        assert_eq!(decoded.value, ScoreForm::Staff(staff.clone()));
+        assert_eq!(decoded.preserved, staff.object_ids());
+    }
+}
+
+#[test]
+fn snapshot_decoder_reports_incomplete_activity_sets() {
+    let mut staff = polyphonic_staff();
+    staff.voices[0].notes[0].note.duration = Ratio::new(1, 2);
+    let omitted = staff.voices[0].notes[0].event_id.clone();
+    let encoded = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Snapshot,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("encode snapshots");
+    let ScoreForm::Snapshot(mut snapshots) = encoded.value else {
+        panic!("snapshot");
+    };
+    snapshots
+        .snapshots
+        .iter_mut()
+        .find(|snapshot| snapshot.at == quarter())
+        .expect("quarter-note boundary")
+        .sounding
+        .retain(|note| note.event_id != omitted);
+
+    let decoded = convert_score(
+        &ScoreForm::Snapshot(snapshots),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("decode incomplete snapshots");
+    assert!(
+        decoded
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::InconsistentChange)
+    );
+}
+
+#[test]
+fn ambiguous_monophonic_conversion_requires_a_policy() {
+    let staff = polyphonic_staff();
+    let rejected = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::Reject,
+    );
+    assert!(matches!(
+        rejected,
+        Err(ConversionError::Ambiguous {
+            to: ScoreFormKind::Melody,
+            ..
+        })
+    ));
+
+    let selected = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Melody,
+        AmbiguousConversionPolicy::KeepHighest,
+    )
+    .expect("select high line");
+    let ScoreForm::Melody(melody) = selected.value else {
+        panic!("melody");
+    };
+    let midis = melody
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            MelodyItem::Note(note) => note.pitch.to_midi(),
+            MelodyItem::Rest(_) => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(midis, vec![72, 74]);
+    assert!(
+        selected
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::DiscardedVoice)
+    );
+}
+
+#[test]
+fn every_catalog_target_converts_or_reports_its_loss() {
+    let staff = polyphonic_staff();
+    for target in [
+        ScoreFormKind::Melody,
+        ScoreFormKind::Chord,
+        ScoreFormKind::Staff,
+        ScoreFormKind::Counterpoint,
+        ScoreFormKind::PianoRoll,
+        ScoreFormKind::Snapshot,
+        ScoreFormKind::ChangeStream,
+        ScoreFormKind::Progression,
+    ] {
+        let report = convert_score(
+            &ScoreForm::Staff(staff.clone()),
+            target,
+            AmbiguousConversionPolicy::KeepFirst,
+        )
+        .unwrap_or_else(|error| panic!("{target:?}: {error}"));
+        assert_eq!(report.value.kind(), target);
+        if !report.is_lossless() {
+            assert!(report.losses.iter().all(|loss| !loss.detail.is_empty()));
+        }
+    }
+}
+
+#[test]
+fn full_catalog_matrix_round_trips_or_carries_explicit_losses() {
+    let staff = polyphonic_staff();
+    let melody = Melody::new(vec![
+        MelodyItem::Note(note(60, quarter())),
+        MelodyItem::Rest(Rest::new(quarter()).expect("rest")),
+        MelodyItem::Note(note(62, quarter())),
+    ])
+    .expect("melody");
+    let chord = Chord::new(
+        quarter(),
+        "Dm",
+        vec![Pitch::from_midi(62), Pitch::from_midi(65)],
+        90,
+        Channel::new(0).expect("channel"),
+    )
+    .expect("chord");
+    let progression =
+        Progression::new(Some("D minor".to_owned()), vec![chord.clone()]).expect("progression");
+    let counterpoint = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Counterpoint,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("counterpoint")
+    .value;
+    let piano_roll = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::PianoRoll,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("piano roll")
+    .value;
+    let snapshot = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::Snapshot,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("snapshot")
+    .value;
+    let changes = convert_score(
+        &ScoreForm::Staff(staff.clone()),
+        ScoreFormKind::ChangeStream,
+        AmbiguousConversionPolicy::KeepFirst,
+    )
+    .expect("changes")
+    .value;
+    let sources = vec![
+        ScoreForm::Melody(melody),
+        ScoreForm::Chord(chord),
+        ScoreForm::Staff(staff),
+        counterpoint,
+        piano_roll,
+        snapshot,
+        changes,
+        ScoreForm::Progression(progression),
+    ];
+    let targets = [
+        ScoreFormKind::Melody,
+        ScoreFormKind::Chord,
+        ScoreFormKind::Staff,
+        ScoreFormKind::Counterpoint,
+        ScoreFormKind::PianoRoll,
+        ScoreFormKind::Snapshot,
+        ScoreFormKind::ChangeStream,
+        ScoreFormKind::Progression,
+    ];
+
+    for source in sources {
+        for target in targets {
+            let converted = convert_score(&source, target, AmbiguousConversionPolicy::KeepFirst)
+                .unwrap_or_else(|error| panic!("{:?} -> {target:?}: {error}", source.kind()));
+            let restored = convert_score(
+                &converted.value,
+                source.kind(),
+                AmbiguousConversionPolicy::KeepFirst,
+            )
+            .unwrap_or_else(|error| panic!("{target:?} -> {:?}: {error}", source.kind()));
+            if restored.value != source {
+                assert!(
+                    !converted.losses.is_empty() || !restored.losses.is_empty(),
+                    "{:?} -> {target:?} changed without a loss report",
+                    source.kind()
+                );
+            }
+        }
+    }
+}
+
+#[test]
+fn harmonic_and_piano_roll_metadata_losses_are_explicit() {
+    let chord = Chord::new(
+        quarter(),
+        "C",
+        vec![Pitch::from_midi(60), Pitch::from_midi(64)],
+        90,
+        Channel::new(0).expect("channel"),
+    )
+    .expect("chord");
+    let progression =
+        Progression::new(Some("C major".to_owned()), vec![chord]).expect("progression");
+    let progression_report = convert_score(
+        &ScoreForm::Progression(progression),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("progression to staff");
+    assert!(
+        progression_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::KeyAnnotation)
+    );
+    assert!(
+        progression_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::HarmonicLabel)
+    );
+
+    let automation = PianoRollCell::Automation(AutomationCell {
+        time: Time::from_integer(0),
+        target: sim_kernel::Symbol::qualified("music/parameter", "expression"),
+        value: 72,
+    });
+    let roll = PianoRoll::from_lanes_with_time(
+        vec![
+            PianoRollLane::new(
+                LaneId::new("automation"),
+                LaneKind::Automation,
+                vec![automation],
+            )
+            .expect("lane"),
+        ],
+        TimeGrid::new(960, Ratio::new(1, 32)).expect("grid"),
+    )
+    .expect("roll");
+    let roll_report = convert_score(
+        &ScoreForm::PianoRoll(roll),
+        ScoreFormKind::Staff,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("roll to staff");
+    assert!(
+        roll_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::PianoRollGrid)
+    );
+    assert!(
+        roll_report
+            .losses
+            .iter()
+            .any(|loss| loss.kind == ConversionLossKind::NonNoteCell)
+    );
+}
+
+#[test]
+fn staff_duration_is_exact_parallel_maximum() {
+    let staff = polyphonic_staff();
+    assert_eq!(staff.duration(), Time::from_integer(1));
+    assert_eq!(MusicObject::duration(&staff), Time::from_integer(1));
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-transform/src/tests/exact` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-transform/src/tests/exact.rs`:
+
+```rust
+use num_rational::Ratio;
+
+// conformance: exact staff transforms preserve identities and satisfy composition laws.
+
+use sim_lib_music_core::{
+    Articulation, Channel, Note, ObjectId, Pitch, Staff, StaffNote, StaffVoice, Time,
+};
+
+use crate::{
+    AssignmentCertificate, DelayedNoteOrder, MusicTransformChange, RegisterRange, RegisterTie,
+    RhythmMask, SustainSpan, VoiceCrossingPolicy, VoiceLeadingMetric, VoiceLeadingMotion,
+    VoiceLeadingPolicy, apply_rhythm_mask, expand_staff, parallel_staff, progression_multiply,
+    progression_overlay, progression_repeat, progression_slice, restore_register,
+    separate_delayed_notes, sequence_staff, slice_staff, slur_staff, sustain_staff,
+    unwrap_register, verify_voice_leading_path, voice_leading, voice_leading_path,
+    voicing_change_palette,
+};
+
+fn q() -> Time {
+    Ratio::new(1, 4)
+}
+
+fn make_note(voice: &ObjectId, path: &str, onset: Time, duration: Time, midi: u8) -> StaffNote {
+    StaffNote {
+        voice_id: voice.clone(),
+        note_id: ObjectId::new(format!("note/{path}")).expect("note id"),
+        event_id: ObjectId::new(format!("event/{path}")).expect("event id"),
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            96,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+fn one_voice(voice_name: &str, duration: Time, notes: Vec<StaffNote>) -> Staff {
+    let voice = notes
+        .first()
+        .map(|note| note.voice_id.clone())
+        .unwrap_or_else(|| ObjectId::new(voice_name).expect("voice id"));
+    Staff::new(vec![StaffVoice {
+        id: voice,
+        name: voice_name.to_owned(),
+        duration,
+        notes,
+    }])
+    .expect("staff")
+}
+
+fn voicing_staff(name: &str, pitches: &[u8]) -> Staff {
+    Staff::new(
+        pitches
+            .iter()
+            .enumerate()
+            .map(|(index, pitch)| {
+                let voice = ObjectId::new(format!("voice/{name}/{index}")).expect("voice");
+                StaffVoice {
+                    id: voice.clone(),
+                    name: format!("{name} {index}"),
+                    duration: Time::from_integer(1),
+                    notes: vec![make_note(
+                        &voice,
+                        &format!("{name}/{index}"),
+                        Time::from_integer(0),
+                        Time::from_integer(1),
+                        *pitch,
+                    )],
+                }
+            })
+            .collect(),
+    )
+    .expect("voicing staff")
+}
+
+#[test]
+fn sustain_and_slur_report_exact_duration_and_articulation_edits() {
+    let voice = ObjectId::new("voice/lead").expect("voice");
+    let staff = one_voice(
+        "Lead",
+        Time::from_integer(1),
+        vec![
+            make_note(&voice, "lead/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "lead/1", Ratio::new(1, 2), q(), 62),
+        ],
+    );
+    let sustained = sustain_staff(
+        &staff,
+        &[
+            SustainSpan::new(Ratio::new(3, 8), Ratio::new(1, 2), None),
+            SustainSpan::new(Ratio::new(1, 8), Ratio::new(3, 8), None),
+        ],
+    )
+    .expect("sustain");
+    assert_eq!(
+        sustained.value.voices[0].notes[0].note.duration,
+        Ratio::new(1, 2)
+    );
+    assert!(matches!(
+        sustained.changes[0],
+        MusicTransformChange::Duration { .. }
+    ));
+
+    let slurred = slur_staff(&staff).expect("slur");
+    assert_eq!(
+        slurred.value.voices[0].notes[0].note.duration,
+        Ratio::new(1, 2)
+    );
+    assert_eq!(
+        slurred.value.voices[0].notes[0].note.articulation,
+        Articulation::Legato
+    );
+    assert!(
+        slurred
+            .changes
+            .iter()
+            .any(|change| matches!(change, MusicTransformChange::Articulation { .. }))
+    );
+}
+
+#[test]
+fn expansion_is_exactly_invertible_without_float_time() {
+    let voice = ObjectId::new("voice/expand").expect("voice");
+    let staff = one_voice(
+        "Expand",
+        Ratio::new(5, 8),
+        vec![make_note(
+            &voice,
+            "expand/0",
+            Ratio::new(1, 8),
+            Ratio::new(3, 16),
+            60,
+        )],
+    );
+    let expanded = expand_staff(&staff, Ratio::new(3, 2)).expect("expand");
+    let restored = expand_staff(&expanded.value, Ratio::new(2, 3)).expect("contract");
+    assert_eq!(restored.value, staff);
+}
+
+#[test]
+fn delayed_note_separation_preserves_ids_and_keeps_exact_abutment() {
+    let voice = ObjectId::new("voice/delayed").expect("voice");
+    let staff = one_voice(
+        "Delayed",
+        Time::from_integer(1),
+        vec![
+            make_note(
+                &voice,
+                "delayed/0",
+                Time::from_integer(0),
+                Ratio::new(1, 2),
+                60,
+            ),
+            make_note(&voice, "delayed/1", q(), q(), 67),
+            make_note(&voice, "delayed/2", Ratio::new(1, 2), q(), 62),
+        ],
+    );
+    let original_ids = staff.object_ids();
+    let separated =
+        separate_delayed_notes(&staff, DelayedNoteOrder::HighestFirst).expect("separate");
+
+    assert_eq!(separated.value.voices.len(), 2);
+    assert_eq!(separated.value.voices[0].notes.len(), 2);
+    assert_eq!(separated.value.voices[0].notes[1].onset, Ratio::new(1, 2));
+    assert_eq!(separated.preserved, original_ids);
+    assert!(
+        separated
+            .changes
+            .iter()
+            .any(|change| matches!(change, MusicTransformChange::CreatedVoice { .. }))
+    );
+}
+
+#[test]
+fn register_unwrap_report_restores_original_octaves() {
+    let voice = ObjectId::new("voice/register").expect("voice");
+    let staff = one_voice(
+        "Register",
+        Ratio::new(1, 2),
+        vec![
+            make_note(&voice, "register/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "register/1", q(), q(), 83),
+        ],
+    );
+    let unwrapped = unwrap_register(
+        &staff,
+        RegisterRange {
+            low: Pitch::from_midi(48),
+            high: Pitch::from_midi(72),
+            tie: RegisterTie::Descending,
+        },
+    )
+    .expect("unwrap");
+    assert_eq!(
+        unwrapped.value.voices[0].notes[1].note.pitch.to_midi(),
+        Some(59)
+    );
+    assert_eq!(restore_register(&unwrapped).expect("restore").value, staff);
+}
+
+#[test]
+fn exact_duration_sequence_and_parallel_laws_hold() {
+    let voice_a = ObjectId::new("voice/a").expect("voice");
+    let voice_b = ObjectId::new("voice/b").expect("voice");
+    let first = one_voice(
+        "voice/a",
+        Ratio::new(3, 4),
+        vec![make_note(&voice_a, "a/0", Time::from_integer(0), q(), 60)],
+    );
+    let second_same_voice = one_voice(
+        "voice/a",
+        Ratio::new(1, 2),
+        vec![make_note(&voice_a, "a/1", Ratio::new(1, 8), q(), 62)],
+    );
+    let second_parallel = one_voice(
+        "voice/b",
+        Ratio::new(1, 2),
+        vec![make_note(&voice_b, "b/0", Time::from_integer(0), q(), 48)],
+    );
+
+    let sequence = sequence_staff(&[first.clone(), second_same_voice]).expect("sequence");
+    assert_eq!(sequence.value.duration(), Ratio::new(5, 4));
+    assert_eq!(sequence.value.voices[0].notes[1].onset, Ratio::new(7, 8));
+
+    let parallel = parallel_staff(&[first, second_parallel]).expect("parallel");
+    assert_eq!(parallel.value.duration(), Ratio::new(3, 4));
+}
+
+#[test]
+fn slicing_composes_and_rhythm_masks_are_idempotent() {
+    let voice = ObjectId::new("voice/laws").expect("voice");
+    let staff = one_voice(
+        "Laws",
+        Time::from_integer(1),
+        vec![
+            make_note(&voice, "laws/0", Time::from_integer(0), q(), 60),
+            make_note(&voice, "laws/1", q(), q(), 62),
+            make_note(&voice, "laws/2", Ratio::new(1, 2), q(), 64),
+            make_note(&voice, "laws/3", Ratio::new(3, 4), q(), 65),
+        ],
+    );
+
+    let outer = slice_staff(&staff, Ratio::new(1, 8), Ratio::new(7, 8)).expect("outer");
+    let nested = slice_staff(&outer.value, Ratio::new(1, 8), Ratio::new(1, 2)).expect("nested");
+    let direct = slice_staff(&staff, q(), Ratio::new(5, 8)).expect("direct");
+    assert_eq!(nested.value, direct.value);
+
+    let mask = RhythmMask::new(q(), vec![true, false]).expect("mask");
+    let once = apply_rhythm_mask(&staff, &mask).expect("once");
+    let twice = apply_rhythm_mask(&once.value, &mask).expect("twice");
+    assert_eq!(once.value, twice.value);
+    assert_eq!(
+        once.value.voices[0]
+            .notes
+            .iter()
+            .map(|note| note.note.pitch.to_midi().expect("midi"))
+            .collect::<Vec<_>>(),
+        vec![60, 64]
+    );
+}
+
+#[test]
+fn certified_optimum_beats_sequential_greedy_voice_leading() {
+    let source =
+        crate::ExactVoicing::from_staff(&voicing_staff("source", &[69, 70]), Time::from_integer(0))
+            .expect("source");
+    let target =
+        crate::ExactVoicing::from_staff(&voicing_staff("target", &[60, 69]), Time::from_integer(0))
+            .expect("target");
+    let policy = VoiceLeadingPolicy::new(1_000, 1_000);
+    let optimal = voice_leading(&source, &target, &policy).expect("optimal");
+
+    let mut unused = vec![true; target.notes.len()];
+    let mut greedy = 0_i64;
+    for from in &source.notes {
+        let (index, cost) = target
+            .notes
+            .iter()
+            .enumerate()
+            .filter(|(index, _)| unused[*index])
+            .map(|(index, to)| {
+                let distance = i64::from(to.pitch.semitone()) - i64::from(from.pitch.semitone());
+                (index, distance * distance)
+            })
+            .min_by_key(|(index, cost)| (*cost, *index))
+            .expect("greedy target");
+        unused[index] = false;
+        greedy += cost;
+    }
+
+    assert_eq!(greedy, 100);
+    assert_eq!(optimal.assignment.total_cost, 82);
+    assert!(matches!(
+        optimal.assignment.certificate,
+        AssignmentCertificate::MinCostFlow { .. }
+    ));
+    assert!(optimal.motions.iter().all(|motion| matches!(
+        motion,
+        VoiceLeadingMotion::Move { source, target, .. }
+            if source.note_id.as_str().starts_with("note/source/")
+                && target.note_id.as_str().starts_with("note/target/")
+    )));
+}
+
+#[test]
+fn voice_leading_preserves_multiplicity_ties_and_path_certificates() {
+    let first =
+        crate::ExactVoicing::from_staff(&voicing_staff("first", &[60, 64]), Time::from_integer(0))
+            .expect("first");
+    let tied =
+        crate::ExactVoicing::from_staff(&voicing_staff("tied", &[62, 62]), Time::from_integer(0))
+            .expect("tied");
+    let last =
+        crate::ExactVoicing::from_staff(&voicing_staff("last", &[61, 65]), Time::from_integer(0))
+            .expect("last");
+    let policy = VoiceLeadingPolicy::new(100, 100)
+        .with_metric(VoiceLeadingMetric::SquaredSemitones)
+        .with_voice_crossing(VoiceCrossingPolicy::Allow);
+
+    let first_run = voice_leading(&first, &tied, &policy).expect("first run");
+    let replay = voice_leading(&first, &tied, &policy).expect("replay");
+    assert_eq!(first_run, replay);
+    assert_eq!(first_run.assignment.total_cost, 8);
+    assert_eq!(
+        first_run
+            .motions
+            .iter()
+            .filter_map(|motion| match motion {
+                VoiceLeadingMotion::Move { target, .. } => Some(target.event_id.clone()),
+                _ => None,
+            })
+            .collect::<std::collections::BTreeSet<_>>()
+            .len(),
+        2
+    );
+
+    let path = voice_leading_path(&[first, tied, last], &policy).expect("path");
+    verify_voice_leading_path(&path, &policy).expect("path certificate");
+    assert_eq!(path.certificate.leg_costs, vec![8, 10]);
+    assert_eq!(path.certificate.total_cost, 18);
+}
+
+#[test]
+fn unequal_voice_counts_use_doubling_and_exact_palette_edges() {
+    let single =
+        crate::ExactVoicing::from_staff(&voicing_staff("single", &[60]), Time::from_integer(0))
+            .expect("single");
+    let pair =
+        crate::ExactVoicing::from_staff(&voicing_staff("pair", &[60, 67]), Time::from_integer(0))
+            .expect("pair");
+    let third =
+        crate::ExactVoicing::from_staff(&voicing_staff("third", &[62, 65]), Time::from_integer(0))
+            .expect("third");
+    let policy = VoiceLeadingPolicy::new(100, 100).with_doubling(10);
+    let leading = voice_leading(&single, &pair, &policy).expect("doubling");
+
+    assert_eq!(leading.assignment.total_cost, 59);
+    assert!(
+        leading
+            .motions
+            .iter()
+            .any(|motion| matches!(motion, VoiceLeadingMotion::Double { cost: 59, .. }))
+    );
+
+    let palette = voicing_change_palette(&[single, pair, third], &policy).expect("change palette");
+    assert_eq!(palette.changes.len(), 6);
+    assert_eq!(
+        palette
+            .changes
+            .iter()
+            .map(|change| (change.source, change.target))
+            .collect::<Vec<_>>(),
+        vec![(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)]
+    );
+    assert_eq!(palette.outgoing(1).count(), 2);
+    assert_eq!(palette.outgoing(99).count(), 0);
+}
+
+#[test]
+fn exact_progression_algebra_retains_or_reports_every_identity() {
+    let first = voicing_staff("algebra-a", &[60]);
+    let second = voicing_staff("algebra-b", &[67]);
+
+    let multiplied =
+        progression_multiply(&first, Ratio::new(3, 2)).expect("duration multiplication");
+    assert_eq!(multiplied.value.duration(), Ratio::new(3, 2));
+    assert_eq!(multiplied.preserved, first.object_ids());
+
+    let overlaid = progression_overlay(&[first.clone(), second]).expect("overlay");
+    assert_eq!(overlaid.value.voices.len(), 2);
+
+    let sliced = progression_slice(&multiplied.value, q(), Time::from_integer(1)).expect("slice");
+    assert_eq!(sliced.value.duration(), Ratio::new(3, 4));
+
+    let repeated = progression_repeat(&first, 3).expect("repeat");
+    assert_eq!(repeated.value.duration(), Time::from_integer(3));
+    assert_eq!(repeated.value.voices[0].notes.len(), 3);
+    assert_eq!(
+        repeated.value.voices[0].notes[1].note_id.as_str(),
+        "note/algebra-a/0/repeat/1"
+    );
+    assert_eq!(
+        repeated
+            .changes
+            .iter()
+            .filter(|change| matches!(change, MusicTransformChange::RepeatedIdentity { .. }))
+            .count(),
+        2
+    );
+    assert_eq!(repeated.preserved, first.object_ids());
+
+    let empty = progression_repeat(&first, 0).expect("zero repeats");
+    assert!(empty.value.voices.is_empty());
 }
 ```
 
@@ -1269,7 +5948,3083 @@ fn map_helpers_cover_transpose_inversion_rotation_and_negative_octaves() {
 }
 ```
 
+### `feature/sim-music/algorithm-foundry`
+
+Specimen `recipe/sim-music/music-algorithm-foundry` is checked by `sh scripts/check-recipes.sh`.
+
+Source `recipes/music-algorithm-foundry/recipe.toml`:
+
+```toml
+id = "music-algorithm-foundry"
+title = "Compose a music algorithm plan from replaceable stages"
+codec = "rust"
+setup = "src/main.rs"
+purpose = "README.md"
+order = 10
+tags = ["music", "algorithm", "shape", "foundry"]
+requires = [
+  "sim-lib-midi-smf",
+  "sim-lib-music-analysis",
+  "sim-lib-music-counterpoint",
+  "sim-lib-music-lift",
+  "sim-lib-music-lower",
+  "sim-lib-pitch-chord",
+  "sim-lib-sound-render",
+]
+```
+
+### `feature/sim-music/carpet-composition`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-combinators/src/carpet_conformance.rs`:
+
+```rust
+use std::collections::BTreeMap;
+
+use sim_lib_music_core::{Articulation, Channel, Music, MusicObject, Note, Pitch, Time};
+use sim_lib_music_transform::{PitchDelta, TransformChain, TransformStep, TransposeTransform};
+use sim_lib_rank::Nat;
+
+use crate::{
+    CarpetAxis, CarpetError, CarpetIndex, CarpetPolicy, EmptyPolicy, MusicCarpet, OutOfRangePolicy,
+    OverlayPolicy, RaggedPolicy, SlicePolicy,
+};
+
+fn axis(name: &str, labels: &[&str], cyclic: bool) -> CarpetAxis {
+    CarpetAxis::new(
+        name,
+        labels.iter().map(|label| (*label).to_owned()).collect(),
+        cyclic,
+    )
+}
+
+fn note(midi: u8) -> Music {
+    Music::Note(
+        Note::new(
+            Time::new(1, 4),
+            Pitch::from_midi(midi),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    )
+}
+
+fn full_carpet() -> MusicCarpet {
+    let axes = vec![
+        axis("row", &["north", "south"], false),
+        axis("column", &["west", "center", "east"], false),
+    ];
+    let cells = (0..2)
+        .flat_map(|row| {
+            (0..3).map(move |column| {
+                (
+                    CarpetIndex::new(vec![row, column]),
+                    note(60 + (row * 3 + column) as u8),
+                )
+            })
+        })
+        .collect();
+    MusicCarpet::new(axes, cells, CarpetPolicy::STRICT).expect("full carpet")
+}
+
+fn midi_signature(carpet: &MusicCarpet) -> Vec<(Vec<usize>, Vec<u8>)> {
+    carpet
+        .cells
+        .iter()
+        .map(|(index, music)| {
+            let mut atoms = Vec::new();
+            music.voices(Time::from_integer(0), &mut atoms);
+            let pitches = atoms
+                .into_iter()
+                .filter_map(|atom| match atom.atom {
+                    sim_lib_music_core::AtomRef::Note(note) => note.pitch.to_midi(),
+                    _ => None,
+                })
+                .collect();
+            (index.coordinates.clone(), pitches)
+        })
+        .collect()
+}
+
+#[test]
+fn mixed_radix_addresses_are_stable_and_round_trip() {
+    let carpet = full_carpet();
+    let index = CarpetIndex::new(vec![1, 2]);
+    let ordinal = carpet.rank_index(&index).expect("rank");
+
+    assert_eq!(ordinal.to_decimal_string(), "5");
+    assert_eq!(carpet.index_at_rank(&ordinal).expect("unrank"), index);
+    assert!(matches!(
+        carpet.index_at_rank(&Nat::from(6_u64)),
+        Err(CarpetError::Rank(_))
+    ));
+}
+
+#[test]
+fn empty_ragged_and_out_of_range_policies_are_explicit() {
+    assert_eq!(
+        MusicCarpet::new(Vec::new(), BTreeMap::new(), CarpetPolicy::STRICT)
+            .expect_err("strict empty"),
+        CarpetError::EmptyCarpet
+    );
+    let empty_policy = CarpetPolicy {
+        empty: EmptyPolicy::Allow,
+        ragged: RaggedPolicy::Sparse,
+        out_of_range: OutOfRangePolicy::Reject,
+    };
+    let empty = MusicCarpet::new(Vec::new(), BTreeMap::new(), empty_policy).expect("empty value");
+    assert!(matches!(
+        empty.rank_index(&CarpetIndex::default()),
+        Err(CarpetError::Rank(_))
+    ));
+
+    let axes = vec![
+        axis("cycle", &["a", "b"], true),
+        axis("line", &["x", "y"], false),
+    ];
+    let one_cell = BTreeMap::from([(CarpetIndex::new(vec![0, 0]), note(60))]);
+    assert!(matches!(
+        MusicCarpet::new(axes.clone(), one_cell.clone(), CarpetPolicy::STRICT),
+        Err(CarpetError::Ragged {
+            expected: 4,
+            actual: 1
+        })
+    ));
+    MusicCarpet::new(axes.clone(), one_cell, CarpetPolicy::SPARSE).expect("sparse carpet");
+
+    let wrapped_policy = CarpetPolicy {
+        out_of_range: OutOfRangePolicy::WrapCyclic,
+        ..CarpetPolicy::SPARSE
+    };
+    let wrapped = MusicCarpet::new(
+        axes.clone(),
+        BTreeMap::from([(CarpetIndex::new(vec![2, 1]), note(61))]),
+        wrapped_policy,
+    )
+    .expect("cyclic coordinate");
+    assert!(wrapped.cells.contains_key(&CarpetIndex::new(vec![0, 1])));
+
+    assert!(matches!(
+        MusicCarpet::new(
+            axes,
+            BTreeMap::from([(CarpetIndex::new(vec![0, 2]), note(61))]),
+            wrapped_policy,
+        ),
+        Err(CarpetError::CoordinateOutOfRange { axis: 1, .. })
+    ));
+}
+
+#[test]
+fn rotations_reflections_and_slices_obey_algebraic_fixtures() {
+    let carpet = full_carpet();
+    let rotated = carpet.rotate(0, 1, 4).expect("four rotations");
+    assert_eq!(rotated.axes, carpet.axes);
+    assert_eq!(midi_signature(&rotated), midi_signature(&carpet));
+
+    let quarter = carpet.rotate(0, 1, 1).expect("quarter turn");
+    assert_eq!(quarter.axes[0].name, "column");
+    assert_eq!(quarter.axes[1].name, "row");
+    assert_eq!(quarter.axes[1].labels, vec!["south", "north"]);
+    assert_eq!(
+        quarter
+            .cell(&CarpetIndex::new(vec![0, 1]))
+            .map(|music| music.kind()),
+        Some("Note")
+    );
+
+    let reflected = carpet
+        .reflect(1)
+        .and_then(|value| value.reflect(1))
+        .expect("double reflection");
+    assert_eq!(reflected.axes, carpet.axes);
+    assert_eq!(midi_signature(&reflected), midi_signature(&carpet));
+
+    let cyclic = MusicCarpet::new(
+        vec![axis("cycle", &["a", "b", "c"], true)],
+        BTreeMap::from([
+            (CarpetIndex::new(vec![0]), note(60)),
+            (CarpetIndex::new(vec![1]), note(61)),
+            (CarpetIndex::new(vec![2]), note(62)),
+        ]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("cyclic carpet");
+    let wrapped = cyclic
+        .slice(0, 2, 4, SlicePolicy::WrapCyclic)
+        .expect("wrapped slice");
+    assert_eq!(wrapped.axes[0].labels, vec!["c", "a", "b", "c"]);
+    assert_eq!(
+        midi_signature(&wrapped),
+        vec![
+            (vec![0], vec![62]),
+            (vec![1], vec![60]),
+            (vec![2], vec![61]),
+            (vec![3], vec![62]),
+        ]
+    );
+    assert!(matches!(
+        cyclic.slice(0, 2, 4, SlicePolicy::Strict),
+        Err(CarpetError::InvalidSlice { .. })
+    ));
+    assert_eq!(
+        cyclic
+            .slice(0, 2, 4, SlicePolicy::Clamp)
+            .expect("clamped")
+            .axes[0]
+            .labels,
+        vec!["c"]
+    );
+}
+
+#[test]
+fn overlays_and_music_transform_chains_compose_existing_music() {
+    let axes = vec![axis("x", &["only"], false)];
+    let base = MusicCarpet::new(
+        axes.clone(),
+        BTreeMap::from([(CarpetIndex::new(vec![0]), note(60))]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("base");
+    let top = MusicCarpet::new(
+        axes,
+        BTreeMap::from([(CarpetIndex::new(vec![0]), note(67))]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("top");
+
+    assert!(matches!(
+        base.overlay(&top, OverlayPolicy::Reject),
+        Err(CarpetError::OverlayCollision { .. })
+    ));
+    let parallel = base
+        .overlay(&top, OverlayPolicy::Parallel)
+        .expect("parallel overlay");
+    assert_eq!(midi_signature(&parallel), vec![(vec![0], vec![60, 67])]);
+
+    let chain = TransformChain::new(vec![TransformStep::Transpose(TransposeTransform::new(
+        PitchDelta::Semitones(12),
+    ))]);
+    let transformed = parallel.apply_transform(&chain).expect("transform chain");
+    assert!(transformed.diagnostics.is_empty());
+    assert_eq!(
+        midi_signature(&transformed.carpet),
+        vec![(vec![0], vec![72, 79])]
+    );
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-combinators/src/relative_conformance.rs`:
+
+```rust
+use std::collections::BTreeMap;
+
+use sim_lib_music_core::{
+    Articulation, AtomRef, Channel, Chord, ConversionLossKind, Music, MusicObject, Note, PianoRoll,
+    Pitch, Time, TimedNote,
+};
+
+use crate::{
+    CarpetAxis, CarpetIndex, CarpetPolicy, MusicCarpet, RelativeOrigin, RelativePolicy,
+    RelativeReference, RelativeScope, decode_relative, encode_relative,
+};
+
+fn timed(midi: u8, onset: Time) -> TimedNote {
+    TimedNote {
+        onset,
+        note: Note::new(
+            Time::new(1, 4),
+            Pitch::from_midi(midi),
+            90,
+            Channel::new(2).expect("channel"),
+            Articulation::Legato,
+        )
+        .expect("note"),
+    }
+}
+
+fn canonical_carpet() -> MusicCarpet {
+    let cells = BTreeMap::from([
+        (
+            CarpetIndex::new(vec![0]),
+            Music::PianoRoll(
+                PianoRoll::new(vec![
+                    timed(60, Time::from_integer(0)),
+                    timed(64, Time::new(1, 4)),
+                ])
+                .expect("roll"),
+            ),
+        ),
+        (
+            CarpetIndex::new(vec![1]),
+            Music::PianoRoll(PianoRoll::new(vec![timed(67, Time::new(1, 2))]).expect("roll")),
+        ),
+    ]);
+    MusicCarpet::new(
+        vec![CarpetAxis::new(
+            "phrase",
+            vec!["opening".to_owned(), "answer".to_owned()],
+            false,
+        )],
+        cells,
+        CarpetPolicy::STRICT,
+    )
+    .expect("carpet")
+}
+
+fn assert_canonical_cells_equal(left: &MusicCarpet, right: &MusicCarpet) {
+    assert_eq!(left.axes, right.axes);
+    assert_eq!(left.cells.len(), right.cells.len());
+    for (index, left) in &left.cells {
+        let right = right.cells.get(index).expect("same cell");
+        match (left, right) {
+            (Music::PianoRoll(left), Music::PianoRoll(right)) => assert_eq!(left, right),
+            pair => panic!("expected canonical rolls, got {pair:?}"),
+        }
+    }
+}
+
+fn semantic_notes(music: &Music) -> Vec<(Time, Pitch, Time)> {
+    let mut atoms = Vec::new();
+    music.voices(Time::from_integer(0), &mut atoms);
+    let mut notes = atoms
+        .into_iter()
+        .filter_map(|atom| match atom.atom {
+            AtomRef::Note(note) => Some((atom.onset, note.pitch, note.duration)),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    notes.sort();
+    notes
+}
+
+#[test]
+fn cell_previous_deltas_round_trip_canonical_music_exactly() {
+    let source = canonical_carpet();
+    let encoded = encode_relative(&source, RelativePolicy::CELL_DELTAS).expect("encode");
+    assert!(encoded.is_lossless());
+
+    let opening = &encoded.value.cells[&CarpetIndex::new(vec![0])];
+    assert_eq!(
+        opening.origin,
+        Some(RelativeOrigin::new(
+            Pitch::from_midi(60),
+            Time::from_integer(0)
+        ))
+    );
+    assert_eq!(opening.events[0].pitch_delta, 0);
+    assert_eq!(opening.events[0].onset_delta, Time::from_integer(0));
+    assert_eq!(opening.events[1].pitch_delta, 4);
+    assert_eq!(opening.events[1].onset_delta, Time::new(1, 4));
+    assert_eq!(
+        encoded.value.cells[&CarpetIndex::new(vec![1])].events[0].pitch_delta,
+        0
+    );
+
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    assert!(decoded.is_lossless());
+    assert_canonical_cells_equal(&source, &decoded.value);
+}
+
+#[test]
+fn carpet_anchor_uses_stable_rank_order_across_cells() {
+    let source = canonical_carpet();
+    let policy = RelativePolicy {
+        scope: RelativeScope::Carpet,
+        pitch: RelativeReference::Anchor,
+        time: RelativeReference::Anchor,
+    };
+    let encoded = encode_relative(&source, policy).expect("encode");
+    let opening = &encoded.value.cells[&CarpetIndex::new(vec![0])];
+    let answer = &encoded.value.cells[&CarpetIndex::new(vec![1])];
+
+    assert!(opening.origin.is_some());
+    assert!(answer.origin.is_none());
+    assert_eq!(
+        opening
+            .events
+            .iter()
+            .map(|event| event.pitch_delta)
+            .chain(answer.events.iter().map(|event| event.pitch_delta))
+            .collect::<Vec<_>>(),
+        vec![0, 4, 7]
+    );
+    assert_eq!(answer.events[0].onset_delta, Time::new(1, 2));
+
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    assert_canonical_cells_equal(&source, &decoded.value);
+}
+
+#[test]
+fn external_origin_reports_loss_and_can_be_restored_by_context() {
+    let source = canonical_carpet();
+    let policy = RelativePolicy {
+        scope: RelativeScope::External,
+        pitch: RelativeReference::Previous,
+        time: RelativeReference::Previous,
+    };
+    let encoded = encode_relative(&source, policy).expect("encode");
+    assert_eq!(encoded.losses.len(), 1);
+    assert_eq!(encoded.losses[0].kind, ConversionLossKind::RelativeAnchor);
+    assert!(
+        encoded
+            .value
+            .cells
+            .values()
+            .all(|cell| cell.origin.is_none())
+    );
+
+    let origin = RelativeOrigin::new(Pitch::from_midi(60), Time::from_integer(0));
+    let restored = decode_relative(&encoded.value, Some(origin)).expect("context decode");
+    assert!(restored.is_lossless());
+    assert_canonical_cells_equal(&source, &restored.value);
+
+    let normalized = decode_relative(&encoded.value, None).expect("zero decode");
+    assert_eq!(
+        normalized.losses[0].kind,
+        ConversionLossKind::RelativeAnchor
+    );
+    let first = normalized.value.cells[&CarpetIndex::new(vec![0])].clone();
+    assert_eq!(semantic_notes(&first)[0].1, Pitch::from_semitone(0));
+}
+
+#[test]
+fn noncanonical_music_reports_structure_loss_but_preserves_semantics() {
+    let chord = Music::Chord(
+        Chord::new(
+            Time::new(1, 2),
+            "C",
+            vec![Pitch::from_midi(60), Pitch::from_midi(64)],
+            88,
+            Channel::new(1).expect("channel"),
+        )
+        .expect("chord"),
+    );
+    let source = MusicCarpet::new(
+        vec![CarpetAxis::new("x", vec!["one".to_owned()], false)],
+        BTreeMap::from([(CarpetIndex::new(vec![0]), chord.clone())]),
+        CarpetPolicy::STRICT,
+    )
+    .expect("carpet");
+
+    let encoded = encode_relative(&source, RelativePolicy::CELL_DELTAS).expect("encode");
+    assert_eq!(encoded.losses.len(), 1);
+    assert_eq!(encoded.losses[0].kind, ConversionLossKind::SourceStructure);
+    let decoded = decode_relative(&encoded.value, None).expect("decode");
+    let reconstructed = &decoded.value.cells[&CarpetIndex::new(vec![0])];
+    assert_eq!(semantic_notes(&chord), semantic_notes(reconstructed));
+    assert_eq!(chord.duration(), reconstructed.duration());
+}
+```
+
+### `feature/sim-music/bounded-rewrite-catalogs`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/rewrite_conformance` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-combinators/src/rewrite_conformance.rs`:
+
+```rust
+use sim_lib_discrete_search::{SearchControl, SearchStatus};
+use sim_lib_music_core::{Pitch, PitchClass};
+use sim_lib_music_transform::PitchMapPolicy;
+use sim_lib_pitch_scale::Scale;
+
+use crate::{
+    Alphabet, ExpansionLimits, LSystem, LSystemError, Production, ProductionContext,
+    ProgressionTree, ProgressionTreeCatalog, ProgressionTreeFilter, ProgressionTreeTopology,
+    ScaleFollowingState, ScaleRewriteError, ScaleRewriteProgram, SymbolRole, derive,
+};
+
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+enum Branch {
+    Grow,
+    Leaf,
+}
+
+fn search_control(seed: u64) -> SearchControl {
+    SearchControl::default()
+        .with_seed(seed)
+        .with_max_work(100_000)
+        .with_max_results(128)
+        .with_max_frontier(4_096)
+        .with_max_memory_nodes(8_192)
+}
+
+fn context_system() -> LSystem<Branch> {
+    LSystem::new(
+        Alphabet::new([
+            (Branch::Grow, SymbolRole::Variable),
+            (Branch::Leaf, SymbolRole::Constant),
+        ])
+        .expect("alphabet"),
+        vec![Branch::Grow],
+        vec![
+            Production::new(
+                "grow-next-to-leaf",
+                Branch::Grow,
+                ProductionContext::new(None, Some(Branch::Leaf)),
+                vec![Branch::Leaf, Branch::Leaf],
+            ),
+            Production::new(
+                "grow-fallback",
+                Branch::Grow,
+                ProductionContext::free(),
+                vec![Branch::Grow, Branch::Leaf],
+            ),
+        ],
+        ExpansionLimits::new(3, 8, 24),
+    )
+    .expect("productive finite system")
+}
+
+#[test]
+fn typed_contextual_derivation_is_bounded_and_inspectable() {
+    let run = derive(&context_system(), 2, search_control(17)).expect("bounded derivation");
+
+    assert_eq!(run.receipt.status, SearchStatus::Complete);
+    assert_eq!(run.receipt.seed, 17);
+    assert_eq!(run.outputs.len(), 1);
+    let result = &run.outputs[0];
+    assert_eq!(
+        result
+            .generations
+            .iter()
+            .map(|generation| generation.symbols.clone())
+            .collect::<Vec<_>>(),
+        vec![
+            vec![Branch::Grow],
+            vec![Branch::Grow, Branch::Leaf],
+            vec![Branch::Leaf, Branch::Leaf, Branch::Leaf],
+        ]
+    );
+    assert_eq!(result.receipt.total_symbols, 6);
+    assert_eq!(result.receipt.production_uses["grow-fallback"], 1);
+    assert_eq!(result.receipt.production_uses["grow-next-to-leaf"], 1);
+    assert_eq!(
+        result.forest[0].production_id.as_deref(),
+        Some("grow-fallback")
+    );
+    assert_eq!(
+        result.forest[0].children[0].production_id.as_deref(),
+        Some("grow-next-to-leaf")
+    );
+    assert_eq!(result.forest[0].children[0].children.len(), 2);
+
+    let repeated = derive(&context_system(), 2, search_control(17)).expect("repeat");
+    assert_eq!(run, repeated);
+}
+
+#[test]
+fn invalid_productivity_and_unbounded_policies_fail_before_search() {
+    let alphabet = Alphabet::new([(Branch::Grow, SymbolRole::Variable)]).expect("alphabet");
+    let no_fallback = LSystem::new(
+        alphabet.clone(),
+        vec![Branch::Grow],
+        vec![Production::new(
+            "context-only",
+            Branch::Grow,
+            ProductionContext::new(Some(Branch::Grow), None),
+            vec![Branch::Grow],
+        )],
+        ExpansionLimits::new(2, 4, 8),
+    );
+    assert_eq!(no_fallback, Err(LSystemError::VariableWithoutFallback));
+
+    let erasing = LSystem::new(
+        alphabet,
+        vec![Branch::Grow],
+        vec![Production::new(
+            "erase",
+            Branch::Grow,
+            ProductionContext::free(),
+            Vec::new(),
+        )],
+        ExpansionLimits::new(2, 4, 8),
+    );
+    assert_eq!(
+        erasing,
+        Err(LSystemError::NonProductiveProduction {
+            id: "erase".to_owned()
+        })
+    );
+
+    assert_eq!(
+        derive(&context_system(), 1, SearchControl::default()),
+        Err(LSystemError::UnboundedSearch { field: "max_work" })
+    );
+    let tight = LSystem::new(
+        Alphabet::new([
+            (Branch::Grow, SymbolRole::Variable),
+            (Branch::Leaf, SymbolRole::Constant),
+        ])
+        .expect("alphabet"),
+        vec![Branch::Grow],
+        vec![Production::new(
+            "double",
+            Branch::Grow,
+            ProductionContext::free(),
+            vec![Branch::Grow, Branch::Grow],
+        )],
+        ExpansionLimits::new(2, 3, 8),
+    )
+    .expect("policy is structurally valid");
+    assert!(matches!(
+        derive(&tight, 2, search_control(0)),
+        Err(LSystemError::ExpansionCouldExceed {
+            generation: 2,
+            symbols: Some(4)
+        })
+    ));
+}
+
+fn tree() -> ProgressionTree<&'static str> {
+    ProgressionTree::new(
+        "I",
+        vec![
+            ProgressionTree::new("IV", Vec::new()),
+            ProgressionTree::new("V", vec![ProgressionTree::new("I", Vec::new())]),
+        ],
+    )
+}
+
+struct NoRepeatedPreorderValue;
+
+impl ProgressionTreeFilter<&'static str> for NoRepeatedPreorderValue {
+    fn allows_prefix(&self, prefix: &[&'static str], _topology: &ProgressionTreeTopology) -> bool {
+        prefix.windows(2).all(|pair| pair[0] != pair[1])
+    }
+}
+
+#[test]
+fn progression_trees_rank_round_trip_and_search_through_shared_engines() {
+    let topology = ProgressionTreeTopology::new(vec![2, 0, 1, 0]).expect("topology");
+    let catalog =
+        ProgressionTreeCatalog::new(vec!["I", "IV", "V"], topology).expect("tree catalog");
+    let rank = catalog.rank(&tree()).expect("rank");
+
+    assert_eq!(catalog.unrank(&rank).expect("unrank"), tree());
+    assert_eq!(catalog.rank(&catalog.unrank(&rank).unwrap()).unwrap(), rank);
+    assert!(matches!(
+        catalog.explore(SearchControl::default(), &NoRepeatedPreorderValue),
+        Err(crate::ProgressionTreeError::UnboundedSearch { field: "max_work" })
+    ));
+
+    let control = search_control(23).with_max_results(7);
+    let run = catalog
+        .explore(control, &NoRepeatedPreorderValue)
+        .expect("bounded tree search");
+    assert_eq!(run.receipt.status, SearchStatus::Partial);
+    assert_eq!(run.receipt.reason.as_deref(), Some("result bound reached"));
+    assert_eq!(run.outputs.len(), 7);
+    for output in &run.outputs {
+        assert_eq!(
+            catalog.rank(&output.tree).expect("rank explored tree"),
+            output.rank
+        );
+        let mut values = Vec::new();
+        flatten(&output.tree, &mut values);
+        assert!(values.windows(2).all(|pair| pair[0] != pair[1]));
+    }
+}
+
+#[test]
+fn scale_modulation_is_rewrite_data_over_pitch_maps() {
+    let c = ScaleFollowingState::from_scale(
+        "c-major",
+        Scale::major(PitchClass::C),
+        PitchMapPolicy::Nearest,
+    )
+    .expect("C state");
+    let g = ScaleFollowingState::from_scale(
+        "g-major",
+        Scale::major(PitchClass::G),
+        PitchMapPolicy::Nearest,
+    )
+    .expect("G state");
+    let d = ScaleFollowingState::from_scale(
+        "d-major",
+        Scale::major(PitchClass::D),
+        PitchMapPolicy::Nearest,
+    )
+    .expect("D state");
+    let program = ScaleRewriteProgram::new(
+        vec![c, g, d],
+        vec!["c-major".to_owned()],
+        vec![
+            Production::new(
+                "c-to-dominant-neighbors",
+                "c-major".to_owned(),
+                ProductionContext::free(),
+                vec!["g-major".to_owned(), "d-major".to_owned()],
+            ),
+            Production::new(
+                "g-to-d",
+                "g-major".to_owned(),
+                ProductionContext::free(),
+                vec!["d-major".to_owned()],
+            ),
+            Production::new(
+                "d-to-c",
+                "d-major".to_owned(),
+                ProductionContext::free(),
+                vec!["c-major".to_owned()],
+            ),
+        ],
+        ExpansionLimits::new(2, 4, 8),
+    )
+    .expect("scale rewrite data");
+
+    let run = program
+        .derive(1, search_control(31))
+        .expect("scale rewrite");
+    assert_eq!(run.outputs.len(), 1);
+    let output = &run.outputs[0];
+    assert_eq!(
+        output.generations[1]
+            .iter()
+            .map(|state| state.id.as_str())
+            .collect::<Vec<_>>(),
+        vec!["g-major", "d-major"]
+    );
+    for state in &output.generations[1] {
+        let mapped = state
+            .pitch_map
+            .map_pitch(Pitch::from_midi(61))
+            .expect("nearest scale pitch");
+        assert!(state.scale.degree_of(mapped.pitch.class).is_some());
+    }
+    assert_eq!(
+        output.derivation.receipt.production_uses["c-to-dominant-neighbors"],
+        1
+    );
+    assert_eq!(output.program_digest.len(), 16);
+
+    assert_eq!(
+        ScaleFollowingState::from_scale(
+            "unsafe",
+            Scale::major(PitchClass::C),
+            PitchMapPolicy::Unmapped,
+        ),
+        Err(ScaleRewriteError::NonFollowingMapPolicy)
+    );
+}
+
+fn flatten<'a>(tree: &'a ProgressionTree<&'static str>, values: &mut Vec<&'a str>) {
+    values.push(tree.value);
+    for child in &tree.children {
+        flatten(child, values);
+    }
+}
+```
+
+### `feature/sim-music/exact-score-consonance`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-consonance/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-consonance/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+// conformance: exact score consonance retains identity, multiplicity, separate metrics, and MIDI parity.
+
+use num_rational::Ratio;
+use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, RawArgs, Symbol};
+use sim_lib_midi_core::{
+    Channel, ChannelMessage, MetaEvent, MidiEvent, MidiPayload, TickTime, U7, synthetic_origin,
+};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack};
+use sim_lib_music_core::{
+    Articulation, Chord, Music, Note, ObjectId, Pitch, Score, Staff, StaffNote, StaffVoice, Time,
+};
+use sim_lib_music_lift::{MidiRealizationPolicy, realize_midi};
+
+use crate::{
+    ConsonancePolicy, TimeSpan, evaluate, evaluate_midi_timeline, evaluate_staff,
+    install_music_consonance_lib, music_consonance_evaluate_symbol, slice_sounding_windows,
+    sounding_windows,
+};
+
+fn time(numerator: i64, denominator: i64) -> Time {
+    Ratio::new(numerator, denominator)
+}
+
+fn object_id(value: &str) -> ObjectId {
+    ObjectId::new(value).expect("identity")
+}
+
+fn channel() -> Channel {
+    Channel::new(0).expect("channel")
+}
+
+fn staff_note(
+    voice: &str,
+    id: &str,
+    midi: u8,
+    onset: Time,
+    duration: Time,
+    velocity: u8,
+    articulation: Articulation,
+) -> StaffNote {
+    StaffNote {
+        voice_id: object_id(voice),
+        note_id: object_id(&format!("note/{id}")),
+        event_id: object_id(&format!("event/{id}")),
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            velocity,
+            channel(),
+            articulation,
+        )
+        .expect("note"),
+    }
+}
+
+fn staff(duration: Time, notes: Vec<StaffNote>) -> Staff {
+    Staff::new(vec![StaffVoice {
+        id: object_id("voice/main"),
+        name: "Main".to_owned(),
+        duration,
+        notes,
+    }])
+    .expect("staff")
+}
+
+#[test]
+fn exact_windows_are_half_open_and_retain_duplicate_note_facts() {
+    let score = staff(
+        time(1, 1),
+        vec![
+            staff_note(
+                "voice/main",
+                "first",
+                60,
+                time(0, 1),
+                time(1, 2),
+                90,
+                Articulation::Staccato,
+            ),
+            staff_note(
+                "voice/main",
+                "duplicate",
+                60,
+                time(1, 4),
+                time(1, 2),
+                110,
+                Articulation::Legato,
+            ),
+        ],
+    );
+    let windows = sounding_windows(&score).expect("windows");
+
+    assert_eq!(
+        windows
+            .iter()
+            .map(|window| (window.span.start, window.span.end, window.notes.len()))
+            .collect::<Vec<_>>(),
+        vec![
+            (time(0, 1), time(1, 4), 1),
+            (time(1, 4), time(1, 2), 2),
+            (time(1, 2), time(3, 4), 1),
+            (time(3, 4), time(1, 1), 0),
+        ]
+    );
+    let duplicate_window = &windows[1];
+    assert_eq!(
+        duplicate_window.notes[0].pitch,
+        duplicate_window.notes[1].pitch
+    );
+    assert_ne!(
+        duplicate_window.notes[0].event_id,
+        duplicate_window.notes[1].event_id
+    );
+    assert_eq!(duplicate_window.notes[0].velocity, 90);
+    assert_eq!(duplicate_window.notes[1].articulation, Articulation::Legato);
+    assert_eq!(windows[2].notes[0].onset, time(1, 4));
+    assert_eq!(windows[2].notes[0].release, time(3, 4));
+}
+
+#[test]
+fn exact_window_slicing_is_associative_and_keeps_source_lifetimes() {
+    let score = staff(
+        time(1, 1),
+        vec![staff_note(
+            "voice/main",
+            "held",
+            67,
+            time(0, 1),
+            time(1, 1),
+            100,
+            Articulation::Tenuto,
+        )],
+    );
+    let windows = sounding_windows(&score).expect("windows");
+    let outer = TimeSpan::new(time(1, 8), time(7, 8)).expect("span");
+    let inner = TimeSpan::new(time(1, 4), time(3, 4)).expect("span");
+    let twice = slice_sounding_windows(&slice_sounding_windows(&windows, outer), inner.clone());
+    let once = slice_sounding_windows(&windows, inner);
+
+    assert_eq!(twice, once);
+    assert_eq!(once[0].notes[0].onset, time(0, 1));
+    assert_eq!(once[0].notes[0].release, time(1, 1));
+}
+
+#[test]
+fn silence_is_an_exact_window_with_zero_separate_metrics() {
+    let report = evaluate_staff(&staff(time(1, 2), Vec::new()), &ConsonancePolicy::default())
+        .expect("silence");
+
+    assert_eq!(report.windows.len(), 1);
+    let silence = &report.windows[0];
+    assert!(silence.window.notes.is_empty());
+    assert!(silence.pitch.iter().all(zero_metric));
+    assert!(silence.acoustic.iter().all(zero_metric));
+    assert!(zero_metric(&silence.ratio));
+    assert!(zero_metric(&silence.commonality));
+    assert!(zero_metric(&silence.leading));
+}
+
+#[test]
+fn every_metric_family_is_separate_and_density_is_not_mass() {
+    let report = evaluate_staff(
+        &staff(
+            time(1, 2),
+            vec![
+                staff_note(
+                    "voice/main",
+                    "c",
+                    60,
+                    time(0, 1),
+                    time(1, 2),
+                    127,
+                    Articulation::Normal,
+                ),
+                staff_note(
+                    "voice/main",
+                    "cs",
+                    61,
+                    time(0, 1),
+                    time(1, 2),
+                    96,
+                    Articulation::Normal,
+                ),
+                staff_note(
+                    "voice/main",
+                    "g",
+                    67,
+                    time(0, 1),
+                    time(1, 2),
+                    80,
+                    Articulation::Normal,
+                ),
+            ],
+        ),
+        &ConsonancePolicy::default(),
+    )
+    .expect("evaluation");
+    let window = &report.windows[0];
+
+    assert_eq!(window.pitch.len(), 4);
+    assert_eq!(window.acoustic.len(), 4);
+    assert_eq!(window.ratio.model, "ratio");
+    assert_eq!(window.commonality.model, "commonality");
+    assert_eq!(window.leading.model, "leading");
+    let roughness = window
+        .acoustic
+        .iter()
+        .find(|metric| metric.model == "plomp-levelt")
+        .expect("roughness");
+    assert!(roughness.roughness_mass > 0.0);
+    assert!(roughness.normalized_density > 0.0);
+    assert_ne!(
+        roughness.roughness_mass, roughness.normalized_density,
+        "mass and density must remain different named components"
+    );
+}
+
+#[test]
+fn octave_move_preserves_pitch_models_but_is_visible_to_leading() {
+    let report = evaluate_staff(
+        &staff(
+            time(1, 1),
+            vec![
+                staff_note(
+                    "voice/main",
+                    "low",
+                    60,
+                    time(0, 1),
+                    time(1, 2),
+                    100,
+                    Articulation::Normal,
+                ),
+                staff_note(
+                    "voice/main",
+                    "high",
+                    72,
+                    time(1, 2),
+                    time(1, 2),
+                    100,
+                    Articulation::Normal,
+                ),
+            ],
+        ),
+        &ConsonancePolicy::default(),
+    )
+    .expect("evaluation");
+
+    assert_eq!(report.windows[0].pitch, report.windows[1].pitch);
+    assert_eq!(report.windows[1].leading.roughness_mass, 12.0);
+    assert_ne!(
+        report.windows[0].acoustic, report.windows[1].acoustic,
+        "acoustic frequency remains octave-aware"
+    );
+}
+
+#[test]
+fn score_and_realized_midi_have_equivalent_windows_and_metrics() {
+    let pitches = vec![
+        Pitch::from_midi(60),
+        Pitch::from_midi(64),
+        Pitch::from_midi(67),
+    ];
+    let score = Score::new(
+        120,
+        (4, 4),
+        None,
+        Music::Chord(Chord::new(time(1, 4), "C", pitches, 100, channel()).expect("chord")),
+    )
+    .expect("score");
+    let file = single_track(vec![
+        note_on(0, 60),
+        note_on(0, 64),
+        note_on(0, 67),
+        note_off(480, 60),
+        note_off(480, 64),
+        note_off(480, 67),
+        event(480, MidiPayload::Meta(MetaEvent::EndOfTrack)),
+    ]);
+    let midi = realize_midi(&file, MidiRealizationPolicy::default()).expect("MIDI realization");
+    let score_report = evaluate(&score, &ConsonancePolicy::default()).expect("score evaluation");
+    let midi_report = evaluate_midi_timeline(&midi.timelines[0], &ConsonancePolicy::default())
+        .expect("MIDI evaluation");
+
+    assert_eq!(score_report.windows.len(), midi_report.windows.len());
+    assert_eq!(
+        score_report.windows[0].window.span,
+        midi_report.windows[0].window.span
+    );
+    assert_eq!(score_report.windows[0].pitch, midi_report.windows[0].pitch);
+    assert_eq!(
+        score_report.windows[0].acoustic,
+        midi_report.windows[0].acoustic
+    );
+    assert_eq!(score_report.windows[0].ratio, midi_report.windows[0].ratio);
+}
+
+#[test]
+fn runtime_report_exposes_notes_and_each_metric_without_an_aggregate() {
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_consonance_lib(&mut cx).expect("install");
+    let function = cx
+        .resolve_function(&music_consonance_evaluate_symbol())
+        .expect("function");
+    let callable = function.object().as_callable().expect("callable");
+    let args = vec![
+        Expr::Symbol(Symbol::new(":score")),
+        Expr::String(
+            "#(Score tempo=120 time_sig=4/4 key=none body=#(Chord dur=1/4 symbol=\"C\" pitches=[C4,E4,G4] vel=100 channel=0))"
+                .to_owned(),
+        ),
+        Expr::Symbol(Symbol::new(":policy")),
+        Expr::Map(vec![
+            (
+                Expr::Symbol(Symbol::new(":duplicates")),
+                quoted_symbol("retain"),
+            ),
+            (
+                Expr::Symbol(Symbol::new(":normalization")),
+                quoted_symbol("per-pair"),
+            ),
+        ]),
+    ];
+    let value = callable
+        .call_exprs(&mut cx, RawArgs::new(args))
+        .expect("runtime evaluation");
+    let Expr::Map(report) = value.object().as_expr(&mut cx).expect("expression") else {
+        panic!("expected report map");
+    };
+
+    assert!(has_key(&report, "provenance"));
+    assert!(has_key(&report, "windows"));
+    assert_eq!(field(&report, "aggregate"), Some(&Expr::Nil));
+    let Some(Expr::Vector(windows)) = field(&report, "windows") else {
+        panic!("expected windows vector");
+    };
+    let Expr::Map(window) = &windows[0] else {
+        panic!("expected window map");
+    };
+    for key in [
+        "notes",
+        "pitch",
+        "acoustic",
+        "ratio",
+        "commonality",
+        "leading",
+    ] {
+        assert!(has_key(window, key), "missing {key}");
+    }
+}
+
+fn zero_metric(metric: &crate::MetricReport) -> bool {
+    metric.roughness_mass == 0.0
+        && metric.normalized_density == 0.0
+        && metric.harmonic_context == 0.0
+}
+
+fn event(ticks: i64, payload: MidiPayload) -> MidiEvent {
+    MidiEvent {
+        time: TickTime::new(ticks, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload,
+    }
+}
+
+fn note_on(ticks: i64, key: u8) -> MidiEvent {
+    event(
+        ticks,
+        MidiPayload::Channel(ChannelMessage::NoteOn {
+            ch: channel(),
+            key: U7(key),
+            vel: U7(100),
+        }),
+    )
+}
+
+fn note_off(ticks: i64, key: u8) -> MidiEvent {
+    event(
+        ticks,
+        MidiPayload::Channel(ChannelMessage::NoteOff {
+            ch: channel(),
+            key: U7(key),
+            vel: U7(0),
+        }),
+    )
+}
+
+fn single_track(events: Vec<MidiEvent>) -> SmfFile {
+    SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![SmfTrack { events }],
+    }
+}
+
+fn quoted_symbol(value: &str) -> Expr {
+    Expr::Quote {
+        mode: QuoteMode::Quote,
+        expr: Box::new(Expr::Symbol(Symbol::new(value))),
+    }
+}
+
+fn has_key(entries: &[(Expr, Expr)], name: &str) -> bool {
+    field(entries, name).is_some()
+}
+
+fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Option<&'a Expr> {
+    entries.iter().find_map(|(key, value)| match key {
+        Expr::Symbol(symbol) if symbol.name.as_ref() == name => Some(value),
+        _ => None,
+    })
+}
+```
+
+### `feature/sim-music/reversible-consonance-completion`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-consonance/src/completion_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-consonance/src/completion_tests.rs`:
+
+```rust
+use std::collections::BTreeSet;
+
+// conformance: additive completion is bounded, reversible, and identity preserving.
+
+use num_rational::Ratio;
+use sim_lib_discrete_search::{NeverInterrupt, SearchControl, SearchStatus};
+use sim_lib_music_core::{
+    Articulation, Channel, Note, ObjectId, Pitch, Staff, StaffNote, StaffVoice, Time,
+};
+
+use crate::{
+    Addition, AdditionKind, ChordAddition, CompletionConstraints, CompletionRequest,
+    ConsonancePatch, ConsonancePolicy, DoublingAddition, MetricBounds, MetricFamily,
+    MetricThreshold, NoteAddition, OrnamentAddition, PedalAddition, PitchRangeConstraint,
+    PreservationConstraints, StyleConstraints, TimeSpan, VoiceAddition, apply_patch,
+    complete_staff, remove_patch,
+};
+
+fn time(numerator: i64, denominator: i64) -> Time {
+    Ratio::new(numerator, denominator)
+}
+
+fn id(value: &str) -> ObjectId {
+    ObjectId::new(value).expect("identity")
+}
+
+fn note(voice: &str, name: &str, pitch: u8, onset: Time, duration: Time) -> StaffNote {
+    StaffNote {
+        voice_id: id(voice),
+        note_id: id(&format!("note/{name}")),
+        event_id: id(&format!("event/{name}")),
+        onset,
+        note: Note::new(
+            duration,
+            Pitch::from_midi(pitch),
+            96,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    }
+}
+
+fn source_staff(notes: Vec<StaffNote>) -> Staff {
+    Staff::new(vec![StaffVoice {
+        id: id("voice/main"),
+        name: "Main".to_owned(),
+        duration: time(1, 1),
+        notes,
+    }])
+    .expect("staff")
+}
+
+#[test]
+fn every_typed_addition_applies_without_rewriting_and_inverts_exactly() {
+    let source = source_staff(vec![
+        note("voice/main", "source-c", 60, time(0, 1), time(1, 1)),
+        note("voice/main", "source-g", 67, time(1, 2), time(1, 2)),
+    ]);
+    let original = source.clone();
+    let additions = vec![
+        Addition::Note(NoteAddition {
+            note: note("voice/main", "single", 64, time(0, 1), time(1, 4)),
+        }),
+        Addition::Ornament(OrnamentAddition {
+            anchor_event_id: id("event/source-c"),
+            notes: vec![
+                note("voice/main", "ornament-a", 62, time(1, 4), time(1, 8)),
+                note("voice/main", "ornament-b", 59, time(3, 8), time(1, 8)),
+            ],
+        }),
+        Addition::Chord(ChordAddition {
+            label: Some("C major".to_owned()),
+            notes: vec![
+                note("voice/main", "chord-e", 64, time(1, 2), time(1, 4)),
+                note("voice/main", "chord-g", 67, time(1, 2), time(1, 4)),
+            ],
+        }),
+        Addition::Pedal(PedalAddition {
+            label: Some("tonic".to_owned()),
+            note: note("voice/main", "pedal", 48, time(0, 1), time(1, 1)),
+        }),
+        Addition::Doubling(DoublingAddition {
+            source_event_id: id("event/source-c"),
+            note: note("voice/main", "double-c", 72, time(0, 1), time(1, 1)),
+        }),
+        Addition::Voice(VoiceAddition {
+            voice: StaffVoice {
+                id: id("voice/counterline"),
+                name: "Counterline".to_owned(),
+                duration: time(1, 1),
+                notes: vec![note(
+                    "voice/counterline",
+                    "voice-a",
+                    55,
+                    time(0, 1),
+                    time(1, 1),
+                )],
+            },
+        }),
+    ];
+    let patch = ConsonancePatch::new(&source, additions.clone()).expect("typed patch");
+    let completed = apply_patch(&source, &patch).expect("apply");
+    let restored = remove_patch(&completed, &patch).expect("remove");
+
+    assert_eq!(source, original, "construction and apply borrow immutably");
+    assert_eq!(restored, source);
+    assert_eq!(restored.object_ids(), source.object_ids());
+    assert_eq!(
+        additions
+            .iter()
+            .map(Addition::kind)
+            .collect::<BTreeSet<_>>(),
+        [
+            AdditionKind::Note,
+            AdditionKind::Ornament,
+            AdditionKind::Chord,
+            AdditionKind::Pedal,
+            AdditionKind::Doubling,
+            AdditionKind::Voice,
+        ]
+        .into_iter()
+        .collect()
+    );
+
+    let mut altered = completed;
+    let added = altered
+        .voices
+        .iter_mut()
+        .find(|voice| voice.id == id("voice/main"))
+        .and_then(|voice| {
+            voice
+                .notes
+                .iter_mut()
+                .find(|note| note.event_id == id("event/single"))
+        })
+        .expect("added note");
+    added.note.velocity = 1;
+    assert!(remove_patch(&altered, &patch).is_err());
+}
+
+#[test]
+fn bounded_completion_meets_thresholds_and_labels_partial_search_honestly() {
+    let source = source_staff(vec![
+        note("voice/main", "c", 60, time(0, 1), time(1, 1)),
+        note("voice/main", "fs", 66, time(0, 1), time(1, 1)),
+    ]);
+    let target = TimeSpan::new(time(0, 1), time(1, 2)).expect("target");
+    let protected = TimeSpan::new(time(1, 2), time(1, 1)).expect("protected");
+    let request = CompletionRequest {
+        candidates: vec![
+            Addition::Note(NoteAddition {
+                note: note("voice/main", "candidate-e", 64, time(0, 1), time(1, 2)),
+            }),
+            Addition::Note(NoteAddition {
+                note: note("voice/main", "candidate-g", 67, time(0, 1), time(1, 2)),
+            }),
+        ],
+        constraints: CompletionConstraints {
+            thresholds: vec![MetricThreshold {
+                family: MetricFamily::Pitch,
+                model: "tritone-density".to_owned(),
+                span: Some(target.clone()),
+                bounds: MetricBounds {
+                    max_normalized_density: Some(0.5),
+                    ..MetricBounds::default()
+                },
+            }],
+            preservation: PreservationConstraints {
+                required_ids: source.object_ids(),
+                protected_spans: vec![protected],
+            },
+            ranges: vec![PitchRangeConstraint {
+                voice_id: None,
+                lowest: Pitch::from_midi(60),
+                highest: Pitch::from_midi(72),
+            }],
+            style: StyleConstraints {
+                allowed_kinds: [AdditionKind::Note].into_iter().collect(),
+                min_additions: 1,
+                max_additions: Some(1),
+                max_added_notes: Some(1),
+                max_new_voices: Some(0),
+                max_simultaneous_added_notes: Some(1),
+                allowed_articulations: vec![Articulation::Normal],
+            },
+        },
+    };
+    assert!(
+        request
+            .constraints
+            .accepts_partial(&source, &request.candidates[..1])
+            .expect("candidate constraints")
+    );
+
+    let result = complete_staff(
+        &source,
+        &ConsonancePolicy::default(),
+        &request,
+        SearchControl::default().with_max_results(1),
+        &NeverInterrupt,
+    )
+    .expect("bounded completion");
+
+    assert_eq!(result.patch.additions.len(), 1);
+    assert_eq!(result.changed_windows, vec![target]);
+    assert_eq!(result.search.status, SearchStatus::Partial);
+    assert_eq!(
+        result.search.reason.as_deref(),
+        Some("result bound reached")
+    );
+    assert_eq!(result.search.result_count, 1);
+    assert_eq!(result.provenance.preserved_ids, source.object_ids());
+    assert_eq!(
+        remove_patch(
+            &apply_patch(&source, &result.patch).expect("apply result"),
+            &result.patch
+        )
+        .expect("remove result"),
+        source
+    );
+
+    let before_density = result.before.windows[0]
+        .pitch
+        .iter()
+        .find(|metric| metric.model == "tritone-density")
+        .expect("before tritone metric")
+        .normalized_density;
+    let after_density = result.after.windows[0]
+        .pitch
+        .iter()
+        .find(|metric| metric.model == "tritone-density")
+        .expect("after tritone metric")
+        .normalized_density;
+    assert_eq!(before_density, 1.0);
+    assert!(after_density <= 0.5);
+}
+```
+
+### `feature/sim-music/music-counterpoint`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-counterpoint/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-counterpoint/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+// conformance: counterpoint reports and stretto graphs retain exact rule and relation evidence.
+
+use num_rational::Ratio;
+use sim_codec::{Input, decode_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, RawArgs, ReadPolicy, Symbol};
+use sim_lib_discrete_search::{NeverInterrupt, SearchControl, SearchInterrupt, SearchStatus};
+use sim_lib_music_consonance::{Addition, apply_patch, remove_patch};
+use sim_lib_music_core::{
+    Articulation, Channel, Counterpoint, Melody, MelodyItem, Note, Pitch, Time,
+};
+use sim_lib_music_shapes::{encode_counterpoint, encode_melody};
+
+use crate::{
+    CadencePolicy, ContrapuntalForm, CounterpointGenerationPolicy, DiversityPolicy, PitchRange,
+    RuleSet, StrettoCluster, StrettoEntry, StrettoPolicy, StrettoTransform, analyze_counterpoint,
+    cluster_overlap, compile_counterpoint_csp, fuse_stretto_entries, generate_counterpoint,
+    install_music_counterpoint_lib, materialize_transform, music_counterpoint_analyze_symbol,
+    music_stretto_graph_symbol, stretto_graph,
+};
+
+fn time(numerator: i64, denominator: i64) -> Time {
+    Ratio::new(numerator, denominator)
+}
+
+fn note(midi: u8, duration: Time) -> MelodyItem {
+    MelodyItem::Note(
+        Note::new(
+            duration,
+            Pitch::from_midi(midi),
+            100,
+            Channel::new(0).expect("channel"),
+            Articulation::Normal,
+        )
+        .expect("note"),
+    )
+}
+
+fn melody(midis: &[u8], duration: Time) -> Melody {
+    Melody::new(
+        midis
+            .iter()
+            .copied()
+            .map(|midi| note(midi, duration))
+            .collect(),
+    )
+    .expect("melody")
+}
+
+fn generation_fixture() -> (Melody, RuleSet, CounterpointGenerationPolicy) {
+    let cantus = melody(&[72, 74, 72], time(1, 1));
+    let mut rules = RuleSet::species_two(time(1, 1));
+    rules.voices.ranges = vec![
+        PitchRange::midi(),
+        PitchRange {
+            low: Pitch::from_midi(65),
+            high: Pitch::from_midi(65),
+        },
+        PitchRange {
+            low: Pitch::from_midi(53),
+            high: Pitch::from_midi(53),
+        },
+    ];
+    let policy = CounterpointGenerationPolicy {
+        voices: 2,
+        ..CounterpointGenerationPolicy::default()
+    };
+    (cantus, rules, policy)
+}
+
+fn bounded_control(seed: u64) -> SearchControl {
+    SearchControl::default()
+        .with_seed(seed)
+        .with_max_work(100_000)
+        .with_max_frontier(128)
+        .with_max_results(8)
+}
+
+#[test]
+fn species_rules_are_inspectable_and_validate() {
+    let first = RuleSet::species_one(time(1, 1));
+    let fourth = RuleSet::species_four(time(1, 1));
+    assert_eq!(first.durations.allowed_pulse_ratios, vec![time(1, 1)]);
+    assert!(first.dissonance.allowed_contexts.is_empty());
+    assert!(
+        fourth
+            .dissonance
+            .allowed_contexts
+            .contains(&crate::DissonanceContext::Suspension)
+    );
+    first.validate().expect("first species");
+    fourth.validate().expect("fourth species");
+}
+
+#[test]
+fn rules_compile_to_explicit_finite_csp_for_the_generic_search_engine() {
+    let (cantus, rules, policy) = generation_fixture();
+    let csp = compile_counterpoint_csp(&cantus, &rules, &policy).expect("compile CSP");
+    assert_eq!(csp.slots(), 6);
+    assert_eq!(csp.variables.len(), 12);
+    assert_eq!(csp.domains.len(), csp.variables.len());
+    assert!(
+        csp.variables
+            .iter()
+            .zip(&csp.domains)
+            .all(|(variable, domain)| variable == &domain.variable && !domain.pitches.is_empty())
+    );
+    assert!(
+        csp.facts
+            .iter()
+            .any(|fact| fact == "engine=sim-lib-discrete-search/SearchProblem")
+    );
+
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("generic bounded generation");
+    assert!(run.receipt.search.propagated > 0);
+    assert!(run.receipt.search.scored > 0);
+}
+
+#[test]
+fn generated_species_two_voices_preserve_fixed_material_and_pass_analysis() {
+    let (cantus, rules, policy) = generation_fixture();
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("counterpoint generation");
+    assert_eq!(run.receipt.search.status, SearchStatus::Complete);
+    assert_eq!(run.results.len(), 1);
+    let result = &run.results[0];
+    assert_eq!(result.counterpoint.voices.len(), 3);
+    assert_eq!(result.counterpoint.voices[0], cantus);
+    assert!(
+        result.analysis.is_legal(),
+        "{:?}",
+        result.analysis.violations
+    );
+    for voice in &result.counterpoint.voices[1..] {
+        assert_eq!(voice.total_duration(), cantus.total_duration());
+        assert!(voice.items.iter().all(|item| item.duration() == time(1, 2)));
+    }
+    assert!(
+        result.counterpoint.voices[1].items.iter().all(
+            |item| matches!(item, MelodyItem::Note(note) if note.pitch == Pitch::from_midi(65))
+        )
+    );
+    assert!(
+        result.counterpoint.voices[2].items.iter().all(
+            |item| matches!(item, MelodyItem::Note(note) if note.pitch == Pitch::from_midi(53))
+        )
+    );
+}
+
+#[test]
+fn generation_reports_seed_bounds_cancellation_and_diversity_honestly() {
+    let cantus = melody(&[72], time(1, 1));
+    let mut rules = RuleSet::open();
+    rules.voices.ranges = vec![
+        PitchRange::midi(),
+        PitchRange {
+            low: Pitch::from_midi(60),
+            high: Pitch::from_midi(62),
+        },
+    ];
+    let policy = CounterpointGenerationPolicy {
+        cadence: CadencePolicy::Open,
+        diversity: DiversityPolicy {
+            minimum_pitch_changes: 2,
+        },
+        ..CounterpointGenerationPolicy::default()
+    };
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("diverse generation");
+    assert_eq!(run.receipt.search.status, SearchStatus::Complete);
+    assert_eq!(run.receipt.search.seed, 99);
+    assert!(run.receipt.search.work_used <= 100_000);
+    assert!(run.receipt.search.max_frontier <= 128);
+    assert_eq!(run.receipt.raw_result_count, 3);
+    assert_eq!(run.receipt.selected_result_count, 1);
+    assert_eq!(run.receipt.diversity_rejected, 2);
+    assert_eq!(run.results.len(), 1);
+
+    let bounded = generate_counterpoint(
+        &cantus,
+        &rules,
+        &CounterpointGenerationPolicy {
+            cadence: CadencePolicy::Open,
+            ..CounterpointGenerationPolicy::default()
+        },
+        SearchControl::default()
+            .with_seed(99)
+            .with_max_work(1)
+            .with_max_frontier(1)
+            .with_max_results(1),
+        &NeverInterrupt,
+    )
+    .expect("work-bounded generation");
+    assert_eq!(bounded.receipt.search.status, SearchStatus::Partial);
+    assert_eq!(
+        bounded.receipt.search.reason.as_deref(),
+        Some("work bound reached")
+    );
+
+    struct CancelNow;
+    impl SearchInterrupt for CancelNow {
+        fn is_cancelled(&self) -> bool {
+            true
+        }
+    }
+    let cancelled = generate_counterpoint(
+        &cantus,
+        &rules,
+        &CounterpointGenerationPolicy {
+            cadence: CadencePolicy::Open,
+            ..CounterpointGenerationPolicy::default()
+        },
+        bounded_control(99),
+        &CancelNow,
+    )
+    .expect("cancelled generation");
+    assert_eq!(cancelled.receipt.search.status, SearchStatus::Cancelled);
+    assert_eq!(
+        cancelled.receipt.search.reason.as_deref(),
+        Some("interrupt cancelled search")
+    );
+    assert!(cancelled.results.is_empty());
+}
+
+#[test]
+fn generated_voice_patch_is_additive_content_bound_and_exactly_reversible() {
+    let (cantus, rules, policy) = generation_fixture();
+    let run = generate_counterpoint(
+        &cantus,
+        &rules,
+        &policy,
+        bounded_control(99),
+        &NeverInterrupt,
+    )
+    .expect("counterpoint generation");
+    let result = &run.results[0];
+    assert_eq!(result.patch.additions.len(), 2);
+    assert!(
+        result
+            .patch
+            .additions
+            .iter()
+            .all(|addition| matches!(addition, Addition::Voice(_)))
+    );
+    let restored = remove_patch(&result.completed, &result.patch).expect("remove patch");
+    let reapplied = apply_patch(&restored, &result.patch).expect("reapply patch");
+    assert_eq!(reapplied, result.completed);
+    assert_eq!(restored.voices.len(), 1);
+    assert_eq!(restored.voices[0].name, "Cantus");
+}
+
+#[test]
+fn every_violation_names_voices_notes_time_rule_and_metric() {
+    let cp = Counterpoint::new(
+        vec![melody(&[73], time(1, 1)), melody(&[60], time(1, 1))],
+        vec!["Upper".to_owned(), "Lower".to_owned()],
+    )
+    .expect("counterpoint");
+    let report = analyze_counterpoint(&cp, &RuleSet::species_one(time(1, 1)));
+    let dissonance = report
+        .violations
+        .iter()
+        .find(|violation| violation.rule == "dissonance-preparation-resolution")
+        .expect("dissonance violation");
+    assert_eq!(
+        (dissonance.span.start, dissonance.span.end),
+        (time(0, 1), time(1, 1))
+    );
+    assert_eq!(
+        dissonance
+            .voices
+            .iter()
+            .map(|voice| voice.name.as_str())
+            .collect::<Vec<_>>(),
+        vec!["Upper", "Lower"]
+    );
+    assert_eq!(dissonance.notes.len(), 2);
+    assert!(
+        dissonance
+            .notes
+            .iter()
+            .all(|note| !note.note_id.as_str().is_empty() && !note.event_id.as_str().is_empty())
+    );
+    assert_eq!(dissonance.metric.metric, "harmonic-interval-class");
+    assert_eq!(dissonance.metric.observed, "1");
+    assert_eq!(report.provenance.mode, "existing-counterpoint");
+}
+
+#[test]
+fn exact_motion_reports_parallel_fifths() {
+    let cp = Counterpoint::new(
+        vec![melody(&[72, 74], time(1, 1)), melody(&[65, 67], time(1, 1))],
+        vec!["Upper".to_owned(), "Lower".to_owned()],
+    )
+    .expect("counterpoint");
+    let report = analyze_counterpoint(&cp, &RuleSet::species_one(time(1, 1)));
+    let parallel = report
+        .violations
+        .iter()
+        .find(|violation| violation.rule == "parallel-perfect")
+        .expect("parallel perfect");
+    assert_eq!(parallel.metric.observed, "5->5");
+    assert_eq!(parallel.notes.len(), 4);
+    assert_eq!(report.motions.len(), 1);
+}
+
+#[test]
+fn weak_stepwise_passing_dissonance_is_admitted_by_species_two() {
+    let upper = melody(&[72, 74, 76], time(1, 2));
+    let lower = Melody::new(vec![
+        note(60, time(1, 1)),
+        MelodyItem::Rest(sim_lib_music_core::Rest::new(time(1, 2)).expect("rest")),
+    ])
+    .expect("lower");
+    let cp = Counterpoint::new(
+        vec![upper, lower],
+        vec!["Upper".to_owned(), "Lower".to_owned()],
+    )
+    .expect("counterpoint");
+    let report = analyze_counterpoint(&cp, &RuleSet::species_two(time(1, 1)));
+    assert!(
+        report
+            .violations
+            .iter()
+            .all(|violation| violation.rule != "dissonance-preparation-resolution"),
+        "{:?}",
+        report.violations
+    );
+}
+
+#[test]
+fn stretto_fixture_preserves_couples_and_clique_relations() {
+    let subject = melody(&[60, 60, 60, 60], time(1, 4));
+    let policy = StrettoPolicy {
+        delays: vec![time(1, 4)],
+        transforms: vec![StrettoTransform::original(4), StrettoTransform::original(7)],
+        max_entries: 3,
+        minimum_cluster_voices: 3,
+        ..StrettoPolicy::default()
+    };
+    let graph = stretto_graph(&subject, policy).expect("stretto graph");
+    assert_eq!(graph.compatibility.node_count(), 3);
+    assert_eq!(graph.couples.len(), 3);
+    assert_eq!(graph.clusters.len(), 1);
+    assert_eq!(graph.clusters[0].entries, vec![0, 1, 2]);
+    assert_eq!(graph.clusters[0].edge_ids.len(), 3);
+    assert_eq!(
+        graph.clusters[0].fusion.mode,
+        "derived-analysis-not-generation"
+    );
+    assert!(
+        graph
+            .provenance
+            .iter()
+            .any(|fact| fact == "generation=false")
+    );
+}
+
+#[test]
+fn catalog_chain_fixture_uses_largest_normalized_overlap() {
+    let source = melody(&[60], time(1, 4));
+    let specifications = [
+        (0, 0, 0),
+        (1, 1, 4),
+        (2, 2, 7),
+        (3, 0, 0),
+        (4, 1, 3),
+        (5, 2, 8),
+    ];
+    let entries = specifications
+        .into_iter()
+        .map(|(id, quarter_delay, transposition)| StrettoEntry {
+            id,
+            delay: time(quarter_delay, 4),
+            transform: StrettoTransform::original(transposition),
+            melody: source.clone(),
+        })
+        .collect::<Vec<_>>();
+    let left_entries = entries[..3].to_vec();
+    let right_entries = entries[3..].to_vec();
+    let left = StrettoCluster {
+        entries: vec![0, 1, 2],
+        edge_ids: Vec::new(),
+        fusion: fuse_stretto_entries(&left_entries).expect("left fusion"),
+    };
+    let right = StrettoCluster {
+        entries: vec![3, 4, 5],
+        edge_ids: Vec::new(),
+        fusion: fuse_stretto_entries(&right_entries).expect("right fusion"),
+    };
+    assert_eq!(cluster_overlap(&left, &right, &entries), 2);
+}
+
+#[test]
+fn transform_candidates_delegate_retrograde_pitch_and_time_changes() {
+    let subject = melody(&[60, 62, 64], time(1, 4));
+    let transformed = materialize_transform(
+        &subject,
+        &StrettoTransform {
+            form: ContrapuntalForm::Retrograde,
+            transposition: 12,
+            duration_factor: time(2, 1),
+        },
+    )
+    .expect("transform");
+    let notes = transformed
+        .items
+        .iter()
+        .filter_map(|item| match item {
+            MelodyItem::Note(note) => Some((note.pitch.semitone(), note.duration)),
+            MelodyItem::Rest(_) => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        notes,
+        vec![(76, time(1, 2)), (74, time(1, 2)), (72, time(1, 2))]
+    );
+}
+
+#[test]
+fn lisp_surfaces_expose_violation_evidence_and_stretto_relations() {
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_counterpoint_lib(&mut cx).expect("install");
+
+    let cp = Counterpoint::new(
+        vec![melody(&[73], time(1, 1)), melody(&[60], time(1, 1))],
+        vec!["Upper".to_owned(), "Lower".to_owned()],
+    )
+    .expect("counterpoint");
+    let function = cx
+        .resolve_function(&music_counterpoint_analyze_symbol())
+        .expect("analysis function");
+    let callable = function.object().as_callable().expect("callable");
+    let value = callable
+        .call_exprs(
+            &mut cx,
+            RawArgs::new(vec![
+                Expr::Symbol(Symbol::new(":counterpoint")),
+                Expr::String(encode_counterpoint(&cp)),
+                Expr::Symbol(Symbol::new(":rules")),
+                quoted_symbol("species-one"),
+            ]),
+        )
+        .expect("analysis call");
+    let Expr::Map(report) = value.object().as_expr(&mut cx).expect("report expr") else {
+        panic!("expected analysis map");
+    };
+    assert_eq!(
+        field(&report, "mode"),
+        Some(&Expr::String("existing-counterpoint".to_owned()))
+    );
+    let Some(Expr::Vector(violations)) = field(&report, "violations") else {
+        panic!("expected violation vector");
+    };
+    let Expr::Map(violation) = &violations[0] else {
+        panic!("expected violation map");
+    };
+    for key in ["voices", "notes", "span", "rule", "metric"] {
+        assert!(field(violation, key).is_some(), "missing {key}");
+    }
+
+    let subject = melody(&[60, 60, 60, 60], time(1, 4));
+    let function = cx
+        .resolve_function(&music_stretto_graph_symbol())
+        .expect("stretto function");
+    let callable = function.object().as_callable().expect("callable");
+    let value = callable
+        .call_exprs(
+            &mut cx,
+            RawArgs::new(vec![
+                Expr::Symbol(Symbol::new(":subject")),
+                Expr::String(encode_melody(&subject)),
+                Expr::Symbol(Symbol::new(":policy")),
+                Expr::Map(vec![
+                    (
+                        Expr::Symbol(Symbol::new(":delays")),
+                        Expr::Vector(vec![Expr::String("1/4".to_owned())]),
+                    ),
+                    (
+                        Expr::Symbol(Symbol::new(":transpositions")),
+                        Expr::Vector(vec![
+                            Expr::String("4".to_owned()),
+                            Expr::String("7".to_owned()),
+                        ]),
+                    ),
+                    (
+                        Expr::Symbol(Symbol::new(":minimum-cluster-voices")),
+                        Expr::String("3".to_owned()),
+                    ),
+                    (
+                        Expr::Symbol(Symbol::new(":max-entries")),
+                        Expr::String("3".to_owned()),
+                    ),
+                ]),
+            ]),
+        )
+        .expect("stretto call");
+    let Expr::Map(graph) = value.object().as_expr(&mut cx).expect("graph expr") else {
+        panic!("expected graph map");
+    };
+    assert_eq!(field(&graph, "generation"), Some(&Expr::Bool(false)));
+    for key in ["entries", "couples", "components", "cliques", "chains"] {
+        assert!(field(&graph, key).is_some(), "missing {key}");
+    }
+}
+
+#[test]
+fn checked_lisp_specimens_execute_and_reproduce_evidence() {
+    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    sim_test_support::register_core_classes(&mut cx);
+    sim_test_support::register_f64_number_domain(&mut cx);
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
+    cx.load_lib(&lisp).expect("install lisp codec");
+    install_music_counterpoint_lib(&mut cx).expect("install counterpoint lib");
+
+    let report = evaluate_lisp_specimen(
+        &mut cx,
+        include_str!("../recipes/01-basics/counterpoint-report/setup.siml"),
+    );
+    let Expr::Map(report) = report else {
+        panic!("counterpoint specimen must return a report map: {report:?}");
+    };
+    let Some(Expr::Vector(violations)) = field(&report, "violations") else {
+        panic!("counterpoint specimen must return violation evidence");
+    };
+    assert!(!violations.is_empty());
+    for violation in violations {
+        let Expr::Map(violation) = violation else {
+            panic!("violation evidence must be a map");
+        };
+        for key in ["voices", "notes", "span", "rule", "metric"] {
+            assert!(field(violation, key).is_some(), "missing {key}");
+        }
+    }
+
+    let graph = evaluate_lisp_specimen(
+        &mut cx,
+        include_str!("../recipes/01-basics/stretto-graph/setup.siml"),
+    );
+    let Expr::Map(graph) = graph else {
+        panic!("stretto specimen must return a graph map: {graph:?}");
+    };
+    assert_eq!(field(&graph, "generation"), Some(&Expr::Bool(false)));
+    let Some(Expr::Vector(couples)) = field(&graph, "couples") else {
+        panic!("stretto specimen must return couple relations");
+    };
+    assert!(!couples.is_empty());
+    for key in ["components", "cliques"] {
+        let Some(Expr::Vector(relations)) = field(&graph, key) else {
+            panic!("stretto specimen must return {key} relations");
+        };
+        assert!(!relations.is_empty(), "stretto specimen has no {key}");
+    }
+    assert!(matches!(field(&graph, "chains"), Some(Expr::Vector(_))));
+
+    let generated = evaluate_lisp_specimen(
+        &mut cx,
+        include_str!("../recipes/01-basics/bounded-generation/setup.siml"),
+    );
+    let Expr::Map(generated) = generated else {
+        panic!("generation specimen must return a map: {generated:?}");
+    };
+    assert_eq!(
+        field(&generated, "mode"),
+        Some(&Expr::String("generated-counterpoint".to_owned()))
+    );
+    let Some(Expr::Vector(results)) = field(&generated, "results") else {
+        panic!("generation specimen must return result alternatives");
+    };
+    assert!(!results.is_empty(), "{generated:?}");
+    for result in results {
+        let Expr::Map(result) = result else {
+            panic!("generated result must be a map");
+        };
+        assert_eq!(field(result, "legal"), Some(&Expr::Bool(true)));
+        assert!(field(result, "patch").is_some());
+    }
+    let Some(Expr::Map(receipt)) = field(&generated, "receipt") else {
+        panic!("generation specimen must return a receipt");
+    };
+    for key in [
+        "status",
+        "work-used",
+        "max-frontier",
+        "raw-results",
+        "selected-results",
+        "seed",
+        "digest",
+    ] {
+        assert!(field(receipt, key).is_some(), "missing receipt {key}");
+    }
+}
+
+fn evaluate_lisp_specimen(cx: &mut sim_kernel::Cx, source: &str) -> Expr {
+    let form = decode_with_codec(
+        cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source.trim().to_owned()),
+        ReadPolicy::default(),
+    )
+    .expect("decode Lisp specimen");
+    let value = cx
+        .eval_expr(lower_lisp_eval_surface(form))
+        .expect("evaluate Lisp specimen");
+    value
+        .object()
+        .as_expr(cx)
+        .expect("Lisp specimen result expression")
+}
+
+fn lower_lisp_eval_surface(expr: Expr) -> Expr {
+    match expr {
+        Expr::List(items) if items.len() > 1 => {
+            let mut items = items
+                .into_iter()
+                .map(lower_lisp_eval_surface)
+                .collect::<Vec<_>>();
+            Expr::Call {
+                operator: Box::new(items.remove(0)),
+                args: items,
+            }
+        }
+        Expr::List(items) => Expr::List(items.into_iter().map(lower_lisp_eval_surface).collect()),
+        Expr::Vector(items) => {
+            Expr::Vector(items.into_iter().map(lower_lisp_eval_surface).collect())
+        }
+        Expr::Map(entries) => Expr::Map(
+            entries
+                .into_iter()
+                .map(|(key, value)| (lower_lisp_eval_surface(key), lower_lisp_eval_surface(value)))
+                .collect(),
+        ),
+        Expr::Set(items) => Expr::Set(items.into_iter().map(lower_lisp_eval_surface).collect()),
+        Expr::Block(items) => Expr::Block(items.into_iter().map(lower_lisp_eval_surface).collect()),
+        Expr::Annotated { expr, annotations } => Expr::Annotated {
+            expr: Box::new(lower_lisp_eval_surface(*expr)),
+            annotations: annotations
+                .into_iter()
+                .map(|(name, value)| (name, lower_lisp_eval_surface(value)))
+                .collect(),
+        },
+        Expr::Extension { tag, payload } => Expr::Extension {
+            tag,
+            payload: Box::new(lower_lisp_eval_surface(*payload)),
+        },
+        other => other,
+    }
+}
+
+fn quoted_symbol(value: &str) -> Expr {
+    Expr::Quote {
+        mode: QuoteMode::Quote,
+        expr: Box::new(Expr::Symbol(Symbol::new(value))),
+    }
+}
+
+fn field<'a>(entries: &'a [(Expr, Expr)], name: &str) -> Option<&'a Expr> {
+    entries.iter().find_map(|(key, value)| match key {
+        Expr::Symbol(symbol) if symbol.name.as_ref() == name => Some(value),
+        _ => None,
+    })
+}
+```
+
+### `feature/sim-music/sound-spectrum-adapter`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-spectrum/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-spectrum/src/tests.rs`:
+
+```rust
+use std::time::Duration;
+
+use super::*;
+use sim_lib_sound_core::{Amplitude, Frequency, Tone};
+
+// conformance: sound PCM spectra delegate transform math and retain domain facts.
+
+#[test]
+fn spectrum_peaks_recover_sine_frequency() {
+    let tone = Tone::sine(Frequency(440.0), Duration::from_secs(1));
+    let spectrum = Spectrum::from_tone(&tone, Duration::from_millis(100));
+    let peak = spectrum.peaks(1)[0].0;
+    assert!((peak.0 - 440.0).abs() < 1e-6);
+}
+
+#[test]
+fn pcm_spectrum_remains_a_sound_adapter_over_numbers_signal() {
+    let samples = [1.0_f32, 0.0, -1.0, 0.0];
+    let spectrum = Spectrum::from_pcm(&samples, 8, 4);
+    assert_eq!(spectrum.bins.len(), 3);
+    assert_eq!(spectrum.bins[0], (Frequency(0.0), Amplitude(0.0)));
+    assert!((spectrum.bins[1].0.0 - 2.0).abs() < 1e-12);
+    assert!((spectrum.bins[1].1.0 - 0.5).abs() < 1e-12);
+    assert!(spectrum.bins[2].1.0 < 1e-12);
+    assert_eq!(
+        spectrum.source,
+        SpectrumSource::FromPcm {
+            window_size: 4,
+            sample_rate: 8,
+        }
+    );
+}
+
+#[test]
+fn centroid_rises_with_brighter_partials() {
+    let base = Spectrum {
+        bins: vec![
+            (Frequency(220.0), Amplitude(1.0)),
+            (Frequency(880.0), Amplitude(0.1)),
+        ],
+        source: SpectrumSource::Synthetic,
+    };
+    let brighter = Spectrum {
+        bins: vec![
+            (Frequency(220.0), Amplitude(1.0)),
+            (Frequency(880.0), Amplitude(0.8)),
+        ],
+        source: SpectrumSource::Synthetic,
+    };
+    assert!(brighter.centroid().0 > base.centroid().0);
+}
+
+#[test]
+fn pcm_sine_peak_is_near_expected_bin() {
+    let sample_rate = 8_000u32;
+    let window = 256usize;
+    let frequency = 437.5;
+    let samples: Vec<f32> = (0..window)
+        .map(|index| {
+            let phase = std::f64::consts::TAU * frequency * index as f64 / f64::from(sample_rate);
+            phase.sin() as f32
+        })
+        .collect();
+    let spectrum = Spectrum::from_pcm(&samples, sample_rate, window);
+    let peak = spectrum.peaks(1)[0].0;
+    assert!((peak.0 - frequency).abs() <= f64::from(sample_rate) / window as f64);
+}
+
+#[test]
+fn stft_projection_retains_provenance_and_summary_apis() {
+    let bins = [(0.0, 0.0), (0.25, -0.5), (0.0, 0.125)];
+    let spectrum = Spectrum::from_stft_bins(&bins, 8_000, 4, -2).unwrap();
+    assert_eq!(
+        spectrum.source,
+        SpectrumSource::FromStft {
+            frame_size: 4,
+            sample_rate: 8_000,
+            onset_sample: -2,
+        }
+    );
+    assert_eq!(spectrum.peaks(1)[0].0, Frequency(2_000.0));
+    assert!(spectrum.centroid().0.is_finite());
+    assert!(spectrum.flatness().is_finite());
+    assert!(spectrum.rolloff(0.85).0.is_finite());
+    assert_eq!(Spectrum::flux(&spectrum, &spectrum), 0.0);
+}
+
+#[test]
+fn stft_projection_rejects_inconsistent_or_non_finite_frames() {
+    assert_eq!(
+        Spectrum::from_stft_bins(&[(0.0, 0.0)], 8_000, 4, 0),
+        Err(SpectrumError::BinCount {
+            expected: 3,
+            actual: 1,
+        })
+    );
+    assert_eq!(
+        Spectrum::from_stft_bins(&[(0.0, 0.0), (f64::NAN, 0.0)], 8_000, 2, 0),
+        Err(SpectrumError::NonFiniteBin { index: 1 })
+    );
+}
+```
+
 ### `feature/sim-music/audio-lift-and-render`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/analysis_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/analysis_tests.rs`:
+
+```rust
+use sim_lib_numbers_signal::{
+    Normalization, PaddingPolicy, SignConvention, WindowFunction, WindowSampling, WindowSpec,
+};
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioAnalysisControl, AudioAnalysisPlan, AudioFeatureSelection, BeatTrackingPlan,
+    CepstralNormalization, CqtPlan, CqtWeighting, DctNormalization, Filterbank, FilterbankPlan,
+    FrequencyScale, MfccPlan, OnsetPeak, OnsetPeaks, PeakPickingPlan, SpectralEnergy,
+    StftOverlapPolicy, StftPlan, ZeroCrossingPlan, analyze_audio, track_beats, zero_crossing_rate,
+};
+
+// conformance: generated click/chord audio proves timing and labels end to end.
+
+#[test]
+fn generated_click_chord_fixture_proves_timing_features_and_labels() {
+    let sample_rate = 8_000;
+    let beat_samples = 4_000;
+    let samples = click_chord_fixture(sample_rate, beat_samples);
+    let plan = compact_analysis_plan(sample_rate);
+    let control = AudioAnalysisControl {
+        max_work: 100_000_000,
+        max_results: 16,
+        seed: 21,
+    };
+    let analysis = analyze_audio(
+        &samples,
+        sample_rate,
+        &EqualTemperament::default(),
+        &AudioFeatureSelection::foundry(),
+        &plan,
+        &control,
+    )
+    .unwrap();
+
+    let onsets = analysis.onsets.as_ref().unwrap();
+    assert!(onsets.peaks.len() >= 3, "{:#?}", onsets.peaks);
+    for expected in [beat_samples, beat_samples * 2, beat_samples * 3] {
+        assert!(
+            onsets
+                .peaks
+                .iter()
+                .any(|onset| onset.sample.abs_diff(expected as i64) <= 384),
+            "missing onset near {expected}: {:#?}",
+            onsets.peaks
+        );
+    }
+    assert!(onsets.peaks.iter().all(|onset| onset.confidence > 0.0));
+    assert!(onsets.latency_samples > 0);
+
+    let beats = analysis.beats.as_ref().unwrap();
+    assert!(
+        beats
+            .tempo_candidates
+            .iter()
+            .any(|candidate| { (candidate.bpm - 120.0).abs() < 2.0 && candidate.confidence > 0.0 })
+    );
+    assert!(beats.dynamic_programming.is_some());
+    assert!(beats.beats.iter().all(|beat| beat.confidence > 0.0));
+    assert!(
+        beats
+            .beats
+            .iter()
+            .skip(1)
+            .all(|beat| { beat.bpm.is_some() && !beat.alternatives.is_empty() })
+    );
+    assert!(beats.meter_hypotheses.len() > 1);
+
+    let mfcc = analysis.mfcc.as_ref().unwrap();
+    assert_eq!(mfcc.sample_rate, sample_rate);
+    assert_eq!(mfcc.plan.filterbank.scale, FrequencyScale::Mel);
+    assert_eq!(mfcc.frames[0].coefficients.len(), 13);
+    assert!(
+        mfcc.frames
+            .iter()
+            .flat_map(|frame| &frame.coefficients)
+            .all(|value| value.is_finite())
+    );
+
+    let keys = analysis.key.as_ref().unwrap();
+    let chords = analysis.chords.as_ref().unwrap();
+    assert!(keys.frames.iter().any(|frame| frame.label == "C major"));
+    assert!(chords.frames.iter().any(|frame| frame.label == "C:maj"));
+    assert!(chords.frames.iter().any(|frame| frame.label == "G:maj"));
+    for frame in keys.frames.iter().chain(&chords.frames) {
+        assert!(frame.confidence > 0.0);
+        assert!(frame.alternatives.len() > 1);
+        assert!(frame.alternatives.iter().all(|item| item.posterior > 0.0));
+    }
+    assert!(analysis.evidence.work_used <= analysis.evidence.work_limit);
+    assert_eq!(analysis.evidence.seed, 21);
+}
+
+#[test]
+fn beat_dp_preserves_changing_tempo_and_all_meter_alternatives() {
+    let onsets = OnsetPeaks {
+        plan: PeakPickingPlan::default(),
+        latency_samples: 64,
+        peaks: [0, 24_000, 44_000, 60_000]
+            .into_iter()
+            .enumerate()
+            .map(|(frame_index, sample)| OnsetPeak {
+                frame_index,
+                sample,
+                available_at_sample: sample + 64,
+                strength: if frame_index.is_multiple_of(2) {
+                    1.0
+                } else {
+                    0.7
+                },
+                confidence: 0.9,
+            })
+            .collect(),
+        alternatives: Vec::new(),
+        work_used: 1,
+    };
+    let tracked = track_beats(&onsets, 48_000, &BeatTrackingPlan::default()).unwrap();
+    let tempi = tracked
+        .beats
+        .iter()
+        .filter_map(|beat| beat.bpm)
+        .collect::<Vec<_>>();
+    assert_eq!(tempi.len(), 3);
+    assert!(tempi.windows(2).any(|pair| (pair[0] - pair[1]).abs() > 1.0));
+    assert!(tracked.dynamic_programming.is_some());
+    assert!(tracked.meter_hypotheses.len() >= 4);
+}
+
+#[test]
+fn zcr_and_each_perceptual_filterbank_retain_full_rate_policy() {
+    let samples = (0_usize..800)
+        .map(|index| if index.is_multiple_of(2) { -1.0 } else { 1.0 })
+        .collect::<Vec<_>>();
+    let zcr = zero_crossing_rate(
+        &samples,
+        8_000,
+        &ZeroCrossingPlan {
+            frame: 80,
+            hop: 40,
+            ..ZeroCrossingPlan::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(zcr.sample_rate, 8_000);
+    assert!(zcr.frames[0].rate > 0.99);
+
+    for scale in [
+        FrequencyScale::Mel,
+        FrequencyScale::Bark,
+        FrequencyScale::Erb,
+    ] {
+        let bank = Filterbank::new(
+            48_000,
+            1_024,
+            &FilterbankPlan {
+                scale,
+                bands: 24,
+                minimum_hz: 20.0,
+                maximum_hz: Some(20_000.0),
+                max_weights: 100_000,
+            },
+        )
+        .unwrap();
+        assert_eq!(bank.sample_rate, 48_000);
+        assert_eq!(bank.bands.len(), 24);
+        assert!(
+            bank.bands
+                .windows(2)
+                .all(|pair| pair[0].center_hz < pair[1].center_hz)
+        );
+        assert!(
+            bank.weights
+                .iter()
+                .all(|row| row.iter().all(|weight| (0.0..=1.0).contains(weight)))
+        );
+    }
+}
+
+fn compact_analysis_plan(sample_rate: u32) -> AudioAnalysisPlan {
+    let mut window = WindowSpec::new(WindowFunction::Hann);
+    window.sampling = WindowSampling::Periodic;
+    AudioAnalysisPlan {
+        stft: StftPlan {
+            frame: 256,
+            hop: 64,
+            analysis_window: window.clone(),
+            synthesis_window: window.clone(),
+            center: true,
+            padding: PaddingPolicy::Zero,
+            phase: SignConvention::NegativeForward,
+            normalization: Normalization::Forward,
+            overlap: StftOverlapPolicy::RequireCola { tolerance: 1e-10 },
+            max_frames: 2_048,
+            max_cells: 1_000_000,
+        },
+        peak_picking: PeakPickingPlan {
+            local_max_before: 2,
+            local_max_after: 2,
+            average_before: 8,
+            average_after: 8,
+            threshold: 0.04,
+            minimum_distance_samples: 2_000,
+            max_peaks: 16,
+            max_work: 1_000_000,
+        },
+        zero_crossing: ZeroCrossingPlan {
+            frame: 256,
+            hop: 64,
+            ..ZeroCrossingPlan::default()
+        },
+        mfcc: MfccPlan {
+            filterbank: FilterbankPlan {
+                scale: FrequencyScale::Mel,
+                bands: 24,
+                minimum_hz: 20.0,
+                maximum_hz: Some(f64::from(sample_rate) / 2.0 - 1.0),
+                max_weights: 100_000,
+            },
+            energy: SpectralEnergy::Power,
+            log_floor: 1e-9,
+            coefficients: 13,
+            dct_normalization: DctNormalization::Orthonormal,
+            lifter: Some(22.0),
+            normalization: CepstralNormalization::MeanVariance {
+                variance_floor: 1e-12,
+            },
+            max_work: 20_000_000,
+        },
+        constant_q: CqtPlan {
+            hop: 256,
+            min_frequency_hz: 110.0,
+            max_frequency_hz: 1_760.0,
+            bins_per_octave: 12,
+            window,
+            center: true,
+            padding: PaddingPolicy::Zero,
+            phase: SignConvention::NegativeForward,
+            weighting: CqtWeighting::Power,
+            max_window: 4_096,
+            max_frames: 1_024,
+            max_bins: 128,
+            max_work: 50_000_000,
+        },
+        ..AudioAnalysisPlan::default()
+    }
+}
+
+fn click_chord_fixture(sample_rate: u32, beat_samples: usize) -> Vec<f32> {
+    let chords: [[f64; 3]; 4] = [
+        [261.625_565, 329.627_557, 391.995_436],
+        [261.625_565, 329.627_557, 391.995_436],
+        [195.997_718, 246.941_651, 293.664_768],
+        [195.997_718, 246.941_651, 293.664_768],
+    ];
+    (0..beat_samples * chords.len())
+        .map(|index| {
+            let beat = index / beat_samples;
+            let within = index % beat_samples;
+            let time = index as f64 / f64::from(sample_rate);
+            let chord = chords[beat]
+                .iter()
+                .map(|frequency| (std::f64::consts::TAU * frequency * time).sin())
+                .sum::<f64>()
+                * 0.18;
+            let click = if within < 24 {
+                0.9 * (1.0 - within as f64 / 24.0)
+                    * if within.is_multiple_of(2) { 1.0 } else { -1.0 }
+            } else {
+                0.0
+            };
+            (chord + click).clamp(-1.0, 1.0) as f32
+        })
+        .collect()
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/partial_track_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/partial_track_tests.rs`:
+
+```rust
+use sim_lib_pitch_core::Pitch;
+use sim_lib_sound_core::{Amplitude, Frequency};
+use sim_lib_sound_spectrum::{Spectrum, SpectrumSource};
+
+use crate::{
+    AudioLiftFrame, PartialCrossingPolicy, PartialDeathReason, PartialLinkRejectionReason,
+    PartialTrackPolicy, PitchCandidate, track_partials,
+};
+
+// conformance: partial tracking retains bounded assignment, DTW, crossing, and provenance evidence.
+
+#[test]
+fn certified_assignment_can_follow_or_forbid_crossing_trajectories() {
+    let frames = vec![
+        frame(0, &[220.0, 440.0]),
+        frame(1, &[300.0, 360.0]),
+        frame(2, &[220.0, 440.0]),
+    ];
+    let base = PartialTrackPolicy {
+        max_jump_cents: 1_200.0,
+        birth_cost: 2_000.0,
+        death_cost: 2_000.0,
+        min_points: 3,
+        ..PartialTrackPolicy::default()
+    };
+    let crossing = track_partials(
+        &frames,
+        8_000,
+        &PartialTrackPolicy {
+            crossing: PartialCrossingPolicy::Allow,
+            ..base.clone()
+        },
+    )
+    .unwrap();
+    let ordered = track_partials(
+        &frames,
+        8_000,
+        &PartialTrackPolicy {
+            crossing: PartialCrossingPolicy::Forbid,
+            ..base
+        },
+    )
+    .unwrap();
+
+    assert_eq!(crossing.tracks.len(), 2);
+    assert_eq!(ordered.tracks.len(), 2);
+    let rising = &crossing.tracks[0];
+    assert_eq!(frequencies(rising), vec![220.0, 300.0, 440.0]);
+    assert_eq!(frequencies(&ordered.tracks[0]), vec![220.0, 300.0, 220.0]);
+    assert!(rising.continuity.receipt.work_used > 0);
+    assert!(rising.continuity.steps >= rising.points.len());
+    assert!(
+        crossing.frames[1]
+            .assignment_receipt
+            .as_ref()
+            .is_some_and(|receipt| receipt.work_used > 0)
+    );
+}
+
+#[test]
+fn birth_death_gap_and_track_caps_are_explicit() {
+    let frames = vec![
+        frame(0, &[220.0, 330.0, 440.0]),
+        frame(1, &[]),
+        frame(2, &[]),
+    ];
+    let report = track_partials(
+        &frames,
+        8_000,
+        &PartialTrackPolicy {
+            max_tracks: 2,
+            max_gap_frames: 1,
+            min_points: 1,
+            ..PartialTrackPolicy::default()
+        },
+    )
+    .unwrap();
+    assert_eq!(report.tracks.len(), 2);
+    assert!(
+        report
+            .tracks
+            .iter()
+            .all(|track| track.death == PartialDeathReason::GapLimit)
+    );
+    assert_eq!(report.frames[2].deaths.len(), 2);
+    assert!(report.frames[0].rejected_links.iter().any(|rejected| {
+        rejected.reason == PartialLinkRejectionReason::TrackLimit && rejected.track.is_none()
+    }));
+}
+
+#[test]
+fn jump_rejections_and_candidate_uncertainty_retain_frame_provenance() {
+    let frames = vec![frame(0, &[220.0]), frame(1, &[880.0])];
+    let report = track_partials(
+        &frames,
+        8_000,
+        &PartialTrackPolicy {
+            max_jump_cents: 100.0,
+            min_points: 1,
+            ..PartialTrackPolicy::default()
+        },
+    )
+    .unwrap();
+    let rejected = &report.frames[1].rejected_links[0];
+    assert_eq!(rejected.reason, PartialLinkRejectionReason::JumpLimit);
+    assert!(rejected.cents_distance.unwrap() > 2_300.0);
+    let candidate = &report.frames[1].candidates[0];
+    assert_eq!(candidate.provenance.frame_index, 1);
+    assert_eq!(candidate.provenance.onset_sample, 256);
+    assert!(candidate.lower_frequency.0 < candidate.frequency.0);
+    assert!(candidate.upper_frequency.0 > candidate.frequency.0);
+}
+
+fn frame(index: usize, frequencies: &[f64]) -> AudioLiftFrame {
+    AudioLiftFrame {
+        index,
+        onset_sample: index * 256,
+        duration_samples: 1_024,
+        spectrum: Spectrum {
+            bins: Vec::new(),
+            source: SpectrumSource::Synthetic,
+        },
+        pitch_candidates: frequencies
+            .iter()
+            .copied()
+            .map(|frequency| PitchCandidate {
+                pitch: Pitch::from_semitone(
+                    (69.0 + 12.0 * (frequency / 440.0).log2()).round() as i32
+                ),
+                frequency: Frequency(frequency),
+                amplitude: Amplitude(1.0),
+                confidence: 0.9,
+                cents_error: 0.0,
+                harmonic_count: 3,
+            })
+            .collect(),
+        diagnostics: Vec::new(),
+    }
+}
+
+fn frequencies(track: &crate::PartialTrack) -> Vec<f64> {
+    track
+        .points
+        .iter()
+        .map(|point| point.candidate.frequency.0)
+        .collect()
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/pitch_fixture_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/pitch_fixture_tests.rs`:
+
+```rust
+use sim_lib_pitch_core::Pitch;
+use sim_lib_sound_core::Frequency;
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioLiftOptions, AudioLifter, FftPeakLifter, PartialCrossingPolicy, PartialTrackPolicy,
+    PitchFramePolicy, PitchFrameTail, PitchRange, PitchTrackControl, PitchTrackMethod,
+    PitchTrackPlan, pitch_track, polyphonic_pitch_track, track_partials,
+};
+
+const SAMPLE_RATE: u32 = 8_000;
+
+// conformance: generated audio covers silence, noise, vibrato, missing fundamentals, crossings, and tuning offsets.
+
+#[test]
+fn silence_and_seeded_noise_remain_unvoiced() {
+    let plan = mono_plan();
+    let silence = pitch_track(
+        &vec![0.0; 2_048],
+        SAMPLE_RATE,
+        &EqualTemperament::default(),
+        &plan,
+    )
+    .unwrap();
+    assert!(silence.value.contour.iter().all(Option::is_none));
+
+    let noise = (0..2_048)
+        .map(|index| (0.25 * pseudo_noise(index)) as f32)
+        .collect::<Vec<_>>();
+    let noisy = pitch_track(&noise, SAMPLE_RATE, &EqualTemperament::default(), &plan).unwrap();
+    assert!(
+        noisy.value.contour.iter().all(Option::is_none),
+        "{:?}",
+        noisy.value.contour
+    );
+    assert!(
+        noisy
+            .value
+            .frames
+            .iter()
+            .all(|frame| !frame.rejected.is_empty())
+    );
+}
+
+#[test]
+fn pyin_follows_generated_vibrato_without_quantizing_the_contour() {
+    let samples = vibrato(440.0, 55.0, 5.0, SAMPLE_RATE, 4_096);
+    let report = pitch_track(
+        &samples,
+        SAMPLE_RATE,
+        &EqualTemperament::default(),
+        &mono_plan(),
+    )
+    .unwrap();
+    let frequencies = report
+        .value
+        .contour
+        .iter()
+        .flatten()
+        .map(|estimate| estimate.frequency.0)
+        .collect::<Vec<_>>();
+    assert!(frequencies.len() >= 20, "{frequencies:?}");
+    let min = frequencies.iter().copied().fold(f64::INFINITY, f64::min);
+    let max = frequencies.iter().copied().fold(0.0_f64, f64::max);
+    assert!(min < 430.0, "minimum {min}");
+    assert!(max > 450.0, "maximum {max}");
+    assert!(
+        frequencies
+            .iter()
+            .all(|frequency| (410.0..470.0).contains(frequency))
+    );
+}
+
+#[test]
+fn harmonic_comb_recovers_a_generated_missing_fundamental() {
+    let samples = harmonic_sweep(
+        &[
+            (440.0, 1.0, 440.0),
+            (660.0, 0.8, 660.0),
+            (880.0, 0.6, 880.0),
+        ],
+        SAMPLE_RATE,
+        4_096,
+    );
+    let report = polyphonic_pitch_track(
+        &samples,
+        SAMPLE_RATE,
+        &EqualTemperament::default(),
+        &lift_options(),
+        &PartialTrackPolicy {
+            min_points: 3,
+            ..PartialTrackPolicy::default()
+        },
+    )
+    .unwrap();
+    let fundamental = report.value.tracks.iter().find(|track| {
+        let mean = track
+            .points
+            .iter()
+            .map(|point| point.candidate.frequency.0)
+            .sum::<f64>()
+            / track.points.len() as f64;
+        (mean - 220.0).abs() < 8.0
+    });
+    let fundamental = fundamental.expect("220 Hz missing-fundamental track");
+    assert!(
+        fundamental
+            .points
+            .iter()
+            .any(|point| point.candidate.harmonic_count >= 3)
+    );
+    assert!(fundamental.confidence > 0.75, "{fundamental:?}");
+}
+
+#[test]
+fn generated_crossing_partials_keep_two_bounded_trajectories() {
+    let samples = harmonic_sweep(
+        &[(220.0, 0.9, 440.0), (440.0, 0.8, 220.0)],
+        SAMPLE_RATE,
+        8_000,
+    );
+    let lifted = FftPeakLifter {
+        opts: lift_options(),
+    }
+    .lift(&samples, SAMPLE_RATE, &EqualTemperament::default())
+    .unwrap();
+    let report = track_partials(
+        &lifted.frames,
+        SAMPLE_RATE,
+        &PartialTrackPolicy {
+            max_tracks: 8,
+            max_jump_cents: 240.0,
+            crossing: PartialCrossingPolicy::Allow,
+            min_points: 8,
+            max_work: 2_000_000,
+            ..PartialTrackPolicy::default()
+        },
+    )
+    .unwrap();
+    let long = report
+        .tracks
+        .iter()
+        .filter(|track| track.points.len() >= 10)
+        .collect::<Vec<_>>();
+    assert!(long.len() >= 2, "tracks: {:?}", report.tracks);
+    let trends = long.iter().map(trend).collect::<Vec<_>>();
+    assert!(
+        trends.iter().any(|trend| *trend > 300.0),
+        "trends: {trends:?}"
+    );
+    assert!(
+        trends.iter().any(|trend| *trend < -300.0),
+        "trends: {trends:?}"
+    );
+    assert!(report.work_used <= report.policy.max_work);
+}
+
+#[test]
+fn tuning_offset_is_measured_against_the_supplied_reference() {
+    let tuning = EqualTemperament {
+        divisions: 12,
+        reference: (Pitch::from_midi(69), Frequency(442.0)),
+    };
+    let samples = harmonic_sweep(&[(442.0, 1.0, 442.0)], SAMPLE_RATE, 2_048);
+    let report = pitch_track(&samples, SAMPLE_RATE, &tuning, &mono_plan()).unwrap();
+    let estimate = report.value.contour.iter().flatten().next().unwrap();
+    assert!((estimate.frequency.0 - 442.0).abs() < 1.0);
+    assert!(estimate.cents_error.abs() < 4.0, "{estimate:?}");
+}
+
+fn mono_plan() -> PitchTrackPlan {
+    PitchTrackPlan {
+        method: PitchTrackMethod::Pyin,
+        range: PitchRange::new(100.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 512,
+            hop: 128,
+            tail: PitchFrameTail::Drop,
+        },
+        control: PitchTrackControl {
+            max_work: 10_000_000,
+            ..PitchTrackControl::default()
+        },
+        ..PitchTrackPlan::default()
+    }
+}
+
+fn lift_options() -> AudioLiftOptions {
+    AudioLiftOptions {
+        window_size: 1_024,
+        hop_size: 256,
+        max_peaks: 12,
+        min_peak_ratio: 0.08,
+        min_note_confidence: 0.25,
+        min_note_windows: 2,
+        ..AudioLiftOptions::default()
+    }
+}
+
+fn vibrato(
+    center_hz: f64,
+    depth_cents: f64,
+    rate_hz: f64,
+    sample_rate: u32,
+    len: usize,
+) -> Vec<f32> {
+    let mut phase = 0.0;
+    (0..len)
+        .map(|index| {
+            let time = index as f64 / f64::from(sample_rate);
+            let cents = depth_cents * (std::f64::consts::TAU * rate_hz * time).sin();
+            let frequency = center_hz * 2.0_f64.powf(cents / 1_200.0);
+            phase += std::f64::consts::TAU * frequency / f64::from(sample_rate);
+            phase.sin() as f32
+        })
+        .collect()
+}
+
+fn harmonic_sweep(partials: &[(f64, f64, f64)], sample_rate: u32, len: usize) -> Vec<f32> {
+    let mut phases = vec![0.0; partials.len()];
+    (0..len)
+        .map(|index| {
+            let progress = index as f64 / len.saturating_sub(1).max(1) as f64;
+            let value = partials
+                .iter()
+                .enumerate()
+                .map(|(partial, (start, amplitude, end))| {
+                    let frequency = start + (end - start) * progress;
+                    phases[partial] += std::f64::consts::TAU * frequency / f64::from(sample_rate);
+                    amplitude * phases[partial].sin()
+                })
+                .sum::<f64>();
+            (value / partials.len().max(1) as f64) as f32
+        })
+        .collect()
+}
+
+fn trend(track: &&crate::PartialTrack) -> f64 {
+    let first = track.points.first().unwrap().candidate.frequency.0;
+    let last = track.points.last().unwrap().candidate.frequency.0;
+    1_200.0 * (last / first).log2()
+}
+
+fn pseudo_noise(index: usize) -> f64 {
+    let mut value = (index as u64).wrapping_add(0x9e37_79b9_7f4a_7c15);
+    value = (value ^ (value >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+    value = (value ^ (value >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+    value ^= value >> 31;
+    (value >> 11) as f64 / (1_u64 << 53) as f64 * 2.0 - 1.0
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/pitch_track_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/pitch_track_tests.rs`:
+
+```rust
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioLiftError, PitchFramePolicy, PitchFrameTail, PitchInterpolation, PitchRange,
+    PitchRejectionReason, PitchTrackControl, PitchTrackMethod, PitchTrackPlan, pitch_track,
+};
+
+// conformance: YIN and pYIN retain interpolation, probability, range, framing, and work evidence.
+
+#[test]
+fn yin_and_pyin_interpolate_a_monophonic_tone_with_bounds() {
+    let samples = sine(443.0, 8_000, 4_096);
+    for method in [PitchTrackMethod::Yin, PitchTrackMethod::Pyin] {
+        let plan = PitchTrackPlan {
+            method,
+            range: PitchRange::new(80.0, 1_000.0).unwrap(),
+            frames: PitchFramePolicy {
+                size: 1_024,
+                hop: 512,
+                tail: PitchFrameTail::Drop,
+            },
+            control: PitchTrackControl {
+                max_work: 2_000_000,
+                ..PitchTrackControl::default()
+            },
+            ..PitchTrackPlan::default()
+        };
+        let report = pitch_track(&samples, 8_000, &EqualTemperament::default(), &plan).unwrap();
+        let estimate = report.value.contour[2].as_ref().expect("voiced estimate");
+        assert!((estimate.frequency.0 - 443.0).abs() < 1.0, "{estimate:?}");
+        assert!(estimate.lower_frequency.0 < estimate.frequency.0);
+        assert!(estimate.upper_frequency.0 > estimate.frequency.0);
+        assert!(estimate.voiced_probability >= plan.yin.min_voiced_probability);
+        assert_eq!(estimate.pitch.to_midi(), Some(69));
+        assert!(estimate.cents_error > 0.0);
+        assert!(report.value.work_used <= plan.control.max_work);
+    }
+}
+
+#[test]
+fn interpolation_policy_is_explicit_and_retained() {
+    let samples = sine(443.0, 8_000, 1_024);
+    let base = PitchTrackPlan {
+        method: PitchTrackMethod::Yin,
+        range: PitchRange::new(80.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 1_024,
+            hop: 1_024,
+            tail: PitchFrameTail::Drop,
+        },
+        control: PitchTrackControl {
+            max_work: 2_000_000,
+            ..PitchTrackControl::default()
+        },
+        ..PitchTrackPlan::default()
+    };
+    let mut integer = base.clone();
+    integer.interpolation = PitchInterpolation::None;
+    let mut parabolic = base;
+    parabolic.interpolation = PitchInterpolation::Parabolic;
+    let integer_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &integer).unwrap();
+    let parabolic_report =
+        pitch_track(&samples, 8_000, &EqualTemperament::default(), &parabolic).unwrap();
+    let integer_pitch = integer_report.value.contour[0].as_ref().unwrap();
+    let parabolic_pitch = parabolic_report.value.contour[0].as_ref().unwrap();
+    assert_eq!(integer_pitch.interpolated_lag, integer_pitch.lag as f64);
+    assert!(
+        (parabolic_pitch.frequency.0 - 443.0).abs() < (integer_pitch.frequency.0 - 443.0).abs()
+    );
+    assert_eq!(
+        parabolic_report.value.plan.interpolation,
+        PitchInterpolation::Parabolic
+    );
+}
+
+#[test]
+fn frame_tail_and_silence_policies_are_retained_in_provenance() {
+    let plan = PitchTrackPlan {
+        range: PitchRange::new(100.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 256,
+            hop: 128,
+            tail: PitchFrameTail::ZeroPad,
+        },
+        ..PitchTrackPlan::default()
+    };
+    let report = pitch_track(&[0.0; 300], 8_000, &EqualTemperament::default(), &plan).unwrap();
+    assert_eq!(report.value.frames.len(), 2);
+    let tail = &report.value.frames[1];
+    assert!(tail.provenance.zero_padded);
+    assert_eq!(tail.provenance.source_samples, 172);
+    assert_eq!(tail.provenance.frame_size, 256);
+    assert_eq!(tail.rejected[0].reason, PitchRejectionReason::Silence);
+    assert!(tail.rejected[0].hypothesis.is_none());
+}
+
+#[test]
+fn invalid_ranges_and_work_exhaustion_fail_closed() {
+    assert_eq!(
+        PitchRange::new(440.0, 55.0),
+        Err(AudioLiftError::InvalidPitchRange)
+    );
+    let plan = PitchTrackPlan {
+        range: PitchRange::new(100.0, 1_000.0).unwrap(),
+        frames: PitchFramePolicy {
+            size: 512,
+            hop: 256,
+            tail: PitchFrameTail::Drop,
+        },
+        control: PitchTrackControl {
+            max_work: 1,
+            ..PitchTrackControl::default()
+        },
+        ..PitchTrackPlan::default()
+    };
+    let error = pitch_track(
+        &sine(440.0, 8_000, 512),
+        8_000,
+        &EqualTemperament::default(),
+        &plan,
+    )
+    .unwrap_err();
+    assert_eq!(error, AudioLiftError::PitchWorkLimit { limit: 1 });
+}
+
+fn sine(frequency: f64, sample_rate: u32, len: usize) -> Vec<f32> {
+    (0..len)
+        .map(|index| {
+            (std::f64::consts::TAU * frequency * index as f64 / f64::from(sample_rate)).sin() as f32
+        })
+        .collect()
+}
+```
 
 Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/tests` is checked by `cargo test`.
 
@@ -1280,11 +9035,17 @@ use std::sync::Arc;
 
 // conformance: audio lift and render workflows expose checked audio analysis descriptors.
 
-use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ExportKind, Symbol};
+use sim_codec::{Input, decode_eval_expr_with_codec, encode_value_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, ExportKind, ReadPolicy, Symbol,
+    TrustLevel,
+};
 use sim_lib_sound_tuning::EqualTemperament;
 
 use crate::{
-    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, install_sound_audio_lift_lib,
+    AudioLiftOptions, AudioLifter, FftPeakLifter, HarmonicCombLifter, RECIPES,
+    install_sound_audio_lift_lib,
 };
 
 #[cfg(feature = "sound-music")]
@@ -1416,6 +9177,122 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
         record.kind == ExportKind::named("AudioLifter")
             && record.symbol == Symbol::qualified("sound", "HarmonicCombLifter")
     }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "pitch-track")
+    }));
+    assert!(loaded.exports.iter().any(|record| {
+        record.kind == ExportKind::named(ExportKind::FUNCTION)
+            && record.symbol == Symbol::qualified("sound/lift", "analyze")
+    }));
+}
+
+#[test]
+fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/pitch-tracking"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "method pyin",
+        "interpolation parabolic",
+        "frequency",
+        "lower-frequency",
+        "upper-frequency",
+        "confidence",
+        "rejected",
+        "frame-index (expr:number numbers/i64 \"0\")",
+        "sample-rate (expr:number numbers/i64 \"8000\")",
+        "work-used",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
+}
+
+#[test]
+fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
+        .unwrap();
+    install_sound_audio_lift_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let recipes = sim_cookbook::recipes_from_embedded(RECIPES).unwrap();
+    let recipe = recipes
+        .iter()
+        .find(|recipe| recipe.id.ends_with("/onset-beat-harmony"))
+        .unwrap();
+    let source = String::from_utf8(recipe.setup.clone()).unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(source),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let output = cx.eval_expr(expr).unwrap();
+    let encoded = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &output,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    for evidence in [
+        "features [onsets beats mfcc chroma key chords]",
+        "latency-samples",
+        "minimum-distance-samples",
+        "tempo-policy varying",
+        "tempo-candidates",
+        "meter-hypotheses",
+        "scale mel",
+        "log-floor",
+        "dct-normalization orthonormal",
+        "strategy posterior",
+        "strategy hmm",
+        "confidence",
+        "alternatives",
+        "posterior",
+        "work-used",
+        "seed (expr:number numbers/i64 \"21\")",
+    ] {
+        assert!(encoded.contains(evidence), "missing {evidence}: {encoded}");
+    }
 }
 
 fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, seconds: f64, noise: f64) -> Vec<f32> {
@@ -1452,4 +9329,985 @@ fn pseudo_noise(index: usize) -> f64 {
     let x = ((index as u64).wrapping_mul(1103515245).wrapping_add(12345) % 65536) as f64;
     (x / 32768.0) - 1.0
 }
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/transform_tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-audio-lift/src/transform_tests.rs`:
+
+```rust
+use sim_lib_numbers_signal::{
+    Normalization, PaddingPolicy, SignConvention, WindowFunction, WindowSampling, WindowSpec,
+};
+use sim_lib_sound_spectrum::SpectrumSource;
+use sim_lib_sound_tuning::EqualTemperament;
+
+use crate::{
+    AudioTransformError, ChromaFoldPolicy, ChromaNormalization, ChromaPlan, CqtPlan, CqtWeighting,
+    StftOverlapPolicy, StftPlan, chroma, cola_report, constant_q, istft, stft,
+};
+
+// conformance: audio transforms retain policies, bounded work, tuning, and folding evidence.
+
+#[test]
+fn stft_round_trips_when_declared_window_pair_is_cola() {
+    let samples = (0..997)
+        .map(|index| {
+            let time = index as f64 / 8_000.0;
+            ((std::f64::consts::TAU * 440.0 * time).sin()
+                + 0.2 * (std::f64::consts::TAU * 713.0 * time).cos()) as f32
+        })
+        .collect::<Vec<_>>();
+    let plan = stft_plan(128, 32);
+    let transformed = stft(&samples, 8_000, &plan).unwrap();
+
+    assert!(transformed.cola.reconstructable);
+    assert!((transformed.cola.gain_min - 1.5).abs() < 1e-12);
+    assert_eq!(transformed.plan.padding, PaddingPolicy::Zero);
+    assert_eq!(transformed.plan.phase, SignConvention::NegativeForward);
+    assert_eq!(transformed.plan.normalization, Normalization::Forward);
+    assert!(transformed.plan.center);
+
+    let recovered = istft(&transformed).unwrap();
+    assert_eq!(recovered.len(), samples.len());
+    let max_error = samples
+        .iter()
+        .zip(recovered)
+        .map(|(expected, actual)| (expected - actual).abs())
+        .fold(0.0_f32, f32::max);
+    assert!(max_error < 2e-5, "maximum reconstruction error {max_error}");
+}
+
+#[test]
+fn invalid_overlap_pair_returns_its_failing_cola_report() {
+    let plan = stft_plan(128, 40);
+    let report = cola_report(&plan).unwrap();
+    assert!(!report.reconstructable);
+    assert!(report.gain_max - report.gain_min > report.tolerance);
+
+    let error = stft(&[0.0; 256], 8_000, &plan).unwrap_err();
+    let AudioTransformError::NonCola { report: failed } = error else {
+        panic!("expected failing COLA evidence");
+    };
+    assert_eq!(failed, report);
+}
+
+#[test]
+fn stft_frames_feed_existing_sound_spectrum_summaries() {
+    let samples = sine_mix(&[(437.5, 1.0)], 8_000, 1_024);
+    let transformed = stft(&samples, 8_000, &stft_plan(512, 128)).unwrap();
+    let frame = transformed
+        .frames
+        .iter()
+        .find(|frame| frame.onset_sample == 0)
+        .expect("unpadded frame");
+    let spectrum = frame.spectrum(8_000, 512).unwrap();
+
+    assert_eq!(
+        spectrum.source,
+        SpectrumSource::FromStft {
+            frame_size: 512,
+            sample_rate: 8_000,
+            onset_sample: 0,
+        }
+    );
+    assert!((spectrum.peaks(1)[0].0.0 - 437.5).abs() < 1e-9);
+    assert!(spectrum.centroid().0.is_finite());
+    assert!(spectrum.flatness().is_finite());
+    assert!(spectrum.rolloff(0.85).0.is_finite());
+    assert_eq!(
+        sim_lib_sound_spectrum::Spectrum::flux(&spectrum, &spectrum),
+        0.0
+    );
+}
+
+#[test]
+fn bounded_cqt_and_chroma_name_tuning_weighting_and_fold_policy() {
+    let samples = sine_mix(&[(440.0, 1.0), (659.255_113_8, 0.5)], 8_000, 4_096);
+    let tuning = EqualTemperament::default();
+    let plan = CqtPlan {
+        hop: 256,
+        min_frequency_hz: 220.0,
+        max_frequency_hz: 880.0,
+        max_window: 4_096,
+        max_work: 20_000_000,
+        weighting: CqtWeighting::Power,
+        ..CqtPlan::default()
+    };
+    let cqt = constant_q(&samples, 8_000, &tuning, &plan).unwrap();
+
+    assert_eq!(cqt.reference.tuning, "equal-temperament");
+    assert_eq!(cqt.reference.frequency.0, 440.0);
+    assert_eq!(cqt.reference.divisions, 12);
+    assert_eq!(cqt.report.bins, 25);
+    assert!(cqt.report.work_units <= cqt.report.work_limit);
+    let middle = &cqt.frames[cqt.frames.len() / 2];
+    let strongest = middle
+        .bins
+        .iter()
+        .max_by(|left, right| left.value.total_cmp(&right.value))
+        .unwrap();
+    assert!((strongest.center_frequency.0 - 440.0).abs() < 1e-9);
+
+    let chroma_plan = ChromaPlan {
+        folding: ChromaFoldPolicy::Sum,
+        normalization: ChromaNormalization::L1,
+    };
+    let folded = chroma(&cqt, &chroma_plan).unwrap();
+    assert_eq!(folded.reference.tuning, "equal-temperament");
+    assert_eq!(folded.weighting, CqtWeighting::Power);
+    assert_eq!(folded.plan.folding, ChromaFoldPolicy::Sum);
+    let middle = &folded.frames[folded.frames.len() / 2];
+    assert_eq!(middle.bins.len(), 12);
+    assert_eq!(
+        middle
+            .bins
+            .iter()
+            .enumerate()
+            .max_by(|left, right| left.1.total_cmp(right.1))
+            .map(|(index, _)| index),
+        Some(9),
+        "A chroma must dominate: {:?}",
+        middle.bins
+    );
+    assert!((middle.bins.iter().sum::<f64>() - 1.0).abs() < 1e-12);
+}
+
+#[test]
+fn cqt_fails_closed_before_exceeding_declared_work() {
+    let samples = sine_mix(&[(440.0, 1.0)], 8_000, 2_048);
+    let plan = CqtPlan {
+        min_frequency_hz: 220.0,
+        max_frequency_hz: 880.0,
+        max_window: 4_096,
+        max_work: 1,
+        ..CqtPlan::default()
+    };
+    let error = constant_q(&samples, 8_000, &EqualTemperament::default(), &plan).unwrap_err();
+    assert!(matches!(error, AudioTransformError::WorkLimit { .. }));
+}
+
+fn stft_plan(frame: usize, hop: usize) -> StftPlan {
+    let mut window = WindowSpec::new(WindowFunction::Hann);
+    window.sampling = WindowSampling::Periodic;
+    StftPlan {
+        frame,
+        hop,
+        analysis_window: window.clone(),
+        synthesis_window: window,
+        center: true,
+        padding: PaddingPolicy::Zero,
+        phase: SignConvention::NegativeForward,
+        normalization: Normalization::Forward,
+        overlap: StftOverlapPolicy::RequireCola { tolerance: 1e-10 },
+        max_frames: 4_096,
+        max_cells: 4_194_304,
+    }
+}
+
+fn sine_mix(tones: &[(f64, f64)], sample_rate: u32, samples: usize) -> Vec<f32> {
+    (0..samples)
+        .map(|index| {
+            let time = index as f64 / f64::from(sample_rate);
+            tones
+                .iter()
+                .map(|(frequency, amplitude)| {
+                    amplitude * (std::f64::consts::TAU * frequency * time).sin()
+                })
+                .sum::<f64>() as f32
+        })
+        .collect()
+}
+```
+
+### `feature/sim-music/offline-audio-transform-and-loudness`
+
+Specimen `spec-test/sim-music/crates/sim-lib-sound-render/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-sound-render/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+use sim_kernel::Cx;
+use sim_kernel::{DefaultFactory, EagerPolicy};
+use sim_lib_sound_bridge::ScheduledTone;
+use sim_lib_sound_core::{Frequency, Tone};
+use sim_lib_sound_timbre::pure_sine;
+
+use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
+
+mod loudness_tests;
+mod vocoder_tests;
+
+// conformance: sound rendering reuse produces deterministic offline PCM.
+
+#[test]
+fn render_tone_produces_non_zero_samples_for_sine() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(25));
+    let rendered = renderer.render_tone(&tone);
+    assert!(rendered.iter().any(|sample| sample.abs() > 0.0));
+}
+
+#[test]
+fn write_wav_emits_valid_riff_wave_header() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(5));
+    let rendered = renderer.render_tone(&tone);
+    let wav = renderer.write_wav(&rendered, Vec::new()).unwrap();
+    assert_eq!(&wav[0..4], b"RIFF");
+    assert_eq!(&wav[8..12], b"WAVE");
+}
+
+#[test]
+fn write_wav_rejects_channel_misaligned_samples() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+
+    let err = renderer.write_wav(&[0.0], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::ChannelMisalignedSamples);
+}
+
+#[test]
+fn write_wav_uses_checked_header_arithmetic() {
+    let renderer = PcmRenderer::new(RendererOptions::new(u32::MAX, 2).unwrap()).unwrap();
+
+    let err = renderer.write_wav(&[], Vec::new()).unwrap_err();
+
+    assert_eq!(err, SoundRenderError::BufferTooLarge);
+}
+
+#[test]
+fn pcm_renderer_exposes_validated_options_through_accessors() {
+    let renderer = PcmRenderer::new(RendererOptions::new(22_050, 1).unwrap()).unwrap();
+
+    assert_eq!(renderer.sample_rate(), 22_050);
+    assert_eq!(renderer.channels(), 1);
+}
+
+#[test]
+fn render_mix_respects_scheduled_start_and_pan() {
+    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
+    let tones = vec![
+        ScheduledTone {
+            start: std::time::Duration::ZERO,
+            tone: Tone::sine(Frequency(220.0), std::time::Duration::from_millis(10)),
+            pan: -1.0,
+            channel: 0,
+            key: 57,
+        },
+        ScheduledTone {
+            start: std::time::Duration::from_millis(5),
+            tone: Tone::sine(Frequency(440.0), std::time::Duration::from_millis(10)),
+            pan: 1.0,
+            channel: 1,
+            key: 69,
+        },
+    ];
+    let mix = renderer.render_mix(&tones);
+    assert!(mix.len() > renderer.render_tone(&tones[0].tone).len());
+    assert!(mix.iter().any(|sample| sample.abs() > 0.0));
+}
+
+#[test]
+fn render_timbre_preview_uses_pcm_renderer() {
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    let samples = renderer
+        .render_timbre_preview(
+            &pure_sine(),
+            Frequency(440.0),
+            std::time::Duration::from_millis(10),
+        )
+        .expect("preview");
+    assert_eq!(samples.len(), 80);
+}
+
+#[test]
+fn catalog_timbres_render_deterministically_to_offline_pcm() {
+    use sim_lib_sound_timbre::{fm_pair, harmonic_expansion, karplus_strong};
+
+    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
+    for timbre in [
+        harmonic_expansion(6, 0.5, 0.0),
+        karplus_strong(0.8),
+        fm_pair(2.0, 1.5),
+    ] {
+        let first = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("first preview");
+        let second = renderer
+            .render_timbre_preview(
+                &timbre,
+                Frequency(220.0),
+                std::time::Duration::from_millis(20),
+            )
+            .expect("second preview");
+        assert_eq!(first, second);
+        assert!(first.iter().all(|sample| sample.is_finite()));
+        assert!(first.iter().any(|sample| sample.abs() > 0.0));
+    }
+}
+
+#[test]
+fn runtime_install_is_idempotent() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_sound_render_lib(&mut cx).unwrap();
+    install_sound_render_lib(&mut cx).unwrap();
+}
+```
+
+Specimen `spec-test/sim-music/crates/sim-lib-stream-file/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-stream-file/src/tests.rs`:
+
+```rust
+use std::{
+    convert::TryFrom,
+    fs,
+    path::{Path, PathBuf},
+    sync::Arc,
+    time::{SystemTime, UNIX_EPOCH},
+};
+
+use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol};
+use sim_lib_midi_core::{
+    Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
+    TickTime, U7, synthetic_origin,
+};
+use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
+use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
+use sim_lib_stream_core::{
+    BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
+    StreamPacket, StreamValue, TransportProfile,
+};
+use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
+
+use crate::cap::stream_file_filesystem_effect_kind;
+use crate::{
+    cassette_expr_to_stream, pcm_buffers_to_wav_bytes, read_smf_stream, read_wav_stream,
+    stream_file_read_capability, stream_file_write_capability, stream_to_cassette,
+    stream_to_cassette_expr, validate_cassette_fixture_path, write_smf_stream,
+};
+
+// conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
+
+mod pcm_convert_tests;
+
+#[test]
+fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
+    let temp = TempPath::new("input.mid");
+    let file = smf_fixture();
+    let bytes = write_smf(&file).unwrap();
+    fs::write(temp.path(), &bytes).unwrap();
+    let decoded = read_smf(&bytes).unwrap();
+    let expected = merged_events(&decoded);
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let stream =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/smf-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(decoded.ticks_per_quarter().unwrap());
+    let count = midi_stream_to_sink(&stream, &mut sink).unwrap();
+
+    assert_eq!(count, expected.len());
+    assert_eq!(sink.events(), expected.as_slice());
+}
+
+#[test]
+fn memory_midi_source_to_smf_to_read_back_round_trips() {
+    let temp = TempPath::new("roundtrip.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/smf-write")).unwrap();
+    let mut cx = cx(&[
+        stream_file_write_capability(),
+        stream_file_read_capability(),
+    ]);
+
+    let count = write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back = read_smf_stream(
+        &mut cx,
+        temp.path(),
+        3,
+        midi_metadata("stream/smf-read-back"),
+    )
+    .unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(count, events.len());
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn wav_to_pcm_packet_spine_to_memory_sink_round_trips() {
+    let temp = TempPath::new("input.wav");
+    let spec = pcm_spec();
+    let buffers = vec![pcm_buffer(&[1, -1, 2, -2]), pcm_buffer(&[3, -3])];
+    let bytes = pcm_buffers_to_wav_bytes(spec, &buffers).unwrap();
+    assert_eq!(bytes, pcm_buffers_to_wav_bytes(spec, &buffers).unwrap());
+    fs::write(temp.path(), bytes).unwrap();
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let wav = read_wav_stream(&mut cx, temp.path(), 2, pcm_metadata("stream/wav-read")).unwrap();
+    let mut sink = MemoryPcmSink::new(spec);
+    let summary = stream_to_pcm_sink(wav.stream(), &mut sink).unwrap();
+
+    assert_eq!(wav.spec(), spec);
+    assert_eq!(summary.buffers(), 2);
+    assert_eq!(summary.frames(), 3);
+    assert_eq!(sink.buffers(), buffers.as_slice());
+}
+
+#[test]
+fn midi_control_stream_cassette_replays_from_file_expression_format() {
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/cassette-midi")).unwrap();
+
+    let cassette_expr =
+        stream_to_cassette_expr(&stream, TransportProfile::lan_midi_control()).unwrap();
+    let replay = cassette_expr_to_stream(&cassette_expr).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let replayed = midi_stream_to_sink(&replay, &mut sink).unwrap();
+
+    assert_eq!(replayed, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn buffered_pcm_preview_cassette_replays_as_golden_fixture() {
+    let items = vec![
+        StreamItem::new(StreamPacket::Pcm(
+            PcmPacket::i16(2, 1, vec![1, -1]).unwrap(),
+        )),
+        StreamItem::new(StreamPacket::Pcm(
+            PcmPacket::i16(2, 1, vec![2, -2]).unwrap(),
+        )),
+    ];
+    let stream =
+        sim_lib_stream_core::StreamValue::pull(pcm_metadata("stream/cassette-pcm"), items.clone());
+
+    let cassette =
+        stream_to_cassette(&stream, TransportProfile::lan_buffered_audio_preview()).unwrap();
+    let report = validate_cassette_fixture_path(
+        &cassette,
+        "fixtures/streams/golden/buffered-preview.simcassette",
+    )
+    .unwrap();
+    let replay = cassette.replay_stream_value().unwrap();
+
+    assert_eq!(report.packet_count, 2);
+    assert_eq!(replay.take_packets(4).unwrap(), items);
+}
+
+#[test]
+fn cassette_fixture_validation_requires_redacted_sensitive_payloads() {
+    let payload = Expr::Map(vec![
+        (
+            Expr::Symbol(Symbol::new("path")),
+            Expr::String("private-path=session.mid".to_owned()),
+        ),
+        (
+            Expr::Symbol(Symbol::new("token")),
+            Expr::String("token=abc123".to_owned()),
+        ),
+    ]);
+    let stream = StreamValue::pull(
+        data_metadata("stream/sensitive-cassette"),
+        vec![StreamItem::new(StreamPacket::data(
+            Symbol::qualified("stream/data", "expr"),
+            payload,
+        ))],
+    );
+
+    let cassette = stream_to_cassette(&stream, TransportProfile::remote_stream_fabric()).unwrap();
+    assert!(
+        validate_cassette_fixture_path(&cassette, "fixtures/streams/golden/sensitive.simcassette")
+            .is_err()
+    );
+    let redacted = cassette.redacted().unwrap();
+    let report =
+        validate_cassette_fixture_path(&redacted, "fixtures/streams/golden/sensitive.simcassette")
+            .unwrap();
+
+    assert_eq!(report.packet_count, 1);
+    assert!(matches!(
+        redacted.items().unwrap()[0].packet(),
+        StreamPacket::Data(data)
+            if data.kind == Symbol::qualified("stream/data", "redacted")
+    ));
+}
+
+#[test]
+fn malformed_file_returns_diagnostic_error() {
+    let temp = TempPath::new("bad.mid");
+    fs::write(temp.path(), b"not an smf").unwrap();
+    let mut cx = cx(&[stream_file_read_capability()]);
+
+    let err = match read_smf_stream(&mut cx, temp.path(), 1, midi_metadata("stream/bad-smf")) {
+        Ok(_) => panic!("malformed SMF unexpectedly decoded"),
+        Err(err) => err,
+    };
+
+    assert!(format!("{err}").contains("malformed SMF file"));
+}
+
+#[test]
+fn file_effects_and_capabilities_are_recorded() {
+    let temp = TempPath::new("cap.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events);
+    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/cap-write")).unwrap();
+    let mut write_cx = cx(&[stream_file_write_capability()]);
+
+    write_smf_stream(&mut write_cx, temp.path(), &stream, 480).unwrap();
+
+    let records = write_cx.effect_ledger().records();
+    assert_eq!(records.len(), 1);
+    assert!(!records[0].aborted);
+    let recorded = write_cx.effect_ledger().effect(&records[0].effect).unwrap();
+    assert_eq!(recorded.kind, stream_file_filesystem_effect_kind());
+    assert!(recorded.requires.contains(&stream_file_write_capability()));
+
+    let mut read_cx = cx(&[]);
+    let err = match read_smf_stream(
+        &mut read_cx,
+        temp.path(),
+        1,
+        midi_metadata("stream/cap-read"),
+    ) {
+        Ok(_) => panic!("missing read capability unexpectedly succeeded"),
+        Err(err) => err,
+    };
+    assert!(matches!(
+        err,
+        Error::CapabilityDenied { capability } if capability == stream_file_read_capability()
+    ));
+    let denied = read_cx.effect_ledger().records();
+    assert_eq!(denied.len(), 1);
+    assert!(denied[0].aborted);
+}
+
+#[test]
+fn compatibility_stream_file_capability_aliases_are_accepted() {
+    let temp = TempPath::new("compat-caps.mid");
+    let events = midi_events_with_end();
+    let mut source = MemoryMidiSource::new(480, events.clone());
+    let stream =
+        midi_source_to_stream(&mut source, 2, midi_metadata("stream/compat-write")).unwrap();
+    let mut cx = cx(&[
+        CapabilityName::new("stream.file.write"),
+        CapabilityName::new("stream.file.read"),
+    ]);
+
+    write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+    let read_back =
+        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/compat-read")).unwrap();
+    let mut sink = MemoryMidiSink::new(480);
+    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+    assert_eq!(read_count, events.len());
+    assert_eq!(sink.events(), events.as_slice());
+}
+
+#[test]
+fn directory_aliases_do_not_authorize_file_writes() {
+    for alias in ["table.fs.mkdir", "table.fs.rmdir"] {
+        let suffix = format!("directory-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events);
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/dir-alias-write")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias)]);
+
+        let err = match write_smf_stream(&mut cx, temp.path(), &stream, 480) {
+            Ok(_) => panic!("{alias} unexpectedly authorized an SMF file write"),
+            Err(err) => err,
+        };
+
+        assert!(matches!(
+            err,
+            Error::CapabilityDenied { capability } if capability == stream_file_write_capability()
+        ));
+        assert!(!temp.path().exists());
+    }
+}
+
+#[test]
+fn compatibility_file_write_aliases_are_accepted() {
+    for alias in ["table.fs.write", "file-write"] {
+        let suffix = format!("write-alias-{}.mid", alias.replace('.', "-"));
+        let temp = TempPath::new(&suffix);
+        let events = midi_events_with_end();
+        let mut source = MemoryMidiSource::new(480, events.clone());
+        let stream =
+            midi_source_to_stream(&mut source, 2, midi_metadata("stream/write-alias")).unwrap();
+        let mut cx = cx(&[CapabilityName::new(alias), stream_file_read_capability()]);
+
+        write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
+        let read_back =
+            read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/read-alias")).unwrap();
+        let mut sink = MemoryMidiSink::new(480);
+        let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
+
+        assert_eq!(read_count, events.len());
+        assert_eq!(sink.events(), events.as_slice());
+    }
+}
+
+fn cx(capabilities: &[CapabilityName]) -> Cx {
+    let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
+    for capability in capabilities {
+        cx.grant(capability.clone());
+    }
+    cx
+}
+
+fn midi_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Midi,
+        StreamDirection::Source,
+        Symbol::qualified("clock", "midi"),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn pcm_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Pcm,
+        StreamDirection::Source,
+        ClockDomain::Sample.symbol(),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn data_metadata(id: &str) -> StreamMetadata {
+    StreamMetadata::new(
+        Symbol::new(id),
+        StreamMedia::Data,
+        StreamDirection::Source,
+        ClockDomain::ServerFrame.symbol(),
+        BufferPolicy::bounded(16).unwrap(),
+    )
+}
+
+fn smf_fixture() -> SmfFile {
+    SmfFile {
+        format: SmfFormat::SingleTrack,
+        division: SmfDivision::metrical(480).unwrap(),
+        tracks: vec![SmfTrack {
+            events: midi_events_with_end(),
+        }],
+    }
+}
+
+fn midi_events_with_end() -> Vec<MidiEvent> {
+    vec![
+        midi_event(
+            0,
+            MidiPayload::Channel(ChannelMessage::NoteOn {
+                ch: Channel::new(0).unwrap(),
+                key: U7::try_from(60).unwrap(),
+                vel: U7::try_from(100).unwrap(),
+            }),
+        ),
+        midi_event(
+            240,
+            MidiPayload::Channel(ChannelMessage::NoteOff {
+                ch: Channel::new(0).unwrap(),
+                key: U7::try_from(60).unwrap(),
+                vel: U7::try_from(0).unwrap(),
+            }),
+        ),
+        midi_event(240, MidiPayload::Meta(MetaEvent::EndOfTrack)),
+    ]
+}
+
+fn midi_event(ticks: i64, payload: MidiPayload) -> MidiEvent {
+    MidiEvent {
+        time: TickTime::new(ticks, 480).unwrap(),
+        origin: synthetic_origin(),
+        payload,
+    }
+}
+
+fn merged_events(file: &SmfFile) -> Vec<MidiEvent> {
+    file.merged_events()
+        .unwrap()
+        .into_iter()
+        .map(|tracked| tracked.event)
+        .collect()
+}
+
+fn pcm_spec() -> PcmSpec {
+    PcmSpec::i16(2, 48_000).unwrap()
+}
+
+fn pcm_buffer(samples: &[i16]) -> PcmBuffer {
+    PcmBuffer::i16(pcm_spec(), samples.len() / 2, samples.to_vec()).unwrap()
+}
+
+struct TempPath {
+    path: PathBuf,
+}
+
+impl TempPath {
+    fn new(suffix: &str) -> Self {
+        let nanos = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let path = std::env::temp_dir().join(format!(
+            "sim-stream-file-{}-{nanos}-{suffix}",
+            std::process::id()
+        ));
+        Self { path }
+    }
+
+    fn path(&self) -> &Path {
+        &self.path
+    }
+}
+
+impl Drop for TempPath {
+    fn drop(&mut self) {
+        let _ = fs::remove_file(&self.path);
+    }
+}
+```
+
+### `feature/sim-music/serial-series-calculus`
+
+Specimen `recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-serial-core/recipes/01-basics/custom-alphabet/recipe.toml`:
+
+```toml
+id = "custom-alphabet"
+title = "Validate a five-symbol custom alphabet"
+codec = "lisp"
+setup = "setup.siml"
+purpose = "purpose.md"
+order = 10
+tags = ["serial", "alphabet", "aggregate", "non-pitch", "lisp", "framework"]
+requires = ["serial-core", "music-shapes", "discrete-rank", "codec/lisp"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-serial-core/recipes/01-basics/certified-transforms/recipe.toml`:
+
+```toml
+id = "certified-transforms"
+title = "Transform a symbolic series with inverse evidence"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
+order = 20
+tags = ["serial", "transform", "certificate", "bijection", "rust", "framework"]
+requires = ["serial-core", "discrete-rank"]
+```
+
+### `feature/sim-music/twelve-tone-row-theory`
+
+Specimen `recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`:
+
+```toml
+id = "row-family-matrix"
+title = "Build the complete family and matrix for an Op. 25 row"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
+order = 10
+tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "family", "matrix", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core", "serial-core"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-pitch-serial/02-partitions/partition-mosaic` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml`:
+
+```toml
+title = "Analyze partitions, mosaics, and interlocking evidence"
+summary = "Validate block-order contracts, compare partitions, verticalize row slices, and inspect dyadic through hexachordal mosaics."
+category = "Rust"
+tags = ["pitch", "serial", "tone-row", "partition", "mosaic", "interlocking", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core"]
+purpose = "purpose.md"
+```
+
+### `feature/sim-music/serial-practice`
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml`:
+
+```toml
+title = "Immutable serial plan"
+summary = "Validate an immutable serial plan with simultaneous groups, structural coverage, and stable provenance."
+category = "Rust"
+tags = ["music", "serial", "twelve-tone", "plan", "provenance", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`:
+
+```toml
+title = "Strict row realization"
+summary = "Realize and render a strict serial row statement without losing planned event, voice, or ordinal identity."
+category = "Rust"
+tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/arrays-time-points` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml`:
+
+```toml
+title = "Analyze serial arrays and time-point rows"
+summary = "Keep horizontal row order, vertical aggregate evidence, and onset order explicit without collapsing them into one score model."
+category = "Rust"
+tags = ["music", "serial", "array", "time-point", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "serial-core", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/simultaneous-forms` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml`:
+
+```toml
+title = "Deploy simultaneous forms without fabricating chord order"
+summary = "Build one inspectable simultaneous-form deployment from reusable partition components and preserve equal-onset group evidence."
+category = "Rust"
+tags = ["music", "serial", "simultaneity", "deployment", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/derived-invariant-practice` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml`:
+
+```toml
+title = "Analyze derived cells and invariant candidates"
+summary = "Keep derived deployment evidence and invariant certificates inspectable instead of collapsing them into one style flag."
+category = "Rust"
+tags = ["music", "serial", "derived", "invariant", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/referential-subsets` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml`:
+
+```toml
+title = "Analyze bounded referential subsets"
+summary = "Name subset evidence, harmonic context, and emphasis without upgrading one local claim into whole-passage tonality."
+category = "Rust"
+tags = ["music", "serial", "referential", "subset", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "pitch-chord", "pitch-scale", "pitch-ratio"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/counter-voices` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml`:
+
+```toml
+title = "Build counter-voices with explicit canon evidence"
+summary = "Deploy counter-voices as ordinary public canon components and retain offset, symmetry, and orchestration metadata."
+category = "Rust"
+tags = ["music", "serial", "counter-voices", "canon", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/03-parameters/integral-parameters` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml`:
+
+```toml
+title = "Project integral parameter tracks with explicit ledgers"
+summary = "Bind builtin and custom parameter tracks through one typed surface and inspect phase, exhaustion, and transform evidence."
+category = "Rust"
+tags = ["music", "serial", "integral", "parameters", "rust", "framework"]
+requires = ["music-serial", "music-core", "serial-core"]
+purpose = "purpose.md"
+```
+
+### `feature/sim-music/open-serial-adaptation`
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`:
+
+```toml
+title = "Third-party adaptation without source edits"
+summary = "Register a caller-defined alphabet, practice rule, and realizer entirely through public APIs, then prove the generic Lisp validation surface and open adaptation registry fail closed on unknown components."
+category = "Rust"
+tags = ["music", "serial", "adaptation", "registry", "lisp", "framework"]
+requires = ["music-serial", "music-shapes", "serial-core", "codec/lisp"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`:
+
+```toml
+title = "Modal spine realization"
+summary = "Land one immutable serial plan onto modal and caller-defined scales while preserving ordinal identity and reporting aggregate relaxation explicitly."
+category = "Rust"
+tags = ["music", "serial", "modal", "adaptation", "realization", "rust", "framework"]
+requires = ["music-serial", "pitch-scale", "music-core"]
+```
+
+### `feature/sim-music/serial-consonance-completion`
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml`:
+
+```toml
+title = "Serial completion with structural ledgers"
+summary = "Filter additive completion candidates through serial allowances, preserve the structural plan, and audit the result through structural and all-sounding ledgers."
+category = "Rust"
+tags = ["music", "serial", "completion", "bounded-search", "reversible", "framework", "rust"]
+requires = ["music-serial", "discrete-search", "music-transform"]
+```
+
+### `feature/sim-music/serial-music-workbench`
+
+Specimen `recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition` is checked by `sh scripts/check-recipes.sh`.
+
+Source `recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml`:
+
+```toml
+title = "Run a serial music workbench from row to audition"
+summary = "Load replaceable realization components, build a row plan, realize it strictly and modally, complete it reversibly, audit ledgers, export MIDI and LilyPond notation, and audition it."
+category = "Rust"
+tags = ["music", "serial", "workbench", "end-to-end", "notation", "midi", "rust", "framework"]
+requires = [
+  "music-serial",
+  "music-notation",
+  "music-transform",
+  "pitch-scale",
+]
+purpose = "purpose.md"
 ```

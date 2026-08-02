@@ -6,7 +6,9 @@ use sim_lib_midi_core::{
     Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent,
     TickTime, U7, U14, synthetic_origin,
 };
-use sim_lib_midi_smf::{SmfFile, SmfFormat, SmfTrack};
+
+mod smf;
+pub use smf::*;
 
 /// Errors raised while decoding a MIDI string shape, named by the shape that
 /// failed to parse.
@@ -312,91 +314,6 @@ pub fn decode_midi_event(value: &str) -> Result<MidiEvent, MidiShapeError> {
     })
 }
 
-/// Encodes an [`SmfTrack`] as a `#(SmfTrack ...)` form.
-pub fn encode_smf_track(track: &SmfTrack) -> String {
-    if track.events.is_empty() {
-        return "#(SmfTrack)".to_owned();
-    }
-    format!(
-        "#(SmfTrack {})",
-        track
-            .events
-            .iter()
-            .map(encode_midi_event)
-            .collect::<Vec<_>>()
-            .join(" ")
-    )
-}
-
-/// Decodes an [`SmfTrack`] from a `#(SmfTrack ...)` form.
-pub fn decode_smf_track(value: &str) -> Result<SmfTrack, MidiShapeError> {
-    let inner = value
-        .strip_prefix("#(SmfTrack")
-        .and_then(|rest| rest.strip_suffix(')'))
-        .ok_or(MidiShapeError::InvalidSmfTrack)?
-        .trim();
-    if inner.is_empty() {
-        return Ok(SmfTrack { events: Vec::new() });
-    }
-    let events = split_top_level(inner)
-        .into_iter()
-        .map(decode_midi_event)
-        .collect::<Result<Vec<_>, _>>()?;
-    Ok(SmfTrack { events })
-}
-
-/// Encodes an [`SmfFile`] as a `#(SmfFile <format> <tpq> ...)` form.
-pub fn encode_smf_file(file: &SmfFile) -> String {
-    let format = match file.format {
-        SmfFormat::SingleTrack => "SingleTrack",
-        SmfFormat::Simultaneous => "Simultaneous",
-        SmfFormat::Independent => "Independent",
-    };
-    if file.tracks.is_empty() {
-        return format!("#(SmfFile {} {})", format, file.tpq);
-    }
-    format!(
-        "#(SmfFile {} {} {})",
-        format,
-        file.tpq,
-        file.tracks
-            .iter()
-            .map(encode_smf_track)
-            .collect::<Vec<_>>()
-            .join(" ")
-    )
-}
-
-/// Decodes an [`SmfFile`] from a `#(SmfFile ...)` form.
-pub fn decode_smf_file(value: &str) -> Result<SmfFile, MidiShapeError> {
-    let inner = value
-        .strip_prefix("#(SmfFile ")
-        .and_then(|rest| rest.strip_suffix(')'))
-        .ok_or(MidiShapeError::InvalidSmfFile)?;
-    let parts = split_top_level(inner);
-    if parts.len() < 2 {
-        return Err(MidiShapeError::InvalidSmfFile);
-    }
-    let format = match parts[0] {
-        "SingleTrack" => SmfFormat::SingleTrack,
-        "Simultaneous" => SmfFormat::Simultaneous,
-        "Independent" => SmfFormat::Independent,
-        _ => return Err(MidiShapeError::InvalidSmfFile),
-    };
-    let tpq = parts[1]
-        .parse::<u32>()
-        .map_err(|_| MidiShapeError::InvalidSmfFile)?;
-    let tracks = parts[2..]
-        .iter()
-        .map(|part| decode_smf_track(part))
-        .collect::<Result<Vec<_>, _>>()?;
-    Ok(SmfFile {
-        format,
-        tpq,
-        tracks,
-    })
-}
-
 fn parse_channel(value: Option<&&str>) -> Result<Channel, MidiShapeError> {
     Channel::new(parse_u8(
         value.copied(),
@@ -502,7 +419,7 @@ fn decode_bytes(value: &str) -> Result<Vec<u8>, MidiShapeError> {
         .collect()
 }
 
-fn split_top_level(value: &str) -> Vec<&str> {
+pub(super) fn split_top_level(value: &str) -> Vec<&str> {
     let mut parts = Vec::new();
     let mut depth = 0usize;
     let mut start = 0usize;

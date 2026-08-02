@@ -1,14 +1,21 @@
+//! Defensive SMF conformance: lossless divisions and extension events plus
+//! bounded, fail-closed parsing of adversarial input.
+
 use std::io::Cursor;
 
 use sim_lib_midi_core::{
-    Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, SysExEvent, TickTime,
-    U7, U14, synthetic_origin,
+    Channel, ChannelMessage, MetaBucket, MetaEvent, MidiEvent, MidiPayload, RawBytes, SysExEvent,
+    TickTime, U7, synthetic_origin,
 };
 
+use crate::test_support::{
+    canonical_format_zero_fixture, format_one_merge_fixture, metrical_division, minimal_track,
+    wrap_track, wrap_track_raw,
+};
 use crate::writer::{MAX_SMF_VLQ, checked_chunk_len, checked_payload_len};
 use crate::{
-    SmfError, SmfFile, SmfFormat, SmfTrack, SmfWriteOptions, decode_vlq, encode_vlq, read_smf,
-    write_smf_with_options,
+    SmfDivision, SmfError, SmfFile, SmfFormat, SmfTempoMaps, SmfTimeSemantics, SmfTrack,
+    SmfWriteOptions, SmpteRate, decode_vlq, encode_vlq, read_smf, write_smf_with_options,
 };
 
 #[test]
@@ -52,14 +59,22 @@ fn smf_headers_round_trip_for_formats_0_1_and_2() {
     ] {
         let file = SmfFile {
             format,
-            tpq: 480,
+            division: metrical_division(),
             tracks,
         };
         let bytes = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
         let decoded = read_smf(&bytes).unwrap();
         assert_eq!(decoded.format, format);
-        assert_eq!(decoded.tpq, 480);
+        assert_eq!(decoded.division, metrical_division());
         assert_eq!(decoded.tracks.len(), file.tracks.len());
+        assert_eq!(
+            decoded.format.time_semantics(),
+            if format == SmfFormat::Independent {
+                SmfTimeSemantics::IndependentPatterns
+            } else {
+                SmfTimeSemantics::SharedTimeline
+            }
+        );
     }
 }
 
@@ -103,7 +118,7 @@ fn running_status_files_read_correctly() {
 #[test]
 fn multi_track_reader_emits_time_sorted_events_and_preserves_last_track() {
     let file = read_smf(&format_one_merge_fixture()).unwrap();
-    let merged = file.merged_events();
+    let merged = file.merged_events().unwrap();
     let pairs = merged
         .iter()
         .map(|tracked| {
@@ -125,7 +140,7 @@ fn multi_track_reader_emits_time_sorted_events_and_preserves_last_track() {
 fn merge_cursor_skips_exhausted_earlier_tracks() {
     let file = SmfFile {
         format: SmfFormat::Simultaneous,
-        tpq: 480,
+        division: metrical_division(),
         tracks: vec![
             SmfTrack {
                 events: vec![MidiEvent {
@@ -161,7 +176,7 @@ fn merge_cursor_skips_exhausted_earlier_tracks() {
         ],
     };
 
-    let merged = file.merged_events();
+    let merged = file.merged_events().unwrap();
     let pairs = merged
         .iter()
         .map(|tracked| (tracked.last_track, tracked.event.time.ticks))
@@ -171,16 +186,98 @@ fn merge_cursor_skips_exhausted_earlier_tracks() {
 }
 
 #[test]
-fn writer_rejects_tpq_with_smpte_high_bit() {
+fn format_two_patterns_cannot_be_merged_onto_a_shared_timeline() {
     let file = SmfFile {
-        format: SmfFormat::SingleTrack,
-        tpq: 0x8000,
-        tracks: vec![minimal_track(480)],
+        format: SmfFormat::Independent,
+        division: metrical_division(),
+        tracks: vec![minimal_track(480), minimal_track(480)],
     };
 
-    let error = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap_err();
+    assert_eq!(
+        file.merged_events().unwrap_err(),
+        SmfError::IndependentPatternsCannotMerge
+    );
+}
 
-    assert_eq!(error, SmfError::TpqOutOfRange(0x8000));
+#[test]
+fn tempo_maps_keep_format_two_patterns_independent() {
+    let tempo = |us_per_quarter| MidiEvent {
+        time: TickTime::new(0, 480).expect("tick"),
+        origin: synthetic_origin(),
+        payload: MidiPayload::Meta(MetaEvent::Tempo { us_per_quarter }),
+    };
+    let file = SmfFile {
+        format: SmfFormat::Independent,
+        division: SmfDivision::metrical(480).expect("division"),
+        tracks: vec![
+            SmfTrack {
+                events: vec![tempo(500_000)],
+            },
+            SmfTrack {
+                events: vec![tempo(250_000)],
+            },
+        ],
+    };
+
+    let SmfTempoMaps::Independent(maps) = file.tempo_maps().expect("tempo maps") else {
+        panic!("format 2 must retain independent tempo maps");
+    };
+    assert_eq!(maps.len(), 2);
+    assert_eq!(maps[0].segments()[0].us_per_quarter, 500_000);
+    assert_eq!(maps[1].segments()[0].us_per_quarter, 250_000);
+    let first = maps[0]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    let second = maps[1]
+        .wall_time_for_tick(TickTime::new(480, 480).expect("tick"))
+        .expect("wall");
+    assert_eq!((first.numerator(), first.denominator()), (1, 2));
+    assert_eq!((second.numerator(), second.denominator()), (1, 4));
+}
+
+#[test]
+fn every_valid_smpte_division_round_trips_byte_identically() {
+    for (rate, rate_byte) in [
+        (SmpteRate::Fps24, 0xe8),
+        (SmpteRate::Fps25, 0xe7),
+        (SmpteRate::Fps29Drop, 0xe3),
+        (SmpteRate::Fps30, 0xe2),
+    ] {
+        let raw_division = u16::from_be_bytes([rate_byte, 80]);
+        let fixture = wrap_track_raw(
+            SmfFormat::SingleTrack,
+            raw_division,
+            vec![vec![0x00, 0xff, 0x2f, 0x00]],
+        );
+        let decoded = read_smf(&fixture).unwrap();
+        assert_eq!(decoded.division, SmfDivision::smpte(rate, 80).unwrap());
+        assert_eq!(
+            write_smf_with_options(&decoded, SmfWriteOptions::default()).unwrap(),
+            fixture
+        );
+    }
+
+    assert_eq!(
+        SmfDivision::smpte(SmpteRate::Fps29Drop, 80)
+            .unwrap()
+            .ticks_per_second_ratio(),
+        Some((2_400_000, 1_001))
+    );
+}
+
+#[test]
+fn invalid_smpte_rate_and_zero_subframes_are_rejected_at_the_division_offset() {
+    for raw in [0xe600, 0xe800] {
+        let fixture = wrap_track_raw(
+            SmfFormat::SingleTrack,
+            raw,
+            vec![vec![0x00, 0xff, 0x2f, 0x00]],
+        );
+        assert_eq!(
+            read_smf(&fixture).unwrap_err(),
+            SmfError::InvalidDivision { offset: 12, raw }
+        );
+    }
 }
 
 #[test]
@@ -190,7 +287,7 @@ fn writer_rejects_too_many_tracks() {
         .collect::<Vec<_>>();
     let file = SmfFile {
         format: SmfFormat::Simultaneous,
-        tpq: 480,
+        division: metrical_division(),
         tracks,
     };
 
@@ -204,7 +301,7 @@ fn writer_rejects_delta_above_four_byte_vlq_limit() {
     let delta = i64::from(MAX_SMF_VLQ) + 1;
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: metrical_division(),
         tracks: vec![SmfTrack {
             events: vec![MidiEvent {
                 time: TickTime::new(delta, 480).unwrap(),
@@ -239,7 +336,7 @@ fn writer_length_guards_reject_unrepresentable_lengths() {
 fn unknown_meta_and_sysex_round_trip() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: metrical_division(),
         tracks: vec![SmfTrack {
             events: vec![
                 MidiEvent {
@@ -273,121 +370,143 @@ fn unknown_meta_and_sysex_round_trip() {
 }
 
 #[test]
-fn channel_control_pitch_and_pressure_messages_round_trip() {
-    let channel = Channel::new(0).unwrap();
+fn unknown_meta_and_valid_system_events_round_trip() {
     let file = SmfFile {
         format: SmfFormat::SingleTrack,
-        tpq: 480,
+        division: metrical_division(),
         tracks: vec![SmfTrack {
             events: vec![
                 MidiEvent {
                     time: TickTime::new(0, 480).unwrap(),
                     origin: synthetic_origin(),
-                    payload: MidiPayload::Channel(ChannelMessage::ControlChange {
-                        ch: channel,
-                        cc: U7(74),
-                        value: U7(64),
+                    payload: MidiPayload::Meta(MetaEvent::Other(MetaBucket {
+                        type_byte: 0x6f,
+                        data: vec![0x80, 0xff, 0x01],
+                    })),
+                },
+                MidiEvent {
+                    time: TickTime::new(1, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Raw(RawBytes {
+                        status: 0xf2,
+                        data: vec![0x01, 0x7f],
                     }),
                 },
                 MidiEvent {
-                    time: TickTime::new(120, 480).unwrap(),
+                    time: TickTime::new(2, 480).unwrap(),
                     origin: synthetic_origin(),
-                    payload: MidiPayload::Channel(ChannelMessage::PitchBend {
-                        ch: channel,
-                        value: U14(8192),
-                    }),
-                },
-                MidiEvent {
-                    time: TickTime::new(240, 480).unwrap(),
-                    origin: synthetic_origin(),
-                    payload: MidiPayload::Channel(ChannelMessage::PolyAftertouch {
-                        ch: channel,
-                        key: U7(60),
-                        pressure: U7(70),
+                    payload: MidiPayload::Raw(RawBytes {
+                        status: 0xf8,
+                        data: Vec::new(),
                     }),
                 },
             ],
         }],
     };
 
-    let bytes = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
-    let decoded = read_smf(&bytes).unwrap();
-    assert!(decoded.tracks[0].events.iter().any(|event| matches!(
-        event.payload,
-        MidiPayload::Channel(ChannelMessage::ControlChange {
-            cc: U7(74),
-            value: U7(64),
-            ..
-        })
-    )));
-    assert!(decoded.tracks[0].events.iter().any(|event| matches!(
-        event.payload,
-        MidiPayload::Channel(ChannelMessage::PitchBend {
-            value: U14(8192),
-            ..
-        })
-    )));
-    assert!(decoded.tracks[0].events.iter().any(|event| matches!(
-        event.payload,
-        MidiPayload::Channel(ChannelMessage::PolyAftertouch {
-            pressure: U7(70),
-            ..
-        })
-    )));
+    let encoded = write_smf_with_options(&file, SmfWriteOptions::default()).unwrap();
+    let decoded = read_smf(&encoded).unwrap();
+    assert_eq!(decoded.tracks[0].events[..3], file.tracks[0].events[..]);
+    assert_eq!(
+        write_smf_with_options(&decoded, SmfWriteOptions::default()).unwrap(),
+        encoded
+    );
 }
 
-fn minimal_track(tpq: u32) -> SmfTrack {
-    SmfTrack {
-        events: vec![MidiEvent {
-            time: TickTime::new(0, tpq).unwrap(),
-            origin: synthetic_origin(),
-            payload: MidiPayload::Meta(MetaEvent::EndOfTrack),
-        }],
+#[test]
+fn realtime_system_events_do_not_cancel_running_status() {
+    let fixture = wrap_track(
+        SmfFormat::SingleTrack,
+        480,
+        vec![vec![
+            0x00, 0x90, 0x3c, 0x40, 0x01, 0xf8, 0x01, 0x3d, 0x41, 0x00, 0xff, 0x2f, 0x00,
+        ]],
+    );
+    let decoded = read_smf(&fixture).unwrap();
+    assert_eq!(
+        write_smf_with_options(
+            &decoded,
+            SmfWriteOptions {
+                running_status: true,
+            },
+        )
+        .unwrap(),
+        fixture
+    );
+}
+
+#[test]
+fn writer_rejects_illegal_raw_system_status_lengths_and_data_bytes() {
+    for raw in [
+        RawBytes {
+            status: 0xf4,
+            data: Vec::new(),
+        },
+        RawBytes {
+            status: 0xf2,
+            data: vec![0x01],
+        },
+        RawBytes {
+            status: 0xf1,
+            data: vec![0x80],
+        },
+    ] {
+        let status = raw.status;
+        let file = SmfFile {
+            format: SmfFormat::SingleTrack,
+            division: metrical_division(),
+            tracks: vec![SmfTrack {
+                events: vec![MidiEvent {
+                    time: TickTime::new(0, 480).unwrap(),
+                    origin: synthetic_origin(),
+                    payload: MidiPayload::Raw(raw),
+                }],
+            }],
+        };
+        assert!(matches!(
+            write_smf_with_options(&file, SmfWriteOptions::default()),
+            Err(SmfError::InvalidSystemEvent {
+                status: actual,
+                ..
+            }) if actual == status
+        ));
     }
 }
 
-fn canonical_format_zero_fixture(running_status: bool) -> Vec<u8> {
-    let track = if running_status {
-        vec![
-            0x00, 0xff, 0x51, 0x03, 0x07, 0xa1, 0x20, 0x00, 0x90, 60, 100, 0x78, 62, 96, 0x78,
-            0x80, 60, 0, 0x00, 62, 0, 0x00, 0xff, 0x2f, 0x00,
-        ]
-    } else {
-        vec![
-            0x00, 0xff, 0x51, 0x03, 0x07, 0xa1, 0x20, 0x00, 0x90, 60, 100, 0x78, 0x90, 62, 96,
-            0x78, 0x80, 60, 0, 0x00, 0x80, 62, 0, 0x00, 0xff, 0x2f, 0x00,
-        ]
-    };
-    wrap_track(SmfFormat::SingleTrack, 480, vec![track])
-}
-
-fn format_one_merge_fixture() -> Vec<u8> {
-    let track0 = vec![
-        0x00, 0xff, 0x51, 0x03, 0x07, 0xa1, 0x20, 0x78, 0x90, 60, 100, 0x78, 0x80, 60, 0, 0x00,
-        0xff, 0x2f, 0x00,
+#[test]
+fn malformed_lengths_vlqs_running_status_and_data_bytes_fail_closed() {
+    let cases = [
+        (
+            vec![0x00, 0xff, 0x51, 0x02, 0x07, 0xa1],
+            SmfError::InvalidMetaLength {
+                offset: 24,
+                type_byte: 0x51,
+                expected: 3,
+                actual: 2,
+            },
+        ),
+        (
+            vec![0x81, 0x80, 0x80, 0x80, 0x00],
+            SmfError::InvalidVlq { offset: 22 },
+        ),
+        (
+            vec![0x00, 0x90, 0x3c, 0x80],
+            SmfError::InvalidChannelData { offset: 25 },
+        ),
+        (
+            vec![
+                0x00, 0x90, 0x3c, 0x40, 0x00, 0xff, 0x01, 0x00, 0x00, 0x3d, 0x40,
+            ],
+            SmfError::MalformedRunningStatus { offset: 31 },
+        ),
+        (
+            vec![0x00, 0x90, 0x3c, 0x40],
+            SmfError::MissingEndOfTrack { offset: 26 },
+        ),
     ];
-    let track1 = vec![
-        0x3c, 0x91, 67, 110, 0x78, 0x81, 67, 0, 0x00, 0xff, 0x2f, 0x00,
-    ];
-    wrap_track(SmfFormat::Simultaneous, 480, vec![track0, track1])
-}
 
-fn wrap_track(format: SmfFormat, tpq: u16, tracks: Vec<Vec<u8>>) -> Vec<u8> {
-    let format_u16 = match format {
-        SmfFormat::SingleTrack => 0u16,
-        SmfFormat::Simultaneous => 1u16,
-        SmfFormat::Independent => 2u16,
-    };
-    let mut bytes = Vec::new();
-    bytes.extend_from_slice(b"MThd");
-    bytes.extend_from_slice(&6u32.to_be_bytes());
-    bytes.extend_from_slice(&format_u16.to_be_bytes());
-    bytes.extend_from_slice(&(tracks.len() as u16).to_be_bytes());
-    bytes.extend_from_slice(&tpq.to_be_bytes());
-    for track in tracks {
-        bytes.extend_from_slice(b"MTrk");
-        bytes.extend_from_slice(&(track.len() as u32).to_be_bytes());
-        bytes.extend_from_slice(&track);
+    for (track, expected) in cases {
+        let bytes = wrap_track(SmfFormat::SingleTrack, 480, vec![track]);
+        assert_eq!(read_smf(&bytes).unwrap_err(), expected);
     }
-    bytes
 }

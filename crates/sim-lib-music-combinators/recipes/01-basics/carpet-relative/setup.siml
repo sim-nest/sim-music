@@ -1,0 +1,1 @@
+"music-combinators descriptor: a finite sparse MusicCarpet uses explicit empty, ragged, cyclic, collision, and slice policies; mixed-radix rank addresses stable cells; TransformChain edits exact music; retained relative origins round-trip while omitted origins return ConversionLoss evidence"

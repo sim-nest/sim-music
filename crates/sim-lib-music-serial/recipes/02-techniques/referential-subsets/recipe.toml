@@ -1,0 +1,6 @@
+title = "Analyze bounded referential subsets"
+summary = "Name subset evidence, harmonic context, and emphasis without upgrading one local claim into whole-passage tonality."
+category = "Rust"
+tags = ["music", "serial", "referential", "subset", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "pitch-chord", "pitch-scale", "pitch-ratio"]
+purpose = "purpose.md"

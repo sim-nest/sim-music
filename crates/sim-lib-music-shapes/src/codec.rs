@@ -8,16 +8,20 @@ use sim_lib_music_core::{
     Seq, Time, TimedNote,
 };
 use sim_lib_music_lift::{
-    CounterpointLiftOpts, LabelStrategy, ProgressionLiftOpts, VoiceAssignment,
+    CounterpointLiftOpts, DanglingNotePolicy, LabelStrategy, MidiRealizationPolicy, OverlapPolicy,
+    PedalPolicy, ProgressionLiftOpts, SameTickPolicy, VoiceAssignment,
 };
 use sim_lib_music_transform::{FunctionMap, RetrogradeMode};
 use sim_lib_pitch_scale::{Key, Mode};
+use sim_lib_pitch_serial::RowError;
 
 mod analysis;
 mod encode_arranger;
 mod filter;
 mod lift;
 mod parse;
+mod serial;
+mod serial_plan;
 
 use encode_arranger::encode_arranger_placement;
 
@@ -29,14 +33,17 @@ pub use filter::{
     custom_filter_from_expr, custom_filter_to_expr, decode_custom_filter, encode_custom_filter,
 };
 pub use lift::{
-    decode_counterpoint_lift_opts, decode_label_strategy, decode_progression_lift_opts,
-    decode_voice_assignment,
+    decode_counterpoint_lift_opts, decode_dangling_note_policy, decode_label_strategy,
+    decode_midi_realization_policy, decode_overlap_policy, decode_pedal_policy,
+    decode_progression_lift_opts, decode_same_tick_policy, decode_voice_assignment,
 };
 pub use parse::{
     decode_arranger, decode_chord, decode_counterpoint, decode_melody, decode_midi_file,
     decode_midi_track, decode_music, decode_music_file, decode_note, decode_piano_roll,
     decode_progression, decode_rest, decode_score, decode_time,
 };
+pub use serial::{SymbolSeries, decode_serial_series, encode_serial_series};
+pub use serial_plan::{decode_serial_plan, encode_serial_plan};
 
 /// Error raised while decoding a music `#(...)` form.
 #[derive(Debug, Error)]
@@ -59,6 +66,15 @@ pub enum MusicShapeError {
     /// A construction error surfaced from `sim-lib-music-core`.
     #[error(transparent)]
     Music(#[from] MusicError),
+    /// A finite serial alphabet, rule, or series failed semantic validation.
+    #[error(transparent)]
+    Serial(#[from] sim_lib_serial_core::SeriesError),
+    /// A strict tone-row form used inside a serial plan was invalid.
+    #[error(transparent)]
+    Row(#[from] RowError),
+    /// An immutable serial plan failed semantic validation.
+    #[error(transparent)]
+    SerialPlan(#[from] sim_lib_music_serial::SerialPlanError),
 }
 
 /// Encodes a `Time` as its `numer/denom` text form.
@@ -328,6 +344,46 @@ pub fn encode_voice_assignment(assignment: VoiceAssignment) -> String {
     format!("#(VoiceAssignment value={value})")
 }
 
+/// Encodes an `OverlapPolicy` selector as its `#(OverlapPolicy ...)` form.
+pub fn encode_overlap_policy(policy: OverlapPolicy) -> String {
+    format!(
+        "#(OverlapPolicy value={})",
+        encode_overlap_policy_atom(policy)
+    )
+}
+
+/// Encodes a `SameTickPolicy` selector as its `#(SameTickPolicy ...)` form.
+pub fn encode_same_tick_policy(policy: SameTickPolicy) -> String {
+    format!(
+        "#(SameTickPolicy value={})",
+        encode_same_tick_policy_atom(policy)
+    )
+}
+
+/// Encodes a `DanglingNotePolicy` selector as its `#(DanglingNotePolicy ...)` form.
+pub fn encode_dangling_note_policy(policy: DanglingNotePolicy) -> String {
+    format!(
+        "#(DanglingNotePolicy value={})",
+        encode_dangling_note_policy_atom(policy)
+    )
+}
+
+/// Encodes a `PedalPolicy` selector as its `#(PedalPolicy ...)` form.
+pub fn encode_pedal_policy(policy: PedalPolicy) -> String {
+    format!("#(PedalPolicy value={})", encode_pedal_policy_atom(policy))
+}
+
+/// Encodes `MidiRealizationPolicy` as its `#(MidiRealizationPolicy ...)` form.
+pub fn encode_midi_realization_policy(policy: &MidiRealizationPolicy) -> String {
+    format!(
+        "#(MidiRealizationPolicy overlap={} same_tick={} dangling_notes={} pedals={})",
+        encode_overlap_policy_atom(policy.overlap),
+        encode_same_tick_policy_atom(policy.same_tick),
+        encode_dangling_note_policy_atom(policy.dangling_notes),
+        encode_pedal_policy_atom(policy.pedals),
+    )
+}
+
 /// Encodes `ProgressionLiftOpts` as its `#(ProgressionLiftOpts ...)` form.
 pub fn encode_progression_lift_opts(opts: &ProgressionLiftOpts) -> String {
     format!(
@@ -505,6 +561,37 @@ fn encode_voice_assignment_atom(assignment: VoiceAssignment) -> &'static str {
         VoiceAssignment::TrackThenChannel => "TrackThenChannel",
         VoiceAssignment::HighestFirst => "HighestFirst",
         VoiceAssignment::LowestFirst => "LowestFirst",
+    }
+}
+
+fn encode_overlap_policy_atom(policy: OverlapPolicy) -> &'static str {
+    match policy {
+        OverlapPolicy::Fifo => "Fifo",
+        OverlapPolicy::Lifo => "Lifo",
+        OverlapPolicy::Reject => "Reject",
+    }
+}
+
+fn encode_same_tick_policy_atom(policy: SameTickPolicy) -> &'static str {
+    match policy {
+        SameTickPolicy::Encoded => "Encoded",
+        SameTickPolicy::NoteOffsFirst => "NoteOffsFirst",
+        SameTickPolicy::NoteOnsFirst => "NoteOnsFirst",
+    }
+}
+
+fn encode_dangling_note_policy_atom(policy: DanglingNotePolicy) -> &'static str {
+    match policy {
+        DanglingNotePolicy::CloseAtEnd => "CloseAtEnd",
+        DanglingNotePolicy::Reject => "Reject",
+    }
+}
+
+fn encode_pedal_policy_atom(policy: PedalPolicy) -> &'static str {
+    match policy {
+        PedalPolicy::Ignore => "Ignore",
+        PedalPolicy::Sustain => "Sustain",
+        PedalPolicy::SustainAndSostenuto => "SustainAndSostenuto",
     }
 }
 
