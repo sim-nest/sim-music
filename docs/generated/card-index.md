@@ -26,6 +26,7 @@
 | `cookbook/music-lift` | `cookbook-recipe` | `sim-lib-music-lift` | Lifting descriptors from MIDI-style tracks into music objects. |
 | `cookbook/music-lower` | `cookbook-recipe` | `sim-lib-music-lower` | Lowering descriptors from scores to MIDI-like tracks. |
 | `cookbook/music-notation` | `cookbook-recipe` | `sim-lib-music-notation` | Notation import and export descriptors. |
+| `cookbook/music-serial` | `cookbook-recipe` | `sim-lib-music-serial` | Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques. |
 | `cookbook/music-shapes` | `cookbook-recipe` | `sim-lib-music-shapes` | Citizen descriptor shapes for music objects. |
 | `cookbook/music-transform` | `cookbook-recipe` | `sim-lib-music-transform` | Exact music transformation and voice-leading descriptors. |
 | `cookbook/music-wasm` | `cookbook-recipe` | `sim-lib-music-wasm-frame` | Browser-safe music facade descriptors. |
@@ -39,9 +40,11 @@
 | `cookbook/pitch-namer-roman` | `cookbook-recipe` | `sim-lib-pitch-namer-roman` | Roman numeral analysis descriptors. |
 | `cookbook/pitch-ratio` | `cookbook-recipe` | `sim-lib-pitch-ratio` | Exact musical ratio interval descriptors. |
 | `cookbook/pitch-scale` | `cookbook-recipe` | `sim-lib-pitch-scale` | Scale and degree descriptors. |
+| `cookbook/pitch-serial` | `cookbook-recipe` | `sim-lib-pitch-serial` | Strict tone rows, complete operation families, matrices, and explicit labels. |
 | `cookbook/pitch-set` | `cookbook-recipe` | `sim-lib-pitch-set` | Pitch-class sets, canonical forms, typed relations, and graph descriptors. |
 | `cookbook/pitch-shapes` | `cookbook-recipe` | `sim-lib-pitch-shapes` | Citizen descriptor shapes for pitch values. |
 | `cookbook/pitch-wasm` | `cookbook-recipe` | `sim-lib-pitch-wasm-frame` | Browser-safe pitch facade descriptors. |
+| `cookbook/serial-core` | `cookbook-recipe` | `sim-lib-serial-core` | Finite symbolic alphabets, aggregate evidence, and total transforms. |
 | `cookbook/sim-music` | `cookbook-recipe` | `sim-music` | Runnable recipes composing the loadable SIM music libraries. |
 | `cookbook/sound-audio-lift` | `cookbook-recipe` | `sim-lib-sound-audio-lift` | Checked framed transforms and descriptors that lift PCM into sound and music features. |
 | `cookbook/sound-bridge` | `cookbook-recipe` | `sim-lib-sound-bridge` | Music and MIDI bridge descriptors for sound playback. |

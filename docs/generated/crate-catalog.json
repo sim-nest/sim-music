@@ -1,6 +1,6 @@
 {
   "generator": "xtask crate-catalog v1",
-  "package_count": 47,
+  "package_count": 54,
   "packages": [
     {
       "description": "Headless DAW session surface for SIM audio graph workspaces.",
@@ -120,7 +120,7 @@
       ]
     },
     {
-      "description": "Chord windows, diff rolls, histograms, and analysis views over SIM music.",
+      "description": "Exact structural, harmonic, quantization, similarity, and pattern analysis over SIM music.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-analysis/Cargo.toml",
       "name": "sim-lib-music-analysis",
@@ -146,6 +146,19 @@
       ]
     },
     {
+      "description": "Exact identity-bearing consonance reports and reversible bounded additive completion.",
+      "generated_readme": true,
+      "manifest": "crates/sim-lib-music-consonance/Cargo.toml",
+      "name": "sim-lib-music-consonance",
+      "publish": "true",
+      "readme": "crates/sim-lib-music-consonance/README.md",
+      "root": "crates/sim-lib-music-consonance",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
       "description": "Core music object model for notes, rests, scores, rolls, players, and arrangers.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-core/Cargo.toml",
@@ -153,6 +166,19 @@
       "publish": "true",
       "readme": "crates/sim-lib-music-core/README.md",
       "root": "crates/sim-lib-music-core",
+      "target_kinds": [
+        "custom-build",
+        "lib"
+      ]
+    },
+    {
+      "description": "Exact counterpoint analysis, graph-backed stretto, and bounded constraint generation.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-music-counterpoint/Cargo.toml",
+      "name": "sim-lib-music-counterpoint",
+      "publish": "true",
+      "readme": "crates/sim-lib-music-counterpoint/README.md",
+      "root": "crates/sim-lib-music-counterpoint",
       "target_kinds": [
         "custom-build",
         "lib"
@@ -185,7 +211,7 @@
       ]
     },
     {
-      "description": "LilyPond subset import and export helpers for SIM score and melody objects.",
+      "description": "Bounded LilyPond and MusicXML notation profiles for canonical SIM scores.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-notation/Cargo.toml",
       "name": "sim-lib-music-notation",
@@ -198,7 +224,21 @@
       ]
     },
     {
-      "description": "Text codecs, citizen descriptors, and runtime shapes for SIM music objects.",
+      "description": "Immutable serial plans with stable row and event identity, explicit provenance, and validated partial temporal order.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-music-serial/Cargo.toml",
+      "name": "sim-lib-music-serial",
+      "publish": "true",
+      "readme": "crates/sim-lib-music-serial/README.md",
+      "root": "crates/sim-lib-music-serial",
+      "target_kinds": [
+        "custom-build",
+        "lib",
+        "test"
+      ]
+    },
+    {
+      "description": "Text codecs, citizen descriptors, runtime shapes, and symbolic serial adapters for SIM music.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-music-shapes/Cargo.toml",
       "name": "sim-lib-music-shapes",
@@ -207,7 +247,8 @@
       "root": "crates/sim-lib-music-shapes",
       "target_kinds": [
         "custom-build",
-        "lib"
+        "lib",
+        "test"
       ]
     },
     {
@@ -380,6 +421,20 @@
       ]
     },
     {
+      "description": "Strict twelve-tone rows, total row operations, and explicit label conventions for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-pitch-serial/Cargo.toml",
+      "name": "sim-lib-pitch-serial",
+      "publish": "true",
+      "readme": "crates/sim-lib-pitch-serial/README.md",
+      "root": "crates/sim-lib-pitch-serial",
+      "target_kinds": [
+        "custom-build",
+        "lib",
+        "test"
+      ]
+    },
+    {
       "description": "Pitch-class set masks, normal forms, interval vectors, and set operations.",
       "generated_readme": true,
       "manifest": "crates/sim-lib-pitch-set/Cargo.toml",
@@ -416,6 +471,20 @@
       "target_kinds": [
         "custom-build",
         "lib"
+      ]
+    },
+    {
+      "description": "Finite symbolic alphabets, aggregate rules, and certified total series transforms for SIM.",
+      "generated_readme": false,
+      "manifest": "crates/sim-lib-serial-core/Cargo.toml",
+      "name": "sim-lib-serial-core",
+      "publish": "true",
+      "readme": "crates/sim-lib-serial-core/README.md",
+      "root": "crates/sim-lib-serial-core",
+      "target_kinds": [
+        "custom-build",
+        "lib",
+        "test"
       ]
     },
     {
@@ -598,6 +667,30 @@
       "target_kinds": [
         "custom-build",
         "lib"
+      ]
+    },
+    {
+      "description": "Data-planned composition recipe for the SIM music algorithm foundry.",
+      "generated_readme": false,
+      "manifest": "recipes/music-algorithm-foundry/Cargo.toml",
+      "name": "music-algorithm-foundry",
+      "publish": "false",
+      "readme": "recipes/music-algorithm-foundry/README.md",
+      "root": "recipes/music-algorithm-foundry",
+      "target_kinds": [
+        "bin"
+      ]
+    },
+    {
+      "description": "End-to-end serial music workbench recipe over replaceable SIM music components.",
+      "generated_readme": false,
+      "manifest": "recipes/serial-workbench/Cargo.toml",
+      "name": "serial-workbench",
+      "publish": "false",
+      "readme": "recipes/serial-workbench/README.md",
+      "root": "recipes/serial-workbench",
+      "target_kinds": [
+        "bin"
       ]
     },
     {

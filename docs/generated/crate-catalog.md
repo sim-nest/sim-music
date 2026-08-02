@@ -15,13 +15,16 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-midi-smf` | `true` | `custom-build, lib` | Standard MIDI File reader and writer helpers for deterministic SIM MIDI fixtures. |
 | `sim-lib-midi-sysex` | `true` | `custom-build, lib` | System-exclusive MIDI message models, checksums, and device payload helpers. |
 | `sim-lib-midi-wasm-frame` | `true` | `custom-build, lib` | MIDI binary-frame facade descriptors. |
-| `sim-lib-music-analysis` | `true` | `custom-build, lib` | Chord windows, diff rolls, histograms, and analysis views over SIM music. |
+| `sim-lib-music-analysis` | `true` | `custom-build, lib` | Exact structural, harmonic, quantization, similarity, and pattern analysis over SIM music. |
 | `sim-lib-music-combinators` | `true` | `custom-build, lib` | Composable melody, rhythm, arpeggio, bassline, and pattern-building helpers. |
+| `sim-lib-music-consonance` | `true` | `custom-build, lib` | Exact identity-bearing consonance reports and reversible bounded additive completion. |
 | `sim-lib-music-core` | `true` | `custom-build, lib` | Core music object model for notes, rests, scores, rolls, players, and arrangers. |
+| `sim-lib-music-counterpoint` | `true` | `custom-build, lib` | Exact counterpoint analysis, graph-backed stretto, and bounded constraint generation. |
 | `sim-lib-music-lift` | `true` | `custom-build, lib` | Lifts MIDI files and tracks into progression, counterpoint, piano-roll, and diff views. |
 | `sim-lib-music-lower` | `true` | `custom-build, lib` | Lowering from structured SIM music objects into MIDI tracks and SMF-ready events. |
-| `sim-lib-music-notation` | `true` | `custom-build, lib` | LilyPond subset import and export helpers for SIM score and melody objects. |
-| `sim-lib-music-shapes` | `true` | `custom-build, lib` | Text codecs, citizen descriptors, and runtime shapes for SIM music objects. |
+| `sim-lib-music-notation` | `true` | `custom-build, lib` | Bounded LilyPond and MusicXML notation profiles for canonical SIM scores. |
+| `sim-lib-music-serial` | `true` | `custom-build, lib, test` | Immutable serial plans with stable row and event identity, explicit provenance, and validated partial temporal order. |
+| `sim-lib-music-shapes` | `true` | `custom-build, lib, test` | Text codecs, citizen descriptors, runtime shapes, and symbolic serial adapters for SIM music. |
 | `sim-lib-music-synth` | `true` | `custom-build, lib` | Playable pure Rust software synthesizer primitives for the SIM audio graph. |
 | `sim-lib-music-transform` | `true` | `custom-build, lib` | Pitch, time, pattern, and diagnostic transforms over canonical SIM music objects. |
 | `sim-lib-music-wasm-frame` | `true` | `custom-build, lib` | Music binary-frame facade descriptors. |
@@ -35,9 +38,11 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-pitch-namer` | `true` | `custom-build, lib` | Shared naming registry for chord, pitch-class set, and harmonic label systems. |
 | `sim-lib-pitch-ratio` | `true` | `custom-build, lib` | Exact positive musical ratio intervals with prime-limit ranking and bounded approximation search. |
 | `sim-lib-pitch-scale` | `true` | `custom-build, lib` | Scale, key, mode, and degree mapping helpers for pitch-domain transforms. |
+| `sim-lib-pitch-serial` | `true` | `custom-build, lib, test` | Strict twelve-tone rows, total row operations, and explicit label conventions for SIM. |
 | `sim-lib-pitch-set` | `true` | `custom-build, lib` | Pitch-class set masks, normal forms, interval vectors, and set operations. |
 | `sim-lib-pitch-shapes` | `true` | `custom-build, lib` | Text codecs, citizen descriptors, and runtime shapes for pitch-domain values. |
 | `sim-lib-pitch-wasm-frame` | `true` | `custom-build, lib` | Pitch binary-frame facade descriptors. |
+| `sim-lib-serial-core` | `true` | `custom-build, lib, test` | Finite symbolic alphabets, aggregate rules, and certified total series transforms for SIM. |
 | `sim-lib-sound-audio-lift` | `true` | `custom-build, lib` | Lifts PCM and rendered audio artifacts into structured sound analysis descriptors. |
 | `sim-lib-sound-bridge` | `true` | `custom-build, lib` | Bridges MIDI events into sound-domain tones, timbres, and renderable note candidates. |
 | `sim-lib-sound-core` | `true` | `custom-build, lib` | Sound-domain frequency, envelope, partial, spectrum, tone, and sample models. |
@@ -52,4 +57,6 @@ Generated from Cargo metadata by `xtask crate-catalog v1`.
 | `sim-lib-stream-bridge` | `true` | `custom-build, lib` | MIDI/audio bridge helpers for STREAM 6. |
 | `sim-lib-stream-file` | `true` | `custom-build, lib` | File-backed source and sink adapters for STREAM 6. |
 | `sim-lib-stream-midi` | `true` | `custom-build, lib` | MIDI source, sink, and stream-spine adapters for STREAM 6. |
+| `music-algorithm-foundry` | `false` | `bin` | Data-planned composition recipe for the SIM music algorithm foundry. |
+| `serial-workbench` | `false` | `bin` | End-to-end serial music workbench recipe over replaceable SIM music components. |
 | `xtask` | `false` | `bin` | Repository maintenance tasks for sim-music validation and generated docs. |

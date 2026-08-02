@@ -12,4 +12,4 @@ Lifts PCM and rendered audio artifacts into structured sound analysis descriptor
 
 ## Crate Documentation
 
-Audio-to-notes lifting for the SIM music constellation.
+Audio-to-feature and audio-to-notes lifting for the SIM music constellation.
