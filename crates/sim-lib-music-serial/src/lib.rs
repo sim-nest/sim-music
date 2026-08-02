@@ -8,10 +8,15 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
+mod additive;
+mod allowance;
 mod anchor;
 mod array;
+mod audition;
+mod candidate_filter;
 mod canon;
 mod chromatic;
+mod completion;
 mod cycle;
 mod deploy;
 mod derived;
@@ -27,6 +32,7 @@ mod nesting;
 mod order;
 mod origin;
 mod parameter;
+mod pitch_map;
 mod plan;
 mod practice;
 mod practice_builtin;
@@ -42,10 +48,18 @@ mod strict;
 mod techniques;
 mod time_point;
 
+pub use additive::AdditiveStaffPatch;
+pub use allowance::{
+    ReferentialSubsetAllowance, SerialAllowanceKind, SerialAllowanceMatch,
+    SerialCompletionAllowances,
+};
 pub use anchor::ReferentialEmphasis;
 pub use array::{
     AggregateArrayReport, AggregatePartitionReport, ColumnPartition, PartitionCoverageReport,
     SerialArray, SerialArrayError, SerialArrayRow, VerticalAggregateRequirement,
+};
+pub use audition::{
+    SerialSurfaceError, lower_serial_score, render_serial_audition_score, write_serial_smf,
 };
 pub use canon::{
     CanonDeployment, CanonError, CanonOrchestration, CanonRealizationEvent, CanonSpec,
@@ -53,6 +67,13 @@ pub use canon::{
     build_canon,
 };
 pub use chromatic::{ChromaticSerialRealizer, strict_chromatic_realizer_id};
+pub use completion::{
+    AcceptedSerialAddition, AcceptedSerialCategory, AcceptedSerialNote, AdditionKind,
+    ChordAddition, CompletionCandidate, CompletionError, CompletionProvenance, CompletionRequest,
+    CompletionResult, DoublingAddition, NoteAddition, OrnamentAddition, PedalAddition,
+    PitchRangeConstraint, SerialCompletionError, SerialCompletionRequest, SerialCompletionResult,
+    VoiceAddition, complete_serial,
+};
 pub use cycle::{
     CyclicOrder, CyclicProjection, CyclicProjectionSpec, ParameterTrackKind, project_cyclic_order,
 };
@@ -100,6 +121,7 @@ pub use nesting::{
 pub use order::PrecedenceGraph;
 pub use origin::{SerialOrigin, SerialRole};
 pub use parameter::{ParameterAlphabet, ParameterError, ParameterSeries, ParameterValue};
+pub use pitch_map::MapWitness;
 pub use plan::SerialPlan;
 pub use practice::{
     BuiltInPracticeRule, DeclaredWaivers, PracticeId, PracticeRule, PracticeRuleId,
@@ -139,6 +161,10 @@ pub static RECIPES: sim_cookbook::EmbeddedDir =
 mod tests;
 #[cfg(test)]
 mod tests_array_time_point;
+#[cfg(test)]
+mod tests_audition;
+#[cfg(test)]
+mod tests_completion;
 #[cfg(test)]
 mod tests_deploy;
 #[cfg(test)]

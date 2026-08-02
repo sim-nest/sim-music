@@ -2,14 +2,13 @@
 
 use std::collections::BTreeMap;
 
-use sim_lib_music_transform::{PitchMap, PitchMapPolicy};
-use sim_lib_pitch_core::OctaveSpace;
 use sim_lib_pitch_dissonance::{
     ContextualPitch, ContextualSonanceOptions, ContextualSonanceRegistry,
 };
 use sim_lib_pitch_scale::PlayerScale;
 
 use crate::chromatic::realize_chromatic_with_id;
+use crate::pitch_map::{PitchMap, PitchMapPolicy};
 use crate::spine::{
     SerialSonanceContext, SerialSpineEntry, SerialSpineKind, SerialSpineLabel, SerialSpineReport,
     aggregate_identity, collect_collisions, collect_repeated_degrees,
@@ -21,11 +20,16 @@ use crate::{
 };
 
 fn build_pitch_map(scale: &PlayerScale, policy: PitchMapPolicy) -> PitchMap {
-    let mut image = vec![None; usize::from(OctaveSpace::twelve_tone().len())];
+    let mut image = vec![None; usize::from(sim_lib_pitch_core::OctaveSpace::twelve_tone().len())];
     for class in scale.pitch_classes() {
         image[usize::from(class.value())] = Some(i32::from(class.value()));
     }
-    PitchMap::new(OctaveSpace::twelve_tone(), image, policy).expect("twelve-tone map")
+    PitchMap::new(
+        sim_lib_pitch_core::OctaveSpace::twelve_tone(),
+        image,
+        policy,
+    )
+    .expect("twelve-tone map")
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

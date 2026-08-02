@@ -1,15 +1,17 @@
 use num_rational::Ratio;
 use std::any::Any;
+use std::collections::BTreeMap;
 use std::sync::Arc;
 
 mod custom_filter;
 mod serial_plan;
 
-use sim_codec::{Input, decode_eval_expr_with_codec};
+use sim_codec::{Input, decode_eval_expr_with_codec, decode_with_codec, encode_value_with_codec};
+use sim_codec_json::JsonCodecLib;
 use sim_codec_lisp::LispCodecLib;
 use sim_kernel::{
-    CapabilitySet, Cx, DefaultFactory, EagerPolicy, Expr, ReadPolicy, Symbol, TrustLevel, Value,
-    read_construct_capability,
+    CapabilitySet, Cx, DefaultFactory, EagerPolicy, EncodeOptions, Expr, ReadPolicy, Symbol,
+    TrustLevel, Value, read_construct_capability,
 };
 use sim_lib_midi_core::{
     Channel, ChannelMessage, MidiEvent, MidiPayload, TickTime, U7, synthetic_origin,
@@ -25,8 +27,13 @@ use sim_lib_music_lift::{
     CounterpointLiftOpts, DanglingNotePolicy, LabelStrategy, MidiRealizationPolicy, OverlapPolicy,
     PedalPolicy, ProgressionLiftOpts, SameTickPolicy, VoiceAssignment,
 };
+use sim_lib_music_serial::{
+    EventPlacement, OrdinalRef, PlannedSerialEvent, RowInstanceId, SerialEventId, SerialOrigin,
+    SerialPlan, SerialRole, StructuralLicense, StructuralReadingId,
+};
 use sim_lib_music_transform::{FunctionMap, RetrogradeMode};
 use sim_lib_pitch_scale::{Mode, Scale};
+use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
 use crate::{
     MusicChordDescriptor, MusicMelodyDescriptor, MusicNoteDescriptor, MusicParDescriptor,
@@ -42,7 +49,7 @@ use crate::{
     encode_melody, encode_midi_file, encode_midi_realization_policy, encode_midi_track,
     encode_music, encode_music_file, encode_note, encode_par, encode_piano_roll,
     encode_progression, encode_progression_lift_opts, encode_rest, encode_retrograde_mode,
-    encode_score, encode_seq, encode_serial_series, encode_voice_assignment,
+    encode_score, encode_seq, encode_serial_plan, encode_serial_series, encode_voice_assignment,
     install_music_shapes_lib, music_chord_class_symbol, music_melody_class_symbol,
     music_note_class_symbol, music_par_class_symbol, music_score_class_symbol,
     music_seq_class_symbol,
@@ -85,6 +92,101 @@ fn encoded_score(score: &Score) -> String {
 
 fn encoded_seq(seq: &Seq) -> String {
     encode_seq(seq).expect("encode seq")
+}
+
+fn serial_realization_request_expr() -> Expr {
+    let row = ToneRow::try_from_classes([
+        sim_lib_music_core::PitchClass::E,
+        sim_lib_music_core::PitchClass::F,
+        sim_lib_music_core::PitchClass::G,
+        sim_lib_music_core::PitchClass::CS,
+        sim_lib_music_core::PitchClass::FS,
+        sim_lib_music_core::PitchClass::DS,
+        sim_lib_music_core::PitchClass::GS,
+        sim_lib_music_core::PitchClass::D,
+        sim_lib_music_core::PitchClass::B,
+        sim_lib_music_core::PitchClass::C,
+        sim_lib_music_core::PitchClass::A,
+        sim_lib_music_core::PitchClass::AS,
+    ])
+    .expect("row")
+    .apply(RowOperation::new(RowFamily::P, 0));
+    let row_id = RowInstanceId::new("row/lisp/p0").expect("row id");
+    let mut rows = BTreeMap::new();
+    rows.insert(row_id.clone(), row);
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/lisp").expect("reading id"),
+        "lisp runtime request",
+    )
+    .expect("license");
+    let event_id = SerialEventId::new("event/statement").expect("event id");
+    let event = PlannedSerialEvent {
+        id: event_id.clone(),
+        ordinals: (0..12)
+            .map(|ordinal| OrdinalRef::new(row_id.clone(), ordinal))
+            .collect(),
+        role: SerialRole::Structural,
+        origin: SerialOrigin::Structural {
+            rationale: "single statement".to_owned(),
+        },
+        voice: sim_lib_music_core::ObjectId::new("voice/high").expect("voice"),
+        placement: EventPlacement::independent(),
+        parents: vec![],
+        licenses: vec![license],
+    };
+    let plan = SerialPlan::try_new(
+        rows,
+        [(event_id.clone(), event)].into_iter().collect(),
+        std::iter::empty::<(SerialEventId, SerialEventId)>(),
+    )
+    .expect("plan");
+    let plan = encode_serial_plan(&plan).expect("encode plan");
+
+    Expr::Map(vec![
+        (Expr::Symbol(Symbol::new("plan")), Expr::String(plan)),
+        (
+            Expr::Symbol(Symbol::new("context")),
+            Expr::Map(vec![
+                (
+                    Expr::Symbol(Symbol::new("specs")),
+                    Expr::Vector(vec![Expr::Map(vec![
+                        (
+                            Expr::Symbol(Symbol::new("id")),
+                            Expr::String("event/statement".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("sound")),
+                            Expr::String("notes".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("register")),
+                            Expr::String("4".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("duration")),
+                            Expr::String("1/4".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("velocity")),
+                            Expr::String("96".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("channel")),
+                            Expr::String("0".to_owned()),
+                        ),
+                        (
+                            Expr::Symbol(Symbol::new("articulation")),
+                            Expr::String("Normal".to_owned()),
+                        ),
+                    ])]),
+                ),
+                (
+                    Expr::Symbol(Symbol::new("scale")),
+                    Expr::String("C:dorian".to_owned()),
+                ),
+            ]),
+        ),
+    ])
 }
 
 #[test]
@@ -433,6 +535,81 @@ fn custom_alphabet_recipe_executes_through_lisp_runtime_surface() {
     );
 }
 
+#[test]
+fn lisp_serial_realization_surface_round_trips_through_lisp_and_json() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_music_shapes_lib(&mut cx).expect("music shapes");
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
+    cx.load_lib(&lisp).expect("load lisp codec");
+    let json = JsonCodecLib::new(cx.registry_mut().fresh_codec_id());
+    cx.load_lib(&json).expect("load json codec");
+
+    let request_expr = serial_realization_request_expr();
+    let request_value =
+        sim_citizen::value_from_expr(&mut cx, &request_expr).expect("request value");
+    let request_lisp = encode_value_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        &request_value,
+        EncodeOptions::default(),
+    )
+    .unwrap()
+    .into_text()
+    .unwrap();
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(format!(
+            "(serial/realize {request_lisp} :with \"modal-degree-cycle\")"
+        )),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let realized = cx.eval_expr(expr).unwrap();
+    let realized_expr = realized.object().as_expr(&mut cx).unwrap();
+    let Expr::Map(fields) = &realized_expr else {
+        panic!("serial/realize must return a realization map");
+    };
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("form")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("SerialRealization".to_owned()))
+    );
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("realizer-id")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("realizer/modal-degree-cycle".to_owned()))
+    );
+
+    for codec in ["lisp", "json"] {
+        let encoded = encode_value_with_codec(
+            &mut cx,
+            &Symbol::qualified("codec", codec),
+            &realized,
+            EncodeOptions::default(),
+        )
+        .unwrap();
+        let decoded = decode_with_codec(
+            &mut cx,
+            &Symbol::qualified("codec", codec),
+            encoded.into_text().map(Input::Text).unwrap(),
+            ReadPolicy {
+                trust: TrustLevel::TrustedSource,
+                capabilities: CapabilitySet::new(),
+            },
+        )
+        .unwrap();
+        assert_eq!(decoded, realized_expr);
+    }
+}
+
 fn decode_serial_call_source(source: &[u8]) -> Option<String> {
     let text = std::str::from_utf8(source).ok()?;
     let start = text.find('"')? + 1;
@@ -440,237 +617,7 @@ fn decode_serial_call_source(source: &[u8]) -> Option<String> {
     (start <= end).then(|| text[start..end].to_owned())
 }
 
-#[test]
-fn music_citizens_accept_legacy_text_and_read_construct() {
-    let mut cx = cx_with_citizens();
+#[path = "tests_read_construct.rs"]
+mod tests_read_construct;
 
-    let note_text = "#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)";
-    let note = read_construct::<MusicNoteDescriptor>(&mut cx, music_note_class_symbol(), note_text);
-    assert_eq!(note.note().unwrap(), decode_note(note_text).unwrap());
-    assert_eq!(
-        MusicNoteDescriptor::read_construct_expr_from_text(note_text).unwrap(),
-        read_construct_expr(music_note_class_symbol(), note.as_text())
-    );
-
-    let seq_text =
-        "#(Seq children=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)])";
-    let seq = read_construct::<MusicSeqDescriptor>(&mut cx, music_seq_class_symbol(), seq_text);
-    assert_eq!(seq.as_text(), encoded_seq(&seq.seq().unwrap()));
-
-    let par_text =
-        "#(Par children=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)])";
-    let par = read_construct::<MusicParDescriptor>(&mut cx, music_par_class_symbol(), par_text);
-    assert_eq!(par.as_text(), encoded_par(&par.par().unwrap()));
-
-    let chord_text = "#(Chord dur=1/4 symbol=\"C\" pitches=[C4,E4,G4] vel=100 channel=0)";
-    let chord =
-        read_construct::<MusicChordDescriptor>(&mut cx, music_chord_class_symbol(), chord_text);
-    assert_eq!(chord.chord().unwrap(), decode_chord(chord_text).unwrap());
-
-    let melody_text =
-        "#(Melody items=[#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal)])";
-    let melody =
-        read_construct::<MusicMelodyDescriptor>(&mut cx, music_melody_class_symbol(), melody_text);
-    assert_eq!(
-        melody.melody().unwrap(),
-        decode_melody(melody_text).unwrap()
-    );
-
-    let score_text = "#(Score tempo=120 time_sig=4/4 key=none body=#(Note dur=1/4 pitch=C4 vel=100 channel=0 articulation=Normal))";
-    let score =
-        read_construct::<MusicScoreDescriptor>(&mut cx, music_score_class_symbol(), score_text);
-    assert_eq!(
-        encoded_score(&score.score().unwrap()),
-        encoded_score(&decode_score(score_text).unwrap())
-    );
-}
-
-fn cx_with_citizens() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
-    cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
-    cx.grant(read_construct_capability());
-    cx
-}
-
-fn registered_music_shape(cx: &Cx, name: &'static str) -> Value {
-    cx.registry()
-        .shape_by_symbol(&Symbol::qualified("music", name))
-        .expect("registered music shape")
-        .clone()
-}
-
-fn assert_shape_accepts(cx: &mut Cx, shape: &Value, text: &str) {
-    let expr = Expr::String(text.to_owned());
-    let matched = shape
-        .object()
-        .as_shape()
-        .expect("shape protocol")
-        .check_expr(cx, &expr)
-        .unwrap();
-    assert!(
-        matched.accepted,
-        "{text} rejected: {:?}",
-        matched.diagnostics
-    );
-}
-
-fn assert_shape_rejects(cx: &mut Cx, shape: &Value, text: &str) {
-    let expr = Expr::String(text.to_owned());
-    let matched = shape
-        .object()
-        .as_shape()
-        .expect("shape protocol")
-        .check_expr(cx, &expr)
-        .unwrap();
-    assert!(
-        !matched.accepted,
-        "{text} unexpectedly matched with score {:?}",
-        matched.score
-    );
-}
-
-fn read_construct<T>(cx: &mut Cx, class: Symbol, form: &str) -> T
-where
-    T: Clone + 'static,
-{
-    let args = [
-        Expr::Symbol(Symbol::new("v1")),
-        Expr::String(form.to_owned()),
-    ]
-    .iter()
-    .map(|expr| sim_citizen::value_from_expr(cx, expr))
-    .collect::<sim_kernel::Result<Vec<_>>>()
-    .unwrap();
-    cx.read_construct(&class, args)
-        .unwrap()
-        .object()
-        .downcast_ref::<T>()
-        .unwrap()
-        .clone()
-}
-
-fn read_construct_expr(class: Symbol, form: &str) -> Expr {
-    Expr::Extension {
-        tag: Symbol::qualified("citizen", "read-construct"),
-        payload: Box::new(Expr::Vector(vec![
-            Expr::Symbol(class),
-            Expr::Symbol(Symbol::new("v1")),
-            Expr::String(form.to_owned()),
-        ])),
-    }
-}
-
-#[test]
-fn diff_roll_and_transform_option_values_round_trip() {
-    let roll = PianoRoll::new(vec![
-        TimedNote {
-            onset: Ratio::new(0, 1),
-            note: note(60),
-        },
-        TimedNote {
-            onset: Ratio::new(1, 4),
-            note: note(64),
-        },
-    ])
-    .expect("roll");
-    let diff = DiffRoll::from_piano_roll(&roll);
-    assert_eq!(
-        decode_diff_roll(&encode_diff_roll(&diff)).expect("diff"),
-        diff
-    );
-    assert_eq!(
-        decode_retrograde_mode(&encode_retrograde_mode(RetrogradeMode::PinnedNoteOn))
-            .expect("retrograde"),
-        RetrogradeMode::PinnedNoteOn
-    );
-    let custom = FunctionMap::Custom(Scale::new(
-        sim_lib_music_core::Pitch::from_midi(60).class,
-        Mode::Dorian,
-    ));
-    assert_eq!(
-        decode_function_map(&encode_function_map(&custom)).expect("function map"),
-        custom
-    );
-    assert_eq!(
-        decode_chord_window_mode(&encode_chord_window_mode(ChordWindowMode::StartingNotes))
-            .expect("window mode"),
-        ChordWindowMode::StartingNotes
-    );
-}
-
-#[test]
-fn chord_window_round_trips() {
-    let roll = PianoRoll::new(vec![
-        TimedNote {
-            onset: Ratio::new(0, 1),
-            note: note(60),
-        },
-        TimedNote {
-            onset: Ratio::new(0, 1),
-            note: note(64),
-        },
-        TimedNote {
-            onset: Ratio::new(1, 4),
-            note: note(67),
-        },
-    ])
-    .expect("roll");
-    let windows = chord_windows_from_piano_roll(&roll, ChordWindowMode::SoundingNotes);
-    let first = windows.first().expect("window");
-    assert_eq!(
-        decode_chord_window(&encode_chord_window(first)).expect("window"),
-        *first
-    );
-}
-
-#[test]
-fn lift_option_values_round_trip() {
-    assert_eq!(
-        decode_label_strategy(&encode_label_strategy(LabelStrategy::SetClass)).expect("strategy"),
-        LabelStrategy::SetClass
-    );
-    assert_eq!(
-        decode_voice_assignment(&encode_voice_assignment(VoiceAssignment::TrackThenChannel))
-            .expect("assignment"),
-        VoiceAssignment::TrackThenChannel
-    );
-
-    let progression_opts = ProgressionLiftOpts {
-        grid: Ratio::new(1, 8),
-        min_notes: 3,
-        key_hint: Some(sim_lib_pitch_scale::Key {
-            tonic: sim_lib_music_core::Pitch::from_midi(60).class,
-            mode: Mode::Dorian,
-        }),
-        label_strategy: LabelStrategy::Functional,
-        window_mode: ChordWindowMode::StartingNotes,
-    };
-    assert_eq!(
-        decode_progression_lift_opts(&encode_progression_lift_opts(&progression_opts))
-            .expect("progression opts"),
-        progression_opts
-    );
-
-    let counterpoint_opts = CounterpointLiftOpts {
-        min_rest_to_close: Ratio::new(1, 32),
-        max_voices_per_track: 6,
-        voice_assignment: VoiceAssignment::HighestFirst,
-    };
-    assert_eq!(
-        decode_counterpoint_lift_opts(&encode_counterpoint_lift_opts(&counterpoint_opts))
-            .expect("counterpoint opts"),
-        counterpoint_opts
-    );
-
-    let realization_policy = MidiRealizationPolicy {
-        overlap: OverlapPolicy::Lifo,
-        same_tick: SameTickPolicy::NoteOnsFirst,
-        dangling_notes: DanglingNotePolicy::Reject,
-        pedals: PedalPolicy::Sustain,
-    };
-    assert_eq!(
-        decode_midi_realization_policy(&encode_midi_realization_policy(&realization_policy))
-            .expect("realization policy"),
-        realization_policy
-    );
-}
+use tests_read_construct::{assert_shape_accepts, assert_shape_rejects, registered_music_shape};

@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use sim_codec::parse_domain_form;
 use sim_kernel::{
-    AbiVersion, Cx, Export, Expr, Lib, LibManifest, LibTarget, Linker, Result, ShapeRef, Symbol,
-    Value, Version,
+    AbiVersion, Cx, Export, ExportKind, ExportRecord, ExportState, Expr, Lib, LibManifest,
+    LibTarget, Linker, Result, RuntimeId, ShapeRef, Symbol, Value, Version,
 };
 use sim_shape::{
     ExactExprShape, ExprKind, ExprKindShape, Shape, ShapeDoc, ShapeMatch, TableExtraPolicy,
@@ -36,6 +36,15 @@ impl Lib for MusicShapesLib {
             symbol: music_serial_validate_symbol(),
             function_id: None,
         });
+        exports.push(Export::Function {
+            symbol: serial::music_serial_realize_symbol(),
+            function_id: None,
+        });
+        exports.extend(
+            serial::built_in_realizer_symbols()
+                .into_iter()
+                .map(|symbol| Export::Value { symbol }),
+        );
         LibManifest {
             id: Symbol::new(MUSIC_SHAPES_LIB_ID),
             version: Version(env!("CARGO_PKG_VERSION").to_owned()),
@@ -73,7 +82,20 @@ pub fn install_music_shapes_lib(cx: &mut Cx) -> Result<()> {
     {
         return Ok(());
     }
-    cx.load_lib(&MusicShapesLib).map(|_| ())
+    cx.load_lib(&MusicShapesLib)?;
+    for symbol in serial::built_in_realizer_symbols() {
+        cx.registry_mut().append_export_record(
+            &Symbol::new(MUSIC_SHAPES_LIB_ID),
+            ExportRecord {
+                kind: ExportKind::named("SerialRealizer"),
+                symbol,
+                state: ExportState::Resolved {
+                    id: RuntimeId::Value,
+                },
+            },
+        )?;
+    }
+    Ok(())
 }
 
 fn shape_specs() -> Vec<ShapeSpec> {

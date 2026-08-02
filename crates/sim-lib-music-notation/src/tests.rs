@@ -6,14 +6,21 @@ use std::sync::Arc;
 
 use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, Symbol};
 use sim_lib_music_core::{
-    Articulation, Channel, Chord, Melody, MelodyItem, Music, Note, Progression, Score,
+    AmbiguousConversionPolicy, Articulation, Channel, Chord, Melody, MelodyItem, Music, Note,
+    Progression, Score, ScoreForm, ScoreFormKind, convert_score,
+};
+use sim_lib_music_serial::{
+    EventPlacement, OrdinalRef, RowInstanceId, SerialEventId, SerialOrigin, SerialPlan, SerialRole,
+    StrictEventSpec, StrictRealizationContext, StructuralLicense, StructuralReadingId,
+    realize_strict, render_serial_staff,
 };
 use sim_lib_music_shapes::{decode_score, encode_score};
 use sim_lib_pitch_core::Pitch;
+use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
 use crate::{
     MusicXmlLimits, NotationCodec, NotationError, NotationIdentityKind, NotationLossKind,
-    export_counterpoint_lilypond, export_lilypond, export_melody_lilypond,
+    export_counterpoint_lilypond, export_lilypond, export_lilypond_report, export_melody_lilypond,
     export_musicxml_partwise_report, export_progression_lilypond, import_lilypond,
     import_musicxml_partwise_report, install_music_notation_lib, notation_import_symbol,
 };
@@ -57,6 +64,88 @@ fn canonical_score(score: &Score) -> String {
     encode_score(score).expect("canonical score")
 }
 
+fn serial_notation_score() -> Score {
+    let row_id = RowInstanceId::new("row/notation/p0").expect("row id");
+    let row = ToneRow::try_from_classes([
+        sim_lib_pitch_core::PitchClass::C,
+        sim_lib_pitch_core::PitchClass::CS,
+        sim_lib_pitch_core::PitchClass::D,
+        sim_lib_pitch_core::PitchClass::DS,
+        sim_lib_pitch_core::PitchClass::E,
+        sim_lib_pitch_core::PitchClass::F,
+        sim_lib_pitch_core::PitchClass::FS,
+        sim_lib_pitch_core::PitchClass::G,
+        sim_lib_pitch_core::PitchClass::GS,
+        sim_lib_pitch_core::PitchClass::A,
+        sim_lib_pitch_core::PitchClass::AS,
+        sim_lib_pitch_core::PitchClass::B,
+    ])
+    .expect("row")
+    .apply(RowOperation::new(RowFamily::P, 0));
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/notation").expect("reading"),
+        "notation statement",
+    )
+    .expect("license");
+    let events = (0usize..12)
+        .map(|ordinal| {
+            let id = format!("event/note-{ordinal}");
+            let event_id = SerialEventId::new(&id).expect("event id");
+            (
+                event_id.clone(),
+                sim_lib_music_serial::PlannedSerialEvent {
+                    id: event_id,
+                    ordinals: vec![OrdinalRef::new(row_id.clone(), ordinal)],
+                    role: SerialRole::Structural,
+                    origin: SerialOrigin::Structural {
+                        rationale: "notation".to_owned(),
+                    },
+                    voice: sim_lib_music_core::ObjectId::new("voice/solo").expect("voice"),
+                    placement: EventPlacement::independent(),
+                    parents: Vec::new(),
+                    licenses: vec![license.clone()],
+                },
+            )
+        })
+        .collect();
+    let precedence = (0usize..11).map(|ordinal| {
+        (
+            SerialEventId::new(format!("event/note-{ordinal}")).expect("from"),
+            SerialEventId::new(format!("event/note-{}", ordinal + 1)).expect("to"),
+        )
+    });
+    let plan = SerialPlan::try_new([(row_id, row)].into_iter().collect(), events, precedence)
+        .expect("plan");
+    let context = StrictRealizationContext::new(
+        (0usize..12)
+            .map(|ordinal| {
+                (
+                    SerialEventId::new(format!("event/note-{ordinal}")).expect("event id"),
+                    StrictEventSpec::notes(4, quarter(), 96, channel(), Articulation::Normal),
+                )
+            })
+            .collect(),
+    );
+    let realization = realize_strict(&plan, &context).expect("realization");
+    let staff = render_serial_staff(&realization).expect("staff");
+    let report = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Counterpoint,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("counterpoint");
+    let ScoreForm::Counterpoint(counterpoint) = report.value else {
+        unreachable!("counterpoint conversion returns counterpoint");
+    };
+    Score::new(
+        72,
+        (12, 4),
+        Some("C".to_owned()),
+        Music::Counterpoint(counterpoint),
+    )
+    .expect("score")
+}
+
 #[test]
 fn simple_melody_exports_valid_lilypond_text() {
     let melody = Melody::new(vec![
@@ -79,6 +168,18 @@ fn simple_melody_exports_valid_lilypond_text() {
     assert!(text.contains("c'4"));
     assert!(text.contains("r4"));
     assert!(text.contains("d'4 ~ d'8"));
+}
+
+#[test]
+fn serial_notation_exports_replay_deterministically_and_keep_sidecars() {
+    let score = serial_notation_score();
+    let lily = export_lilypond_report(&score).expect("lily");
+    assert!(lily.value.contains("\\new Voice"));
+
+    let xml_a = export_musicxml_partwise_report(&score, &[]).expect("xml");
+    let xml_b = export_musicxml_partwise_report(&score, &xml_a.identities).expect("xml replay");
+    assert_eq!(xml_a.value, xml_b.value);
+    assert!(!xml_a.identities.is_empty());
 }
 
 #[test]

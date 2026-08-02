@@ -28,4 +28,5 @@ thiserror = "1"
 sim-cookbook = { version = "0.1.0" }
 
 [dev-dependencies]
+sim-codec-lisp = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0", features = ["test-support"] }

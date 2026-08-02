@@ -22,6 +22,7 @@ mod mutator;
 mod pitch_map;
 mod player;
 mod remap;
+mod serial;
 
 pub use arranger::*;
 pub use diagnostic::*;
@@ -32,6 +33,7 @@ pub use mutator::*;
 pub use pitch_map::*;
 pub use player::*;
 pub use remap::*;
+pub use serial::*;
 
 /// Cookbook recipes for this lib, embedded at build time.
 pub static RECIPES: sim_cookbook::EmbeddedDir =

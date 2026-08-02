@@ -312,7 +312,7 @@ pub(crate) fn strict_plan() -> SerialPlan {
     .expect("plan")
 }
 
-fn practice_plan() -> SerialPlan {
+pub(crate) fn practice_plan() -> SerialPlan {
     let row_id = RowInstanceId::new("row/practice/p0").expect("row id");
     let alt_row_id = RowInstanceId::new("row/practice/alt").expect("row id");
     let mut rows = BTreeMap::new();

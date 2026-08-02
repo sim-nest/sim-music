@@ -37,7 +37,8 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
 | `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
 | `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 2 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
-| `feature/sim-music/open-serial-adaptation` | `crate/sim-lib-music-serial` | 1 | Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently. |
+| `feature/sim-music/open-serial-adaptation` | `crate/sim-lib-music-serial` | 2 | Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently. |
+| `feature/sim-music/serial-consonance-completion` | `crate/sim-lib-music-serial` | 1 | Filter bounded additive completion candidates through serial allowances, preserve the immutable structural plan, and return separate structural and all-sounding post-completion ledgers. |
 
 ## Surfaces
 
@@ -227,6 +228,12 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/purpose.md`
 - `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`
 - `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/setup.rs`
 - `crates/sim-lib-music-serial/recipes/book.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md`
@@ -3037,14 +3044,21 @@ use std::sync::Arc;
 
 use sim_kernel::{DefaultFactory, EagerPolicy, Expr, QuoteMode, Symbol};
 use sim_lib_music_core::{
-    Articulation, Channel, Chord, Melody, MelodyItem, Music, Note, Progression, Score,
+    AmbiguousConversionPolicy, Articulation, Channel, Chord, Melody, MelodyItem, Music, Note,
+    Progression, Score, ScoreForm, ScoreFormKind, convert_score,
+};
+use sim_lib_music_serial::{
+    EventPlacement, OrdinalRef, RowInstanceId, SerialEventId, SerialOrigin, SerialPlan, SerialRole,
+    StrictEventSpec, StrictRealizationContext, StructuralLicense, StructuralReadingId,
+    realize_strict, render_serial_staff,
 };
 use sim_lib_music_shapes::{decode_score, encode_score};
 use sim_lib_pitch_core::Pitch;
+use sim_lib_pitch_serial::{RowFamily, RowOperation, ToneRow};
 
 use crate::{
     MusicXmlLimits, NotationCodec, NotationError, NotationIdentityKind, NotationLossKind,
-    export_counterpoint_lilypond, export_lilypond, export_melody_lilypond,
+    export_counterpoint_lilypond, export_lilypond, export_lilypond_report, export_melody_lilypond,
     export_musicxml_partwise_report, export_progression_lilypond, import_lilypond,
     import_musicxml_partwise_report, install_music_notation_lib, notation_import_symbol,
 };
@@ -3088,6 +3102,88 @@ fn canonical_score(score: &Score) -> String {
     encode_score(score).expect("canonical score")
 }
 
+fn serial_notation_score() -> Score {
+    let row_id = RowInstanceId::new("row/notation/p0").expect("row id");
+    let row = ToneRow::try_from_classes([
+        sim_lib_pitch_core::PitchClass::C,
+        sim_lib_pitch_core::PitchClass::CS,
+        sim_lib_pitch_core::PitchClass::D,
+        sim_lib_pitch_core::PitchClass::DS,
+        sim_lib_pitch_core::PitchClass::E,
+        sim_lib_pitch_core::PitchClass::F,
+        sim_lib_pitch_core::PitchClass::FS,
+        sim_lib_pitch_core::PitchClass::G,
+        sim_lib_pitch_core::PitchClass::GS,
+        sim_lib_pitch_core::PitchClass::A,
+        sim_lib_pitch_core::PitchClass::AS,
+        sim_lib_pitch_core::PitchClass::B,
+    ])
+    .expect("row")
+    .apply(RowOperation::new(RowFamily::P, 0));
+    let license = StructuralLicense::new(
+        StructuralReadingId::new("reading/notation").expect("reading"),
+        "notation statement",
+    )
+    .expect("license");
+    let events = (0usize..12)
+        .map(|ordinal| {
+            let id = format!("event/note-{ordinal}");
+            let event_id = SerialEventId::new(&id).expect("event id");
+            (
+                event_id.clone(),
+                sim_lib_music_serial::PlannedSerialEvent {
+                    id: event_id,
+                    ordinals: vec![OrdinalRef::new(row_id.clone(), ordinal)],
+                    role: SerialRole::Structural,
+                    origin: SerialOrigin::Structural {
+                        rationale: "notation".to_owned(),
+                    },
+                    voice: sim_lib_music_core::ObjectId::new("voice/solo").expect("voice"),
+                    placement: EventPlacement::independent(),
+                    parents: Vec::new(),
+                    licenses: vec![license.clone()],
+                },
+            )
+        })
+        .collect();
+    let precedence = (0usize..11).map(|ordinal| {
+        (
+            SerialEventId::new(format!("event/note-{ordinal}")).expect("from"),
+            SerialEventId::new(format!("event/note-{}", ordinal + 1)).expect("to"),
+        )
+    });
+    let plan = SerialPlan::try_new([(row_id, row)].into_iter().collect(), events, precedence)
+        .expect("plan");
+    let context = StrictRealizationContext::new(
+        (0usize..12)
+            .map(|ordinal| {
+                (
+                    SerialEventId::new(format!("event/note-{ordinal}")).expect("event id"),
+                    StrictEventSpec::notes(4, quarter(), 96, channel(), Articulation::Normal),
+                )
+            })
+            .collect(),
+    );
+    let realization = realize_strict(&plan, &context).expect("realization");
+    let staff = render_serial_staff(&realization).expect("staff");
+    let report = convert_score(
+        &ScoreForm::Staff(staff),
+        ScoreFormKind::Counterpoint,
+        AmbiguousConversionPolicy::Reject,
+    )
+    .expect("counterpoint");
+    let ScoreForm::Counterpoint(counterpoint) = report.value else {
+        unreachable!("counterpoint conversion returns counterpoint");
+    };
+    Score::new(
+        72,
+        (12, 4),
+        Some("C".to_owned()),
+        Music::Counterpoint(counterpoint),
+    )
+    .expect("score")
+}
+
 #[test]
 fn simple_melody_exports_valid_lilypond_text() {
     let melody = Melody::new(vec![
@@ -3110,6 +3206,18 @@ fn simple_melody_exports_valid_lilypond_text() {
     assert!(text.contains("c'4"));
     assert!(text.contains("r4"));
     assert!(text.contains("d'4 ~ d'8"));
+}
+
+#[test]
+fn serial_notation_exports_replay_deterministically_and_keep_sidecars() {
+    let score = serial_notation_score();
+    let lily = export_lilypond_report(&score).expect("lily");
+    assert!(lily.value.contains("\\new Voice"));
+
+    let xml_a = export_musicxml_partwise_report(&score, &[]).expect("xml");
+    let xml_b = export_musicxml_partwise_report(&score, &xml_a.identities).expect("xml replay");
+    assert_eq!(xml_a.value, xml_b.value);
+    assert!(!xml_a.identities.is_empty());
 }
 
 #[test]
@@ -10020,6 +10128,18 @@ requires = ["music-serial", "pitch-serial", "music-core"]
 
 ### `feature/sim-music/open-serial-adaptation`
 
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`:
+
+```toml
+title = "Third-party adaptation without source edits"
+summary = "Register a caller-defined alphabet, practice rule, and realizer entirely through public APIs, then prove the generic Lisp validation surface and open adaptation registry fail closed on unknown components."
+category = "Rust"
+tags = ["music", "serial", "adaptation", "registry", "lisp", "framework"]
+requires = ["music-serial", "music-shapes", "serial-core", "codec/lisp"]
+```
+
 Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine` is checked by `sh scripts/check-recipes.sh`.
 
 Source `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`:
@@ -10030,4 +10150,18 @@ summary = "Land one immutable serial plan onto modal and caller-defined scales w
 category = "Rust"
 tags = ["music", "serial", "modal", "adaptation", "realization", "rust", "framework"]
 requires = ["music-serial", "pitch-scale", "music-core"]
+```
+
+### `feature/sim-music/serial-consonance-completion`
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml`:
+
+```toml
+title = "Serial completion with structural ledgers"
+summary = "Filter additive completion candidates through serial allowances, preserve the structural plan, and audit the result through structural and all-sounding ledgers."
+category = "Rust"
+tags = ["music", "serial", "completion", "bounded-search", "reversible", "framework", "rust"]
+requires = ["music-serial", "discrete-search", "music-transform"]
 ```

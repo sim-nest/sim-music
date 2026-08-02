@@ -15,6 +15,7 @@
 mod citizen;
 mod codec;
 mod runtime;
+mod serial_runtime;
 
 pub use citizen::{
     PitchChordDescriptor, PitchClassMaskDescriptor, PitchDescriptor, PitchIntervalDescriptor,

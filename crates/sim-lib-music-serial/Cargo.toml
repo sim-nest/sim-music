@@ -13,7 +13,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 sim-cookbook = { version = "0.1.0" }
 sim-lib-discrete-search = { version = "0.1.1", path = "../../../sim-discrete/crates/sim-lib-discrete-search" }
 sim-lib-music-core = { version = "0.1.3", path = "../sim-lib-music-core" }
-sim-lib-music-transform = { version = "0.1.0", path = "../sim-lib-music-transform" }
+sim-lib-music-lower = { version = "0.1.0", path = "../sim-lib-music-lower" }
 sim-lib-pitch-chord = { version = "0.1.0", path = "../sim-lib-pitch-chord" }
 sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-dissonance = { version = "0.1.0", path = "../sim-lib-pitch-dissonance" }
@@ -28,6 +28,12 @@ thiserror = "1"
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }
+
+[dev-dependencies]
+sim-codec = { version = "0.1.0" }
+sim-codec-lisp = { version = "0.1.0" }
+sim-kernel = { version = "0.1.0" }
+sim-lib-pitch-namer = { version = "0.1.0", path = "../sim-lib-pitch-namer" }
 
 [lints]
 workspace = true

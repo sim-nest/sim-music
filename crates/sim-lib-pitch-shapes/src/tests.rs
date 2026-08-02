@@ -1,4 +1,7 @@
 use super::*;
+use sim_codec::{Input, decode_eval_expr_with_codec};
+use sim_codec_lisp::LispCodecLib;
+use sim_kernel::{CapabilitySet, ReadPolicy, TrustLevel};
 use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol, read_construct_capability};
 use sim_lib_pitch_core::PitchClass;
 use sim_lib_pitch_scale::{Key, Mode, Scale};
@@ -187,6 +190,68 @@ fn pitch_citizens_accept_legacy_text_and_read_construct() {
     assert_eq!(
         encode_tone_row(&row.row().unwrap()),
         "4,5,7,1,6,3,8,2,11,0,9,10"
+    );
+}
+
+#[test]
+fn lisp_serial_surface_builds_rows_matrices_and_reports() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_pitch_shapes_lib(&mut cx).unwrap();
+    let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
+    cx.load_lib(&lisp).unwrap();
+
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text("(serial/analyze-row (serial/row '(4 5 7 1 6 3 8 2 11 0 9 10)))".to_owned()),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let report = cx.eval_expr(expr).unwrap();
+    let Expr::Map(fields) = report.object().as_expr(&mut cx).unwrap() else {
+        panic!("serial/analyze-row must return a report map");
+    };
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("form")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("RowClassReport".to_owned()))
+    );
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("row")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("4,5,7,1,6,3,8,2,11,0,9,10".to_owned()))
+    );
+
+    let expr = decode_eval_expr_with_codec(
+        &mut cx,
+        &Symbol::qualified("codec", "lisp"),
+        Input::Text(
+            "(serial/matrix (serial/row '(4 5 7 1 6 3 8 2 11 0 9 10)) :labels :first-last-pitch)"
+                .to_owned(),
+        ),
+        ReadPolicy {
+            trust: TrustLevel::TrustedSource,
+            capabilities: CapabilitySet::new(),
+        },
+    )
+    .unwrap();
+    let matrix = cx.eval_expr(expr).unwrap();
+    let Expr::Map(fields) = matrix.object().as_expr(&mut cx).unwrap() else {
+        panic!("serial/matrix must return a matrix map");
+    };
+    assert_eq!(
+        fields
+            .iter()
+            .find(|(key, _)| key == &Expr::Symbol(Symbol::new("label-convention")))
+            .map(|(_, value)| value),
+        Some(&Expr::String("first-last-pitch".to_owned()))
     );
 }
 

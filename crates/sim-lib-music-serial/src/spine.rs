@@ -3,10 +3,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use sim_lib_music_core::{Pitch, Time};
-use sim_lib_music_transform::MapWitness;
 use sim_lib_pitch_dissonance::ContextualSonanceReport;
 use sim_lib_pitch_scale::PlayerScale;
 
+use crate::pitch_map::MapWitness;
 use crate::{OrdinalRef, RealizerId, SerialEventId};
 
 /// Stable adaptation family used by a modal-spine realizer.

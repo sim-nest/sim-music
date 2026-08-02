@@ -1,0 +1,1 @@
+Complete one realized serial plan through the serial adapter without mutating its structural source. The recipe filters generic additive candidates through explicit serial allowances, keeps the structural plan and structural ledger unchanged, and records the added note only in the all-sounding post-completion ledger.

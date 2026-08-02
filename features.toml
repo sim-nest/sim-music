@@ -584,12 +584,36 @@ claims_surfaces = [
   "docs/sim-music/generated",
 ]
 claims_specimens = [
+  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation",
   "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine",
 ]
 supports = [
   "feature/sim-music/exact-music-analysis-and-transform",
   "feature/sim-music/pitch-and-sound-vocabulary",
   "feature/sim-music/serial-practice",
+]
+
+[[feature]]
+id = "feature/sim-music/serial-consonance-completion"
+title = "Serial additive completion with structural ledgers"
+summary = "Filter bounded additive completion candidates through serial allowances, preserve the immutable structural plan, and return separate structural and all-sounding post-completion ledgers."
+owner = "crate/sim-lib-music-serial"
+audiences = ["user", "code", "framework"]
+guidance = "Use complete_serial when a realized serial plan must admit reversible additive material without mutating or disguising its structural source. The adapter starts from the immutable SerialPlan and realized Staff, filters generic additive candidates through explicit serial allowances for the current partition, already stated pitch classes, future aggregate remainder, caller-declared referential subsets, modal projection, derived reservoirs, and explicitly foreign material, then delegates bounded subset selection to sim-lib-discrete-search and exact additive application/removal to the shared music-transform patch surface. The result returns the unchanged structural plan, the unmodified generic completion receipt, and separate ledgers for the structural reading before/after completion plus the all-sounding reading after completion. Partial or cancelled search status stays partial or cancelled; budget exhaustion is never translated into success."
+claims_anchors = [
+  "anchor/crate/sim-lib-music-serial",
+  "anchor/crate/sim-lib-music-transform",
+  "anchor/repo/sim-music",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion",
+]
+supports = [
+  "feature/sim-music/serial-practice",
+  "feature/sim-music/open-serial-adaptation",
 ]
 
 [[route]]
@@ -644,7 +668,21 @@ steps = [
   { feature = "feature/sim-music/pitch-and-sound-vocabulary", why = "The pitch vocabulary row owns named scales, caller-defined player scales, and contextual sonance models reused by the adaptation report." },
   { feature = "feature/sim-music/exact-music-analysis-and-transform", why = "The exact transform row owns the first-class partial pitch-map policy that modal landing reuses instead of inventing another remap surface." },
   { feature = "feature/sim-music/open-serial-adaptation", why = "The open adaptation row owns landed modal realization, aggregate-relaxation receipts, and the independent spine, pitch, ordinal, and sonance report facets." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation", why = "The checked external-style scenario registers a seven-symbol non-pitch series, a custom practice rule, and a custom realizer through public APIs only, then proves the Lisp validation hook and realizer registry both fail closed on unknown components." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine", why = "The checked Rust scenario realizes the same immutable plan through C Dorian, C Lydian, and a caller-defined scale, proves plan equality with differing sounding pitches, and inspects the spine report without claiming strict twelve-tone output." },
+]
+
+[[route]]
+id = "route/complete-serial-consonance"
+task = "Complete a realized serial plan with bounded reversible additions"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/serial-practice", why = "The serial row owns the immutable plan, stable event identities, strict realization, and the structural-versus-all-sounding reading boundary that the adapter must preserve." },
+  { feature = "feature/sim-music/open-serial-adaptation", why = "The adaptation row supplies the optional modal-projection evidence that the completion adapter can admit explicitly without pretending the result remains strict chromatic output." },
+  { feature = "feature/sim-music/exact-score-consonance", why = "The exact score row establishes the identity-bearing staff surface and exact sounding timeline that additive completion must preserve." },
+  { feature = "feature/sim-music/reversible-consonance-completion", why = "The reversible completion row defines the generic additive-search contract that the serial row narrows through serial-specific legality and post-completion ledgers." },
+  { feature = "feature/sim-music/serial-consonance-completion", why = "The serial completion row filters generic candidates through serial allowances, leaves the structural plan unchanged, delegates deterministic finite traversal, work/result bounds, cancellation, and honest receipts to sim-lib-discrete-search, and returns structural plus all-sounding ledgers beside the reversible patch result." },
+  { specimen = "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion", why = "The checked Rust scenario completes one realized row statement with a stated pitch-class addition, proves the structural ledger is unchanged, and records the added material only in the all-sounding ledger." },
 ]
 
 [[route]]

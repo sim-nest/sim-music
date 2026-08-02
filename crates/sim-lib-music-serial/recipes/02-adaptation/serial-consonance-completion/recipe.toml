@@ -1,0 +1,5 @@
+title = "Serial completion with structural ledgers"
+summary = "Filter additive completion candidates through serial allowances, preserve the structural plan, and audit the result through structural and all-sounding ledgers."
+category = "Rust"
+tags = ["music", "serial", "completion", "bounded-search", "reversible", "framework", "rust"]
+requires = ["music-serial", "discrete-search", "music-transform"]
