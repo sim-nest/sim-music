@@ -1,6 +1,8 @@
-# Serial Core
+# sim-lib-serial-core
 
-Build serial technique over the symbols the work actually uses.
+In one line: builds serial technique over the symbols the work actually uses.
+
+## What it gives you
 
 `sim-lib-serial-core` validates and transforms ordered series over any finite
 alphabet, from pitch classes to gestures, durations, dynamics, registers, or a
@@ -9,17 +11,16 @@ exactly-once, no-repeat, declared multiplicity, declared omissions, projected
 classes, or free order. Every accepted series carries an `AggregateLedger`
 showing what was observed and expected.
 
-Series retain symbols rather than user ordinals. Stable alphabet identities,
-duplicate rejection, foreign-symbol checks, and impossible-rule checks keep the
-boundary honest. Retrograde, rotation, block partitions, ordinal permutations,
-cyclic relabeling, and caller-defined alphabet bijections validate their maps
-before application and return `TransformCertificate` evidence: exact order map,
-source and target alphabet, aggregate preservation, relaxed invariants, and an
-inverse when the algebra supplies one.
+## Why you will be glad
 
-Composition normalizes to deterministic finite maps. When an accepted order is
-a permutation, its rank comes from SIM's shared discrete rank owner; this crate
-never grows a private search or enumeration engine.
+- Keep serial validation generic instead of hard-wiring pitch into the substrate.
+- Get certified transforms with exact order maps, preserved aggregates, and inverses when the algebra supplies them.
+- Reuse SIM's shared rank/search owners instead of growing a private enumeration engine.
 
-This is the open foundation for twelve-tone rows without making twelve pitches
-the definition of serial music.
+## Where it fits
+
+This is the open foundation under twelve-tone rows, integral parameter cycles,
+and any other finite serial vocabulary. Series retain symbols rather than user
+ordinals, and retrograde, rotation, partitions, permutations, cyclic
+relabeling, and caller-defined bijections all validate their maps before
+application.

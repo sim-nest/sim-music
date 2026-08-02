@@ -9,6 +9,13 @@
       "summary": "Data-planned composition recipe for the SIM music algorithm foundry."
     },
     {
+      "crate_name": "serial-workbench",
+      "group": "workspace",
+      "manifest": "recipes/serial-workbench/Cargo.toml",
+      "package": "serial-workbench",
+      "summary": "End-to-end serial music workbench recipe over replaceable SIM music components."
+    },
+    {
       "crate_name": "sim_lib_daw_session",
       "group": "workspace",
       "manifest": "crates/sim-lib-daw-session/Cargo.toml",

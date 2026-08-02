@@ -1,24 +1,24 @@
-# Twelve-Tone Row Theory
+# sim-lib-pitch-serial
 
-Turn one exact chromatic aggregate into trustworthy P, I, R, and RI forms.
+In one line: turns one exact chromatic aggregate into trustworthy P, I, R, and RI families without losing provenance.
+
+## What it gives you
 
 `sim-lib-pitch-serial` accepts only rows containing each of SIM's canonical
 twelve `PitchClass` values exactly once. It reuses the general serial aggregate
 validator, so malformed rows fail with typed evidence while pitch identity
 stays shared with the rest of the music stack.
 
-Every operation is total and normalized modulo twelve. The returned `RowForm`
-retains the operation that produced it, making later analysis and provenance
-unambiguous. Printed names are deliberately separate: choose traditional
-first/last-pitch labels or affine operation-index labels, and retain honest
-disagreement between them.
+## Why you will be glad
 
-Build the entire family without losing names: all 48 operation aliases remain
-available even when row symmetry collapses them to fewer distinct values. A
-`RowMatrix` carries its source, its explicit label convention, coordinate-bearing
-cells, and all four labeled edges. Its ASCII display is generated from the same
-structured data that applications can inspect.
+- Keep every row operation total, normalized, and explicit about the form that produced it.
+- Preserve all 48 aliases even when symmetry collapses them to fewer distinct rows.
+- Inspect matrices, partitions, mosaics, and interlocking evidence from structured data instead of ad hoc text.
 
-The documented Schoenberg Op. 25 row starts on E. Its identity operation is
-therefore `P0` as affine algebra and `P4` under first-pitch labeling. SIM keeps
-both facts instead of silently choosing one.
+## Where it fits
+
+Use this when twelve-tone work needs row forms, label conventions, matrices, or
+partition analysis that can be trusted downstream by realization, notation, and
+practice layers. The documented Schoenberg Op. 25 row starts on E, so its
+identity operation is `P0` in affine algebra and `P4` under first-pitch
+labeling; this crate keeps both facts instead of silently choosing one.

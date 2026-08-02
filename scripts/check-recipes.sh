@@ -5,5 +5,6 @@ set -eu
 # the root foundry application's alternate-provider and failure-path tests.
 cargo test --workspace --quiet
 cargo run --quiet -p music-algorithm-foundry
+cargo run --quiet -p serial-workbench
 
-printf 'check-recipes: OK (embedded music recipes + algorithm foundry application)\n'
+printf 'check-recipes: OK (embedded music recipes + algorithm foundry + serial workbench applications)\n'

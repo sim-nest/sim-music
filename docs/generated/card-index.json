@@ -137,7 +137,7 @@
       "id": "cookbook/music-serial",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-serial",
-      "summary": ""
+      "summary": "Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques."
     },
     {
       "id": "cookbook/music-shapes",

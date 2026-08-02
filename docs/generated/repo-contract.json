@@ -137,7 +137,7 @@
       "id": "cookbook/music-serial",
       "kind": "cookbook-recipe",
       "owner": "sim-lib-music-serial",
-      "summary": ""
+      "summary": "Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques."
     },
     {
       "id": "cookbook/music-shapes",
@@ -354,6 +354,7 @@
   "groups": {
     "workspace": [
       "music-algorithm-foundry",
+      "serial-workbench",
       "sim-lib-daw-session",
       "sim-lib-midi-ble",
       "sim-lib-midi-core",
@@ -410,7 +411,7 @@
   },
   "non_citizen_exemption_count": 0,
   "non_citizen_exemptions": [],
-  "package_count": 53,
+  "package_count": 54,
   "packages": [
     {
       "crate_name": "music-algorithm-foundry",
@@ -542,6 +543,90 @@
           ],
           "name": "music-algorithm-foundry",
           "src": "recipes/music-algorithm-foundry/src/main.rs"
+        }
+      ]
+    },
+    {
+      "crate_name": "serial-workbench",
+      "dependencies": [
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-lower",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-notation",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-serial",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-music-transform",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-core",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-scale",
+          "rename": null,
+          "target": null
+        },
+        {
+          "kind": "normal",
+          "optional": false,
+          "package": "sim-lib-pitch-serial",
+          "rename": null,
+          "target": null
+        }
+      ],
+      "description": "End-to-end serial music workbench recipe over replaceable SIM music components.",
+      "features": [],
+      "group": "workspace",
+      "manifest": "recipes/serial-workbench/Cargo.toml",
+      "name": "serial-workbench",
+      "publish": "false",
+      "root": "recipes/serial-workbench",
+      "rustdoc_summary": "End-to-end serial music workbench recipe over replaceable SIM music components.",
+      "target_kinds": [
+        "bin"
+      ],
+      "targets": [
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "bin"
+          ],
+          "name": "serial-workbench",
+          "src": "recipes/serial-workbench/src/main.rs"
         }
       ]
     },
@@ -1830,6 +1915,46 @@
           "kind": [
             "test"
           ],
+          "name": "arrays_time_points_recipe",
+          "src": "crates/sim-lib-music-serial/tests/arrays_time_points_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "counter_voices_recipe",
+          "src": "crates/sim-lib-music-serial/tests/counter_voices_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "derived_invariant_practice_recipe",
+          "src": "crates/sim-lib-music-serial/tests/derived_invariant_practice_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "integral_parameters_recipe",
+          "src": "crates/sim-lib-music-serial/tests/integral_parameters_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
           "name": "modal_spine_recipe",
           "src": "crates/sim-lib-music-serial/tests/modal_spine_recipe.rs"
         },
@@ -1840,8 +1965,28 @@
           "kind": [
             "test"
           ],
+          "name": "referential_subsets_recipe",
+          "src": "crates/sim-lib-music-serial/tests/referential_subsets_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
           "name": "serial_completion_recipe",
           "src": "crates/sim-lib-music-serial/tests/serial_completion_recipe.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "simultaneous_forms_recipe",
+          "src": "crates/sim-lib-music-serial/tests/simultaneous_forms_recipe.rs"
         },
         {
           "crate_types": [
@@ -2932,6 +3077,16 @@
           ],
           "name": "gate_row",
           "src": "crates/sim-lib-pitch-serial/tests/gate_row.rs"
+        },
+        {
+          "crate_types": [
+            "bin"
+          ],
+          "kind": [
+            "test"
+          ],
+          "name": "partition_mosaic_recipe",
+          "src": "crates/sim-lib-pitch-serial/tests/partition_mosaic_recipe.rs"
         },
         {
           "crate_types": [
@@ -4285,10 +4440,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "43eabaae7c8b8195f20aca188bd180816d710b7b",
+    "git_commit": "78a98db6f6416b21a9a1906870ae753d7414efd8",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "43eabaae7c8b8195f20aca188bd180816d710b7b",
+    "source_commit": "78a98db6f6416b21a9a1906870ae753d7414efd8",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -4301,9 +4456,9 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "302dc5da9cd0f1be",
+    "workspace_hash": "f3aa75397b8379ce",
     "workspace_hash_algorithm": "fnv1a64",
-    "workspace_hash_input_count": 935,
+    "workspace_hash_input_count": 959,
     "workspace_hash_inputs": [
       "Cargo.toml",
       "crates/sim-lib-daw-session/Cargo.toml",
@@ -4606,6 +4761,8 @@
       "crates/sim-lib-music-notation/src/tests.rs",
       "crates/sim-lib-music-serial/Cargo.toml",
       "crates/sim-lib-music-serial/build.rs",
+      "crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/setup.rs",
       "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml",
       "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/setup.rs",
       "crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml",
@@ -4616,6 +4773,16 @@
       "crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/setup.rs",
       "crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml",
       "crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/setup.rs",
+      "crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/setup.rs",
+      "crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/setup.rs",
+      "crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/setup.rs",
+      "crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/setup.rs",
+      "crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml",
+      "crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/setup.rs",
       "crates/sim-lib-music-serial/recipes/book.toml",
       "crates/sim-lib-music-serial/src/additive.rs",
       "crates/sim-lib-music-serial/src/allowance.rs",
@@ -4674,8 +4841,14 @@
       "crates/sim-lib-music-serial/src/tests_realizer.rs",
       "crates/sim-lib-music-serial/src/tests_techniques.rs",
       "crates/sim-lib-music-serial/src/time_point.rs",
+      "crates/sim-lib-music-serial/tests/arrays_time_points_recipe.rs",
+      "crates/sim-lib-music-serial/tests/counter_voices_recipe.rs",
+      "crates/sim-lib-music-serial/tests/derived_invariant_practice_recipe.rs",
+      "crates/sim-lib-music-serial/tests/integral_parameters_recipe.rs",
       "crates/sim-lib-music-serial/tests/modal_spine_recipe.rs",
+      "crates/sim-lib-music-serial/tests/referential_subsets_recipe.rs",
       "crates/sim-lib-music-serial/tests/serial_completion_recipe.rs",
+      "crates/sim-lib-music-serial/tests/simultaneous_forms_recipe.rs",
       "crates/sim-lib-music-serial/tests/strict_row_realization_recipe.rs",
       "crates/sim-lib-music-shapes/Cargo.toml",
       "crates/sim-lib-music-shapes/build.rs",
@@ -4995,6 +5168,8 @@
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-class-analysis/setup.rs",
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
       "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs",
+      "crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml",
+      "crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/setup.rs",
       "crates/sim-lib-pitch-serial/recipes/book.toml",
       "crates/sim-lib-pitch-serial/src/affine.rs",
       "crates/sim-lib-pitch-serial/src/all_interval.rs",
@@ -5019,6 +5194,7 @@
       "crates/sim-lib-pitch-serial/src/segment.rs",
       "crates/sim-lib-pitch-serial/src/vertical.rs",
       "crates/sim-lib-pitch-serial/tests/gate_row.rs",
+      "crates/sim-lib-pitch-serial/tests/partition_mosaic_recipe.rs",
       "crates/sim-lib-pitch-serial/tests/pitch_reservoir.rs",
       "crates/sim-lib-pitch-serial/tests/row_class_analysis_recipe.rs",
       "crates/sim-lib-pitch-serial/tests/row_family_matrix_recipe.rs",
@@ -5239,6 +5415,9 @@
       "recipes/book.toml",
       "recipes/music-algorithm-foundry/Cargo.toml",
       "recipes/music-algorithm-foundry/recipe.toml",
+      "recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml",
+      "recipes/serial-workbench/Cargo.toml",
+      "recipes/serial-workbench/book.toml",
       "xtask/Cargo.toml"
     ]
   },
@@ -5798,8 +5977,16 @@
       "card_id": "cookbook/music-serial",
       "group": "workspace",
       "package": "sim-lib-music-serial",
-      "recipe_count": 5,
+      "recipe_count": 11,
       "recipes": [
+        {
+          "card_id": "music-serial/01-basics/arrays-time-points",
+          "codec": "",
+          "id": "arrays-time-points",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml",
+          "title": "Analyze serial arrays and time-point rows"
+        },
         {
           "card_id": "music-serial/01-basics/immutable-plan",
           "codec": "",
@@ -5839,9 +6026,49 @@
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml",
           "title": "Third-party adaptation without source edits"
+        },
+        {
+          "card_id": "music-serial/02-techniques/counter-voices",
+          "codec": "",
+          "id": "counter-voices",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml",
+          "title": "Build counter-voices with explicit canon evidence"
+        },
+        {
+          "card_id": "music-serial/02-techniques/derived-invariant-practice",
+          "codec": "",
+          "id": "derived-invariant-practice",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml",
+          "title": "Analyze derived cells and invariant candidates"
+        },
+        {
+          "card_id": "music-serial/02-techniques/referential-subsets",
+          "codec": "",
+          "id": "referential-subsets",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml",
+          "title": "Analyze bounded referential subsets"
+        },
+        {
+          "card_id": "music-serial/02-techniques/simultaneous-forms",
+          "codec": "",
+          "id": "simultaneous-forms",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml",
+          "title": "Deploy simultaneous forms without fabricating chord order"
+        },
+        {
+          "card_id": "music-serial/03-parameters/integral-parameters",
+          "codec": "",
+          "id": "integral-parameters",
+          "package": "sim-lib-music-serial",
+          "recipe_toml": "crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml",
+          "title": "Project integral parameter tracks with explicit ledgers"
         }
       ],
-      "summary": "",
+      "summary": "Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques.",
       "title": "Music Serial"
     },
     {
@@ -6315,7 +6542,7 @@
       "card_id": "cookbook/pitch-serial",
       "group": "workspace",
       "package": "sim-lib-pitch-serial",
-      "recipe_count": 2,
+      "recipe_count": 3,
       "recipes": [
         {
           "card_id": "pitch-serial/01-basics/row-class-analysis",
@@ -6332,6 +6559,14 @@
           "package": "sim-lib-pitch-serial",
           "recipe_toml": "crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml",
           "title": "Build the complete family and matrix for an Op. 25 row"
+        },
+        {
+          "card_id": "pitch-serial/02-partitions/partition-mosaic",
+          "codec": "",
+          "id": "partition-mosaic",
+          "package": "sim-lib-pitch-serial",
+          "recipe_toml": "crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml",
+          "title": "Analyze partitions, mosaics, and interlocking evidence"
         }
       ],
       "summary": "Strict tone rows, complete operation families, matrices, and explicit labels.",
@@ -6775,7 +7010,7 @@
       "card_id": "cookbook/sim-music",
       "group": "",
       "package": "sim-music",
-      "recipe_count": 1,
+      "recipe_count": 2,
       "recipes": [
         {
           "card_id": "sim-music/recipes/music-algorithm-foundry",
@@ -6784,6 +7019,14 @@
           "package": "sim-music",
           "recipe_toml": "recipes/music-algorithm-foundry/recipe.toml",
           "title": "Compose a music algorithm plan from replaceable stages"
+        },
+        {
+          "card_id": "sim-music/01-end-to-end/row-to-audition",
+          "codec": "",
+          "id": "row-to-audition",
+          "package": "sim-music",
+          "recipe_toml": "recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml",
+          "title": "Run a serial music workbench from row to audition"
         }
       ],
       "summary": "Runnable recipes composing the loadable SIM music libraries.",

@@ -2,4 +2,4 @@ book = "pitch-serial"
 title = "Pitch Serial"
 summary = "Strict tone rows, complete operation families, matrices, and explicit labels."
 order = 269
-chapters = ["01-basics"]
+chapters = ["01-basics", "02-partitions"]

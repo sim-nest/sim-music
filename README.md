@@ -25,6 +25,12 @@ primitive shared across the pitch crates. (Doctest:
 The full SIM walkthrough, including how to run the `sim` CLI (`cargo install
 sim-run`), lives in `sim-say`.
 
+`sim-music` also ships a checked end-to-end serial recipe:
+`cargo run -p serial-workbench`. It validates its fixture manifest, freezes one
+immutable row plan, realizes it strictly and modally through a replaceable
+registry-selected component, completes the modal result reversibly, exports MIDI
+plus LilyPond, and lowers an audition score.
+
 ## How it works
 
 `sim-music` is the music and audio domain of the SIM constellation. SIM is an

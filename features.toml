@@ -529,7 +529,7 @@ title = "Strict twelve-tone rows, complete families, and explicit matrices"
 summary = "Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices."
 owner = "crate/sim-lib-pitch-serial"
 audiences = ["user", "code", "framework"]
-guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. ToneRow::rotate and ToneRow::try_permute_ordinals reuse validated OrdinalMap bijections from sim-lib-serial-core rather than spelling a second permutation validator. RowFamilySet preserves all 48 operation aliases in stable order and separately deduplicates equal ToneRow values, retaining each alias's distinct-form index when row symmetry collapses forms. RowMatrix retains its source and RowLabelConvention, exposes validated cell coordinates, P row and I column operations, and P/R/I/RI edge labels; render_data and render_ascii project that same matrix object. Use AffinePitchMap for x -> ax + b mod 12: the bijective multipliers M1, M5, M7, and M11 return strict rows, while non-bijective multipliers return ordered PitchReservoir values with named relaxed invariants instead of pretending to be ToneRow. Use try_partition when a row must be divided into nonempty disjoint ordinal blocks that cover all twelve positions exactly once while preserving whether order is total, partial, or intentionally absent within and between blocks; use the resulting reports for partition similarity, interlocking, mosaics, aggregate coverage, and chord-free vertical collections. Use multiply_partitions when one partition block's interval content should be projected onto another block's pitches: it returns a BlockProductReservoir with per-block provenance instead of collapsing that material into a false row identity. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The checked row-family-matrix Rust specimen and GATE-ROW tests use Schoenberg's Op. 25 values to prove every alias equation, symmetric reduction without alias loss, every matrix line against its operation, malformed aggregate refusal, operation/label disagreement, affine bijections, non-bijective reservoirs, and the row-partition/block-product analysis surface. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
+guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. ToneRow::rotate and ToneRow::try_permute_ordinals reuse validated OrdinalMap bijections from sim-lib-serial-core rather than spelling a second permutation validator. RowFamilySet preserves all 48 operation aliases in stable order and separately deduplicates equal ToneRow values, retaining each alias's distinct-form index when row symmetry collapses forms. RowMatrix retains its source and RowLabelConvention, exposes validated cell coordinates, P row and I column operations, and P/R/I/RI edge labels; render_data and render_ascii project that same matrix object. Use AffinePitchMap for x -> ax + b mod 12: the bijective multipliers M1, M5, M7, and M11 return strict rows, while non-bijective multipliers return ordered PitchReservoir values with named relaxed invariants instead of pretending to be ToneRow. Use try_partition when a row is divided into nonempty disjoint ordinal blocks that cover all twelve positions exactly once while preserving whether order is total, partial, or intentionally absent within and between blocks; use the resulting reports for partition similarity, interlocking, mosaics, aggregate coverage, and chord-free vertical collections. Use multiply_partitions when one partition block's interval content is projected onto another block's pitches: it returns a BlockProductReservoir with per-block provenance instead of collapsing that material into a false row identity. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The checked row-family-matrix Rust specimen and GATE-ROW tests use Schoenberg's Op. 25 values to prove every alias equation, symmetric reduction without alias loss, every matrix line against its operation, malformed aggregate refusal, operation/label disagreement, affine bijections, non-bijective reservoirs, and the row-partition/block-product analysis surface. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
 claims_anchors = [
   "anchor/crate/sim-lib-pitch-core",
   "anchor/crate/sim-lib-pitch-serial",
@@ -542,6 +542,7 @@ claims_surfaces = [
 ]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix",
+  "recipe/sim-music/crates/sim-lib-pitch-serial/02-partitions/partition-mosaic",
 ]
 
 [[feature]]
@@ -564,6 +565,12 @@ claims_surfaces = [
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan",
   "recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization",
+  "recipe/sim-music/crates/sim-lib-music-serial/01-basics/arrays-time-points",
+  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/simultaneous-forms",
+  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/derived-invariant-practice",
+  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/referential-subsets",
+  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/counter-voices",
+  "recipe/sim-music/crates/sim-lib-music-serial/03-parameters/integral-parameters",
 ]
 
 [[feature]]
@@ -614,6 +621,32 @@ claims_specimens = [
 supports = [
   "feature/sim-music/serial-practice",
   "feature/sim-music/open-serial-adaptation",
+]
+
+[[feature]]
+id = "feature/sim-music/serial-music-workbench"
+title = "Replaceable end-to-end serial music workbench"
+summary = "Assemble one immutable row plan, registry-selected realization components, reversible completion, ledger audit, notation and MIDI export, and audition lowering into one checked workbench recipe."
+owner = "repo/sim-music"
+audiences = ["user", "code", "framework"]
+guidance = "Use the serial workbench recipe when a caller needs an end-to-end serial workflow instead of one isolated library surface. The workbench freezes one immutable row plan through sim-lib-music-serial, proves both strict and registry-selected modal realization without mutating the source plan, filters one additive completion through the serial allowances layer, audits structural versus all-sounding ledgers explicitly, reverses the additive patch to prove source recovery, then exports MIDI plus LilyPond notation and lowers an audition score through the existing music-lower and music-notation owners. Fixture coverage is declared in the recipe-local manifest with explicit source, data-status, proof purpose, and a hard no-copyrighted-score rule."
+claims_anchors = [
+  "anchor/repo/sim-music",
+  "anchor/crate/sim-lib-music-serial",
+  "anchor/crate/sim-lib-music-notation",
+  "anchor/crate/sim-lib-music-transform",
+]
+claims_surfaces = [
+  "docs/sim-music/generated",
+]
+claims_specimens = [
+  "recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition",
+]
+supports = [
+  "feature/sim-music/serial-practice",
+  "feature/sim-music/open-serial-adaptation",
+  "feature/sim-music/serial-consonance-completion",
+  "feature/sim-music/midi-notation-workflows",
 ]
 
 [[route]]
@@ -683,6 +716,20 @@ steps = [
   { feature = "feature/sim-music/reversible-consonance-completion", why = "The reversible completion row defines the generic additive-search contract that the serial row narrows through serial-specific legality and post-completion ledgers." },
   { feature = "feature/sim-music/serial-consonance-completion", why = "The serial completion row filters generic candidates through serial allowances, leaves the structural plan unchanged, delegates deterministic finite traversal, work/result bounds, cancellation, and honest receipts to sim-lib-discrete-search, and returns structural plus all-sounding ledgers beside the reversible patch result." },
   { specimen = "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion", why = "The checked Rust scenario completes one realized row statement with a stated pitch-class addition, proves the structural ledger is unchanged, and records the added material only in the all-sounding ledger." },
+]
+
+[[route]]
+id = "route/run-serial-music-workbench"
+task = "Run a serial music workbench"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/twelve-tone-row-theory", why = "The pitch-serial row owns the strict source row, family/matrix inspection, and partition evidence that the workbench freezes before realization." },
+  { feature = "feature/sim-music/serial-practice", why = "The serial practice row owns the immutable plan, strict realization context, simultaneous grouping, referential evidence, counter-voice techniques, arrays/time points, and integral parameter surfaces that the workbench assembles into one inspectable source." },
+  { feature = "feature/sim-music/open-serial-adaptation", why = "The adaptation row owns the registry-selected modal realizer and the spine report proving aggregate relaxation explicitly rather than silently mutating the source plan." },
+  { feature = "feature/sim-music/serial-consonance-completion", why = "The completion row owns the reversible additive patch, structural-versus-all-sounding ledger audit, and exact inverse proof after completion." },
+  { feature = "feature/sim-music/midi-notation-workflows", why = "The MIDI and notation row owns SMF export, LilyPond projection, and the exact score lowering surface used for audition." },
+  { feature = "feature/sim-music/serial-music-workbench", why = "The workbench row composes those replaceable owners into one executable recipe with fixture-manifest coverage and a hard no-copyrighted-score rule." },
+  { specimen = "recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition", why = "The checked runnable recipe validates the fixture manifest, runs strict plus modal realization, completes and undoes one additive patch, audits the ledgers, exports MIDI plus LilyPond notation, and lowers the audition score end to end." },
 ]
 
 [[route]]

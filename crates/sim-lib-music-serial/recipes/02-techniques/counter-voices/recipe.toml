@@ -1,0 +1,6 @@
+title = "Build counter-voices with explicit canon evidence"
+summary = "Deploy counter-voices as ordinary public canon components and retain offset, symmetry, and orchestration metadata."
+category = "Rust"
+tags = ["music", "serial", "counter-voices", "canon", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"

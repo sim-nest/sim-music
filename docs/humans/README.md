@@ -35,16 +35,18 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
 | `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
-| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 1 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
-| `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 2 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
+| `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 2 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
+| `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 8 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
 | `feature/sim-music/open-serial-adaptation` | `crate/sim-lib-music-serial` | 2 | Land immutable serial plans onto modal or caller-defined scales while preserving plan and ordinal identity, recording aggregate relaxation explicitly, and reporting spine, pitch, and sonance facets independently. |
 | `feature/sim-music/serial-consonance-completion` | `crate/sim-lib-music-serial` | 1 | Filter bounded additive completion candidates through serial allowances, preserve the immutable structural plan, and return separate structural and all-sounding post-completion ledgers. |
+| `feature/sim-music/serial-music-workbench` | `repo/sim-music` | 1 | Assemble one immutable row plan, registry-selected realization components, reversible completion, ledger audit, notation and MIDI export, and audition lowering into one checked workbench recipe. |
 
 ## Surfaces
 
 | Surface | Kind | Subject |
 | --- | --- | --- |
 | `cli/music-algorithm-foundry` | `cli` | `crate/music-algorithm-foundry` |
+| `cli/serial-workbench` | `cli` | `crate/serial-workbench` |
 | `cli/xtask` | `cli` | `crate/xtask` |
 | `docs/sim-music/generated` | `docs` | `doc-set/sim-music/generated` |
 
@@ -217,6 +219,9 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/recipe.toml`
 - `crates/sim-lib-music-notation/recipes/01-basics/musicxml-import/setup.siml`
 - `crates/sim-lib-music-notation/recipes/book.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/purpose.md`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/setup.rs`
 - `crates/sim-lib-music-serial/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/purpose.md`
 - `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml`
@@ -234,6 +239,23 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/purpose.md`
 - `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`
 - `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/setup.rs`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/purpose.md`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/setup.rs`
+- `crates/sim-lib-music-serial/recipes/03-parameters/chapter.toml`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/purpose.md`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml`
+- `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/setup.rs`
 - `crates/sim-lib-music-serial/recipes/book.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-music-shapes/recipes/01-basics/shape-family/purpose.md`
@@ -380,6 +402,10 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/purpose.md`
 - `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/recipe.toml`
 - `crates/sim-lib-pitch-serial/recipes/01-basics/row-family-matrix/setup.rs`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/chapter.toml`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/purpose.md`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml`
+- `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/setup.rs`
 - `crates/sim-lib-pitch-serial/recipes/book.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/chapter.toml`
 - `crates/sim-lib-pitch-set/recipes/01-basics/neighborhood-walk/purpose.md`
@@ -507,6 +533,15 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 - `recipes/music-algorithm-foundry/src/foundry/codec.rs`
 - `recipes/music-algorithm-foundry/src/foundry/tests.rs`
 - `recipes/music-algorithm-foundry/src/main.rs`
+- `recipes/serial-workbench/01-end-to-end/chapter.toml`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/purpose.md`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml`
+- `recipes/serial-workbench/01-end-to-end/row-to-audition/setup.rs`
+- `recipes/serial-workbench/Cargo.toml`
+- `recipes/serial-workbench/README.md`
+- `recipes/serial-workbench/book.toml`
+- `recipes/serial-workbench/fixtures/workbench-fixtures.toml`
+- `recipes/serial-workbench/src/main.rs`
 
 ## Worked Examples
 
@@ -10100,6 +10135,19 @@ tags = ["pitch", "serial", "tone-row", "P", "I", "R", "RI", "family", "matrix", 
 requires = ["pitch-serial", "pitch-core", "serial-core"]
 ```
 
+Specimen `recipe/sim-music/crates/sim-lib-pitch-serial/02-partitions/partition-mosaic` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml`:
+
+```toml
+title = "Analyze partitions, mosaics, and interlocking evidence"
+summary = "Validate block-order contracts, compare partitions, verticalize row slices, and inspect dyadic through hexachordal mosaics."
+category = "Rust"
+tags = ["pitch", "serial", "tone-row", "partition", "mosaic", "interlocking", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core"]
+purpose = "purpose.md"
+```
+
 ### `feature/sim-music/serial-practice`
 
 Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan` is checked by `sh scripts/check-recipes.sh`.
@@ -10124,6 +10172,84 @@ summary = "Realize and render a strict serial row statement without losing plann
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
 requires = ["music-serial", "pitch-serial", "music-core"]
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/arrays-time-points` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml`:
+
+```toml
+title = "Analyze serial arrays and time-point rows"
+summary = "Keep horizontal row order, vertical aggregate evidence, and onset order explicit without collapsing them into one score model."
+category = "Rust"
+tags = ["music", "serial", "array", "time-point", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "serial-core", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/simultaneous-forms` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml`:
+
+```toml
+title = "Deploy simultaneous forms without fabricating chord order"
+summary = "Build one inspectable simultaneous-form deployment from reusable partition components and preserve equal-onset group evidence."
+category = "Rust"
+tags = ["music", "serial", "simultaneity", "deployment", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/derived-invariant-practice` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml`:
+
+```toml
+title = "Analyze derived cells and invariant candidates"
+summary = "Keep derived deployment evidence and invariant certificates inspectable instead of collapsing them into one style flag."
+category = "Rust"
+tags = ["music", "serial", "derived", "invariant", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/referential-subsets` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml`:
+
+```toml
+title = "Analyze bounded referential subsets"
+summary = "Name subset evidence, harmonic context, and emphasis without upgrading one local claim into whole-passage tonality."
+category = "Rust"
+tags = ["music", "serial", "referential", "subset", "analysis", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "pitch-chord", "pitch-scale", "pitch-ratio"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/counter-voices` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml`:
+
+```toml
+title = "Build counter-voices with explicit canon evidence"
+summary = "Deploy counter-voices as ordinary public canon components and retain offset, symmetry, and orchestration metadata."
+category = "Rust"
+tags = ["music", "serial", "counter-voices", "canon", "rust", "framework"]
+requires = ["music-serial", "pitch-serial", "music-core"]
+purpose = "purpose.md"
+```
+
+Specimen `recipe/sim-music/crates/sim-lib-music-serial/03-parameters/integral-parameters` is checked by `sh scripts/check-recipes.sh`.
+
+Source `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml`:
+
+```toml
+title = "Project integral parameter tracks with explicit ledgers"
+summary = "Bind builtin and custom parameter tracks through one typed surface and inspect phase, exhaustion, and transform evidence."
+category = "Rust"
+tags = ["music", "serial", "integral", "parameters", "rust", "framework"]
+requires = ["music-serial", "music-core", "serial-core"]
+purpose = "purpose.md"
 ```
 
 ### `feature/sim-music/open-serial-adaptation`
@@ -10164,4 +10290,24 @@ summary = "Filter additive completion candidates through serial allowances, pres
 category = "Rust"
 tags = ["music", "serial", "completion", "bounded-search", "reversible", "framework", "rust"]
 requires = ["music-serial", "discrete-search", "music-transform"]
+```
+
+### `feature/sim-music/serial-music-workbench`
+
+Specimen `recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition` is checked by `sh scripts/check-recipes.sh`.
+
+Source `recipes/serial-workbench/01-end-to-end/row-to-audition/recipe.toml`:
+
+```toml
+title = "Run a serial music workbench from row to audition"
+summary = "Load replaceable realization components, build a row plan, realize it strictly and modally, complete it reversibly, audit ledgers, export MIDI and LilyPond notation, and audition it."
+category = "Rust"
+tags = ["music", "serial", "workbench", "end-to-end", "notation", "midi", "rust", "framework"]
+requires = [
+  "music-serial",
+  "music-notation",
+  "music-transform",
+  "pitch-scale",
+]
+purpose = "purpose.md"
 ```

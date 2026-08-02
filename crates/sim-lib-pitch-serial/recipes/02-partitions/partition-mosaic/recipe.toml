@@ -1,0 +1,6 @@
+title = "Analyze partitions, mosaics, and interlocking evidence"
+summary = "Validate block-order contracts, compare partitions, verticalize row slices, and inspect dyadic through hexachordal mosaics."
+category = "Rust"
+tags = ["pitch", "serial", "tone-row", "partition", "mosaic", "interlocking", "rust", "framework"]
+requires = ["pitch-serial", "pitch-core"]
+purpose = "purpose.md"
