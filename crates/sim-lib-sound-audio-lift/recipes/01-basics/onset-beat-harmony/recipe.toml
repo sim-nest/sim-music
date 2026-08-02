@@ -5,4 +5,4 @@ setup = "setup.siml"
 purpose = "purpose.md"
 order = 40
 tags = ["sound", "onset", "beat", "mfcc", "chroma", "key", "chord", "hmm", "loadable-callable"]
-requires = ["sound-audio-lift", "sound-tuning", "numbers-signal", "numbers-stats", "discrete-graph", "codec/lisp"]
+requires = ["sound-audio-lift", "sound-tuning", "numbers/signal", "numbers/stats", "discrete-graph", "codec/lisp"]

@@ -5,4 +5,4 @@ setup = "setup.siml"
 purpose = "purpose.md"
 order = 30
 tags = ["sound", "pitch", "yin", "pyin", "partials", "assignment", "dtw", "loadable-callable"]
-requires = ["sound-audio-lift", "sound-tuning", "numbers-signal", "discrete-graph", "codec/lisp"]
+requires = ["sound-audio-lift", "sound-tuning", "numbers/signal", "discrete-graph", "codec/lisp"]

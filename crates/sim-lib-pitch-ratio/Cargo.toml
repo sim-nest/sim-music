@@ -12,8 +12,8 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 num-bigint = "0.4"
 sim-cookbook = { version = "0.2.0" }
-sim-lib-discrete-comb = { version = "0.2.0", git = "https://github.com/sim-nest/sim-discrete", rev = "6527474abf279c230a67de0d071fdb73a22d1a14" }
-sim-lib-discrete-search = { version = "0.1.0", git = "https://github.com/sim-nest/sim-discrete", rev = "0a037cc4d12294c90d323bb473aaeb7150127b2e" }
+sim-lib-discrete-comb = { version = "0.2.0" }
+sim-lib-discrete-search = { version = "0.1.0" }
 thiserror = "1"
 
 [build-dependencies]

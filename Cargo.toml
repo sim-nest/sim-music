@@ -72,11 +72,12 @@ sim-citizen = { path = "../sim-citizen/crates/sim-citizen" }
 sim-citizen-derive = { path = "../sim-citizen/crates/sim-citizen-derive" }
 sim-config = { path = "../sim-foundation/crates/sim-config" }
 sim-cookbook = { path = "../sim-foundation/crates/sim-cookbook" }
+sim-lib-net-core = { path = "../sim-foundation/crates/sim-lib-net-core" }
 sim-kernel = { path = "../sim-kernel" }
-sim-lib-discrete-graph = { git = "https://github.com/sim-nest/sim-discrete", rev = "b7e2772fa0eb560ff2a0c67c65e98a176da49702" }
+sim-lib-discrete-graph = { path = "../sim-discrete/crates/sim-lib-discrete-graph" }
 sim-lib-discrete-comb = { path = "../sim-discrete/crates/sim-lib-discrete-comb" }
-sim-lib-discrete-rank = { git = "https://github.com/sim-nest/sim-discrete", rev = "b7e2772fa0eb560ff2a0c67c65e98a176da49702" }
-sim-lib-discrete-search = { git = "https://github.com/sim-nest/sim-discrete", rev = "0a037cc4d12294c90d323bb473aaeb7150127b2e" }
+sim-lib-discrete-rank = { path = "../sim-discrete/crates/sim-lib-discrete-rank" }
+sim-lib-discrete-search = { path = "../sim-discrete/crates/sim-lib-discrete-search" }
 sim-lib-discrete-spectral = { path = "../sim-discrete/crates/sim-lib-discrete-spectral" }
 sim-codec = { path = "../sim-codecs/crates/sim-codec" }
 sim-codec-json = { path = "../sim-codecs/crates/sim-codec-json" }
@@ -93,8 +94,8 @@ sim-lib-stream-midi = { path = "crates/sim-lib-stream-midi" }
 sim-value = { path = "../sim-foundation/crates/sim-value" }
 sim-lib-core = { path = "../sim-runtime/crates/sim-lib-core" }
 sim-lib-numbers-f64 = { path = "../sim-numbers/crates/sim-lib-numbers-f64" }
-sim-lib-numbers-signal = { git = "https://github.com/sim-nest/sim-numbers", rev = "c9e3cc7e2f52c44496a29973d359b64761d76b47" }
-sim-lib-numbers-stats = { git = "https://github.com/sim-nest/sim-numbers", rev = "c9e3cc7e2f52c44496a29973d359b64761d76b47" }
+sim-lib-numbers-signal = { path = "../sim-numbers/crates/sim-lib-numbers-signal" }
+sim-lib-numbers-stats = { path = "../sim-numbers/crates/sim-lib-numbers-stats" }
 sim-lib-plugin-core = { path = "../sim-audio-daw/crates/sim-lib-plugin-core" }
 sim-lib-rank = { path = "../sim-stream/crates/sim-lib-rank" }
 sim-lib-stream-clock = { path = "../sim-stream/crates/sim-lib-stream-clock" }

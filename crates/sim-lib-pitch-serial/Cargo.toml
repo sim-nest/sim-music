@@ -11,7 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.2.0" }
-sim-lib-discrete-comb = { version = "0.2.0", git = "https://github.com/sim-nest/sim-discrete", rev = "6527474abf279c230a67de0d071fdb73a22d1a14" }
+sim-lib-discrete-comb = { version = "0.2.0" }
 sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
 sim-lib-pitch-namer-forte = { version = "0.2.0", path = "../sim-lib-pitch-namer-forte" }
 sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
