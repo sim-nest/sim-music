@@ -10,8 +10,8 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.1.0" }
-sim-kernel = { version = "0.1.0" }
+sim-cookbook = { version = "0.2.0" }
+sim-kernel = { version = "0.2.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-discrete-graph = { version = "0.2.0" }
 sim-lib-discrete-search = { version = "0.1.0" }
@@ -19,16 +19,16 @@ sim-lib-music-consonance = { version = "0.1.0", path = "../sim-lib-music-consona
 sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
 sim-lib-music-shapes = { version = "0.2.0", path = "../sim-lib-music-shapes" }
 sim-lib-music-transform = { version = "0.1.4", path = "../sim-lib-music-transform" }
-sim-shape = { version = "0.1.0" }
+sim-shape = { version = "0.2.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.1.0" }
+sim-cookbook = { version = "0.2.0" }
 
 [dev-dependencies]
 num-rational = "0.4"
 sim-codec = { version = "0.1.0" }
-sim-codec-lisp = { version = "0.1.0" }
+sim-codec-lisp = { version = "0.2.0" }
 sim-test-support = { version = "0.1.0" }
 
 [lints]

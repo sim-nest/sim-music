@@ -10,18 +10,18 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.1.0" }
-sim-kernel = { version = "0.1.0" }
+sim-cookbook = { version = "0.2.0" }
+sim-kernel = { version = "0.2.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-numbers-signal = { version = "0.1.0" }
-sim-lib-sound-audio-lift = { version = "0.1.1", path = "../sim-lib-sound-audio-lift" }
-sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
+sim-lib-sound-audio-lift = { version = "0.1.2", path = "../sim-lib-sound-audio-lift" }
+sim-lib-sound-bridge = { version = "0.1.2", path = "../sim-lib-sound-bridge" }
 sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
-sim-lib-sound-timbre = { version = "0.1.1", path = "../sim-lib-sound-timbre" }
+sim-lib-sound-timbre = { version = "0.1.2", path = "../sim-lib-sound-timbre" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.1.0" }
+sim-cookbook = { version = "0.2.0" }
 
 [lints]
 workspace = true

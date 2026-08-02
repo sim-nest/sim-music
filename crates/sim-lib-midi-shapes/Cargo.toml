@@ -10,19 +10,19 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-citizen = { version = "0.1.0" }
-sim-citizen-derive = { version = "0.1.0" }
-sim-codec = { version = "0.1.4" }
-sim-cookbook = { version = "0.1.0" }
-sim-kernel = { version = "0.1.0" }
-sim-value = { version = "0.1.0" }
-sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
+sim-citizen = { version = "0.2.0" }
+sim-citizen-derive = { version = "0.2.0" }
+sim-codec = { version = "0.1.7" }
+sim-cookbook = { version = "0.2.0" }
+sim-kernel = { version = "0.2.0" }
+sim-value = { version = "0.2.0" }
+sim-lib-midi-core = { version = "0.1.4", path = "../sim-lib-midi-core" }
 sim-lib-midi-smf = { version = "0.2.0", path = "../sim-lib-midi-smf" }
-sim-shape = { version = "0.1.0" }
+sim-shape = { version = "0.2.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.1.0" }
+sim-cookbook = { version = "0.2.0" }
 
 [dev-dependencies]
-sim-kernel = { version = "0.1.0", features = ["test-support"] }
+sim-kernel = { version = "0.2.0", features = ["test-support"] }
