@@ -16,7 +16,7 @@ sim-lib-core = { version = "0.1.0" }
 sim-lib-numbers-signal = { version = "0.1.0" }
 sim-lib-sound-audio-lift = { version = "0.1.1", path = "../sim-lib-sound-audio-lift" }
 sim-lib-sound-bridge = { version = "0.1.0", path = "../sim-lib-sound-bridge" }
-sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
 sim-lib-sound-timbre = { version = "0.1.1", path = "../sim-lib-sound-timbre" }
 thiserror = "1"
 

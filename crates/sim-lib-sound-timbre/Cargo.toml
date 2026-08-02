@@ -14,7 +14,7 @@ sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-lib-core = { version = "0.1.0" }
 sim-lib-discrete-search = { version = "0.1.0" }
-sim-lib-sound-core = { version = "0.1.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
 
 [build-dependencies]
 sim-cookbook = { version = "0.1.0" }

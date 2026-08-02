@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-core"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Core music object model for notes, rests, scores, rolls, players, and arrangers."
@@ -15,8 +15,8 @@ sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
-sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
-sim-lib-pitch-core = { version = "0.1.2", path = "../sim-lib-pitch-core" }
+sim-lib-midi-smf = { version = "0.2.0", path = "../sim-lib-midi-smf" }
+sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
 sim-lib-stream-core = { version = "0.1.2" }
 sim-lib-topology = { version = "0.1.0" }
 thiserror = "1"

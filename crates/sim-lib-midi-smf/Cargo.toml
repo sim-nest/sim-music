@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-smf"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Standard MIDI File reader and writer helpers for deterministic SIM MIDI fixtures."

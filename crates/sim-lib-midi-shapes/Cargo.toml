@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-shapes"
-version = "0.1.3"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Text codecs, citizen descriptors, and runtime shapes for MIDI events and files."
@@ -17,7 +17,7 @@ sim-cookbook = { version = "0.1.0" }
 sim-kernel = { version = "0.1.0" }
 sim-value = { version = "0.1.0" }
 sim-lib-midi-core = { version = "0.1.0", path = "../sim-lib-midi-core" }
-sim-lib-midi-smf = { version = "0.1.0", path = "../sim-lib-midi-smf" }
+sim-lib-midi-smf = { version = "0.2.0", path = "../sim-lib-midi-smf" }
 sim-shape = { version = "0.1.0" }
 thiserror = "1"
 

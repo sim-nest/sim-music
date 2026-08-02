@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-namer-jazz"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Jazz chord-symbol labels and quality detection for pitch chords."
@@ -11,9 +11,9 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.1.0" }
-sim-lib-pitch-chord = { version = "0.1.0", path = "../sim-lib-pitch-chord" }
-sim-lib-pitch-core = { version = "0.1.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-set = { version = "0.1.0", path = "../sim-lib-pitch-set" }
+sim-lib-pitch-chord = { version = "0.2.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
 thiserror = "1"
 
 [build-dependencies]
