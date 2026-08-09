@@ -16,6 +16,8 @@ use crate::{
     instrument_session_render_smoke_command, session_help_card_expr,
 };
 
+// conformance: DAW sessions preserve graph identity through save, load, and rendering.
+
 #[test]
 fn session_can_be_created_saved_loaded_and_rendered_offline() {
     let session = fixture_session();
