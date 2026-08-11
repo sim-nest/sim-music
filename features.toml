@@ -50,8 +50,6 @@ audiences = ["user", "code", "framework"]
 guidance = "Use music-synth for oscillators, envelopes, subtractive voices, DX7 FM, and modeled modular instruments; use sound-timbre for additive partials, filtered timbres, Karplus-Strong, and compact FM pairs; use sound-render for deterministic offline f32 PCM, phase vocoding, loudness, and visible normalization reports; use sim-lib-stream-file for bounded channel mapping, PCM16 quantization, seeded dither, and canonical WAV bytes/streams; and use the sim-audio-daw audio graph, DSP processors, and live runner for realtime preview. Keep Table/Dir values and explicit handles at recipe boundaries, and keep callback work preallocated and free of locks or I/O."
 claims_anchors = [
   "anchor/crate/sim-lib-music-synth",
-  "anchor/crate/sim-lib-sound-render",
-  "anchor/crate/sim-lib-sound-timbre",
   "anchor/crate/sim-lib-stream-file",
   "anchor/export/sim-lib-music-synth/view/component",
   "anchor/export/sim-lib-music-synth/view-instrument-dx7-editor",
@@ -60,15 +58,10 @@ claims_anchors = [
   "anchor/export/sim-lib-music-synth/view-instrument-system700-editor",
   "anchor/runtime-lib/sim-lib-music-synth/audio-synth-lib",
 ]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/daw",
   "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/reuse",
-  "spec-test/sim-music/crates/sim-lib-sound-render/src/tests",
   "spec-test/sim-music/crates/sim-lib-sound-timbre/src/tests",
-  "spec-test/sim-music/crates/sim-lib-stream-file/src/tests",
 ]
 
 [[feature]]
@@ -88,7 +81,6 @@ claims_anchors = [
   "anchor/crate/sim-lib-midi-sysex",
   "anchor/crate/sim-lib-midi-wasm-frame",
   "anchor/crate/sim-lib-music-notation",
-  "anchor/crate/sim-lib-stream-file",
   "anchor/crate/sim-lib-stream-midi",
   "anchor/runtime-lib/sim-lib-midi-ble/midi-ble-lib",
   "anchor/runtime-lib/sim-lib-midi-core/midi-digest-lib",
@@ -97,9 +89,6 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-midi-rtmidi/midi-rtmidi-lib",
   "anchor/runtime-lib/sim-lib-midi-shapes/midi-shapes-lib",
   "anchor/runtime-lib/sim-lib-music-notation/music-notation-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-midi-core/src/tests",
@@ -116,7 +105,6 @@ owner = "crate/sim-lib-pitch-core"
 audiences = ["user", "code", "framework"]
 guidance = "Use this row when reusing pitch, chord, scale, pitch-set, exact ratio interval, tuning, timbre, spectrum, and dissonance vocabulary. Build chord voicing palettes through sim-lib-pitch-chord so exact pitch-vector duplicates are removed while first-policy order and stable ids remain available to downstream voice leading. Keep canonical pitch identity in the 12-class pitch types, generate tetrachord-derived scales through sim-lib-pitch-scale with SearchControl-bounded order/result/seed evidence, preserve the w/x/y/z scale fixtures as named third-stack facts, keep numeric pitch-set normalization separate from conventional SetEquivalence classification, and use analyze_set_relations for typed exact Tn/TnI operators, T/TI canonical equivalence, inclusion, complements, interval vectors, and Z-relations. Use pitch-set interval/gap forms with an explicit zero-gap multiplicity policy, build jumping and non-jumping pitch-set neighborhoods as discrete graphs under SearchControl, use existing pitch-namer registries for symmetric-root proof cases before adding naming behavior, use sim-lib-pitch-ratio for reduced positive ratio identity, octave equivalence, prime-limit factor vectors, cents/error reports, exact discrete mixed-radix rank/unrank, SearchControl-bounded ratio approximation, root-declared exact chord interval matrices, generalized-mean chord costs with opt-in legacy no-division dialect, coverage summaries, and cycle-safe ratio relation trees, use OctaveSpace helpers for parameterized floor folding and circular distance, use tuning crates for frequency conversion, use tagged sound-core partials for source/harmonic/undertone tone components, use sound-timbre for harmonic and undertone expansion, root-normalized sampled timbres, caller-owned bounded timbre caches, explicit layer merge policy, and SearchControl-bounded timbre-family enumeration, use sound-render for PCM previews, and use the dissonance crates for typed Sonance results with named roughness mass, normalized density, harmonic context, normalization, aggregation, provenance, explicit interval-difference and merge modes, compatibility-only legacy tritone dialects, checked psychoacoustic curve families, partial-pair roughness, non-finite or inaudible-partial policy reports, SearchControl-bounded sonance fitting with training/validation/locked conformance corpus hashes and objective receipts, and contextual sonance comparisons with retained duplicate notes, input ids, voice continuity, commonality, leading, motion, pseudo-partial, interval-vector, and experimental exact-ratio components."
 claims_anchors = [
-  "anchor/crate/sim-lib-pitch-chord",
   "anchor/crate/sim-lib-pitch-core",
   "anchor/crate/sim-lib-pitch-dissonance",
   "anchor/crate/sim-lib-pitch-namer",
@@ -133,7 +121,6 @@ claims_anchors = [
   "anchor/crate/sim-lib-sound-dissonance",
   "anchor/crate/sim-lib-sound-gm",
   "anchor/crate/sim-lib-sound-shapes",
-  "anchor/crate/sim-lib-sound-spectrum",
   "anchor/crate/sim-lib-sound-timbre",
   "anchor/crate/sim-lib-sound-tuning",
   "anchor/crate/sim-lib-sound-wasm-frame",
@@ -144,9 +131,6 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-sound-shapes/sound-shapes-lib",
   "anchor/runtime-lib/sim-lib-sound-timbre/sound-timbre-lib",
   "anchor/runtime-lib/sim-lib-sound-tuning/sound-tuning-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-pitch-core/src/tests",
@@ -160,15 +144,7 @@ owner = "crate/sim-lib-pitch-chord"
 audiences = ["user", "code", "framework"]
 guidance = "Use sim-lib-pitch-chord HarmonyProgram when harmony vocabulary and policy must be editable without compiling Rust. ChordTemplate composes existing chord symbols, exact pitches, pitch classes, pitch sets, scale-degree maps, voicing policies, and exact ratio tones. ChordPalette materializes explicit, alternative, Cartesian-chain, and transposition algebra with deterministic deduplication. HarmonyRuleSet keeps prefix-safe hard constraints separate from weighted metrics and retains one evidence row per rule. Use fit_harmony_markov and LearnedTransitionResolver when a corpus-derived transition preference is useful: music owns the chord/key state adapter, sim-lib-numbers-stats owns generic finite counts and smoothing, and the metric remains an optional soft negative-log score with held-out and corpus evidence. Use sim-lib-music-combinators DeclarativeHarmonyResolver to compose the chord-local count, certified voice-leading, and exact-ratio measures with named PitchDissonanceRegistry and ContextualSonanceRegistry models. Use render_harmony_progression to produce canonical exact-time Progression values while retaining the full export profile. The named fixtures cover declarative harmonizers, hard/soft separation, generated CC0 transition provenance, value equality, empty prefixes, scale windows, duplicate voices, fingering bounds, and organ/trumpet render settings."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-combinators",
   "anchor/crate/sim-lib-pitch-chord",
-  "anchor/crate/sim-lib-pitch-dissonance",
-  "anchor/crate/sim-lib-pitch-ratio",
-  "anchor/crate/sim-lib-pitch-scale",
-  "anchor/crate/sim-lib-pitch-set",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_conformance",
@@ -187,15 +163,10 @@ owner = "crate/sim-lib-pitch-chord"
 audiences = ["user", "code", "framework"]
 guidance = "Use sim-lib-pitch-chord HarmonizationRequest and plan_harmony when a domain-specific metric resolver is already available; use sim-lib-music-combinators harmonize to install the pitch-dissonance and contextual-sonance registries. Every strategy consumes the same ChordPalette, melody masks, and HarmonyRuleSet. RecursiveExhaustive and FactoredBacktracking delegate bounded traversal to sim-lib-discrete-search. LayeredDp constructs the exact legal-prefix DAG and returns the sim-lib-discrete-graph Bellman certificate; Beam records its width and caller-declared remaining-cost heuristic. HarmonizationReceipt preserves complete, partial, cancelled, and infeasible status; charged work; evaluated candidates; aggregated failed-rule facts; generic backend receipts; and proven-optimal evidence only when it exists. Use layered DP for bounded exact fixtures and beam for large palettes."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-combinators",
-  "anchor/crate/sim-lib-pitch-chord",
   "anchor/rustdoc/sim-lib-music-combinators/harmonize",
   "anchor/rustdoc/sim-lib-pitch-chord/harmonization-receipt",
   "anchor/rustdoc/sim-lib-pitch-chord/harmonization-request",
   "anchor/rustdoc/sim-lib-pitch-chord/plan_harmony",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmonize_tests",
@@ -214,20 +185,14 @@ audiences = ["user", "code", "framework"]
 guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; key or chord decoding from chroma/features through built-in or declared HarmonicTemplate rows; metrical quantization against an exact tempo/meter lattice with explicit swing, tuplets, tolerance, alternatives, and onset edits; melody or rhythm comparison through named extractors with declared transposition/time-scale invariance; bounded repeated-pattern discovery with support and overlap policy; certified minimum-cost voice leading; canonical-triad Tonnetz analysis; exact progression operations; lift/lower; notation; or partial pitch maps. Quantization and similarity delegate global DTW to sim-lib-discrete-graph. Similarity also retains sim-lib-numbers-signal correlation geometry and normalization. Pattern discovery uses hash candidates only as a filter, exact-verifies candidate pairs through sim-lib-discrete-search, and returns stable event/occurrence identities, transforms, costs, memory admission, and an unmodified SearchReceipt. Harmonic adapters delegate normalized inference to sim-lib-numbers-stats. Graph paths retain certificates. Conversion and transform reports keep rational time and make every identity or loss explicit."
 claims_anchors = [
   "anchor/crate/sim-lib-music-analysis",
-  "anchor/crate/sim-lib-music-combinators",
   "anchor/crate/sim-lib-music-core",
   "anchor/crate/sim-lib-music-lift",
   "anchor/crate/sim-lib-music-lower",
-  "anchor/crate/sim-lib-music-notation",
   "anchor/crate/sim-lib-music-shapes",
   "anchor/crate/sim-lib-music-transform",
   "anchor/crate/sim-lib-music-wasm-frame",
   "anchor/runtime-lib/sim-lib-music-lift/music-lift-lib",
-  "anchor/runtime-lib/sim-lib-music-notation/music-notation-lib",
   "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-analysis/src/harmonic_tests",
@@ -246,6 +211,7 @@ owner = "crate/sim-lib-music-analysis"
 audiences = ["user", "code", "framework"]
 guidance = "Load MusicAlgorithmPlanLib, then register each callable with register_algorithm_stage under music/algorithm-stage/<name>. Every provider must expose argument and result Shapes plus implementation, cost-class, deterministic, and provenance metadata. music/algorithm-plan validates finite work/result/seed control, selects the unique highest Shape match, checks every result, and returns trace plus intermediate values. Use the music-algorithm-foundry recipe for the complete SMF-to-analysis-to-layered-harmony-to-species-counterpoint-to-SMF/WAV application. Its alternate exhaustive harmonizer is selected by changing only plan data. Supply input and output through Table/Dir backends and codecs; add realtime preview only as a separately loaded stage whose caller-supplied target implements EvalFabric realize. A missing stage or mismatched Shape is an error and never enables a hidden fallback."
 claims_anchors = [
+  "anchor/cli/music-algorithm-foundry",
   "anchor/crate/music-algorithm-foundry",
   "anchor/runtime-lib/music-algorithm-foundry/stage-lib",
   "anchor/runtime-lib/sim-lib-music-analysis/music-algorithm-plan-lib",
@@ -256,7 +222,7 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-music-analysis/register_algorithm_stage",
 ]
 claims_surfaces = [
-  "docs/sim-music/generated",
+  "cli/music-algorithm-foundry",
 ]
 claims_specimens = [
   "recipe/sim-music/music-algorithm-foundry",
@@ -294,9 +260,6 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-music-combinators/encode_relative",
   "anchor/rustdoc/sim-lib-music-combinators/music-carpet",
 ]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-combinators/src/carpet_conformance",
   "spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance",
@@ -313,14 +276,10 @@ owner = "crate/sim-lib-music-combinators"
 audiences = ["user", "code", "framework"]
 guidance = "Use LSystem for finite parallel musical rewrites over a typed Alphabet. Every variable needs a non-empty context-free fallback, more-specific immediate-neighbor contexts take precedence, and ExpansionLimits plus bounded SearchControl are validated before sim-lib-discrete-search traversal starts. Derivation retains every generation, production child span, derivation forest, production counts, seed, and limits. Use ProgressionTreeCatalog when a fixed finite preorder topology has values from a finite catalog: rank and unrank delegate to sim-lib-discrete-rank BoundedIntVectorSpace, while explore delegates prefix filtering, work, frontier, memory, cancellation, seed, and receipts to sim-lib-discrete-search. ScaleRewriteProgram keeps modulation choices as named ScaleFollowingState data whose explicit PitchMap is checked against the declared scale and covered by a stable program digest."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-combinators",
   "anchor/rustdoc/sim-lib-music-combinators/derive",
   "anchor/rustdoc/sim-lib-music-combinators/lsystem",
   "anchor/rustdoc/sim-lib-music-combinators/progression-tree-catalog",
   "anchor/rustdoc/sim-lib-music-combinators/scale-rewrite-program",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-combinators/src/rewrite_conformance",
@@ -340,9 +299,6 @@ claims_anchors = [
   "anchor/crate/sim-lib-music-consonance",
   "anchor/runtime-lib/sim-lib-music-consonance/music-consonance-lib",
 ]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-consonance/src/tests",
 ]
@@ -359,13 +315,6 @@ summary = "Search typed note, ornament, chord, pedal, doubling, and voice additi
 owner = "crate/sim-lib-music-consonance"
 audiences = ["user", "code", "framework"]
 guidance = "Use complete_staff when existing identity-bearing material must remain immutable while a bounded search proposes additive consonance material. Supply deterministic candidates, named per-window MetricThreshold values, protected ids and spans, pitch ranges, StyleConstraints, and sim-lib-discrete-search SearchControl. CompletionResult retains before/after ConsonanceReport values, exact changed windows, selected-candidate and identity provenance, and the unmodified SearchReceipt, including Partial or Cancelled status. ConsonancePatch is bound to the source Staff content id; apply_patch only adds, while remove_patch fails closed on altered additions and restores every original voice/note/event id exactly."
-claims_anchors = [
-  "anchor/crate/sim-lib-music-consonance",
-  "anchor/crate/sim-lib-music-transform",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-consonance/src/completion_tests",
 ]
@@ -382,14 +331,8 @@ owner = "crate/sim-lib-music-counterpoint"
 audiences = ["user", "code", "framework"]
 guidance = "Use analyze_counterpoint for material that already exists: it converts through music-core's identity-bearing Staff, reuses exact consonance sounding windows for rational event alignment, and returns every motion and violation with source voices, note/event ids, exact spans, stable rule ids, and metric evidence. Species-one through species-four and open policies are ordinary RuleSet data over intervals, relative motion, range, crossing, overlap, duration, and dissonance preparation/resolution. Use generate_counterpoint when the cantus must remain fixed. It compiles exact-time voice-slot variables and finite range/sonance/cadence pitch domains, delegates prefix propagation, scoring, seed order, work/frontier/result bounds, and cancellation to sim-lib-discrete-search, retains the unmodified SearchReceipt plus explicit diversity counts, admits only results that pass analyze_counterpoint under the same rules, and materializes each generated voice through the existing content-bound reversible ConsonancePatch. Use stretto_graph only for bounded derived analysis candidates. It materializes original, retrograde, inversion, retrograde-inversion, transposition, and duration requests through sim-lib-music-transform, stores legal pairs in sim-lib-discrete-graph Graph, reuses connected_components, reports maximal pairwise-compatible cliques, chooses the largest normalized suffix/prefix relation for chains, and labels fusion as derived analysis rather than generation."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-consonance",
-  "anchor/crate/sim-lib-music-core",
   "anchor/crate/sim-lib-music-counterpoint",
-  "anchor/crate/sim-lib-music-transform",
   "anchor/runtime-lib/sim-lib-music-counterpoint/music-counterpoint-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-music-counterpoint/src/tests",
@@ -412,9 +355,6 @@ claims_anchors = [
   "anchor/rustdoc/sim-lib-sound-spectrum/spectrum",
   "anchor/rustdoc/sim-lib-sound-spectrum/spectrum-source",
 ]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-sound-spectrum/src/tests",
 ]
@@ -429,16 +369,11 @@ guidance = "Load SoundAudioLiftLib for the Shape-described sound/lift/pitch-trac
 claims_anchors = [
   "anchor/crate/sim-lib-sound-audio-lift",
   "anchor/crate/sim-lib-sound-bridge",
-  "anchor/crate/sim-lib-sound-render",
-  "anchor/crate/sim-lib-sound-spectrum",
   "anchor/crate/sim-lib-stream-bridge",
   "anchor/runtime-lib/sim-lib-sound-audio-lift/sound-audio-lift-lib",
   "anchor/runtime-lib/sim-lib-sound-bridge/sound-bridge-lib",
   "anchor/runtime-lib/sim-lib-sound-render/sound-render-lib",
   "anchor/runtime-lib/sim-lib-stream-bridge/stream-bridge-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "spec-test/sim-music/crates/sim-lib-sound-audio-lift/src/analysis_tests",
@@ -461,7 +396,6 @@ audiences = ["user", "code", "framework"]
 guidance = "Use phase_vocode only for offline PCM: it composes sound-audio-lift StftPlan with numbers-signal FFT and phase unwrapping while retaining phase-lock, transient, stretch, pitch, unwrap, instantaneous-frequency, and output bounds. Use measure_loudness for 400 ms momentary blocks, EBU R128 absolute/relative gates, ITU-R BS.1770 K-weighting, and bandlimited true peak. normalize_loudness applies one reported scalar gain and never hides a limiter, clipped float, or dBTP ceiling violation. Use sim-lib-stream-file ChannelMatrix plus convert_f32_to_pcm16 or convert_f32_to_wav_bytes for bounded format/channel conversion and seeded TPDF/noise-shaped dither; analysis and device providers must not duplicate that interchange policy. Realtime oscillation and resampling remain with sim-audio-daw."
 claims_anchors = [
   "anchor/crate/sim-lib-sound-render",
-  "anchor/crate/sim-lib-stream-file",
   "anchor/rustdoc/sim-lib-sound-render/loudness-report",
   "anchor/rustdoc/sim-lib-sound-render/loudness-spec",
   "anchor/rustdoc/sim-lib-sound-render/measure_loudness",
@@ -495,6 +429,9 @@ claims_anchors = [
   "anchor/crate/sim-lib-daw-session",
   "anchor/runtime-lib/sim-lib-daw-session/daw-session-lib",
 ]
+claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-daw-session/src/tests",
+]
 supports = [
   "feature/sim-music/midi-notation-workflows",
   "feature/sim-music/exact-music-analysis-and-transform",
@@ -512,11 +449,6 @@ audiences = ["user", "code", "framework"]
 guidance = "Use sim-lib-serial-core when a musical technique orders a finite symbolic vocabulary without assuming pitch: construct a stable AlphabetId and SerialAlphabet, choose exhaustive-exactly-once, no-repeat, declared-multiplicity, declared-omissions, projected-aggregate, or free-order data, then inspect the Series AggregateLedger. Apply SeriesTransform for retrograde, rotation, exhaustive block partition, validated OrdinalMap permutation, cyclic relabeling, or a caller-supplied SymbolBijection. Every accepted application returns a TransformCertificate with stable source/target alphabet ids, exact output-to-source order map, aggregate preservation, inverse when present, and named relaxed invariants; composition has one deterministic canonical form. Declarations and bijections accept symbols and the Series stores symbols; raw ordinals exist only behind validated maps. Exactly-once permutation rank and exhaustive test fixtures delegate to sim-lib-discrete-rank PermutationSpace, and generic enumeration or search remains in sim-discrete. Load MusicShapesLib for the music/SerialSeries Shape and music/serial/validate Lisp callable. The custom-alphabet recipe proves the five-symbol non-pitch validation surface; the checked certified-transforms Rust recipe proves composition and exact inverse recovery."
 claims_anchors = [
   "anchor/crate/sim-lib-serial-core",
-  "anchor/crate/sim-lib-music-shapes",
-  "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet",
@@ -531,14 +463,7 @@ owner = "crate/sim-lib-pitch-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use sim-lib-pitch-serial when order matters across one exhaustive chromatic aggregate. ToneRow accepts exactly the twelve canonical sim-lib-pitch-core PitchClass values once, with membership and multiplicity delegated to sim-lib-serial-core's exhaustive aggregate validation. RowOperation is the normalized affine/reversal identity: P/R use x + addend and I/RI use -x + addend modulo twelve, with reversal selected by the family. ToneRow::apply is total and returns a strict RowForm through an invariant-preserving private path. ToneRow::rotate and ToneRow::try_permute_ordinals reuse validated OrdinalMap bijections from sim-lib-serial-core rather than spelling a second permutation validator. RowFamilySet preserves all 48 operation aliases in stable order and separately deduplicates equal ToneRow values, retaining each alias's distinct-form index when row symmetry collapses forms. RowMatrix retains its source and RowLabelConvention, exposes validated cell coordinates, P row and I column operations, and P/R/I/RI edge labels; render_data and render_ascii project that same matrix object. Use AffinePitchMap for x -> ax + b mod 12: the bijective multipliers M1, M5, M7, and M11 return strict rows, while non-bijective multipliers return ordered PitchReservoir values with named relaxed invariants instead of pretending to be ToneRow. Use try_partition when a row is divided into nonempty disjoint ordinal blocks that cover all twelve positions exactly once while preserving whether order is total, partial, or intentionally absent within and between blocks; use the resulting reports for partition similarity, interlocking, mosaics, aggregate coverage, and chord-free vertical collections. Use multiply_partitions when one partition block's interval content is projected onto another block's pitches: it returns a BlockProductReservoir with per-block provenance instead of collapsing that material into a false row identity. Keep RowOperation as provenance and derive RowLabel separately: FirstLastPitch labels P/I from the first class and R/RI from the last, while OperationIndex uses the normalized affine addend. Load PitchShapesLib for the pitch/ToneRow citizen and Shape adapter. The checked row-family-matrix Rust specimen and GATE-ROW tests use Schoenberg's Op. 25 values to prove every alias equation, symmetric reduction without alias loss, every matrix line against its operation, malformed aggregate refusal, operation/label disagreement, affine bijections, non-bijective reservoirs, and the row-partition/block-product analysis surface. Use pitch-set for unordered set projections and sim-discrete for enumeration or search; this crate owns neither."
 claims_anchors = [
-  "anchor/crate/sim-lib-pitch-core",
   "anchor/crate/sim-lib-pitch-serial",
-  "anchor/crate/sim-lib-pitch-shapes",
-  "anchor/crate/sim-lib-serial-core",
-  "anchor/runtime-lib/sim-lib-pitch-shapes/pitch-shapes-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix",
@@ -553,14 +478,7 @@ owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use sim-lib-music-serial when twelve-tone or broader serial material must remain an immutable structural source instead of collapsing early into score order. A SerialPlan stores stable RowInstanceId and SerialEventId keys, references row content through OrdinalRef values, preserves row operations in pitch-serial RowForm values, and validates every reference at construction. EventPlacement uses explicit simultaneous groups so equal-onset sonorities stay grouped without a fabricated left-to-right chord order; independent temporal requirements live in the validated precedence DAG. SerialRole and SerialOrigin keep structural, derived, ornamental, and external material distinct, every event carries at least one StructuralLicense naming the structural reading that licenses its notes, and every non-structural event must carry explicit parent evidence. SerialPractice composes open Arc-backed PracticeRule components instead of a closed style enum, evaluates a named SerialReading (StructuralPlan, DeclaredRoles, or AllSounding), and returns an InvariantLedger with one inspectable entry per rule: expected fact, observed fact, evidence ids, explicit waiver, and preserved/relaxed/violated status. Use the built-in aggregate, order, repeats, doublings, simultaneity, row-mixing, foreign-material, and parameter-exhaustion rules when a caller needs explicit policy and relaxation receipts rather than a single strictness boolean. Use TechniquePlan with the public complete-horizontal, motivic-partition, vertical-block, interlocking-partition, melody/accompaniment, aggregate-rotation, and simultaneous-form deployers when a practice such as Schoenberg-style partitioned deployment must stay inspectable instead of becoming a privileged style mode; `schoenberg_partitioned()` is one ordinary public composition of those components. StrictRealizationContext supplies explicit register, duration, velocity, articulation, voice, rest, tie, octave displacement, and simultaneity policy; `realize_strict` remains the opt-in strict chromatic path only. Modal or caller-defined scale landing is a separate open adaptation surface and never silently claims strict twelve-tone aggregate identity. Render through render_serial_staff, render_serial_piano_roll, or render_serial_score when canonical music-core identity, equal-pitch multiplicity, and exact rational timing must be preserved. Construction, practice evaluation, deployment, and realization fail closed on malformed ids, missing rows, out-of-range ordinals, missing structural coverage, parent cycles, impossible MIDI placement, non-positive duration, invalid ties, and unsupported interlocking or simultaneous-form witnesses. Load MusicShapesLib for the narrow music/SerialPlan shape and text adapter; MIDI/audio lowering, transforms, search, and completion remain in their existing owners."
 claims_anchors = [
-  "anchor/crate/sim-lib-music-core",
   "anchor/crate/sim-lib-music-serial",
-  "anchor/crate/sim-lib-music-shapes",
-  "anchor/crate/sim-lib-pitch-serial",
-  "anchor/runtime-lib/sim-lib-music-shapes/music-shapes-lib",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
 ]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan",
@@ -580,16 +498,6 @@ summary = "Land immutable serial plans onto modal or caller-defined scales while
 owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use this row when a serial plan must adapt beyond strict twelve-tone output without mutating the source plan. The built-in modal degree-cycle, nearest-scale-tone, marked-chromatic-inflection, and non-pitch-spine realizers all start from the same immutable SerialPlan and explicit event specs, land pitches through an explicit twelve-tone pitch map derived from either a named Scale or a caller-defined PlayerScale, and attach a SerialSpineReport instead of pretending the result is still a strict chromatic aggregate. The report keeps modal membership, landed-versus-source pitch identity, chromatic aggregate loss, retained ordinal order, collisions, repeated degrees, and contextual sonance as separate inspectable facets. `realize_strict` stays strict and chromatic by default; open adaptation is opt-in through the realizer registry."
-claims_anchors = [
-  "anchor/crate/sim-lib-music-core",
-  "anchor/crate/sim-lib-music-serial",
-  "anchor/crate/sim-lib-music-transform",
-  "anchor/crate/sim-lib-pitch-dissonance",
-  "anchor/crate/sim-lib-pitch-scale",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation",
   "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine",
@@ -607,14 +515,6 @@ summary = "Filter bounded additive completion candidates through serial allowanc
 owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use complete_serial when a realized serial plan must admit reversible additive material without mutating or disguising its structural source. The adapter starts from the immutable SerialPlan and realized Staff, filters generic additive candidates through explicit serial allowances for the current partition, already stated pitch classes, future aggregate remainder, caller-declared referential subsets, modal projection, derived reservoirs, and explicitly foreign material, then delegates bounded subset selection to sim-lib-discrete-search and exact additive application/removal to the shared music-transform patch surface. The result returns the unchanged structural plan, the unmodified generic completion receipt, and separate ledgers for the structural reading before/after completion plus the all-sounding reading after completion. Partial or cancelled search status stays partial or cancelled; budget exhaustion is never translated into success."
-claims_anchors = [
-  "anchor/crate/sim-lib-music-serial",
-  "anchor/crate/sim-lib-music-transform",
-  "anchor/repo/sim-music",
-]
-claims_surfaces = [
-  "docs/sim-music/generated",
-]
 claims_specimens = [
   "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion",
 ]
@@ -631,13 +531,11 @@ owner = "repo/sim-music"
 audiences = ["user", "code", "framework"]
 guidance = "Use the serial workbench recipe when a caller needs an end-to-end serial workflow instead of one isolated library surface. The workbench freezes one immutable row plan through sim-lib-music-serial, proves both strict and registry-selected modal realization without mutating the source plan, filters one additive completion through the serial allowances layer, audits structural versus all-sounding ledgers explicitly, reverses the additive patch to prove source recovery, then exports MIDI plus LilyPond notation and lowers an audition score through the existing music-lower and music-notation owners. Fixture coverage is declared in the recipe-local manifest with explicit source, data-status, proof purpose, and a hard no-copyrighted-score rule."
 claims_anchors = [
-  "anchor/repo/sim-music",
-  "anchor/crate/sim-lib-music-serial",
-  "anchor/crate/sim-lib-music-notation",
-  "anchor/crate/sim-lib-music-transform",
+  "anchor/cli/serial-workbench",
+  "anchor/crate/serial-workbench",
 ]
 claims_surfaces = [
-  "docs/sim-music/generated",
+  "cli/serial-workbench",
 ]
 claims_specimens = [
   "recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition",

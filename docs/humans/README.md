@@ -18,7 +18,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | Feature | Subject | Specimens | Summary |
 | --- | --- | ---: | --- |
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
-| `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 5 | Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations. |
+| `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 3 | Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, classify pitch-set relations, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
@@ -33,7 +33,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/sound-spectrum-adapter` | `crate/sim-lib-sound-spectrum` | 1 | Retain physical frequency, amplitude, PCM/STFT provenance, and sound descriptors while delegating transform math to the generic numbers-signal real FFT. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 6 | Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence. |
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
-| `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 0 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
+| `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 1 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
 | `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 2 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
 | `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 8 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
@@ -885,145 +885,6 @@ fn number_text(value: Option<&Expr>) -> String {
 }
 ```
 
-Specimen `spec-test/sim-music/crates/sim-lib-sound-render/src/tests` is checked by `cargo test`.
-
-Source `crates/sim-lib-sound-render/src/tests.rs`:
-
-```rust
-use std::sync::Arc;
-
-use sim_kernel::Cx;
-use sim_kernel::{DefaultFactory, EagerPolicy};
-use sim_lib_sound_bridge::ScheduledTone;
-use sim_lib_sound_core::{Frequency, Tone};
-use sim_lib_sound_timbre::pure_sine;
-
-use crate::{PcmRenderer, RendererOptions, SoundRenderError, install_sound_render_lib};
-
-mod loudness_tests;
-mod vocoder_tests;
-
-// conformance: sound rendering reuse produces deterministic offline PCM.
-
-#[test]
-fn render_tone_produces_non_zero_samples_for_sine() {
-    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
-    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(25));
-    let rendered = renderer.render_tone(&tone);
-    assert!(rendered.iter().any(|sample| sample.abs() > 0.0));
-}
-
-#[test]
-fn write_wav_emits_valid_riff_wave_header() {
-    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
-    let tone = Tone::sine(Frequency(440.0), std::time::Duration::from_millis(5));
-    let rendered = renderer.render_tone(&tone);
-    let wav = renderer.write_wav(&rendered, Vec::new()).unwrap();
-    assert_eq!(&wav[0..4], b"RIFF");
-    assert_eq!(&wav[8..12], b"WAVE");
-}
-
-#[test]
-fn write_wav_rejects_channel_misaligned_samples() {
-    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
-
-    let err = renderer.write_wav(&[0.0], Vec::new()).unwrap_err();
-
-    assert_eq!(err, SoundRenderError::ChannelMisalignedSamples);
-}
-
-#[test]
-fn write_wav_uses_checked_header_arithmetic() {
-    let renderer = PcmRenderer::new(RendererOptions::new(u32::MAX, 2).unwrap()).unwrap();
-
-    let err = renderer.write_wav(&[], Vec::new()).unwrap_err();
-
-    assert_eq!(err, SoundRenderError::BufferTooLarge);
-}
-
-#[test]
-fn pcm_renderer_exposes_validated_options_through_accessors() {
-    let renderer = PcmRenderer::new(RendererOptions::new(22_050, 1).unwrap()).unwrap();
-
-    assert_eq!(renderer.sample_rate(), 22_050);
-    assert_eq!(renderer.channels(), 1);
-}
-
-#[test]
-fn render_mix_respects_scheduled_start_and_pan() {
-    let renderer = PcmRenderer::new(RendererOptions::default()).unwrap();
-    let tones = vec![
-        ScheduledTone {
-            start: std::time::Duration::ZERO,
-            tone: Tone::sine(Frequency(220.0), std::time::Duration::from_millis(10)),
-            pan: -1.0,
-            channel: 0,
-            key: 57,
-        },
-        ScheduledTone {
-            start: std::time::Duration::from_millis(5),
-            tone: Tone::sine(Frequency(440.0), std::time::Duration::from_millis(10)),
-            pan: 1.0,
-            channel: 1,
-            key: 69,
-        },
-    ];
-    let mix = renderer.render_mix(&tones);
-    assert!(mix.len() > renderer.render_tone(&tones[0].tone).len());
-    assert!(mix.iter().any(|sample| sample.abs() > 0.0));
-}
-
-#[test]
-fn render_timbre_preview_uses_pcm_renderer() {
-    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
-    let samples = renderer
-        .render_timbre_preview(
-            &pure_sine(),
-            Frequency(440.0),
-            std::time::Duration::from_millis(10),
-        )
-        .expect("preview");
-    assert_eq!(samples.len(), 80);
-}
-
-#[test]
-fn catalog_timbres_render_deterministically_to_offline_pcm() {
-    use sim_lib_sound_timbre::{fm_pair, harmonic_expansion, karplus_strong};
-
-    let renderer = PcmRenderer::new(RendererOptions::new(8_000, 1).unwrap()).unwrap();
-    for timbre in [
-        harmonic_expansion(6, 0.5, 0.0),
-        karplus_strong(0.8),
-        fm_pair(2.0, 1.5),
-    ] {
-        let first = renderer
-            .render_timbre_preview(
-                &timbre,
-                Frequency(220.0),
-                std::time::Duration::from_millis(20),
-            )
-            .expect("first preview");
-        let second = renderer
-            .render_timbre_preview(
-                &timbre,
-                Frequency(220.0),
-                std::time::Duration::from_millis(20),
-            )
-            .expect("second preview");
-        assert_eq!(first, second);
-        assert!(first.iter().all(|sample| sample.is_finite()));
-        assert!(first.iter().any(|sample| sample.abs() > 0.0));
-    }
-}
-
-#[test]
-fn runtime_install_is_idempotent() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
-    install_sound_render_lib(&mut cx).unwrap();
-    install_sound_render_lib(&mut cx).unwrap();
-}
-```
-
 Specimen `spec-test/sim-music/crates/sim-lib-sound-timbre/src/tests` is checked by `cargo test`.
 
 Source `crates/sim-lib-sound-timbre/src/tests.rs`:
@@ -1178,431 +1039,6 @@ fn install_sound_timbre_lib_registers_builtin_timbres() {
         cx.resolve_value(&Symbol::qualified("sound", "TimbreRegistry"))
             .is_ok()
     );
-}
-```
-
-Specimen `spec-test/sim-music/crates/sim-lib-stream-file/src/tests` is checked by `cargo test`.
-
-Source `crates/sim-lib-stream-file/src/tests.rs`:
-
-```rust
-use std::{
-    convert::TryFrom,
-    fs,
-    path::{Path, PathBuf},
-    sync::Arc,
-    time::{SystemTime, UNIX_EPOCH},
-};
-
-use sim_kernel::{CapabilityName, Cx, DefaultFactory, Error, Expr, NoopEvalPolicy, Symbol};
-use sim_lib_midi_core::{
-    Channel, ChannelMessage, MemoryMidiSink, MemoryMidiSource, MetaEvent, MidiEvent, MidiPayload,
-    TickTime, U7, synthetic_origin,
-};
-use sim_lib_midi_smf::{SmfDivision, SmfFile, SmfFormat, SmfTrack, read_smf, write_smf};
-use sim_lib_stream_audio::{MemoryPcmSink, PcmBuffer, PcmSpec, stream_to_pcm_sink};
-use sim_lib_stream_core::{
-    BufferPolicy, ClockDomain, PcmPacket, StreamDirection, StreamItem, StreamMedia, StreamMetadata,
-    StreamPacket, StreamValue, TransportProfile,
-};
-use sim_lib_stream_midi::{midi_source_to_stream, midi_stream_to_sink};
-
-use crate::cap::stream_file_filesystem_effect_kind;
-use crate::{
-    cassette_expr_to_stream, pcm_buffers_to_wav_bytes, read_smf_stream, read_wav_stream,
-    stream_file_read_capability, stream_file_write_capability, stream_to_cassette,
-    stream_to_cassette_expr, validate_cassette_fixture_path, write_smf_stream,
-};
-
-// conformance: stream-file reuse owns bounded canonical PCM16 WAV byte and stream I/O.
-
-mod pcm_convert_tests;
-
-#[test]
-fn smf_file_to_packet_spine_to_memory_sink_round_trips() {
-    let temp = TempPath::new("input.mid");
-    let file = smf_fixture();
-    let bytes = write_smf(&file).unwrap();
-    fs::write(temp.path(), &bytes).unwrap();
-    let decoded = read_smf(&bytes).unwrap();
-    let expected = merged_events(&decoded);
-    let mut cx = cx(&[stream_file_read_capability()]);
-
-    let stream =
-        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/smf-read")).unwrap();
-    let mut sink = MemoryMidiSink::new(decoded.ticks_per_quarter().unwrap());
-    let count = midi_stream_to_sink(&stream, &mut sink).unwrap();
-
-    assert_eq!(count, expected.len());
-    assert_eq!(sink.events(), expected.as_slice());
-}
-
-#[test]
-fn memory_midi_source_to_smf_to_read_back_round_trips() {
-    let temp = TempPath::new("roundtrip.mid");
-    let events = midi_events_with_end();
-    let mut source = MemoryMidiSource::new(480, events.clone());
-    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/smf-write")).unwrap();
-    let mut cx = cx(&[
-        stream_file_write_capability(),
-        stream_file_read_capability(),
-    ]);
-
-    let count = write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
-    let read_back = read_smf_stream(
-        &mut cx,
-        temp.path(),
-        3,
-        midi_metadata("stream/smf-read-back"),
-    )
-    .unwrap();
-    let mut sink = MemoryMidiSink::new(480);
-    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
-
-    assert_eq!(count, events.len());
-    assert_eq!(read_count, events.len());
-    assert_eq!(sink.events(), events.as_slice());
-}
-
-#[test]
-fn wav_to_pcm_packet_spine_to_memory_sink_round_trips() {
-    let temp = TempPath::new("input.wav");
-    let spec = pcm_spec();
-    let buffers = vec![pcm_buffer(&[1, -1, 2, -2]), pcm_buffer(&[3, -3])];
-    let bytes = pcm_buffers_to_wav_bytes(spec, &buffers).unwrap();
-    assert_eq!(bytes, pcm_buffers_to_wav_bytes(spec, &buffers).unwrap());
-    fs::write(temp.path(), bytes).unwrap();
-    let mut cx = cx(&[stream_file_read_capability()]);
-
-    let wav = read_wav_stream(&mut cx, temp.path(), 2, pcm_metadata("stream/wav-read")).unwrap();
-    let mut sink = MemoryPcmSink::new(spec);
-    let summary = stream_to_pcm_sink(wav.stream(), &mut sink).unwrap();
-
-    assert_eq!(wav.spec(), spec);
-    assert_eq!(summary.buffers(), 2);
-    assert_eq!(summary.frames(), 3);
-    assert_eq!(sink.buffers(), buffers.as_slice());
-}
-
-#[test]
-fn midi_control_stream_cassette_replays_from_file_expression_format() {
-    let events = midi_events_with_end();
-    let mut source = MemoryMidiSource::new(480, events.clone());
-    let stream =
-        midi_source_to_stream(&mut source, 2, midi_metadata("stream/cassette-midi")).unwrap();
-
-    let cassette_expr =
-        stream_to_cassette_expr(&stream, TransportProfile::lan_midi_control()).unwrap();
-    let replay = cassette_expr_to_stream(&cassette_expr).unwrap();
-    let mut sink = MemoryMidiSink::new(480);
-    let replayed = midi_stream_to_sink(&replay, &mut sink).unwrap();
-
-    assert_eq!(replayed, events.len());
-    assert_eq!(sink.events(), events.as_slice());
-}
-
-#[test]
-fn buffered_pcm_preview_cassette_replays_as_golden_fixture() {
-    let items = vec![
-        StreamItem::new(StreamPacket::Pcm(
-            PcmPacket::i16(2, 1, vec![1, -1]).unwrap(),
-        )),
-        StreamItem::new(StreamPacket::Pcm(
-            PcmPacket::i16(2, 1, vec![2, -2]).unwrap(),
-        )),
-    ];
-    let stream =
-        sim_lib_stream_core::StreamValue::pull(pcm_metadata("stream/cassette-pcm"), items.clone());
-
-    let cassette =
-        stream_to_cassette(&stream, TransportProfile::lan_buffered_audio_preview()).unwrap();
-    let report = validate_cassette_fixture_path(
-        &cassette,
-        "fixtures/streams/golden/buffered-preview.simcassette",
-    )
-    .unwrap();
-    let replay = cassette.replay_stream_value().unwrap();
-
-    assert_eq!(report.packet_count, 2);
-    assert_eq!(replay.take_packets(4).unwrap(), items);
-}
-
-#[test]
-fn cassette_fixture_validation_requires_redacted_sensitive_payloads() {
-    let payload = Expr::Map(vec![
-        (
-            Expr::Symbol(Symbol::new("path")),
-            Expr::String("private-path=session.mid".to_owned()),
-        ),
-        (
-            Expr::Symbol(Symbol::new("token")),
-            Expr::String("token=abc123".to_owned()),
-        ),
-    ]);
-    let stream = StreamValue::pull(
-        data_metadata("stream/sensitive-cassette"),
-        vec![StreamItem::new(StreamPacket::data(
-            Symbol::qualified("stream/data", "expr"),
-            payload,
-        ))],
-    );
-
-    let cassette = stream_to_cassette(&stream, TransportProfile::remote_stream_fabric()).unwrap();
-    assert!(
-        validate_cassette_fixture_path(&cassette, "fixtures/streams/golden/sensitive.simcassette")
-            .is_err()
-    );
-    let redacted = cassette.redacted().unwrap();
-    let report =
-        validate_cassette_fixture_path(&redacted, "fixtures/streams/golden/sensitive.simcassette")
-            .unwrap();
-
-    assert_eq!(report.packet_count, 1);
-    assert!(matches!(
-        redacted.items().unwrap()[0].packet(),
-        StreamPacket::Data(data)
-            if data.kind == Symbol::qualified("stream/data", "redacted")
-    ));
-}
-
-#[test]
-fn malformed_file_returns_diagnostic_error() {
-    let temp = TempPath::new("bad.mid");
-    fs::write(temp.path(), b"not an smf").unwrap();
-    let mut cx = cx(&[stream_file_read_capability()]);
-
-    let err = match read_smf_stream(&mut cx, temp.path(), 1, midi_metadata("stream/bad-smf")) {
-        Ok(_) => panic!("malformed SMF unexpectedly decoded"),
-        Err(err) => err,
-    };
-
-    assert!(format!("{err}").contains("malformed SMF file"));
-}
-
-#[test]
-fn file_effects_and_capabilities_are_recorded() {
-    let temp = TempPath::new("cap.mid");
-    let events = midi_events_with_end();
-    let mut source = MemoryMidiSource::new(480, events);
-    let stream = midi_source_to_stream(&mut source, 3, midi_metadata("stream/cap-write")).unwrap();
-    let mut write_cx = cx(&[stream_file_write_capability()]);
-
-    write_smf_stream(&mut write_cx, temp.path(), &stream, 480).unwrap();
-
-    let records = write_cx.effect_ledger().records();
-    assert_eq!(records.len(), 1);
-    assert!(!records[0].aborted);
-    let recorded = write_cx.effect_ledger().effect(&records[0].effect).unwrap();
-    assert_eq!(recorded.kind, stream_file_filesystem_effect_kind());
-    assert!(recorded.requires.contains(&stream_file_write_capability()));
-
-    let mut read_cx = cx(&[]);
-    let err = match read_smf_stream(
-        &mut read_cx,
-        temp.path(),
-        1,
-        midi_metadata("stream/cap-read"),
-    ) {
-        Ok(_) => panic!("missing read capability unexpectedly succeeded"),
-        Err(err) => err,
-    };
-    assert!(matches!(
-        err,
-        Error::CapabilityDenied { capability } if capability == stream_file_read_capability()
-    ));
-    let denied = read_cx.effect_ledger().records();
-    assert_eq!(denied.len(), 1);
-    assert!(denied[0].aborted);
-}
-
-#[test]
-fn compatibility_stream_file_capability_aliases_are_accepted() {
-    let temp = TempPath::new("compat-caps.mid");
-    let events = midi_events_with_end();
-    let mut source = MemoryMidiSource::new(480, events.clone());
-    let stream =
-        midi_source_to_stream(&mut source, 2, midi_metadata("stream/compat-write")).unwrap();
-    let mut cx = cx(&[
-        CapabilityName::new("stream.file.write"),
-        CapabilityName::new("stream.file.read"),
-    ]);
-
-    write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
-    let read_back =
-        read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/compat-read")).unwrap();
-    let mut sink = MemoryMidiSink::new(480);
-    let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
-
-    assert_eq!(read_count, events.len());
-    assert_eq!(sink.events(), events.as_slice());
-}
-
-#[test]
-fn directory_aliases_do_not_authorize_file_writes() {
-    for alias in ["table.fs.mkdir", "table.fs.rmdir"] {
-        let suffix = format!("directory-alias-{}.mid", alias.replace('.', "-"));
-        let temp = TempPath::new(&suffix);
-        let events = midi_events_with_end();
-        let mut source = MemoryMidiSource::new(480, events);
-        let stream =
-            midi_source_to_stream(&mut source, 2, midi_metadata("stream/dir-alias-write")).unwrap();
-        let mut cx = cx(&[CapabilityName::new(alias)]);
-
-        let err = match write_smf_stream(&mut cx, temp.path(), &stream, 480) {
-            Ok(_) => panic!("{alias} unexpectedly authorized an SMF file write"),
-            Err(err) => err,
-        };
-
-        assert!(matches!(
-            err,
-            Error::CapabilityDenied { capability } if capability == stream_file_write_capability()
-        ));
-        assert!(!temp.path().exists());
-    }
-}
-
-#[test]
-fn compatibility_file_write_aliases_are_accepted() {
-    for alias in ["table.fs.write", "file-write"] {
-        let suffix = format!("write-alias-{}.mid", alias.replace('.', "-"));
-        let temp = TempPath::new(&suffix);
-        let events = midi_events_with_end();
-        let mut source = MemoryMidiSource::new(480, events.clone());
-        let stream =
-            midi_source_to_stream(&mut source, 2, midi_metadata("stream/write-alias")).unwrap();
-        let mut cx = cx(&[CapabilityName::new(alias), stream_file_read_capability()]);
-
-        write_smf_stream(&mut cx, temp.path(), &stream, 480).unwrap();
-        let read_back =
-            read_smf_stream(&mut cx, temp.path(), 2, midi_metadata("stream/read-alias")).unwrap();
-        let mut sink = MemoryMidiSink::new(480);
-        let read_count = midi_stream_to_sink(&read_back, &mut sink).unwrap();
-
-        assert_eq!(read_count, events.len());
-        assert_eq!(sink.events(), events.as_slice());
-    }
-}
-
-fn cx(capabilities: &[CapabilityName]) -> Cx {
-    let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
-    for capability in capabilities {
-        cx.grant(capability.clone());
-    }
-    cx
-}
-
-fn midi_metadata(id: &str) -> StreamMetadata {
-    StreamMetadata::new(
-        Symbol::new(id),
-        StreamMedia::Midi,
-        StreamDirection::Source,
-        Symbol::qualified("clock", "midi"),
-        BufferPolicy::bounded(16).unwrap(),
-    )
-}
-
-fn pcm_metadata(id: &str) -> StreamMetadata {
-    StreamMetadata::new(
-        Symbol::new(id),
-        StreamMedia::Pcm,
-        StreamDirection::Source,
-        ClockDomain::Sample.symbol(),
-        BufferPolicy::bounded(16).unwrap(),
-    )
-}
-
-fn data_metadata(id: &str) -> StreamMetadata {
-    StreamMetadata::new(
-        Symbol::new(id),
-        StreamMedia::Data,
-        StreamDirection::Source,
-        ClockDomain::ServerFrame.symbol(),
-        BufferPolicy::bounded(16).unwrap(),
-    )
-}
-
-fn smf_fixture() -> SmfFile {
-    SmfFile {
-        format: SmfFormat::SingleTrack,
-        division: SmfDivision::metrical(480).unwrap(),
-        tracks: vec![SmfTrack {
-            events: midi_events_with_end(),
-        }],
-    }
-}
-
-fn midi_events_with_end() -> Vec<MidiEvent> {
-    vec![
-        midi_event(
-            0,
-            MidiPayload::Channel(ChannelMessage::NoteOn {
-                ch: Channel::new(0).unwrap(),
-                key: U7::try_from(60).unwrap(),
-                vel: U7::try_from(100).unwrap(),
-            }),
-        ),
-        midi_event(
-            240,
-            MidiPayload::Channel(ChannelMessage::NoteOff {
-                ch: Channel::new(0).unwrap(),
-                key: U7::try_from(60).unwrap(),
-                vel: U7::try_from(0).unwrap(),
-            }),
-        ),
-        midi_event(240, MidiPayload::Meta(MetaEvent::EndOfTrack)),
-    ]
-}
-
-fn midi_event(ticks: i64, payload: MidiPayload) -> MidiEvent {
-    MidiEvent {
-        time: TickTime::new(ticks, 480).unwrap(),
-        origin: synthetic_origin(),
-        payload,
-    }
-}
-
-fn merged_events(file: &SmfFile) -> Vec<MidiEvent> {
-    file.merged_events()
-        .unwrap()
-        .into_iter()
-        .map(|tracked| tracked.event)
-        .collect()
-}
-
-fn pcm_spec() -> PcmSpec {
-    PcmSpec::i16(2, 48_000).unwrap()
-}
-
-fn pcm_buffer(samples: &[i16]) -> PcmBuffer {
-    PcmBuffer::i16(pcm_spec(), samples.len() / 2, samples.to_vec()).unwrap()
-}
-
-struct TempPath {
-    path: PathBuf,
-}
-
-impl TempPath {
-    fn new(suffix: &str) -> Self {
-        let nanos = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_nanos();
-        let path = std::env::temp_dir().join(format!(
-            "sim-stream-file-{}-{nanos}-{suffix}",
-            std::process::id()
-        ));
-        Self { path }
-    }
-
-    fn path(&self) -> &Path {
-        &self.path
-    }
-}
-
-impl Drop for TempPath {
-    fn drop(&mut self) {
-        let _ = fs::remove_file(&self.path);
-    }
 }
 ```
 
@@ -10083,6 +9519,391 @@ impl Drop for TempPath {
     fn drop(&mut self) {
         let _ = fs::remove_file(&self.path);
     }
+}
+```
+
+### `feature/sim-music/daw-session-runtime`
+
+Specimen `spec-test/sim-music/crates/sim-lib-daw-session/src/tests` is checked by `cargo test`.
+
+Source `crates/sim-lib-daw-session/src/tests.rs`:
+
+```rust
+use std::sync::Arc;
+
+use sim_kernel::{Cx, DefaultFactory, EagerPolicy, Expr, Symbol};
+use sim_lib_audio_graph_core::{Patch, PatchNode};
+use sim_lib_music_core::{
+    Arranger, ArrangerPlacement, Articulation, Channel, Music, Note, PlayableRef,
+};
+use sim_lib_plugin_core::{PluginFormat, PluginId, PluginState};
+use sim_value::access::field_q;
+
+use crate::{
+    COMPONENT_BUILDER_PATCH_FORMAT, ClipSource, DawClip, DawInstrumentKind, DawSession,
+    DawSessionDescriptor, DawSessionRouteKind, DawTrack, DawTrackKind, PluginChain, PluginSlot,
+    browse_session_graph, daw_prelude_operations, daw_session_topology_package,
+    install_daw_session_lib, instrument_session_fixture, instrument_session_fixture_names,
+    instrument_session_render_smoke_command, session_help_card_expr,
+};
+
+// conformance: DAW sessions preserve graph identity through save, load, and rendering.
+
+#[test]
+fn session_can_be_created_saved_loaded_and_rendered_offline() {
+    let session = fixture_session();
+    let saved = session.save_expr();
+    let loaded = DawSession::load_expr(&saved).expect("load session");
+    let rendered = loaded.render_offline(4).expect("offline render");
+
+    assert_eq!(loaded.name(), "Song");
+    assert_eq!(rendered.tracks_rendered(), 1);
+    assert_eq!(rendered.clips_rendered(), 1);
+    assert_eq!(rendered.buffer().frames(), 4);
+    assert_eq!(
+        rendered.buffer().samples_f32(),
+        &[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+    );
+}
+
+#[test]
+fn offline_render_rejects_frame_channel_overflow() {
+    let session = fixture_session();
+
+    let err = session.render_offline(usize::MAX).unwrap_err();
+
+    assert!(format!("{err}").contains("sample buffer is too large"));
+}
+
+#[test]
+fn plugin_chain_state_and_patch_metadata_roundtrip() {
+    let mut state = PluginState::new();
+    state.set_param(1, 0.75);
+    let slot = PluginSlot::new(
+        "gain-slot",
+        PluginId::new(PluginFormat::Sim, "sim.gain").unwrap(),
+        state,
+    )
+    .unwrap()
+    .bypassed(true);
+    let track = DawTrack::audio("track-with-plugin", "Track With Plugin", 2)
+        .unwrap()
+        .with_plugin_chain(PluginChain::default().with_slot(slot));
+    let mut session = DawSession::new("plugin-song", "Plugin Song", 48_000)
+        .unwrap()
+        .with_patch(Patch {
+            nodes: vec![PatchNode {
+                id: "gain".to_owned(),
+                in_channels: 2,
+                out_channels: 2,
+            }],
+            cables: Vec::new(),
+        });
+    session.add_track(track).unwrap();
+
+    let loaded = DawSession::from_expr(&session.to_expr()).unwrap();
+    let loaded_slot = &loaded.tracks()[0].plugin_chain().slots()[0];
+
+    assert_eq!(loaded.patch().nodes[0].id, "gain");
+    assert_eq!(loaded_slot.plugin().stable_id, "sim.gain");
+    assert_eq!(loaded_slot.state().param(1), Some(0.75));
+    assert!(loaded_slot.is_bypassed());
+}
+
+#[test]
+fn component_builder_patch_records_stable_ids_save_load_and_preview_hooks() {
+    let mut session = DawSession::new("builder-song", "Builder Song", 48_000)
+        .unwrap()
+        .with_patch(Patch {
+            nodes: vec![
+                PatchNode {
+                    id: "osc".to_owned(),
+                    in_channels: 1,
+                    out_channels: 2,
+                },
+                PatchNode {
+                    id: "amp".to_owned(),
+                    in_channels: 2,
+                    out_channels: 2,
+                },
+            ],
+            cables: Vec::new(),
+        });
+    let track = DawTrack::audio("preview-track", "Preview Track", 2)
+        .unwrap()
+        .with_clip(DawClip::new("preview", 0, 4, ClipSource::Constant(0.25), 1.0).unwrap());
+    session.add_track(track).unwrap();
+
+    let builder = session.component_builder_patch_expr();
+    assert_eq!(
+        builder_field_value(&builder, "format"),
+        Some(&Expr::String(COMPONENT_BUILDER_PATCH_FORMAT.to_owned()))
+    );
+    assert_eq!(
+        builder_field_value(&builder, "stable-component-ids"),
+        Some(&Expr::Vector(vec![
+            Expr::String("osc".to_owned()),
+            Expr::String("amp".to_owned()),
+        ]))
+    );
+    assert_eq!(
+        builder_field_value(builder_field_value(&builder, "hooks").unwrap(), "save"),
+        Some(&action_symbol("save"))
+    );
+    assert_eq!(
+        builder_field_value(builder_field_value(&builder, "hooks").unwrap(), "load"),
+        Some(&action_symbol("load"))
+    );
+    assert_eq!(
+        builder_field_value(
+            builder_field_value(&builder, "hooks").unwrap(),
+            "live-preview"
+        ),
+        Some(&action_symbol("live-preview"))
+    );
+
+    let saved = builder_field_value(&builder, "saved-session").expect("saved session");
+    let loaded = DawSession::load_expr(saved).expect("load saved builder session");
+    assert_eq!(loaded.patch().nodes[0].id, "osc");
+    assert_eq!(loaded.patch().nodes[1].id, "amp");
+
+    let preview = session
+        .component_builder_preview_expr(4)
+        .expect("builder preview");
+    assert_eq!(
+        builder_field_value(&preview, "hook"),
+        Some(&action_symbol("live-preview"))
+    );
+    assert_eq!(builder_number(&preview, "tracks-rendered"), Some("1"));
+    assert_eq!(builder_number(&preview, "clips-rendered"), Some("1"));
+}
+
+#[test]
+fn arranger_clip_and_track_round_trip_without_audio_preview() {
+    let arranger = Arranger::new(
+        vec![
+            ArrangerPlacement::new(
+                "note",
+                PlayableRef::inline(Music::Note(
+                    Note::new(
+                        sim_lib_music_core::Time::new(1, 4),
+                        sim_lib_music_core::Pitch::from_midi(60),
+                        100,
+                        Channel::new(0).unwrap(),
+                        Articulation::Normal,
+                    )
+                    .unwrap(),
+                )),
+                sim_lib_music_core::Time::new(0, 1),
+            )
+            .unwrap(),
+        ],
+        vec![sim_lib_music_core::LaneId::new("notes")],
+    )
+    .unwrap();
+    let track = DawTrack::new(
+        "arranger-track",
+        "Arranger Track",
+        DawTrackKind::Arranger,
+        2,
+    )
+    .unwrap()
+    .with_clip(DawClip::arranger("arranger-clip", 0, 480, arranger.clone()).unwrap());
+    let mut session = DawSession::new("arranger-song", "Arranger Song", 48_000).unwrap();
+    session.add_track(track).unwrap();
+
+    let loaded = DawSession::load_expr(&session.save_expr()).unwrap();
+    assert_eq!(loaded, session);
+    let ClipSource::Arranger(loaded_arranger) = loaded.tracks()[0].clips()[0].source() else {
+        panic!("arranger source");
+    };
+    assert_eq!(loaded_arranger, &arranger);
+    let render = loaded.render_offline(4).unwrap();
+    assert_eq!(render.tracks_rendered(), 0);
+    assert_eq!(render.clips_rendered(), 0);
+}
+
+#[test]
+fn instrument_session_load_render_reopen_smoke() {
+    let session = instrument_session_fixture();
+    let saved = session.save_expr();
+    let loaded = DawSession::load_expr(&saved).expect("load instrument session");
+    let render = loaded.render_offline(4).expect("render preview");
+    let reopened = DawSession::load_expr(&loaded.save_expr()).expect("reopen session");
+    let builder = loaded.component_builder_patch_expr();
+    let preview = loaded.component_builder_preview_expr(4).unwrap();
+    let package = daw_session_topology_package(&loaded);
+
+    assert_eq!(loaded, reopened);
+    assert_eq!(
+        instrument_session_fixture_names(),
+        ["instrument-session-default", "generic-synth-graph-session",]
+    );
+    assert_eq!(
+        instrument_session_render_smoke_command(),
+        "cargo test -p sim-lib-daw-session instrument_session_load_render_reopen_smoke"
+    );
+    assert_eq!(loaded.instrument_instances().len(), 5);
+    assert!(
+        loaded
+            .instrument_instances()
+            .iter()
+            .any(|instrument| instrument.kind() == DawInstrumentKind::Dx7
+                && instrument.graph_node_id() == "dx7-voice")
+    );
+    for kind in [
+        DawSessionRouteKind::Midi,
+        DawSessionRouteKind::ParameterAutomation,
+        DawSessionRouteKind::PatchEdit,
+        DawSessionRouteKind::Trace,
+        DawSessionRouteKind::Preview,
+    ] {
+        assert!(
+            loaded.routes().iter().any(|route| route.kind() == kind),
+            "missing route kind {}",
+            kind.as_str()
+        );
+    }
+    assert_eq!(render.tracks_rendered(), 1);
+    assert_eq!(render.clips_rendered(), 1);
+    assert_eq!(render.buffer().frames(), 4);
+    assert_eq!(
+        metadata_number(&package.metadata, "instrument-count"),
+        Some("5")
+    );
+    assert_eq!(metadata_number(&package.metadata, "route-count"), Some("5"));
+    assert!(builder_list_contains(
+        &builder,
+        "instrument-instances",
+        "dx7:dx7-voice"
+    ));
+    assert!(builder_list_contains(&builder, "routes", "midi:dx7-voice"));
+    assert!(builder_list_contains(&preview, "routes", "preview"));
+}
+
+#[test]
+fn citizen_daw_session_descriptor_round_trips_and_fails_closed() {
+    let session = fixture_session();
+    let descriptor = DawSessionDescriptor::new(session.clone());
+
+    assert_eq!(descriptor.session().unwrap(), session);
+
+    let mut expr = descriptor.as_expr().clone();
+    let Expr::Map(entries) = &mut expr else {
+        panic!("DAW session descriptor should be a map");
+    };
+    for (key, value) in entries {
+        if key == &Expr::Symbol(Symbol::qualified("daw-session", "sample-rate-hz")) {
+            *value = Expr::String("0".to_owned());
+        }
+    }
+    let err = DawSessionDescriptor::from_expr(expr).unwrap_err();
+    assert!(format!("{err}").contains("sample rate"));
+}
+
+#[test]
+fn browse_graph_exposes_session_tracks_buses_and_help() {
+    let session = fixture_session();
+    let cards = browse_session_graph(&session);
+    let help = session_help_card_expr();
+
+    assert!(cards.iter().any(|card| card_has_subject(card, "song")));
+    assert!(cards.iter().any(|card| card_has_subject(card, "track-1")));
+    assert!(cards.iter().any(|card| card_has_subject(card, "master")));
+    assert!(format!("{help:?}").contains("render-offline"));
+}
+
+#[test]
+fn daw_prelude_lists_lisp_facing_operations() {
+    let operations = daw_prelude_operations();
+
+    assert!(operations.contains(&Symbol::qualified("daw", "session")));
+    assert!(operations.contains(&Symbol::qualified("daw", "render-offline")));
+    assert!(operations.contains(&Symbol::qualified("daw", "topology-package")));
+}
+
+#[test]
+fn topology_package_can_launch_from_session_data() {
+    let session = fixture_session();
+    let package = daw_session_topology_package(&session);
+
+    assert_eq!(package.name(), &Symbol::new("daw-song"));
+    assert_eq!(package.graph.nodes.len(), 4);
+    assert_eq!(package.graph.edges.len(), 3);
+    assert_eq!(
+        package.metadata[0].0,
+        Symbol::qualified("daw-session", "session-id")
+    );
+}
+
+#[test]
+fn install_daw_session_lib_registers_runtime_exports() {
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    install_daw_session_lib(&mut cx).expect("install");
+    install_daw_session_lib(&mut cx).expect("idempotent install");
+
+    assert!(
+        cx.registry()
+            .lib(&Symbol::new("daw-session"))
+            .expect("registered")
+            .manifest
+            .exports
+            .iter()
+            .any(|export| *export.symbol() == Symbol::qualified("daw-session", "DawSession"))
+    );
+}
+
+fn fixture_session() -> DawSession {
+    let mut session = DawSession::new("song", "Song", 48_000).unwrap();
+    let track = DawTrack::audio("track-1", "Track 1", 2)
+        .unwrap()
+        .with_clip(DawClip::new("clip-1", 0, 4, ClipSource::Constant(0.5), 1.0).unwrap());
+    session.add_track(track).unwrap();
+    session
+}
+
+fn card_has_subject(card: &Expr, subject: &str) -> bool {
+    let Expr::Map(entries) = card else {
+        return false;
+    };
+    entries.iter().any(|(key, value)| {
+        key == &Expr::Symbol(Symbol::new("subject")) && value == &Expr::Symbol(Symbol::new(subject))
+    })
+}
+
+fn builder_field_value<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a Expr> {
+    field_q(expr, "daw-session/component-builder", name)
+}
+
+fn builder_number<'a>(expr: &'a Expr, name: &'static str) -> Option<&'a str> {
+    let Expr::Number(number) = builder_field_value(expr, name)? else {
+        return None;
+    };
+    Some(&number.canonical)
+}
+
+fn builder_list_contains(expr: &Expr, name: &'static str, expected: &str) -> bool {
+    matches!(
+        builder_field_value(expr, name),
+        Some(Expr::Vector(items))
+            if items
+                .iter()
+                .any(|item| matches!(item, Expr::String(text) if text == expected))
+    )
+}
+
+fn metadata_number<'a>(metadata: &'a [(Symbol, Expr)], name: &str) -> Option<&'a str> {
+    metadata.iter().find_map(|(key, value)| {
+        let Expr::Number(number) = value else {
+            return None;
+        };
+        (key.namespace.as_deref() == Some("daw-session") && key.name.as_ref() == name)
+            .then_some(number.canonical.as_str())
+    })
+}
+
+fn action_symbol(name: &'static str) -> Expr {
+    Expr::Symbol(Symbol::qualified("component-builder/action", name))
 }
 ```
 
