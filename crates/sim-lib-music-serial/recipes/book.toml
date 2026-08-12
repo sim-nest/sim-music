@@ -2,9 +2,4 @@ book = "music-serial"
 title = "Music Serial"
 summary = "Immutable serial plans, practice ledgers, open adaptation, and reusable serial techniques."
 order = 270
-chapters = [
-  "01-basics",
-  "02-techniques",
-  "03-parameters",
-  "02-adaptation",
-]
+chapters = ["01-basics", "02-techniques", "03-parameters", "02-adaptation"]

@@ -1,4 +1,8 @@
+id = "immutable-plan"
 title = "Immutable serial plan"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Validate an immutable serial plan with simultaneous groups, structural coverage, and stable provenance."
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "plan", "provenance", "rust", "framework"]

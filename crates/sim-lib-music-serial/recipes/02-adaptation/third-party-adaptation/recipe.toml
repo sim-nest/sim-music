@@ -1,4 +1,8 @@
+id = "third-party-adaptation"
 title = "Third-party adaptation without source edits"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Register a caller-defined alphabet, practice rule, and realizer entirely through public APIs, then prove the generic Lisp validation surface and open adaptation registry fail closed on unknown components."
 category = "Rust"
 tags = ["music", "serial", "adaptation", "registry", "lisp", "framework"]

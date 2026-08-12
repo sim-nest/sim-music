@@ -1,4 +1,7 @@
+id = "integral-parameters"
 title = "Project integral parameter tracks with explicit ledgers"
+codec = "rust"
+setup = "setup.rs"
 summary = "Bind builtin and custom parameter tracks through one typed surface and inspect phase, exhaustion, and transform evidence."
 category = "Rust"
 tags = ["music", "serial", "integral", "parameters", "rust", "framework"]

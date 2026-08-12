@@ -1,4 +1,7 @@
+id = "derived-invariant-practice"
 title = "Analyze derived cells and invariant candidates"
+codec = "rust"
+setup = "setup.rs"
 summary = "Keep derived deployment evidence and invariant certificates inspectable instead of collapsing them into one style flag."
 category = "Rust"
 tags = ["music", "serial", "derived", "invariant", "analysis", "rust", "framework"]

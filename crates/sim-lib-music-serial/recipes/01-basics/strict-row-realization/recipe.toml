@@ -1,4 +1,8 @@
+id = "strict-row-realization"
 title = "Strict row realization"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Realize and render a strict serial row statement without losing planned event, voice, or ordinal identity."
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
