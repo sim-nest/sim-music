@@ -4440,10 +4440,10 @@
     "generated_by": "cargo run -p xtask -- simdoc",
     "generation_timestamp": "2026-07-15T20:01:50+02:00",
     "generator": "xtask repo-contract v1",
-    "git_commit": "ec130c40b8c6e84926c399585086517fe49e979e",
+    "git_commit": "21b9b6a541ad15798ee13dc90ec0bac1ff6e8dc1",
     "repo": "sim-music",
     "schema": "sim.provenance.v1",
-    "source_commit": "ec130c40b8c6e84926c399585086517fe49e979e",
+    "source_commit": "21b9b6a541ad15798ee13dc90ec0bac1ff6e8dc1",
     "source_remote": "https://github.com/sim-nest/sim-music",
     "validation_commands": [
       "cargo fmt --all --check",
@@ -4456,7 +4456,7 @@
       "cargo run -p xtask -- validation-matrix --check --repo .",
       "cargo run -p xtask -- crate-catalog --check --repo ."
     ],
-    "workspace_hash": "277e5e7c4dfc554f",
+    "workspace_hash": "9214c1738d4a8e60",
     "workspace_hash_algorithm": "fnv1a64",
     "workspace_hash_input_count": 959,
     "workspace_hash_inputs": [
@@ -5981,7 +5981,7 @@
       "recipes": [
         {
           "card_id": "music-serial/01-basics/arrays-time-points",
-          "codec": "",
+          "codec": "rust",
           "id": "arrays-time-points",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml",
@@ -5989,7 +5989,7 @@
         },
         {
           "card_id": "music-serial/01-basics/immutable-plan",
-          "codec": "",
+          "codec": "rust",
           "id": "immutable-plan",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml",
@@ -5997,7 +5997,7 @@
         },
         {
           "card_id": "music-serial/01-basics/strict-row-realization",
-          "codec": "",
+          "codec": "rust",
           "id": "strict-row-realization",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml",
@@ -6005,7 +6005,7 @@
         },
         {
           "card_id": "music-serial/02-adaptation/modal-spine",
-          "codec": "",
+          "codec": "rust",
           "id": "modal-spine",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml",
@@ -6013,7 +6013,7 @@
         },
         {
           "card_id": "music-serial/02-adaptation/serial-consonance-completion",
-          "codec": "",
+          "codec": "rust",
           "id": "serial-consonance-completion",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml",
@@ -6021,7 +6021,7 @@
         },
         {
           "card_id": "music-serial/02-adaptation/third-party-adaptation",
-          "codec": "",
+          "codec": "rust",
           "id": "third-party-adaptation",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml",
@@ -6029,7 +6029,7 @@
         },
         {
           "card_id": "music-serial/02-techniques/counter-voices",
-          "codec": "",
+          "codec": "rust",
           "id": "counter-voices",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml",
@@ -6037,7 +6037,7 @@
         },
         {
           "card_id": "music-serial/02-techniques/derived-invariant-practice",
-          "codec": "",
+          "codec": "rust",
           "id": "derived-invariant-practice",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml",
@@ -6045,7 +6045,7 @@
         },
         {
           "card_id": "music-serial/02-techniques/referential-subsets",
-          "codec": "",
+          "codec": "rust",
           "id": "referential-subsets",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml",
@@ -6053,7 +6053,7 @@
         },
         {
           "card_id": "music-serial/02-techniques/simultaneous-forms",
-          "codec": "",
+          "codec": "rust",
           "id": "simultaneous-forms",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml",
@@ -6061,7 +6061,7 @@
         },
         {
           "card_id": "music-serial/03-parameters/integral-parameters",
-          "codec": "",
+          "codec": "rust",
           "id": "integral-parameters",
           "package": "sim-lib-music-serial",
           "recipe_toml": "crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml",
@@ -6562,7 +6562,7 @@
         },
         {
           "card_id": "pitch-serial/02-partitions/partition-mosaic",
-          "codec": "",
+          "codec": "rust",
           "id": "partition-mosaic",
           "package": "sim-lib-pitch-serial",
           "recipe_toml": "crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml",

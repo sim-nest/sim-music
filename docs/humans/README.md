@@ -9961,7 +9961,10 @@ Specimen `recipe/sim-music/crates/sim-lib-pitch-serial/02-partitions/partition-m
 Source `crates/sim-lib-pitch-serial/recipes/02-partitions/partition-mosaic/recipe.toml`:
 
 ```toml
+id = "partition-mosaic"
 title = "Analyze partitions, mosaics, and interlocking evidence"
+codec = "rust"
+setup = "setup.rs"
 summary = "Validate block-order contracts, compare partitions, verticalize row slices, and inspect dyadic through hexachordal mosaics."
 category = "Rust"
 tags = ["pitch", "serial", "tone-row", "partition", "mosaic", "interlocking", "rust", "framework"]
@@ -9976,7 +9979,11 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan`
 Source `crates/sim-lib-music-serial/recipes/01-basics/immutable-plan/recipe.toml`:
 
 ```toml
+id = "immutable-plan"
 title = "Immutable serial plan"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Validate an immutable serial plan with simultaneous groups, structural coverage, and stable provenance."
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "plan", "provenance", "rust", "framework"]
@@ -9988,7 +9995,11 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-real
 Source `crates/sim-lib-music-serial/recipes/01-basics/strict-row-realization/recipe.toml`:
 
 ```toml
+id = "strict-row-realization"
 title = "Strict row realization"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Realize and render a strict serial row statement without losing planned event, voice, or ordinal identity."
 category = "Rust"
 tags = ["music", "serial", "twelve-tone", "realization", "rendering", "rust", "framework"]
@@ -10000,7 +10011,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/01-basics/arrays-time-poi
 Source `crates/sim-lib-music-serial/recipes/01-basics/arrays-time-points/recipe.toml`:
 
 ```toml
+id = "arrays-time-points"
 title = "Analyze serial arrays and time-point rows"
+codec = "rust"
+setup = "setup.rs"
 summary = "Keep horizontal row order, vertical aggregate evidence, and onset order explicit without collapsing them into one score model."
 category = "Rust"
 tags = ["music", "serial", "array", "time-point", "analysis", "rust", "framework"]
@@ -10013,7 +10027,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/simultaneou
 Source `crates/sim-lib-music-serial/recipes/02-techniques/simultaneous-forms/recipe.toml`:
 
 ```toml
+id = "simultaneous-forms"
 title = "Deploy simultaneous forms without fabricating chord order"
+codec = "rust"
+setup = "setup.rs"
 summary = "Build one inspectable simultaneous-form deployment from reusable partition components and preserve equal-onset group evidence."
 category = "Rust"
 tags = ["music", "serial", "simultaneity", "deployment", "rust", "framework"]
@@ -10026,7 +10043,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/derived-inv
 Source `crates/sim-lib-music-serial/recipes/02-techniques/derived-invariant-practice/recipe.toml`:
 
 ```toml
+id = "derived-invariant-practice"
 title = "Analyze derived cells and invariant candidates"
+codec = "rust"
+setup = "setup.rs"
 summary = "Keep derived deployment evidence and invariant certificates inspectable instead of collapsing them into one style flag."
 category = "Rust"
 tags = ["music", "serial", "derived", "invariant", "analysis", "rust", "framework"]
@@ -10039,7 +10059,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/referential
 Source `crates/sim-lib-music-serial/recipes/02-techniques/referential-subsets/recipe.toml`:
 
 ```toml
+id = "referential-subsets"
 title = "Analyze bounded referential subsets"
+codec = "rust"
+setup = "setup.rs"
 summary = "Name subset evidence, harmonic context, and emphasis without upgrading one local claim into whole-passage tonality."
 category = "Rust"
 tags = ["music", "serial", "referential", "subset", "analysis", "rust", "framework"]
@@ -10052,7 +10075,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-techniques/counter-voi
 Source `crates/sim-lib-music-serial/recipes/02-techniques/counter-voices/recipe.toml`:
 
 ```toml
+id = "counter-voices"
 title = "Build counter-voices with explicit canon evidence"
+codec = "rust"
+setup = "setup.rs"
 summary = "Deploy counter-voices as ordinary public canon components and retain offset, symmetry, and orchestration metadata."
 category = "Rust"
 tags = ["music", "serial", "counter-voices", "canon", "rust", "framework"]
@@ -10065,7 +10091,10 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/03-parameters/integral-pa
 Source `crates/sim-lib-music-serial/recipes/03-parameters/integral-parameters/recipe.toml`:
 
 ```toml
+id = "integral-parameters"
 title = "Project integral parameter tracks with explicit ledgers"
+codec = "rust"
+setup = "setup.rs"
 summary = "Bind builtin and custom parameter tracks through one typed surface and inspect phase, exhaustion, and transform evidence."
 category = "Rust"
 tags = ["music", "serial", "integral", "parameters", "rust", "framework"]
@@ -10080,7 +10109,11 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party
 Source `crates/sim-lib-music-serial/recipes/02-adaptation/third-party-adaptation/recipe.toml`:
 
 ```toml
+id = "third-party-adaptation"
 title = "Third-party adaptation without source edits"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Register a caller-defined alphabet, practice rule, and realizer entirely through public APIs, then prove the generic Lisp validation surface and open adaptation registry fail closed on unknown components."
 category = "Rust"
 tags = ["music", "serial", "adaptation", "registry", "lisp", "framework"]
@@ -10092,7 +10125,11 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine
 Source `crates/sim-lib-music-serial/recipes/02-adaptation/modal-spine/recipe.toml`:
 
 ```toml
+id = "modal-spine"
 title = "Modal spine realization"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Land one immutable serial plan onto modal and caller-defined scales while preserving ordinal identity and reporting aggregate relaxation explicitly."
 category = "Rust"
 tags = ["music", "serial", "modal", "adaptation", "realization", "rust", "framework"]
@@ -10106,7 +10143,11 @@ Specimen `recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-cons
 Source `crates/sim-lib-music-serial/recipes/02-adaptation/serial-consonance-completion/recipe.toml`:
 
 ```toml
+id = "serial-consonance-completion"
 title = "Serial completion with structural ledgers"
+codec = "rust"
+setup = "setup.rs"
+purpose = "purpose.md"
 summary = "Filter additive completion candidates through serial allowances, preserve the structural plan, and audit the result through structural and all-sounding ledgers."
 category = "Rust"
 tags = ["music", "serial", "completion", "bounded-search", "reversible", "framework", "rust"]
