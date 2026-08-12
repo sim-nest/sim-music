@@ -1,4 +1,7 @@
+id = "partition-mosaic"
 title = "Analyze partitions, mosaics, and interlocking evidence"
+codec = "rust"
+setup = "setup.rs"
 summary = "Validate block-order contracts, compare partitions, verticalize row slices, and inspect dyadic through hexachordal mosaics."
 category = "Rust"
 tags = ["pitch", "serial", "tone-row", "partition", "mosaic", "interlocking", "rust", "framework"]

@@ -1,4 +1,7 @@
+id = "simultaneous-forms"
 title = "Deploy simultaneous forms without fabricating chord order"
+codec = "rust"
+setup = "setup.rs"
 summary = "Build one inspectable simultaneous-form deployment from reusable partition components and preserve equal-onset group evidence."
 category = "Rust"
 tags = ["music", "serial", "simultaneity", "deployment", "rust", "framework"]
