@@ -11,7 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.2.0" }
-sim-lib-discrete-search = { version = "0.1.1", path = "../../../sim-discrete/crates/sim-lib-discrete-search" }
+sim-lib-discrete-search = { version = "0.1.1" }
 sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
 sim-lib-music-lower = { version = "0.1.2", path = "../sim-lib-music-lower" }
 sim-lib-pitch-chord = { version = "0.2.0", path = "../sim-lib-pitch-chord" }
