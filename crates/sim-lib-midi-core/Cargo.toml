@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-core"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 license = "MPL-2.0"
 description = "Core MIDI event, channel, tick-time, device, and in-memory transport models."
@@ -12,7 +12,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.2.0" }
 sim-kernel = { version = "0.2.0" }
-sim-lib-core = { version = "0.1.0" }
+sim-lib-core = { version = "0.2.0" }
 sim-lib-stream-clock = { version = "0.1.2" }
 thiserror = "1"
 

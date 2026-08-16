@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-counterpoint"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 license = "MPL-2.0"
 description = "Exact counterpoint analysis, graph-backed stretto, and bounded constraint generation."
@@ -12,10 +12,10 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 sim-cookbook = { version = "0.2.0" }
 sim-kernel = { version = "0.2.0" }
-sim-lib-core = { version = "0.1.0" }
+sim-lib-core = { version = "0.2.0" }
 sim-lib-discrete-graph = { version = "0.2.0" }
 sim-lib-discrete-search = { version = "0.1.0" }
-sim-lib-music-consonance = { version = "0.1.0", path = "../sim-lib-music-consonance" }
+sim-lib-music-consonance = { version = "0.1.1", path = "../sim-lib-music-consonance" }
 sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
 sim-lib-music-shapes = { version = "0.2.0", path = "../sim-lib-music-shapes" }
 sim-lib-music-transform = { version = "0.1.4", path = "../sim-lib-music-transform" }

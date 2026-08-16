@@ -1,3 +1,3 @@
 # Generated Diagrams
 
-Generated diagram images for `sim-music` are written here.
+Generated diagram images for `REPO_NAME` are written here.
