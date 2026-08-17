@@ -11,7 +11,7 @@ homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
 sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.0" }
+sim-kernel = { version = "0.2.1" }
 sim-lib-core = { version = "0.2.0" }
 sim-lib-discrete-search = { version = "0.1.0" }
 sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
@@ -24,7 +24,7 @@ sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
 sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
 sim-lib-sound-dissonance = { version = "0.1.3", path = "../sim-lib-sound-dissonance" }
 sim-lib-sound-tuning = { version = "0.2.1", path = "../sim-lib-sound-tuning" }
-sim-shape = { version = "0.2.0" }
+sim-shape = { version = "0.2.3" }
 thiserror = "1"
 
 [build-dependencies]
