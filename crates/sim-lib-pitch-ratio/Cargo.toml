@@ -10,11 +10,11 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-num-bigint = "0.4"
+num-bigint = "0.5"
 sim-cookbook = { version = "0.2.0" }
 sim-lib-discrete-comb = { version = "0.2.0" }
 sim-lib-discrete-search = { version = "0.1.0" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.2.0" }

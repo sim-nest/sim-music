@@ -18,7 +18,7 @@ sim-lib-sound-audio-lift = { version = "0.1.2", path = "../sim-lib-sound-audio-l
 sim-lib-sound-bridge = { version = "0.1.2", path = "../sim-lib-sound-bridge" }
 sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
 sim-lib-sound-timbre = { version = "0.1.2", path = "../sim-lib-sound-timbre" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.2.0" }

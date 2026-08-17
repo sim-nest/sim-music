@@ -21,7 +21,7 @@ sim-lib-pitch-ratio = { version = "0.1.0", path = "../sim-lib-pitch-ratio" }
 sim-lib-pitch-scale = { version = "0.2.0", path = "../sim-lib-pitch-scale" }
 sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
 sim-value = { version = "0.2.0" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.2.0" }
