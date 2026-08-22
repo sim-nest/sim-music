@@ -13,15 +13,12 @@ homepage = "https://github.com/sim-nest/sim-music"
 default = ["model"]
 # Marks the modeled (pure-Rust, no-FFI) capability tier; see the crate docs.
 model = []
-rtmidi-hardware = ["dep:midir", "dep:sim-lib-midi-live"]
 
 [dependencies]
-midir = { version = "0.11", optional = true, default-features = false }
 sim-cookbook = { version = "0.2.0" }
 sim-kernel = { version = "0.2.1" }
 sim-lib-core = { version = "0.2.0" }
 sim-lib-midi-core = { version = "0.1.5", path = "../sim-lib-midi-core" }
-sim-lib-midi-live = { version = "0.1.3", path = "../sim-lib-midi-live", optional = true }
 sim-lib-stream-core = { version = "0.1.4" }
 sim-lib-stream-host = { version = "0.1.7" }
 

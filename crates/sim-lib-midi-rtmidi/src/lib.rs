@@ -20,15 +20,9 @@
 //! assert_eq!(tick.tpq, 960);
 //! ```
 
-#[cfg(feature = "rtmidi-hardware")]
-mod alsa_provider;
 mod backend;
-#[cfg(feature = "rtmidi-hardware")]
-mod fixture;
 mod io;
 mod model;
-#[cfg(feature = "rtmidi-hardware")]
-mod native;
 mod runtime;
 
 /// RtMidi ALSA sequencer candidate name used by safe config probes.
@@ -47,23 +41,9 @@ pub fn rtmidi_midi_backend_candidates() -> [&'static str; 3] {
     ]
 }
 
-#[cfg(feature = "rtmidi-hardware")]
-pub use alsa_provider::{
-    AlsaMidiDuplexEvalSite, AlsaMidiInputEvalSite, AlsaMidiOutputEvalSite, AlsaMidiProvider,
-    CoreMidiDuplexEvalSite, CoreMidiInputEvalSite, CoreMidiOutputEvalSite, CoreMidiProvider,
-    WinMmDuplexEvalSite, WinMmInputEvalSite, WinMmOutputEvalSite, WinMmProvider,
-    alsa_seq_midi_backend_candidate,
-};
 pub use backend::{RtmidiBackend, rtmidi_backend_symbol, rtmidi_transport_symbol};
-#[cfg(feature = "rtmidi-hardware")]
-pub use fixture::FixtureRtmidiProvider;
 pub use io::{RtmidiMidiSink, RtmidiMidiSource, bytes_from_payload, payload_from_bytes};
 pub use model::{RtmidiEvent, RtmidiPort, RtmidiTiming};
-#[cfg(feature = "rtmidi-hardware")]
-pub use native::{
-    NativeRtmidiProvider, RtmidiHardwareConfig, RtmidiInputDriver, RtmidiInputSource,
-    RtmidiOutputDriver, RtmidiOutputSink, RtmidiProvider, input_ring,
-};
 pub use runtime::{MidiRtmidiLib, install_midi_rtmidi_lib, missing_rtmidi_dependency_card};
 
 /// Cookbook recipes for this lib, embedded at build time.

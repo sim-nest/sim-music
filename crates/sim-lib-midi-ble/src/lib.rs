@@ -26,8 +26,6 @@
 
 mod discovery;
 mod model;
-#[cfg(feature = "ble-midi-hardware")]
-mod native;
 mod runtime;
 
 pub use discovery::{
@@ -37,13 +35,6 @@ pub use discovery::{
 pub use model::{
     BLE_MIDI_IO_CHARACTERISTIC_UUID, BLE_MIDI_SERVICE_UUID, BleMidiDevice, ble_midi_backend_symbol,
     ble_midi_transport_symbol, default_ble_reconnect_policy, md_bt01_compatibility_names,
-};
-#[cfg(feature = "ble-midi-hardware")]
-pub use native::{
-    BleMidiDiscoveryProvider, BleMidiDuplexEvalSite, BleMidiGattSession, BleMidiHardwareConfig,
-    BleMidiInputSource, BleMidiOutputSink, BleMidiProvider, BluezBleMidiProvider,
-    DEFAULT_RING_CAPACITY, DEFAULT_TPQ, FixtureBleMidiProvider, decode_ble_midi_packet,
-    encode_ble_midi_event,
 };
 pub use runtime::{MidiBleLib, install_midi_ble_lib};
 
