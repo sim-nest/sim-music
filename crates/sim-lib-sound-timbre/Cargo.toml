@@ -17,4 +17,4 @@ sim-lib-discrete-search = { version = "0.1.0" }
 sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }

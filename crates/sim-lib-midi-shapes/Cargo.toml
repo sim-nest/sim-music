@@ -22,7 +22,7 @@ sim-shape = { version = "0.2.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-kernel = { version = "0.2.0", features = ["test-support"] }

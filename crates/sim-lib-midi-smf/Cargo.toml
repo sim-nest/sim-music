@@ -15,4 +15,4 @@ sim-lib-midi-core = { version = "0.1.4", path = "../sim-lib-midi-core" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }

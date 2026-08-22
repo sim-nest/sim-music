@@ -26,7 +26,7 @@ sim-lib-topology = { version = "0.1.5" }
 sim-value = { version = "0.2.0" }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true

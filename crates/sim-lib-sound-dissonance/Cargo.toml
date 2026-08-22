@@ -23,4 +23,4 @@ sim-lib-sound-spectrum = { version = "0.1.2", path = "../sim-lib-sound-spectrum"
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }

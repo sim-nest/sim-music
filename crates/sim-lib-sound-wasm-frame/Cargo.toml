@@ -25,7 +25,7 @@ sim-lib-stream-core = { version = "0.1.4" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [features]
 default = ["sound-music", "model"]

@@ -26,7 +26,7 @@ sim-lib-stream-midi = { version = "0.1.3", path = "../sim-lib-stream-midi" }
 sim-lib-stream-prelude = { version = "0.2.1" }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true

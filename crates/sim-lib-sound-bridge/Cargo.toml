@@ -21,7 +21,7 @@ sim-lib-sound-tuning = { version = "0.2.1", path = "../sim-lib-sound-tuning" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true

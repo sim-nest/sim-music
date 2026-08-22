@@ -23,7 +23,7 @@ sim-lib-midi-rtmidi = { version = "0.1.7", path = "../sim-lib-midi-rtmidi" }
 sim-lib-stream-host = { version = "0.1.7" }
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-test-support = { version = "0.1.0" }
