@@ -18,7 +18,7 @@ sim-lib-music-transform = { path = "../../crates/sim-lib-music-transform" }
 sim-lib-pitch-core = { path = "../../crates/sim-lib-pitch-core" }
 sim-lib-pitch-scale = { path = "../../crates/sim-lib-pitch-scale" }
 sim-lib-pitch-serial = { path = "../../crates/sim-lib-pitch-serial" }
-toml = "0.8"
+toml = "1.1"
 
 [lints]
 workspace = true

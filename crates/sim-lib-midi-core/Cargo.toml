@@ -14,7 +14,7 @@ sim-cookbook = { version = "0.2.0" }
 sim-kernel = { version = "0.2.1" }
 sim-lib-core = { version = "0.2.0" }
 sim-lib-stream-clock = { version = "0.1.2" }
-thiserror = "1"
+thiserror = "2"
 
 [build-dependencies]
 sim-cookbook = { version = "0.2.0" }
