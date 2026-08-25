@@ -65,6 +65,16 @@ claims_specimens = [
 ]
 
 [[feature]]
+id = "feature/sim-music/media-edge-vertical"
+title = "Resilient media-edge music vertical"
+summary = "Keep one music-session identity across optional OASYS control/audio, digital RX-V777 playback, SIM synthesis, heavy-DAW fallback, and deterministic offline render."
+owner = "crate/sim-lib-music-core"
+audiences = ["user", "code", "framework"]
+guidance = "Build MediaEdgeMusicPlan::standard and retain RouteEvidence variants independently; unsupported, stale, dropout, reconnect, and disconnected are distinct observations. Physical routes are optional while SIM synthesis and offline render remain mandatory continuity roots."
+claims_anchors = ["anchor/crate/sim-lib-music-core"]
+claims_specimens = ["spec-test/sim-music/crates/sim-lib-music-core/src/media_edge"]
+
+[[feature]]
 id = "feature/sim-music/midi-notation-workflows"
 title = "MIDI and notation workflows"
 summary = "Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML."
