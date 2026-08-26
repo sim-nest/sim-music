@@ -69,7 +69,11 @@ fn roman_without_key_reports_diagnostic() {
 
 #[test]
 fn install_pitch_namer_lib_registers_builtin_namers_as_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x194e_9909_5667_bd4f),
+    );
     install_pitch_namer_lib(&mut cx).unwrap();
     install_pitch_namer_lib(&mut cx).unwrap();
 

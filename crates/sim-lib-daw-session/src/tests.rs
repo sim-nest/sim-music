@@ -307,7 +307,11 @@ fn topology_package_can_launch_from_session_data() {
 
 #[test]
 fn install_daw_session_lib_registers_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xae87_29d1_5834_203a),
+    );
     install_daw_session_lib(&mut cx).expect("install");
     install_daw_session_lib(&mut cx).expect("idempotent install");
 

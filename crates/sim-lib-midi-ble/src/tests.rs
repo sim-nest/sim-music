@@ -25,7 +25,11 @@ fn fixture_discovery_and_bridge_policy_remain_portable() {
 
 #[test]
 fn midi_ble_runtime_exports_only_semantic_backend() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x4d49_4449),
+    );
     sim_test_support::assert_lib_exports(
         &mut cx,
         install_midi_ble_lib,

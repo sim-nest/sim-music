@@ -20,19 +20,6 @@
       "features": [
         {
           "edges": [
-            "dep:sim-lib-midi-live",
-            "dep:zbus"
-          ],
-          "name": "ble-midi-hardware",
-          "workspace_edges": [
-            {
-              "feature": null,
-              "package": "sim-lib-midi-live"
-            }
-          ]
-        },
-        {
-          "edges": [
             "model"
           ],
           "name": "default",
@@ -70,19 +57,6 @@
           "edges": [],
           "name": "model",
           "workspace_edges": []
-        },
-        {
-          "edges": [
-            "dep:midir",
-            "dep:sim-lib-midi-live"
-          ],
-          "name": "rtmidi-hardware",
-          "workspace_edges": [
-            {
-              "feature": null,
-              "package": "sim-lib-midi-live"
-            }
-          ]
         }
       ],
       "group": "workspace",

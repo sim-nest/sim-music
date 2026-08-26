@@ -59,7 +59,11 @@ fn catalog_reuse_composition_recipe_is_bounded_and_non_destructive() {
 }
 
 fn decode_plan(source: &str) -> Vec<(Expr, Expr)> {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xcbc7_974c_a9c0_00d9),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");

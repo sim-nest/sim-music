@@ -9,7 +9,11 @@ use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ReadPolicy, Symbol};
 use crate::{HarmonyMetric, HarmonyPredicate, HarmonyProgram, PaletteAlgebra};
 
 fn decode_fixture(source: &str) -> HarmonyProgram {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x7722_0769_ef9c_e53b),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
@@ -106,3 +110,4 @@ fn catalog_chord_cycle_lisp_fixture_names_transposed_palette_and_filter_chain() 
         ]
     );
 }
+// conformance: harmony tests prove chord identity, voicing, and transformation laws.

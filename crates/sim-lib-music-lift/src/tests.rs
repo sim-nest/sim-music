@@ -263,7 +263,11 @@ fn midi_to_diff_roll_emits_expected_masks() {
 
 #[test]
 fn install_music_lift_lib_registers_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2646_88f7_1e51_0694),
+    );
     install_music_lift_lib(&mut cx).expect("install");
     install_music_lift_lib(&mut cx).expect("install");
     let lib = cx

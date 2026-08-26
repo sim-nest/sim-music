@@ -1,5 +1,7 @@
 //! Provenance and route history for scientific and artistic listening sessions.
 
+// conformance: listening tests prove stable identity, typed mappings, and route substitutions.
+
 use std::str::FromStr;
 
 use sim_kernel::{Error, Result};
@@ -23,7 +25,12 @@ pub enum Normalization {
     /// Preserve source values without rescaling.
     None,
     /// Map the declared source interval onto `[0, 1]`.
-    Linear { source_min: f64, source_max: f64 },
+    Linear {
+        /// Lower endpoint of the measured source interval.
+        source_min: f64,
+        /// Upper endpoint of the measured source interval.
+        source_max: f64,
+    },
 }
 
 /// Policy for values outside the normalized target interval.
@@ -49,11 +56,16 @@ pub enum Interpolation {
 pub enum InverseMapping {
     /// The named inverse recovers the measured values within the stated tolerance.
     Available {
+        /// Stable name of the inverse operation.
         operation: String,
+        /// Declared recovery tolerance and unit.
         tolerance: String,
     },
     /// No inverse exists; the reason is durable evidence rather than an implication.
-    Lossy { reason: String },
+    Lossy {
+        /// Evidence explaining why the mapping cannot be inverted.
+        reason: String,
+    },
 }
 
 /// Audification receipt tying a sounding result to measured evidence.
@@ -122,7 +134,12 @@ pub enum ListeningTarget {
     /// Korg OASYS workstation.
     Oasys,
     /// Exact refusal retained when no adapter exists.
-    Unsupported { requested: String, evidence: String },
+    Unsupported {
+        /// Requested target that could not be resolved.
+        requested: String,
+        /// Durable refusal evidence.
+        evidence: String,
+    },
 }
 
 /// Append-only route lifecycle event.

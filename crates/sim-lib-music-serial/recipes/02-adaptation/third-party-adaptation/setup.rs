@@ -171,7 +171,7 @@ fn assert_shape_reports_serial_diagnostics(
 }
 
 fn serial_cx() -> Result<Cx, Box<dyn std::error::Error>> {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory), sim_kernel::HandleSeed::new(0x0a2c_b6d4_a64a_15b3));
     install_music_shapes_lib(&mut cx)?;
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id())?;
     cx.load_lib(&lisp)?;

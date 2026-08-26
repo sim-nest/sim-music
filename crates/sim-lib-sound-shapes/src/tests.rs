@@ -295,7 +295,11 @@ fn builtins_encode_and_decode() {
 
 #[test]
 fn install_sound_shapes_lib_registers_audio_lift_shapes() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xef78_f3db_293b_cdc9),
+    );
     install_sound_shapes_lib(&mut cx).unwrap();
     install_sound_shapes_lib(&mut cx).unwrap();
     assert!(
@@ -312,7 +316,11 @@ fn install_sound_shapes_lib_registers_audio_lift_shapes() {
 
 #[test]
 fn sound_runtime_shapes_reject_bad_domain_forms() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x8265_55a0_192a_31a3),
+    );
     install_sound_shapes_lib(&mut cx).unwrap();
 
     let frequency = registered_sound_shape(&cx, "Frequency");
@@ -417,7 +425,11 @@ fn sound_citizens_accept_legacy_text_and_read_construct() {
 }
 
 fn cx_with_citizens() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x9051_93e4_d64d_6f53),
+    );
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx

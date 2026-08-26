@@ -84,7 +84,11 @@ fn tone_row_round_trip_and_aggregate_refusal() {
 
 #[test]
 fn install_pitch_shapes_lib_registers_runtime_shape_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xa12d_f495_6de1_fab7),
+    );
     install_pitch_shapes_lib(&mut cx).unwrap();
     install_pitch_shapes_lib(&mut cx).unwrap();
     let shape = cx
@@ -103,7 +107,11 @@ fn install_pitch_shapes_lib_registers_runtime_shape_exports() {
 
 #[test]
 fn pitch_shapes_reject_invalid_values() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfe05_94a5_4054_32d3),
+    );
     install_pitch_shapes_lib(&mut cx).unwrap();
 
     let pitch = cx
@@ -195,7 +203,11 @@ fn pitch_citizens_accept_legacy_text_and_read_construct() {
 
 #[test]
 fn lisp_serial_surface_builds_rows_matrices_and_reports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xe34e_1f9d_6e70_9aa5),
+    );
     install_pitch_shapes_lib(&mut cx).unwrap();
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
     cx.load_lib(&lisp).unwrap();
@@ -256,7 +268,11 @@ fn lisp_serial_surface_builds_rows_matrices_and_reports() {
 }
 
 fn cx_with_citizens() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfe09_0ed9_f3b4_6c06),
+    );
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx

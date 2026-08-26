@@ -305,7 +305,11 @@ fn progression_export_helper_uses_chord_bodies() {
 
 #[test]
 fn install_music_notation_lib_registers_codec_surface() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfe9f_36eb_53e2_6c6d),
+    );
     install_music_notation_lib(&mut cx).expect("install");
     install_music_notation_lib(&mut cx).expect("install");
     let value = cx
@@ -520,7 +524,11 @@ fn runtime_import_is_shape_described_and_returns_score_read_construct() {
         .expect("export")
         .value
         .into_bytes();
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x202b_e423_b18d_476a),
+    );
     install_music_notation_lib(&mut cx).expect("install");
     let function = cx
         .resolve_function(&notation_import_symbol())

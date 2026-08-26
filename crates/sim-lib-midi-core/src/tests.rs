@@ -284,7 +284,11 @@ fn tracked_sources_report_track_metadata() {
 
 #[test]
 fn install_midi_io_lib_registers_runtime_exports() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x9f79_0964_eb64_a0c7),
+    );
     install_midi_io_lib(&mut cx).expect("install");
     install_midi_io_lib(&mut cx).expect("install");
     let value = cx.resolve_value(&Symbol::qualified("midi", "MemoryMidiSource"));

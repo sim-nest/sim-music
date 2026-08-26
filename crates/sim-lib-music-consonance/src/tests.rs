@@ -299,7 +299,11 @@ fn score_and_realized_midi_have_equivalent_windows_and_metrics() {
 
 #[test]
 fn runtime_report_exposes_notes_and_each_metric_without_an_aggregate() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xda34_8bc6_588c_65f4),
+    );
     install_music_consonance_lib(&mut cx).expect("install");
     let function = cx
         .resolve_function(&music_consonance_evaluate_symbol())

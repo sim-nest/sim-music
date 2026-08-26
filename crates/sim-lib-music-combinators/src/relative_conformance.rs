@@ -196,3 +196,4 @@ fn noncanonical_music_reports_structure_loss_but_preserves_semantics() {
     assert_eq!(semantic_notes(&chord), semantic_notes(reconstructed));
     assert_eq!(chord.duration(), reconstructed.duration());
 }
+// conformance: relative-music tests prove context resolution and transposition laws.

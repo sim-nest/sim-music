@@ -225,7 +225,11 @@ fn zero_polyphony_is_rejected() {
 
 #[test]
 fn runtime_install_is_idempotent() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfc10_bcdc_de92_ebce),
+    );
     install_sound_bridge_lib(&mut cx).unwrap();
     install_sound_bridge_lib(&mut cx).unwrap();
 }

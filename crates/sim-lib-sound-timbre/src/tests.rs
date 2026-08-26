@@ -136,7 +136,11 @@ fn layer_merge_policy_combines_coincident_partials() {
 
 #[test]
 fn install_sound_timbre_lib_registers_builtin_timbres() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xd03c_8c7e_ac40_242a),
+    );
     install_sound_timbre_lib(&mut cx).expect("install");
     install_sound_timbre_lib(&mut cx).expect("install");
     assert!(

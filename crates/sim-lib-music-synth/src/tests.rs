@@ -474,7 +474,11 @@ fn live_runner_and_offline_render_use_same_synth_code() {
 
 #[test]
 fn install_audio_synth_lib_registers_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x1a35_8959_070a_6e8f),
+    );
     sim_test_support::assert_lib_exports(
         &mut cx,
         install_audio_synth_lib,
@@ -485,7 +489,11 @@ fn install_audio_synth_lib_registers_runtime_exports() {
 
 #[test]
 fn synth_runtime_cards_advertise_realtime_audio_profile() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x6bd0_e2e9_eda4_d6d5),
+    );
     install_audio_synth_lib(&mut cx).expect("install");
     let value = cx
         .registry()

@@ -232,3 +232,4 @@ fn overlays_and_music_transform_chains_compose_existing_music() {
         vec![(vec![0], vec![72, 79])]
     );
 }
+// conformance: carpet tests prove bounded combinator construction and musical invariants.

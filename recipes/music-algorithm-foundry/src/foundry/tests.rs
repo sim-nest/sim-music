@@ -24,7 +24,11 @@ fn alternate_registered_harmonizer_is_selected_from_data_alone() {
 
 #[test]
 fn missing_optional_preview_reports_load_and_shape_contract() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xb8f6_1596_1dca_7070),
+    );
     install_music_algorithm_plan_lib(&mut cx).unwrap();
     let preview = optional_preview_provider();
     let input = cx.factory().table(Vec::new()).unwrap();

@@ -126,7 +126,11 @@ fn catalog_timbres_render_deterministically_to_offline_pcm() {
 
 #[test]
 fn runtime_install_is_idempotent() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2c3c_ee3c_9428_ea33),
+    );
     install_sound_render_lib(&mut cx).unwrap();
     install_sound_render_lib(&mut cx).unwrap();
 }

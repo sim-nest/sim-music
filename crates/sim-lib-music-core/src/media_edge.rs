@@ -21,17 +21,39 @@ pub enum MusicRouteRole {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum RouteEvidence {
     /// Timing observed for a healthy route.
-    Healthy { latency_us: u64, jitter_us: u64 },
+    Healthy {
+        /// Observed one-way route latency in microseconds.
+        latency_us: u64,
+        /// Observed route jitter in microseconds.
+        jitter_us: u64,
+    },
     /// Frames were lost without erasing route identity.
-    Dropout { lost_frames: u64 },
+    Dropout {
+        /// Number of frames lost in the observed dropout.
+        lost_frames: u64,
+    },
     /// A disconnected route returned.
-    Reconnected { attempts: u32, downtime_ms: u64 },
+    Reconnected {
+        /// Number of attempts required to restore the route.
+        attempts: u32,
+        /// Total route downtime in milliseconds.
+        downtime_ms: u64,
+    },
     /// Discovery data exceeded its freshness bound.
-    StaleObservation { age_ms: u64 },
+    StaleObservation {
+        /// Age of the stale discovery observation in milliseconds.
+        age_ms: u64,
+    },
     /// The provider cannot implement this route.
-    Unsupported { reason: String },
+    Unsupported {
+        /// Provider-supplied explanation of the unsupported route.
+        reason: String,
+    },
     /// An otherwise supported route is currently absent.
-    Disconnected { reason: String },
+    Disconnected {
+        /// Provider-supplied explanation of the disconnection.
+        reason: String,
+    },
 }
 
 /// One named endpoint in a vertical plan.
@@ -126,3 +148,4 @@ mod tests {
         assert_ne!(evidence[4], evidence[5]);
     }
 }
+// conformance: media-edge tests prove typed musical media boundaries and round trips.

@@ -176,7 +176,11 @@ fn smf_file_round_trip() {
 
 #[test]
 fn install_midi_shapes_lib_registers_runtime_shape_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xb59a_8fd7_525c_8050),
+    );
     install_midi_shapes_lib(&mut cx).unwrap();
     install_midi_shapes_lib(&mut cx).unwrap();
     let shape = cx
@@ -195,7 +199,11 @@ fn install_midi_shapes_lib_registers_runtime_shape_exports() {
 
 #[test]
 fn midi_shapes_reject_invalid_values() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x46c2_28e7_1f03_7b7d),
+    );
     install_midi_shapes_lib(&mut cx).unwrap();
 
     let tick = cx
@@ -294,7 +302,11 @@ fn midi_citizens_accept_legacy_text_and_read_construct() {
 }
 
 fn cx_with_citizens() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x0628_4a98_3e4e_b78c),
+    );
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx

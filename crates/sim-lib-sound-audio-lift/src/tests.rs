@@ -128,7 +128,11 @@ fn empty_audio_returns_diagnostics_and_no_notes() {
 
 #[test]
 fn install_runtime_is_idempotent_and_registers_audio_lifters() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfba3_fa38_d672_3d5c),
+    );
     install_sound_audio_lift_lib(&mut cx).unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();
 
@@ -156,7 +160,11 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
 
 #[test]
 fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2596_68d7_f95f_ee5e),
+    );
     cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
         .unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();
@@ -207,7 +215,11 @@ fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
 
 #[test]
 fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xbe00_5149_eba9_51d1),
+    );
     cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
         .unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();

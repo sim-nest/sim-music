@@ -296,7 +296,11 @@ fn compatibility_file_write_aliases_are_accepted() {
 }
 
 fn cx(capabilities: &[CapabilityName]) -> Cx {
-    let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(NoopEvalPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x3087_bd17_948f_b213),
+    );
     for capability in capabilities {
         cx.grant(capability.clone());
     }

@@ -440,7 +440,7 @@ claims_anchors = [
   "anchor/runtime-lib/sim-lib-daw-session/daw-session-lib",
 ]
 claims_specimens = [
-  "spec-test/sim-music/crates/sim-lib-daw-session/src/listening/tests",
+  "spec-test/sim-music/crates/sim-lib-daw-session/src/listening",
   "spec-test/sim-music/crates/sim-lib-daw-session/src/tests",
 ]
 supports = [
@@ -738,7 +738,7 @@ audiences = ["user", "code", "framework"]
 steps = [
   { feature = "feature/sim-music/daw-session-runtime", why = "The session owner records reversible or explicitly lossy audification, disjoint artistic-mapping provenance, stable content identity, and append-only route substitutions." },
   { feature = "feature/sim-music/audio-lift-and-render", why = "The audio owner supplies bounded analysis and deterministic rendering without owning scientific meaning." },
-  { specimen = "spec-test/sim-music/crates/sim-lib-daw-session/src/listening/tests", why = "The listening specimens prove route churn leaves musical and expedition identity stable, mapping families cannot decode as one another, all named target substitutions are typed, and unsupported targets retain exact evidence." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-daw-session/src/listening", why = "The listening specimens prove route churn leaves musical and expedition identity stable, mapping families cannot decode as one another, all named target substitutions are typed, and unsupported targets retain exact evidence." },
 ]
 
 [[route]]
