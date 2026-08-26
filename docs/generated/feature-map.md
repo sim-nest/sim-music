@@ -7,10 +7,10 @@
 | `music-algorithm-foundry` | `workspace` | 0 | 0 |
 | `serial-workbench` | `workspace` | 0 | 0 |
 | `sim-lib-daw-session` | `workspace` | 0 | 0 |
-| `sim-lib-midi-ble` | `workspace` | 3 | 1 |
+| `sim-lib-midi-ble` | `workspace` | 2 | 0 |
 | `sim-lib-midi-core` | `workspace` | 0 | 0 |
 | `sim-lib-midi-live` | `workspace` | 0 | 0 |
-| `sim-lib-midi-rtmidi` | `workspace` | 3 | 1 |
+| `sim-lib-midi-rtmidi` | `workspace` | 2 | 0 |
 | `sim-lib-midi-shapes` | `workspace` | 0 | 0 |
 | `sim-lib-midi-smf` | `workspace` | 0 | 0 |
 | `sim-lib-midi-sysex` | `workspace` | 0 | 0 |
