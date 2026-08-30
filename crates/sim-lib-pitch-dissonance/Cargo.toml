@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-dissonance"
-version = "0.1.3"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Pitch-domain dissonance and interval-density scoring over chord material."
@@ -10,14 +10,14 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer = { version = "0.1.4", path = "../sim-lib-pitch-namer" }
-sim-lib-pitch-ratio = { version = "0.1.0", path = "../sim-lib-pitch-ratio" }
-sim-lib-pitch-scale = { version = "0.2.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer = { version = "0.2.0", path = "../sim-lib-pitch-namer" }
+sim-lib-pitch-ratio = { version = "0.2.0", path = "../sim-lib-pitch-ratio" }
+sim-lib-pitch-scale = { version = "0.3.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
 
 [build-dependencies]
 sim-cookbook-build = { version = "0.1.0" }

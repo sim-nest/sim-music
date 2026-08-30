@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-midi-ble"
-version = "0.1.5"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "BLE-MIDI discovery, packet framing, and stream-host placement seams."
@@ -15,19 +15,19 @@ default = ["model"]
 model = []
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-midi-core = { version = "0.1.5", path = "../sim-lib-midi-core" }
-sim-lib-midi-rtmidi = { version = "0.1.7", path = "../sim-lib-midi-rtmidi" }
-sim-lib-stream-host = { version = "0.1.7" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-midi-core = { version = "0.2.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-rtmidi = { version = "0.2.0", path = "../sim-lib-midi-rtmidi" }
+sim-lib-stream-host = { version = "0.2.0" }
 
 [build-dependencies]
 sim-cookbook-build = { version = "0.1.0" }
 
 [dev-dependencies]
 sim-test-support = { version = "0.1.0" }
-sim-value = { version = "0.2.0" }
+sim-value = { version = "0.3.0" }
 
 [lints]
 workspace = true

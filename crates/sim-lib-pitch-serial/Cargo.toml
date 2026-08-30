@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-serial"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Strict twelve-tone rows, total row operations, and explicit label conventions for SIM."
@@ -10,12 +10,12 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-lib-discrete-comb = { version = "0.2.0" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer-forte = { version = "0.2.0", path = "../sim-lib-pitch-namer-forte" }
-sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
-sim-lib-serial-core = { version = "0.1.0", path = "../sim-lib-serial-core" }
+sim-cookbook = { version = "0.3.0" }
+sim-lib-discrete-comb = { version = "0.3.0" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-forte = { version = "0.3.0", path = "../sim-lib-pitch-namer-forte" }
+sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
+sim-lib-serial-core = { version = "0.2.0", path = "../sim-lib-serial-core" }
 thiserror = "1"
 
 [build-dependencies]

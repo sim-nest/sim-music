@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-set"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Pitch-class set masks, normal forms, interval vectors, and set operations."
@@ -10,10 +10,10 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-lib-discrete-graph = { version = "0.2.0" }
-sim-lib-discrete-search = { version = "0.1.0" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
+sim-cookbook = { version = "0.3.0" }
+sim-lib-discrete-graph = { version = "0.3.0" }
+sim-lib-discrete-search = { version = "0.2.0" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
 thiserror = "1"
 
 [build-dependencies]

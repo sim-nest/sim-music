@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-namer"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Shared naming registry for chord, pitch-class set, and harmonic label systems."
@@ -10,17 +10,17 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-pitch-chord = { version = "0.2.1", path = "../sim-lib-pitch-chord" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer-forte = { version = "0.2.0", path = "../sim-lib-pitch-namer-forte" }
-sim-lib-pitch-namer-jazz = { version = "0.2.0", path = "../sim-lib-pitch-namer-jazz" }
-sim-lib-pitch-namer-riemann = { version = "0.2.0", path = "../sim-lib-pitch-namer-riemann" }
-sim-lib-pitch-namer-roman = { version = "0.2.0", path = "../sim-lib-pitch-namer-roman" }
-sim-lib-pitch-scale = { version = "0.2.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-pitch-chord = { version = "0.3.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-forte = { version = "0.3.0", path = "../sim-lib-pitch-namer-forte" }
+sim-lib-pitch-namer-jazz = { version = "0.3.0", path = "../sim-lib-pitch-namer-jazz" }
+sim-lib-pitch-namer-riemann = { version = "0.3.0", path = "../sim-lib-pitch-namer-riemann" }
+sim-lib-pitch-namer-roman = { version = "0.3.0", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-scale = { version = "0.3.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
 thiserror = "1"
 
 [build-dependencies]
