@@ -46,7 +46,11 @@ fn analysis_returns_one_score_per_model() {
 
 #[test]
 fn install_pitch_dissonance_lib_registers_builtin_models_as_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x3513_26ec_f5c4_59cf),
+    );
     install_pitch_dissonance_lib(&mut cx).unwrap();
     install_pitch_dissonance_lib(&mut cx).unwrap();
 

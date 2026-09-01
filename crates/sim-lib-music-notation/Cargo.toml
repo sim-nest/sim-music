@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-notation"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Bounded LilyPond and MusicXML notation profiles for canonical SIM scores."
@@ -12,18 +12,18 @@ homepage = "https://github.com/sim-nest/sim-music"
 [dependencies]
 num-rational = "0.4"
 roxmltree = "0.21"
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
-sim-lib-music-shapes = { version = "0.2.0", path = "../sim-lib-music-shapes" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-shape = { version = "0.2.3" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-music-core = { version = "0.3.0", path = "../sim-lib-music-core" }
+sim-lib-music-shapes = { version = "0.3.0", path = "../sim-lib-music-shapes" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-shape = { version = "0.3.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [dev-dependencies]
-sim-lib-music-serial = { version = "0.1.0", path = "../sim-lib-music-serial" }
-sim-lib-pitch-serial = { version = "0.1.0", path = "../sim-lib-pitch-serial" }
+sim-lib-music-serial = { version = "0.2.0", path = "../sim-lib-music-serial" }
+sim-lib-pitch-serial = { version = "0.2.0", path = "../sim-lib-pitch-serial" }

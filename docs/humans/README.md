@@ -19,6 +19,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | --- | --- | ---: | --- |
 | `feature/sim-music/generated-docs` | `crate/xtask` | 0 | Publish generated package, card, recipe, and index facts for the music, MIDI, pitch, and sound crates. |
 | `feature/sim-music/synth-performance-workbench` | `crate/sim-lib-music-synth` | 3 | Compose catalog synthesis, deterministic offline renders, bounded PCM interchange, and realtime graph previews without duplicating synth or DSP implementations. |
+| `feature/sim-music/media-edge-vertical` | `crate/sim-lib-music-core` | 1 | Keep one music-session identity across optional OASYS control/audio, digital RX-V777 playback, SIM synthesis, heavy-DAW fallback, and deterministic offline render. |
 | `feature/sim-music/midi-notation-workflows` | `crate/sim-lib-midi-core` | 4 | Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML. |
 | `feature/sim-music/pitch-and-sound-vocabulary` | `crate/sim-lib-pitch-core` | 1 | Name chords, build deterministic voicing palettes, classify pitch-set relations, generate bounded tetrachord scales, rank exact ratio intervals, walk pitch-set graphs, and describe timbres, spectra, and tuning facts through worked musical descriptors and bounded families. |
 | `feature/sim-music/declarative-harmony` | `crate/sim-lib-pitch-chord` | 2 | Load chord palettes, cadence-template algebra, hard legality, declared and learned weighted preferences, voicing changes, and render settings as inspectable expression data. |
@@ -33,7 +34,7 @@ This generated lane consumes `docs/generated/sim-index-fragment.sx`. Global inde
 | `feature/sim-music/sound-spectrum-adapter` | `crate/sim-lib-sound-spectrum` | 1 | Retain physical frequency, amplitude, PCM/STFT provenance, and sound descriptors while delegating transform math to the generic numbers-signal real FFT. |
 | `feature/sim-music/audio-lift-and-render` | `crate/sim-lib-sound-audio-lift` | 6 | Lift PCM through bounded pitch, onset, varying-tempo beat, zero-crossing, perceptual/MFCC, chroma, key, chord, spectral, and finite rendering workflows with alternatives and evidence. |
 | `feature/sim-music/offline-audio-transform-and-loudness` | `crate/sim-lib-sound-render` | 2 | Stretch and pitch PCM independently through a policy-complete STFT phase vocoder, measure EBU R128/ITU-R BS.1770 loudness and true peak, normalize with visible gain and clipping evidence, and lower through bounded channel mapping and seeded PCM16 dither. |
-| `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 1 | Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime. |
+| `feature/sim-music/daw-session-runtime` | `crate/sim-lib-daw-session` | 2 | Represent tracks, clips, instruments, buses, provenance-bearing audification and artistic mappings, and route-independent offline or live schedules as a loadable music session runtime. |
 | `feature/sim-music/serial-series-calculus` | `crate/sim-lib-serial-core` | 2 | Validate symbol-bearing finite alphabets and ordered series, then apply total composable transforms with aggregate and inverse certificates. |
 | `feature/sim-music/twelve-tone-row-theory` | `crate/sim-lib-pitch-serial` | 2 | Validate canonical twelve-pitch rows, preserve all 48 P/I/R/RI aliases across symmetry reduction, and inspect convention-explicit coordinate-bearing matrices. |
 | `feature/sim-music/serial-practice` | `crate/sim-lib-music-serial` | 8 | Freeze row instances, row ordinals, roles, parent evidence, simultaneous groups, and precedence into one validated serial plan, then realize strict row statements without losing source identity. |
@@ -812,7 +813,11 @@ fn catalog_reuse_composition_recipe_is_bounded_and_non_destructive() {
 }
 
 fn decode_plan(source: &str) -> Vec<(Expr, Expr)> {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xcbc7_974c_a9c0_00d9),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
@@ -1028,7 +1033,11 @@ fn layer_merge_policy_combines_coincident_partials() {
 
 #[test]
 fn install_sound_timbre_lib_registers_builtin_timbres() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xd03c_8c7e_ac40_242a),
+    );
     install_sound_timbre_lib(&mut cx).expect("install");
     install_sound_timbre_lib(&mut cx).expect("install");
     assert!(
@@ -1040,6 +1049,166 @@ fn install_sound_timbre_lib_registers_builtin_timbres() {
             .is_ok()
     );
 }
+```
+
+### `feature/sim-music/media-edge-vertical`
+
+Specimen `spec-test/sim-music/crates/sim-lib-music-core/src/media_edge` is checked by `cargo test`.
+
+Source `crates/sim-lib-music-core/src/media_edge.rs`:
+
+```rust
+//! Provider-neutral plan and evidence for a resilient media-edge music session.
+
+use sim_kernel::Symbol;
+
+/// Stable role occupied by one route endpoint.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum MusicRouteRole {
+    /// Performance control source such as MIDI.
+    Control,
+    /// In-process SIM synthesis.
+    Synthesis,
+    /// Audio playback destination.
+    Playback,
+    /// Substitute host used when the preferred route fails.
+    Fallback,
+    /// Deterministic non-realtime rendering sink.
+    OfflineRender,
+}
+
+/// Health evidence retained independently for every route.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum RouteEvidence {
+    /// Timing observed for a healthy route.
+    Healthy {
+        /// Observed one-way route latency in microseconds.
+        latency_us: u64,
+        /// Observed route jitter in microseconds.
+        jitter_us: u64,
+    },
+    /// Frames were lost without erasing route identity.
+    Dropout {
+        /// Number of frames lost in the observed dropout.
+        lost_frames: u64,
+    },
+    /// A disconnected route returned.
+    Reconnected {
+        /// Number of attempts required to restore the route.
+        attempts: u32,
+        /// Total route downtime in milliseconds.
+        downtime_ms: u64,
+    },
+    /// Discovery data exceeded its freshness bound.
+    StaleObservation {
+        /// Age of the stale discovery observation in milliseconds.
+        age_ms: u64,
+    },
+    /// The provider cannot implement this route.
+    Unsupported {
+        /// Provider-supplied explanation of the unsupported route.
+        reason: String,
+    },
+    /// An otherwise supported route is currently absent.
+    Disconnected {
+        /// Provider-supplied explanation of the disconnection.
+        reason: String,
+    },
+}
+
+/// One named endpoint in a vertical plan.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MusicRouteEndpoint {
+    /// Stable route identity.
+    pub id: Symbol,
+    /// Continuity role filled by the endpoint.
+    pub role: MusicRouteRole,
+    /// Whether the vertical remains useful without it.
+    pub optional: bool,
+}
+
+/// Stable-identity session plan spanning hardware, synthesis, fallback, and render.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MediaEdgeMusicPlan {
+    /// Stable identity retained across substitutions.
+    pub session: Symbol,
+    /// Ordered, digital-first route candidates.
+    pub endpoints: Vec<MusicRouteEndpoint>,
+}
+
+impl MediaEdgeMusicPlan {
+    /// Builds the reviewed vertical; every physical edge is optional.
+    pub fn standard(session: Symbol) -> Self {
+        Self {
+            session,
+            endpoints: vec![
+                endpoint("oasys-control", MusicRouteRole::Control, true),
+                endpoint("oasys-audio", MusicRouteRole::Playback, true),
+                endpoint("sim-synthesis", MusicRouteRole::Synthesis, false),
+                endpoint("rx-v777-digital", MusicRouteRole::Playback, true),
+                endpoint("heavy-daw-host", MusicRouteRole::Fallback, true),
+                endpoint("offline-render", MusicRouteRole::OfflineRender, false),
+            ],
+        }
+    }
+
+    /// Returns true when mandatory synthesis and offline-render roles survive.
+    pub fn survives(&self, failed: &[Symbol]) -> bool {
+        self.endpoints
+            .iter()
+            .filter(|endpoint| !endpoint.optional)
+            .all(|endpoint| !failed.contains(&endpoint.id))
+    }
+}
+
+fn endpoint(name: &str, role: MusicRouteRole, optional: bool) -> MusicRouteEndpoint {
+    MusicRouteEndpoint {
+        id: Symbol::qualified("music/route", name),
+        role,
+        optional,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn partial_physical_route_preserves_identity_and_offline_path() {
+        let id = Symbol::qualified("music/session", "atelier");
+        let plan = MediaEdgeMusicPlan::standard(id.clone());
+        let failed = [
+            "oasys-control",
+            "oasys-audio",
+            "rx-v777-digital",
+            "heavy-daw-host",
+        ]
+        .map(|name| Symbol::qualified("music/route", name));
+        assert!(plan.survives(&failed));
+        assert_eq!(plan.session, id);
+        assert!(!plan.survives(&[Symbol::qualified("music/route", "offline-render")]));
+        let evidence = [
+            RouteEvidence::Healthy {
+                latency_us: 1_400,
+                jitter_us: 90,
+            },
+            RouteEvidence::Dropout { lost_frames: 32 },
+            RouteEvidence::Reconnected {
+                attempts: 2,
+                downtime_ms: 80,
+            },
+            RouteEvidence::StaleObservation { age_ms: 500 },
+            RouteEvidence::Unsupported {
+                reason: "OASYS absent".into(),
+            },
+            RouteEvidence::Disconnected {
+                reason: "cable removed".into(),
+            },
+        ];
+        assert_eq!(evidence.len(), 6);
+        assert_ne!(evidence[4], evidence[5]);
+    }
+}
+// conformance: media-edge tests prove typed musical media boundaries and round trips.
 ```
 
 ### `feature/sim-music/midi-notation-workflows`
@@ -1335,7 +1504,11 @@ fn tracked_sources_report_track_metadata() {
 
 #[test]
 fn install_midi_io_lib_registers_runtime_exports() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x9f79_0964_eb64_a0c7),
+    );
     install_midi_io_lib(&mut cx).expect("install");
     install_midi_io_lib(&mut cx).expect("install");
     let value = cx.resolve_value(&Symbol::qualified("midi", "MemoryMidiSource"));
@@ -1351,6 +1524,49 @@ fn install_midi_io_lib_registers_runtime_exports() {
         *key == Expr::Symbol(Symbol::new("sources"))
             && matches!(value, Expr::List(items) if !items.is_empty())
     }));
+}
+
+#[test]
+fn midi_port_model_is_bounded_byte_exact_and_fail_closed() {
+    let card = MidiPortCard {
+        id: MidiPortId("model/duplex-0".into()),
+        label: "Modeled MIDI".into(),
+        direction: MidiDirection::Duplex,
+        transport: "model".into(),
+        timestamp_source: MidiTimestampSource::Modeled,
+        hotplug: true,
+    };
+    let first = MidiPortMessage::new(11, vec![0x90, 60, 100]).unwrap();
+    let second = MidiPortMessage::new(12, vec![0x80, 60, 0]).unwrap();
+    let mut port = ModelMidiPort::default();
+    port.add(card.clone(), [first.clone(), second.clone()]);
+    let policy = MidiPortPolicy::bounded(1, 2, 1).unwrap();
+    assert_eq!(port.cards(policy).unwrap(), vec![card]);
+    let mut connection = port
+        .open(&MidiPortId("model/duplex-0".into()), policy)
+        .unwrap();
+    assert_eq!(connection.receive().unwrap(), Some(first));
+    assert_eq!(connection.receive().unwrap(), Some(second));
+    connection
+        .send(MidiPortMessage::new(13, vec![0xf8]).unwrap())
+        .unwrap();
+    connection.close().unwrap();
+    assert_eq!(connection.receive(), Err(MidiPortRefusal::AlreadyClosed));
+    connection.reconnect().unwrap();
+    connection.close().unwrap();
+    assert_eq!(connection.reconnect(), Err(MidiPortRefusal::ReconnectLimit));
+    assert_eq!(
+        MidiPortMessage::new(0, vec![60]),
+        Err(MidiPortRefusal::InvalidMessage)
+    );
+    assert!(
+        port.cards(MidiPortPolicy::bounded(1, 1, 0).unwrap())
+            .is_ok()
+    );
+    assert!(matches!(
+        port.open(&MidiPortId("absent".into()), policy),
+        Err(MidiPortRefusal::Unsupported)
+    ));
 }
 ```
 
@@ -2143,7 +2359,11 @@ fn midi_to_diff_roll_emits_expected_masks() {
 
 #[test]
 fn install_music_lift_lib_registers_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2646_88f7_1e51_0694),
+    );
     install_music_lift_lib(&mut cx).expect("install");
     install_music_lift_lib(&mut cx).expect("install");
     let lib = cx
@@ -2814,7 +3034,11 @@ fn progression_export_helper_uses_chord_bodies() {
 
 #[test]
 fn install_music_notation_lib_registers_codec_surface() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfe9f_36eb_53e2_6c6d),
+    );
     install_music_notation_lib(&mut cx).expect("install");
     install_music_notation_lib(&mut cx).expect("install");
     let value = cx
@@ -3029,7 +3253,11 @@ fn runtime_import_is_shape_described_and_returns_score_read_construct() {
         .expect("export")
         .value
         .into_bytes();
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x202b_e423_b18d_476a),
+    );
     install_music_notation_lib(&mut cx).expect("install");
     let function = cx
         .resolve_function(&notation_import_symbol())
@@ -3262,7 +3490,11 @@ use sim_kernel::{Cx, DefaultFactory, EagerPolicy, ReadPolicy, Symbol};
 use crate::{HarmonyMetric, HarmonyPredicate, HarmonyProgram, PaletteAlgebra};
 
 fn decode_fixture(source: &str) -> HarmonyProgram {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x7722_0769_ef9c_e53b),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let codec = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).unwrap();
@@ -3359,6 +3591,7 @@ fn catalog_chord_cycle_lisp_fixture_names_transposed_palette_and_filter_chain() 
         ]
     );
 }
+// conformance: harmony tests prove chord identity, voicing, and transformation laws.
 ```
 
 Specimen `spec-test/sim-music/crates/sim-lib-pitch-chord/src/harmony_markov_tests` is checked by `cargo test`.
@@ -5650,6 +5883,7 @@ fn overlays_and_music_transform_chains_compose_existing_music() {
         vec![(vec![0], vec![72, 79])]
     );
 }
+// conformance: carpet tests prove bounded combinator construction and musical invariants.
 ```
 
 Specimen `spec-test/sim-music/crates/sim-lib-music-combinators/src/relative_conformance` is checked by `cargo test`.
@@ -5855,6 +6089,7 @@ fn noncanonical_music_reports_structure_loss_but_preserves_semantics() {
     assert_eq!(semantic_notes(&chord), semantic_notes(reconstructed));
     assert_eq!(chord.duration(), reconstructed.duration());
 }
+// conformance: relative-music tests prove context resolution and transposition laws.
 ```
 
 ### `feature/sim-music/bounded-rewrite-catalogs`
@@ -6155,6 +6390,7 @@ fn flatten<'a>(tree: &'a ProgressionTree<&'static str>, values: &mut Vec<&'a str
         flatten(child, values);
     }
 }
+// conformance: rewrite tests prove bounded rules, stable identity, and refusal semantics.
 ```
 
 ### `feature/sim-music/exact-score-consonance`
@@ -6465,7 +6701,11 @@ fn score_and_realized_midi_have_equivalent_windows_and_metrics() {
 
 #[test]
 fn runtime_report_exposes_notes_and_each_metric_without_an_aggregate() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xda34_8bc6_588c_65f4),
+    );
     install_music_consonance_lib(&mut cx).expect("install");
     let function = cx
         .resolve_function(&music_consonance_evaluate_symbol())
@@ -7275,7 +7515,11 @@ fn transform_candidates_delegate_retrograde_pitch_and_time_changes() {
 
 #[test]
 fn lisp_surfaces_expose_violation_evidence_and_stretto_relations() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x1e91_d058_d312_7e49),
+    );
     install_music_counterpoint_lib(&mut cx).expect("install");
 
     let cp = Counterpoint::new(
@@ -7362,7 +7606,11 @@ fn lisp_surfaces_expose_violation_evidence_and_stretto_relations() {
 
 #[test]
 fn checked_lisp_specimens_execute_and_reproduce_evidence() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xd742_ee97_899b_f34e),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
@@ -8597,7 +8845,11 @@ fn empty_audio_returns_diagnostics_and_no_notes() {
 
 #[test]
 fn install_runtime_is_idempotent_and_registers_audio_lifters() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xfba3_fa38_d672_3d5c),
+    );
     install_sound_audio_lift_lib(&mut cx).unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();
 
@@ -8625,7 +8877,11 @@ fn install_runtime_is_idempotent_and_registers_audio_lifters() {
 
 #[test]
 fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2596_68d7_f95f_ee5e),
+    );
     cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
         .unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();
@@ -8676,7 +8932,11 @@ fn lisp_pitch_track_surface_returns_policy_uncertainty_and_provenance() {
 
 #[test]
 fn lisp_analysis_recipe_returns_policy_confidence_alternatives_and_work() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xbe00_5149_eba9_51d1),
+    );
     cx.load_lib(&sim_lib_numbers_f64::F64NumbersLib::new())
         .unwrap();
     install_sound_audio_lift_lib(&mut cx).unwrap();
@@ -9091,7 +9351,11 @@ fn catalog_timbres_render_deterministically_to_offline_pcm() {
 
 #[test]
 fn runtime_install_is_idempotent() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x2c3c_ee3c_9428_ea33),
+    );
     install_sound_render_lib(&mut cx).unwrap();
     install_sound_render_lib(&mut cx).unwrap();
 }
@@ -9400,7 +9664,11 @@ fn compatibility_file_write_aliases_are_accepted() {
 }
 
 fn cx(capabilities: &[CapabilityName]) -> Cx {
-    let mut cx = Cx::new(Arc::new(NoopEvalPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(NoopEvalPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x3087_bd17_948f_b213),
+    );
     for capability in capabilities {
         cx.grant(capability.clone());
     }
@@ -9523,6 +9791,463 @@ impl Drop for TempPath {
 ```
 
 ### `feature/sim-music/daw-session-runtime`
+
+Specimen `spec-test/sim-music/crates/sim-lib-daw-session/src/listening` is checked by `cargo test`.
+
+Source `crates/sim-lib-daw-session/src/listening.rs`:
+
+```rust
+//! Provenance and route history for scientific and artistic listening sessions.
+
+// conformance: listening tests prove stable identity, typed mappings, and route substitutions.
+
+use std::str::FromStr;
+
+use sim_kernel::{Error, Result};
+
+/// One measured scalar series before it is mapped to sound.
+#[derive(Clone, Debug, PartialEq)]
+pub struct MeasuredSeries {
+    /// Stable content key supplied by the measurement owner.
+    pub content_key: String,
+    /// Physical or observational quantity represented by each sample.
+    pub quantity_kind: String,
+    /// Unit attached to the source values.
+    pub unit: String,
+    /// Ordered measured values.
+    pub values: Vec<f64>,
+}
+
+/// Normalization applied before a measured series drives sound.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Normalization {
+    /// Preserve source values without rescaling.
+    None,
+    /// Map the declared source interval onto `[0, 1]`.
+    Linear {
+        /// Lower endpoint of the measured source interval.
+        source_min: f64,
+        /// Upper endpoint of the measured source interval.
+        source_max: f64,
+    },
+}
+
+/// Policy for values outside the normalized target interval.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Clipping {
+    /// Reject values outside the interval.
+    Reject,
+    /// Clamp values and record that the mapping is lossy.
+    Clamp,
+}
+
+/// Interpolation used between measured samples.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Interpolation {
+    /// Hold each sample until the next sample arrives.
+    Step,
+    /// Linearly interpolate adjacent samples.
+    Linear,
+}
+
+/// Whether and how the source values can be recovered.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum InverseMapping {
+    /// The named inverse recovers the measured values within the stated tolerance.
+    Available {
+        /// Stable name of the inverse operation.
+        operation: String,
+        /// Declared recovery tolerance and unit.
+        tolerance: String,
+    },
+    /// No inverse exists; the reason is durable evidence rather than an implication.
+    Lossy {
+        /// Evidence explaining why the mapping cannot be inverted.
+        reason: String,
+    },
+}
+
+/// Audification receipt tying a sounding result to measured evidence.
+#[derive(Clone, Debug, PartialEq)]
+pub struct AudificationMapping {
+    /// Measured input and its scientific identity.
+    pub input: MeasuredSeries,
+    /// Quantity produced by the mapping, such as frequency or amplitude.
+    pub output_quantity_kind: String,
+    /// Unit of the mapped output.
+    pub output_unit: String,
+    /// Normalization applied to the input.
+    pub normalization: Normalization,
+    /// Out-of-range policy.
+    pub clipping: Clipping,
+    /// Between-sample interpolation.
+    pub interpolation: Interpolation,
+    /// Exact inverse or explicit loss evidence.
+    pub inverse: InverseMapping,
+}
+
+/// Authored sonification which must never be presented as a physical result.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ArtisticMapping {
+    /// Stable input content keys used by the work.
+    pub input_content_keys: Vec<String>,
+    /// Stable keys of the authored choices applied to those inputs.
+    pub authored_choice_keys: Vec<String>,
+}
+
+impl ArtisticMapping {
+    /// The unambiguous category label persisted with every artistic mapping.
+    pub const KIND: &'static str = "artistic-mapping";
+}
+
+/// Durable content of a listening session, independent of any playback route.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ListeningContent {
+    /// Score content key.
+    pub score: String,
+    /// Audio graph content key.
+    pub graph: String,
+    /// Instrument patch content key.
+    pub patch: String,
+    /// Tuning content key.
+    pub tuning: String,
+    /// Scientific mapping receipt, when this is audification.
+    pub audification: Option<AudificationMapping>,
+    /// Creative mapping receipt, when this is authored sonification.
+    pub artistic_mapping: Option<ArtisticMapping>,
+    /// Additional authored-choice content keys.
+    pub choices: Vec<String>,
+}
+
+/// A playback target substitution known to the music owner.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ListeningTarget {
+    /// Deterministic render without a live device.
+    OfflineRender,
+    /// Media-edge execution host.
+    MediaEdgeHost,
+    /// Heavy DAW execution host.
+    HeavyDawHost,
+    /// Yamaha RX-V777 receiver.
+    RxV777,
+    /// Korg OASYS workstation.
+    Oasys,
+    /// Exact refusal retained when no adapter exists.
+    Unsupported {
+        /// Requested target that could not be resolved.
+        requested: String,
+        /// Durable refusal evidence.
+        evidence: String,
+    },
+}
+
+/// Append-only route lifecycle event.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum RouteEventKind {
+    /// A route opened successfully.
+    Open,
+    /// A route closed.
+    Close,
+    /// A route failed with the recorded detail.
+    Fail,
+    /// A previously failed route reconnected.
+    Reconnect,
+    /// Playback substituted another target.
+    Fallback,
+}
+
+/// One durable route event. Live handles are deliberately absent.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RouteEvent {
+    /// Monotonic sequence within this session.
+    pub sequence: u64,
+    /// Route lifecycle transition.
+    pub kind: RouteEventKind,
+    /// Target involved in the transition.
+    pub target: ListeningTarget,
+    /// Exact diagnostic, adapter name, or substitution reason.
+    pub detail: String,
+}
+
+/// Route-independent listening session with append-only delivery history.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ListeningSession {
+    /// Stable musical identity selected by the author or expedition.
+    pub musical_id: String,
+    /// Stable expedition identity, when scientific work owns the observation.
+    pub expedition_id: Option<String>,
+    /// Durable musical and mapping content.
+    pub content: ListeningContent,
+    route_events: Vec<RouteEvent>,
+    live_handle: Option<String>,
+}
+
+impl ListeningSession {
+    /// Creates a route-independent session.
+    pub fn new(
+        musical_id: impl Into<String>,
+        expedition_id: Option<String>,
+        content: ListeningContent,
+    ) -> Result<Self> {
+        let musical_id = non_empty(musical_id.into(), "musical id")?;
+        if content.audification.is_some() == content.artistic_mapping.is_some() {
+            return Err(Error::Eval(
+                "listening content must contain exactly one mapping family".to_owned(),
+            ));
+        }
+        Ok(Self {
+            musical_id,
+            expedition_id,
+            content,
+            route_events: Vec::new(),
+            live_handle: None,
+        })
+    }
+
+    /// Appends a route event, assigning the next monotonic sequence number.
+    pub fn append_route_event(
+        &mut self,
+        kind: RouteEventKind,
+        target: ListeningTarget,
+        detail: impl Into<String>,
+    ) -> Result<()> {
+        let sequence = u64::try_from(self.route_events.len())
+            .map_err(|_| Error::Eval("route event sequence overflow".to_owned()))?;
+        self.route_events.push(RouteEvent {
+            sequence,
+            kind,
+            target,
+            detail: non_empty(detail.into(), "route event detail")?,
+        });
+        Ok(())
+    }
+
+    /// Replaces the ephemeral live handle without changing durable content.
+    pub fn set_live_handle(&mut self, handle: Option<String>) {
+        self.live_handle = handle;
+    }
+
+    /// Returns the append-only route history.
+    pub fn route_events(&self) -> &[RouteEvent] {
+        &self.route_events
+    }
+
+    /// Returns the current ephemeral route handle.
+    pub fn live_handle(&self) -> Option<&str> {
+        self.live_handle.as_deref()
+    }
+
+    /// Returns the route-independent identity projection.
+    pub fn identity(&self) -> (&str, Option<&str>, &ListeningContent) {
+        (
+            &self.musical_id,
+            self.expedition_id.as_deref(),
+            &self.content,
+        )
+    }
+}
+
+/// Predicate accepted only by scientific audification listeners.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ScientificListeningPredicate {
+    /// Require a reversible mapping.
+    Reversible,
+    /// Accept a mapping only when loss is explicit.
+    LossDeclared,
+}
+
+impl FromStr for ScientificListeningPredicate {
+    type Err = Error;
+
+    fn from_str(value: &str) -> Result<Self> {
+        match value {
+            "scientific:reversible" => Ok(Self::Reversible),
+            "scientific:loss-declared" => Ok(Self::LossDeclared),
+            _ => Err(Error::Eval(
+                "not a scientific listening predicate".to_owned(),
+            )),
+        }
+    }
+}
+
+/// Predicate accepted only by artistic-mapping listeners.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ArtisticListeningPredicate {
+    /// Require links to the input material.
+    InputsLinked,
+    /// Require authored choices to be named.
+    ChoicesAttributed,
+}
+
+impl FromStr for ArtisticListeningPredicate {
+    type Err = Error;
+
+    fn from_str(value: &str) -> Result<Self> {
+        match value {
+            "artistic:inputs-linked" => Ok(Self::InputsLinked),
+            "artistic:choices-attributed" => Ok(Self::ChoicesAttributed),
+            _ => Err(Error::Eval(
+                "not an artistic listening predicate".to_owned(),
+            )),
+        }
+    }
+}
+
+fn non_empty(value: String, label: &str) -> Result<String> {
+    if value.trim().is_empty() {
+        Err(Error::Eval(format!("{label} must not be empty")))
+    } else {
+        Ok(value)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn content() -> ListeningContent {
+        ListeningContent {
+            score: "score:ice-core-17".to_owned(),
+            graph: "graph:stereo".to_owned(),
+            patch: "patch:sine".to_owned(),
+            tuning: "tuning:12edo".to_owned(),
+            audification: Some(AudificationMapping {
+                input: MeasuredSeries {
+                    content_key: "series:temperature".to_owned(),
+                    quantity_kind: "temperature".to_owned(),
+                    unit: "kelvin".to_owned(),
+                    values: vec![260.0, 261.5, 263.0],
+                },
+                output_quantity_kind: "frequency".to_owned(),
+                output_unit: "hertz".to_owned(),
+                normalization: Normalization::Linear {
+                    source_min: 250.0,
+                    source_max: 280.0,
+                },
+                clipping: Clipping::Reject,
+                interpolation: Interpolation::Linear,
+                inverse: InverseMapping::Available {
+                    operation: "linear-denormalize".to_owned(),
+                    tolerance: "1e-12 kelvin".to_owned(),
+                },
+            }),
+            artistic_mapping: None,
+            choices: vec!["choice:register-4".to_owned()],
+        }
+    }
+
+    #[test]
+    fn route_churn_preserves_musical_and_expedition_identity() {
+        let mut session = ListeningSession::new(
+            "music:ice-core",
+            Some("expedition:2026-north".to_owned()),
+            content(),
+        )
+        .unwrap();
+        let identity = session.identity();
+        let expected = (
+            identity.0.to_owned(),
+            identity.1.map(str::to_owned),
+            identity.2.clone(),
+        );
+
+        for (kind, target, detail) in [
+            (
+                RouteEventKind::Open,
+                ListeningTarget::MediaEdgeHost,
+                "edge opened",
+            ),
+            (
+                RouteEventKind::Fail,
+                ListeningTarget::RxV777,
+                "adapter unavailable",
+            ),
+            (
+                RouteEventKind::Fallback,
+                ListeningTarget::OfflineRender,
+                "render substituted",
+            ),
+            (
+                RouteEventKind::Close,
+                ListeningTarget::OfflineRender,
+                "render complete",
+            ),
+            (
+                RouteEventKind::Reconnect,
+                ListeningTarget::HeavyDawHost,
+                "DAW restored",
+            ),
+            (
+                RouteEventKind::Open,
+                ListeningTarget::Oasys,
+                "workstation opened",
+            ),
+        ] {
+            session.append_route_event(kind, target, detail).unwrap();
+        }
+        session.set_live_handle(Some("ephemeral:device-42".to_owned()));
+
+        assert_eq!(
+            session.identity(),
+            (expected.0.as_str(), expected.1.as_deref(), &expected.2)
+        );
+        assert_eq!(session.route_events().len(), 6);
+        assert_eq!(session.route_events()[5].sequence, 5);
+    }
+
+    #[test]
+    fn scientific_and_artistic_predicates_cannot_decode_as_each_other() {
+        assert!(
+            "scientific:reversible"
+                .parse::<ScientificListeningPredicate>()
+                .is_ok()
+        );
+        assert!(
+            "scientific:reversible"
+                .parse::<ArtisticListeningPredicate>()
+                .is_err()
+        );
+        assert!(
+            "artistic:choices-attributed"
+                .parse::<ArtisticListeningPredicate>()
+                .is_ok()
+        );
+        assert!(
+            "artistic:choices-attributed"
+                .parse::<ScientificListeningPredicate>()
+                .is_err()
+        );
+    }
+
+    #[test]
+    fn artistic_mapping_is_labelled_and_linked_to_inputs_and_choices() {
+        let mapping = ArtisticMapping {
+            input_content_keys: vec!["series:temperature".to_owned()],
+            authored_choice_keys: vec!["choice:orchestration".to_owned()],
+        };
+        let mut artistic = content();
+        artistic.audification = None;
+        artistic.artistic_mapping = Some(mapping.clone());
+        let session = ListeningSession::new("music:art", None, artistic).unwrap();
+
+        assert_eq!(ArtisticMapping::KIND, "artistic-mapping");
+        assert_eq!(session.content.artistic_mapping, Some(mapping));
+    }
+
+    #[test]
+    fn unsupported_target_retains_exact_evidence() {
+        let target = ListeningTarget::Unsupported {
+            requested: "studio-orbit".to_owned(),
+            evidence: "no registered EvalFabric site or offline adapter".to_owned(),
+        };
+        let mut session = ListeningSession::new("music:ice-core", None, content()).unwrap();
+        session
+            .append_route_event(RouteEventKind::Fail, target.clone(), "substitution refused")
+            .unwrap();
+        assert_eq!(session.route_events()[0].target, target);
+    }
+}
+```
 
 Specimen `spec-test/sim-music/crates/sim-lib-daw-session/src/tests` is checked by `cargo test`.
 
@@ -9838,7 +10563,11 @@ fn topology_package_can_launch_from_session_data() {
 
 #[test]
 fn install_daw_session_lib_registers_runtime_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xae87_29d1_5834_203a),
+    );
     install_daw_session_lib(&mut cx).expect("install");
     install_daw_session_lib(&mut cx).expect("idempotent install");
 

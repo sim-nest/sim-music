@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-sound-bridge"
-version = "0.1.3"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Bridges MIDI events into sound-domain tones, timbres, and renderable note candidates."
@@ -10,18 +10,18 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-midi-core = { version = "0.1.5", path = "../sim-lib-midi-core" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
-sim-lib-sound-timbre = { version = "0.1.3", path = "../sim-lib-sound-timbre" }
-sim-lib-sound-tuning = { version = "0.2.1", path = "../sim-lib-sound-tuning" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-midi-core = { version = "0.2.0", path = "../sim-lib-midi-core" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-sound-core = { version = "0.3.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-timbre = { version = "0.2.0", path = "../sim-lib-sound-timbre" }
+sim-lib-sound-tuning = { version = "0.3.0", path = "../sim-lib-sound-tuning" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [lints]
 workspace = true

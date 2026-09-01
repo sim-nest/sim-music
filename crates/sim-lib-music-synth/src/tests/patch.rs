@@ -120,5 +120,9 @@ fn codec_cx() -> Cx {
 }
 
 fn topology_cx() -> Cx {
-    Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory))
+    Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xef9a_d9a6_5f56_49a1),
+    )
 }

@@ -46,7 +46,11 @@ fn music_citizens_accept_legacy_text_and_read_construct() {
 }
 
 fn cx_with_citizens() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xecda_159d_eeeb_b60c),
+    );
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
     cx.grant(read_construct_capability());
     cx

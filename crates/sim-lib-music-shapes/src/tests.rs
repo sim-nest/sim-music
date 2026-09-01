@@ -402,7 +402,11 @@ fn arranger_round_trips_via_canonical_text() {
 
 #[test]
 fn install_music_shapes_lib_registers_runtime_shape_exports() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x41d6_b9b2_4fb3_dd27),
+    );
     install_music_shapes_lib(&mut cx).unwrap();
     install_music_shapes_lib(&mut cx).unwrap();
     let shape = cx
@@ -421,7 +425,11 @@ fn install_music_shapes_lib_registers_runtime_shape_exports() {
 
 #[test]
 fn music_runtime_shapes_reject_bad_domain_forms() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xc73d_c9f6_f60f_a79d),
+    );
     install_music_shapes_lib(&mut cx).unwrap();
 
     let note_value = note(60);
@@ -484,7 +492,11 @@ fn symbolic_serial_series_round_trips_and_fails_closed() {
 
 #[test]
 fn custom_alphabet_recipe_executes_through_lisp_runtime_surface() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x24ef_2b7f_3135_a7c2),
+    );
     install_music_shapes_lib(&mut cx).expect("music shapes");
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
     cx.load_lib(&lisp).expect("load lisp codec");
@@ -537,7 +549,11 @@ fn custom_alphabet_recipe_executes_through_lisp_runtime_surface() {
 
 #[test]
 fn lisp_serial_realization_surface_round_trips_through_lisp_and_json() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x177e_81ca_3297_0b20),
+    );
     install_music_shapes_lib(&mut cx).expect("music shapes");
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");
     cx.load_lib(&lisp).expect("load lisp codec");

@@ -34,6 +34,7 @@ mod codec;
 mod expr_util;
 mod integration;
 mod integration_stream;
+mod listening;
 mod model;
 mod prelude;
 mod render;
@@ -50,6 +51,11 @@ pub use integration::{
     integrate_session_performance,
 };
 pub use integration_stream::DawPluginEventExport;
+pub use listening::{
+    ArtisticListeningPredicate, ArtisticMapping, AudificationMapping, Clipping, Interpolation,
+    InverseMapping, ListeningContent, ListeningSession, ListeningTarget, MeasuredSeries,
+    Normalization, RouteEvent, RouteEventKind, ScientificListeningPredicate,
+};
 pub use model::{
     ClipSource, DawBus, DawClip, DawInstrumentInstance, DawInstrumentKind, DawSession,
     DawSessionRoute, DawSessionRouteKind, DawTrack, DawTrackKind, DawTransport, PluginChain,

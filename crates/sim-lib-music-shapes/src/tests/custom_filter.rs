@@ -125,7 +125,11 @@ fn codec_roundtrip(codec: &str, expr: &Expr) -> Expr {
 }
 
 fn codec_cx() -> Cx {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xb14b_a0a2_8600_8953),
+    );
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp");
     cx.load_lib(&lisp).expect("load lisp");
     let json = JsonCodecLib::new(cx.registry_mut().fresh_codec_id());

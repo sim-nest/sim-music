@@ -480,7 +480,11 @@ fn render(cx: &mut Cx, output: &Value) -> Result<()> {
 }
 
 fn run_plan(strategy: &str) -> Result<(Cx, Value)> {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xc632_d096_7897_8bdc),
+    );
     install_music_algorithm_plan_lib(&mut cx)?;
     for provider in providers() {
         install_provider(&mut cx, &provider)?;

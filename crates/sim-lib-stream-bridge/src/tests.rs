@@ -164,6 +164,7 @@ fn citizen_bridge_option_descriptors_round_trip() {
     let mut cx = sim_kernel::Cx::new(
         std::sync::Arc::new(sim_kernel::NoopEvalPolicy),
         std::sync::Arc::new(sim_kernel::DefaultFactory),
+        sim_kernel::HandleSeed::new(0x5354_5242),
     );
     cx.load_lib(&sim_citizen::CitizenLib::all()).unwrap();
 

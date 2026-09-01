@@ -284,7 +284,11 @@ fn tracked_sources_report_track_metadata() {
 
 #[test]
 fn install_midi_io_lib_registers_runtime_exports() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x9f79_0964_eb64_a0c7),
+    );
     install_midi_io_lib(&mut cx).expect("install");
     install_midi_io_lib(&mut cx).expect("install");
     let value = cx.resolve_value(&Symbol::qualified("midi", "MemoryMidiSource"));
@@ -300,4 +304,47 @@ fn install_midi_io_lib_registers_runtime_exports() {
         *key == Expr::Symbol(Symbol::new("sources"))
             && matches!(value, Expr::List(items) if !items.is_empty())
     }));
+}
+
+#[test]
+fn midi_port_model_is_bounded_byte_exact_and_fail_closed() {
+    let card = MidiPortCard {
+        id: MidiPortId("model/duplex-0".into()),
+        label: "Modeled MIDI".into(),
+        direction: MidiDirection::Duplex,
+        transport: "model".into(),
+        timestamp_source: MidiTimestampSource::Modeled,
+        hotplug: true,
+    };
+    let first = MidiPortMessage::new(11, vec![0x90, 60, 100]).unwrap();
+    let second = MidiPortMessage::new(12, vec![0x80, 60, 0]).unwrap();
+    let mut port = ModelMidiPort::default();
+    port.add(card.clone(), [first.clone(), second.clone()]);
+    let policy = MidiPortPolicy::bounded(1, 2, 1).unwrap();
+    assert_eq!(port.cards(policy).unwrap(), vec![card]);
+    let mut connection = port
+        .open(&MidiPortId("model/duplex-0".into()), policy)
+        .unwrap();
+    assert_eq!(connection.receive().unwrap(), Some(first));
+    assert_eq!(connection.receive().unwrap(), Some(second));
+    connection
+        .send(MidiPortMessage::new(13, vec![0xf8]).unwrap())
+        .unwrap();
+    connection.close().unwrap();
+    assert_eq!(connection.receive(), Err(MidiPortRefusal::AlreadyClosed));
+    connection.reconnect().unwrap();
+    connection.close().unwrap();
+    assert_eq!(connection.reconnect(), Err(MidiPortRefusal::ReconnectLimit));
+    assert_eq!(
+        MidiPortMessage::new(0, vec![60]),
+        Err(MidiPortRefusal::InvalidMessage)
+    );
+    assert!(
+        port.cards(MidiPortPolicy::bounded(1, 1, 0).unwrap())
+            .is_ok()
+    );
+    assert!(matches!(
+        port.open(&MidiPortId("absent".into()), policy),
+        Err(MidiPortRefusal::Unsupported)
+    ));
 }

@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-analysis"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Exact structural, harmonic, quantization, similarity, and pattern analysis over SIM music."
@@ -10,28 +10,28 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-discrete-graph = { version = "0.2.0" }
-sim-lib-discrete-search = { version = "0.1.0" }
-sim-lib-discrete-spectral = { optional = true, version = "0.2.0" }
-sim-lib-music-core = { version = "0.2.0", path = "../sim-lib-music-core" }
-sim-lib-numbers-signal = { version = "0.1.0" }
-sim-lib-numbers-stats = { version = "0.4.0" }
-sim-lib-pitch-chord = { version = "0.2.1", path = "../sim-lib-pitch-chord" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer-riemann = { version = "0.2.0", path = "../sim-lib-pitch-namer-riemann" }
-sim-lib-pitch-set = { version = "0.2.0", path = "../sim-lib-pitch-set" }
-sim-shape = { version = "0.2.3" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-discrete-graph = { version = "0.3.0" }
+sim-lib-discrete-search = { version = "0.2.0" }
+sim-lib-discrete-spectral = { optional = true, version = "0.3.0" }
+sim-lib-music-core = { version = "0.3.0", path = "../sim-lib-music-core" }
+sim-lib-numbers-signal = { version = "0.2.0" }
+sim-lib-numbers-stats = { version = "0.5.0" }
+sim-lib-pitch-chord = { version = "0.3.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-riemann = { version = "0.3.0", path = "../sim-lib-pitch-namer-riemann" }
+sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
+sim-shape = { version = "0.3.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }
 
 [dev-dependencies]
 num-rational = "0.4"
-sim-kernel = { version = "0.2.1", features = ["test-support"] }
+sim-kernel = { version = "0.3.0", features = ["test-support"] }
 
 [features]
 default = []

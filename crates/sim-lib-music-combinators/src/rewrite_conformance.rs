@@ -289,3 +289,4 @@ fn flatten<'a>(tree: &'a ProgressionTree<&'static str>, values: &mut Vec<&'a str
         flatten(child, values);
     }
 }
+// conformance: rewrite tests prove bounded rules, stable identity, and refusal semantics.

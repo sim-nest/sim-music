@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-sound-tuning"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Equal temperament, custom tuning, and pitch-to-frequency mapping descriptors."
@@ -10,12 +10,12 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.2.0" }
-sim-kernel = { version = "0.2.1" }
-sim-lib-core = { version = "0.2.0" }
-sim-lib-pitch-core = { version = "0.2.0", path = "../sim-lib-pitch-core" }
-sim-lib-sound-core = { version = "0.2.0", path = "../sim-lib-sound-core" }
+sim-cookbook = { version = "0.3.0" }
+sim-kernel = { version = "0.3.0" }
+sim-lib-core = { version = "0.3.0" }
+sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-lib-sound-core = { version = "0.3.0", path = "../sim-lib-sound-core" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook = { version = "0.2.0" }
+sim-cookbook-build = { version = "0.1.0" }

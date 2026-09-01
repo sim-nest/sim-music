@@ -65,12 +65,22 @@ claims_specimens = [
 ]
 
 [[feature]]
+id = "feature/sim-music/media-edge-vertical"
+title = "Resilient media-edge music vertical"
+summary = "Keep one music-session identity across optional OASYS control/audio, digital RX-V777 playback, SIM synthesis, heavy-DAW fallback, and deterministic offline render."
+owner = "crate/sim-lib-music-core"
+audiences = ["user", "code", "framework"]
+guidance = "Build MediaEdgeMusicPlan::standard and retain RouteEvidence variants independently; unsupported, stale, dropout, reconnect, and disconnected are distinct observations. Physical routes are optional while SIM synthesis and offline render remain mandatory continuity roots."
+claims_anchors = ["anchor/crate/sim-lib-music-core"]
+claims_specimens = ["spec-test/sim-music/crates/sim-lib-music-core/src/media_edge"]
+
+[[feature]]
 id = "feature/sim-music/midi-notation-workflows"
 title = "MIDI and notation workflows"
 summary = "Lift, realize, lower, inspect, and export musical material across bounded lossless MIDI files, exact tempo/pedal/note timelines, live MIDI fixtures, LilyPond, and MusicXML."
 owner = "crate/sim-lib-midi-core"
 audiences = ["user", "code", "framework"]
-guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse sim-lib-midi-smf for bounded import and canonical export: it preserves formats 0, 1, and 2, keeps format-2 track time origins and tempo maps independent, retains metrical and valid SMPTE divisions plus unknown valid meta/system events, and reports malformed or oversized input at absolute byte offsets. Reuse sim-lib-midi-core MidiTempoMap for exact tick, quarter-beat, and wall-time conversion over the generic stream-clock chart. Reuse sim-lib-music-lift MidiRealizationPolicy for explicit FIFO/LIFO/reject overlap pairing, same-tick ordering, dangling-note behavior, sustain/sostenuto and channel-mode realization, identity-bearing notes, and multiplicity-preserving exact note slices. Reuse sim-lib-music-notation for the LilyPond subset and bounded MusicXML 4.0 score-partwise profile: the latter rejects DTDs, entity declarations, unknown extensions, and configured byte/node/depth/text/part/event overruns; retains stable part/event ids in an exchange sidecar; and reports every accepted loss while continuing to use canonical Score and its existing read-construct. Callers that need one performance timeline must select a format-2 pattern explicitly and must install an explicit real-time adapter before converting SMPTE timing to a metrical MIDI stream."
+guidance = "Use this row when moving a musical phrase between MIDI events, Standard MIDI Files, notation, streams, and SIM music descriptors. Reuse sim-lib-midi-core MidiPort for bounded provider-neutral discovery, byte-exact messages, explicit timestamp authority, and typed physical refusals; native BlueZ, RtMidi, ALSA, cfg, and FFI remain platform-capsule concerns. Reuse sim-lib-midi-smf for bounded import and canonical export: it preserves formats 0, 1, and 2, keeps format-2 track time origins and tempo maps independent, retains metrical and valid SMPTE divisions plus unknown valid meta/system events, and reports malformed or oversized input at absolute byte offsets. Reuse sim-lib-midi-core MidiTempoMap for exact tick, quarter-beat, and wall-time conversion over the generic stream-clock chart. Reuse sim-lib-music-lift MidiRealizationPolicy for explicit FIFO/LIFO/reject overlap pairing, same-tick ordering, dangling-note behavior, sustain/sostenuto and channel-mode realization, identity-bearing notes, and multiplicity-preserving exact note slices. Reuse sim-lib-music-notation for the LilyPond subset and bounded MusicXML 4.0 score-partwise profile. Callers that need one performance timeline must select a format-2 pattern explicitly and supply a real-time port before converting SMPTE timing to a metrical MIDI stream."
 claims_anchors = [
   "anchor/crate/sim-lib-midi-ble",
   "anchor/crate/sim-lib-midi-core",
@@ -185,7 +195,6 @@ audiences = ["user", "code", "framework"]
 guidance = "Use this row when a caller needs exact score time; policy-controlled conversion among melody, chord, identity-bearing staff, counterpoint, piano roll, snapshot, change stream, and progression; key or chord decoding from chroma/features through built-in or declared HarmonicTemplate rows; metrical quantization against an exact tempo/meter lattice with explicit swing, tuplets, tolerance, alternatives, and onset edits; melody or rhythm comparison through named extractors with declared transposition/time-scale invariance; bounded repeated-pattern discovery with support and overlap policy; certified minimum-cost voice leading; canonical-triad Tonnetz analysis; exact progression operations; lift/lower; notation; or partial pitch maps. Quantization and similarity delegate global DTW to sim-lib-discrete-graph. Similarity also retains sim-lib-numbers-signal correlation geometry and normalization. Pattern discovery uses hash candidates only as a filter, exact-verifies candidate pairs through sim-lib-discrete-search, and returns stable event/occurrence identities, transforms, costs, memory admission, and an unmodified SearchReceipt. Harmonic adapters delegate normalized inference to sim-lib-numbers-stats. Graph paths retain certificates. Conversion and transform reports keep rational time and make every identity or loss explicit."
 claims_anchors = [
   "anchor/crate/sim-lib-music-analysis",
-  "anchor/crate/sim-lib-music-core",
   "anchor/crate/sim-lib-music-lift",
   "anchor/crate/sim-lib-music-lower",
   "anchor/crate/sim-lib-music-shapes",
@@ -421,15 +430,16 @@ supports = [
 [[feature]]
 id = "feature/sim-music/daw-session-runtime"
 title = "DAW session runtime"
-summary = "Represent tracks, clips, instruments, buses, and offline or live schedules as a loadable music session runtime."
+summary = "Represent tracks, clips, instruments, buses, provenance-bearing audification and artistic mappings, and route-independent offline or live schedules as a loadable music session runtime."
 owner = "crate/sim-lib-daw-session"
 audiences = ["code", "framework"]
-guidance = "Use this row when a caller needs a reusable session graph around music, synth, MIDI, and stream features."
+guidance = "Use this row when a caller needs a reusable session graph around music, synth, MIDI, and stream features. Represent measured audification with quantity kinds, units, normalization, clipping, interpolation, and an exact inverse or explicit loss reason. Label authored sonification artistic-mapping and retain its input and authored-choice keys rather than presenting it as physics. Keep score, graph, patch, tuning, mapping, and choices in durable content while route events and live handles remain outside musical and expedition identity. Append open, close, fail, reconnect, and fallback events for offline render, media-edge-host, heavy-daw-host, RX-V777, OASYS, or an exact unsupported target."
 claims_anchors = [
   "anchor/crate/sim-lib-daw-session",
   "anchor/runtime-lib/sim-lib-daw-session/daw-session-lib",
 ]
 claims_specimens = [
+  "spec-test/sim-music/crates/sim-lib-daw-session/src/listening",
   "spec-test/sim-music/crates/sim-lib-daw-session/src/tests",
 ]
 supports = [
@@ -718,6 +728,16 @@ steps = [
   { specimen = "recipe/sim-music/crates/sim-lib-music-synth/03-composition/offline-realtime-preview", why = "The recipe maps every catalog need to an existing owner, renders offline through sound-render, previews through graph/DSP, and uses non-overwriting Table/Dir handles." },
   { specimen = "spec-test/sim-music/crates/sim-lib-music-synth/src/tests/reuse", why = "The paired conformance test decodes the recipe and checks its nine owner mappings, bounded callback policy, Table/Dir handles, and phase-43 conversion/dither deferral." },
   { specimen = "spec-test/sim-music/crates/sim-lib-sound-render/src/tests", why = "The renderer specimen proves additive, Karplus-Strong, and FM timbres produce finite deterministic offline PCM." },
+]
+
+[[route]]
+id = "route/audify-measured-series"
+task = "Hear and creatively transform measured evidence without category fraud or route lock-in"
+audiences = ["user", "code", "framework"]
+steps = [
+  { feature = "feature/sim-music/daw-session-runtime", why = "The session owner records reversible or explicitly lossy audification, disjoint artistic-mapping provenance, stable content identity, and append-only route substitutions." },
+  { feature = "feature/sim-music/audio-lift-and-render", why = "The audio owner supplies bounded analysis and deterministic rendering without owning scientific meaning." },
+  { specimen = "spec-test/sim-music/crates/sim-lib-daw-session/src/listening", why = "The listening specimens prove route churn leaves musical and expedition identity stable, mapping families cannot decode as one another, all named target substitutions are typed, and unsupported targets retain exact evidence." },
 ]
 
 [[route]]

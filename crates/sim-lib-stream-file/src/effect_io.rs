@@ -11,6 +11,7 @@ pub(crate) fn read_file_with_effect(cx: &mut Cx, path: impl AsRef<Path>) -> Resu
     let path = path.as_ref().to_path_buf();
     let input = operation_input_ref(cx, "read", &path, None)?;
     let effect = Effect::new(
+        cx.fresh_handle(),
         stream_file_filesystem_effect_kind(),
         Ref::Symbol(Symbol::qualified("stream/file", "read")),
         input,
@@ -38,6 +39,7 @@ pub(crate) fn write_file_with_effect(
     let path = path.as_ref().to_path_buf();
     let input = operation_input_ref(cx, "write", &path, Some(&bytes))?;
     let effect = Effect::new(
+        cx.fresh_handle(),
         stream_file_filesystem_effect_kind(),
         Ref::Symbol(Symbol::qualified("stream/file", "write")),
         input,

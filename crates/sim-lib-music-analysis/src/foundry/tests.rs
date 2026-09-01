@@ -154,7 +154,11 @@ fn install_fixture(cx: &mut Cx, id: &'static str, strategy: &'static str) {
 
 #[test]
 fn data_only_strategy_selects_shape_ranked_registered_stage() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x607b_c8d6_9009_0aac),
+    );
     install_music_algorithm_plan_lib(&mut cx).unwrap();
     install_fixture(&mut cx, "fixture-layered", "layered-dp");
     install_fixture(&mut cx, "fixture-greedy", "greedy");
@@ -212,7 +216,11 @@ fn data_only_strategy_selects_shape_ranked_registered_stage() {
 
 #[test]
 fn missing_stage_and_shape_mismatch_fail_without_fallback() {
-    let mut cx = Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xc9c6_e629_d079_bd26),
+    );
     install_music_algorithm_plan_lib(&mut cx).unwrap();
     let missing = select_stage(&mut cx, "preview", &[])
         .err()

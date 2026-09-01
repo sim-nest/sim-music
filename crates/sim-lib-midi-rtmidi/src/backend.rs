@@ -10,9 +10,6 @@ use sim_lib_stream_host::{
 
 use crate::{RtmidiEvent, RtmidiMidiSink, RtmidiMidiSource, RtmidiPort, RtmidiTiming};
 
-#[cfg(feature = "rtmidi-hardware")]
-use crate::{NativeRtmidiProvider, RtmidiHardwareConfig};
-
 /// Returns the host-backend symbol `stream/host:rtmidi`.
 pub fn rtmidi_backend_symbol() -> Symbol {
     Symbol::qualified("stream/host", "rtmidi")
@@ -79,24 +76,6 @@ impl RtmidiBackend {
             HostBackendCapability::Fake,
         ]);
         backend
-    }
-
-    /// Enumerates Linux ALSA-sequencer ports through the native provider.
-    #[cfg(all(feature = "rtmidi-hardware", target_os = "linux"))]
-    pub fn hardware_alsa(config: RtmidiHardwareConfig) -> Result<Self> {
-        NativeRtmidiProvider::alsa_seq(config).enumerate_backend()
-    }
-
-    /// Enumerates macOS CoreMIDI ports through the native provider.
-    #[cfg(all(feature = "rtmidi-hardware", target_os = "macos"))]
-    pub fn hardware_coremidi(config: RtmidiHardwareConfig) -> Result<Self> {
-        NativeRtmidiProvider::coremidi(config).enumerate_backend()
-    }
-
-    /// Enumerates Windows multimedia MIDI ports through the native provider.
-    #[cfg(all(feature = "rtmidi-hardware", target_os = "windows"))]
-    pub fn hardware_winmm(config: RtmidiHardwareConfig) -> Result<Self> {
-        NativeRtmidiProvider::winmm(config).enumerate_backend()
     }
 
     /// Returns this backend with the given timestamp-conversion timing applied.

@@ -440,7 +440,11 @@ fn transform_candidates_delegate_retrograde_pitch_and_time_changes() {
 
 #[test]
 fn lisp_surfaces_expose_violation_evidence_and_stretto_relations() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x1e91_d058_d312_7e49),
+    );
     install_music_counterpoint_lib(&mut cx).expect("install");
 
     let cp = Counterpoint::new(
@@ -527,7 +531,11 @@ fn lisp_surfaces_expose_violation_evidence_and_stretto_relations() {
 
 #[test]
 fn checked_lisp_specimens_execute_and_reproduce_evidence() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0xd742_ee97_899b_f34e),
+    );
     sim_test_support::register_core_classes(&mut cx);
     sim_test_support::register_f64_number_domain(&mut cx);
     let lisp = LispCodecLib::new(cx.registry_mut().fresh_codec_id()).expect("lisp codec");

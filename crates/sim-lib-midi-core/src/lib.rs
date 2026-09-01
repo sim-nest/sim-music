@@ -47,6 +47,7 @@ mod frame_digest;
 mod io;
 mod model;
 mod player;
+mod port;
 mod runtime;
 mod tempo;
 
@@ -59,6 +60,7 @@ pub use frame_digest::{MidiDigestLib, manifest_name as midi_digest_manifest_name
 pub use io::*;
 pub use model::*;
 pub use player::*;
+pub use port::*;
 pub use runtime::*;
 pub use tempo::*;
 

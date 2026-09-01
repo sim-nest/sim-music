@@ -148,7 +148,11 @@ fn pump_quantizes_when_live_ring_tpq_differs() {
 
 #[test]
 fn install_midi_live_lib_registers_ring_runtime_exports() {
-    let mut cx = sim_kernel::Cx::new(Arc::new(EagerPolicy), Arc::new(DefaultFactory));
+    let mut cx = sim_kernel::Cx::new(
+        Arc::new(EagerPolicy),
+        Arc::new(DefaultFactory),
+        sim_kernel::HandleSeed::new(0x66f9_b1f5_9186_13f5),
+    );
     install_midi_live_lib(&mut cx).expect("install");
     install_midi_live_lib(&mut cx).expect("install");
     assert!(
