@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-chord"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Chord models, voicing helpers, and scale-aware pitch collections for SIM music."
@@ -10,23 +10,23 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-kernel = { version = "0.3.0" }
-sim-lib-discrete-graph = { version = "0.3.0" }
-sim-lib-discrete-search = { version = "0.2.0" }
-sim-lib-numbers-stats = { version = "0.5.0" }
-sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-namer-roman = { version = "0.3.0", path = "../sim-lib-pitch-namer-roman" }
-sim-lib-pitch-ratio = { version = "0.2.0", path = "../sim-lib-pitch-ratio" }
-sim-lib-pitch-scale = { version = "0.3.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
-sim-value = { version = "0.3.0" }
+sim-cookbook = { version = "0.4.0" }
+sim-kernel = { version = "0.4.0" }
+sim-lib-discrete-graph = { version = "0.4.0" }
+sim-lib-discrete-search = { version = "0.3.0" }
+sim-lib-numbers-stats = { version = "0.6.0" }
+sim-lib-pitch-core = { version = "0.4.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-namer-roman = { version = "0.4.0", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-ratio = { version = "0.3.0", path = "../sim-lib-pitch-ratio" }
+sim-lib-pitch-scale = { version = "0.4.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-set = { version = "0.4.0", path = "../sim-lib-pitch-set" }
+sim-value = { version = "0.4.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
 
 [dev-dependencies]
-sim-codec = { version = "0.2.0" }
-sim-codec-lisp = { version = "0.3.0" }
+sim-codec = { version = "0.3.0" }
+sim-codec-lisp = { version = "0.4.0" }
 sim-test-support = { version = "0.1.0" }

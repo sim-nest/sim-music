@@ -9,7 +9,7 @@ publish = false
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-sim-lib-discrete-search = { version = "0.2.0" }
+sim-lib-discrete-search = { version = "0.3.0" }
 sim-lib-music-core = { path = "../../crates/sim-lib-music-core" }
 sim-lib-music-lower = { path = "../../crates/sim-lib-music-lower" }
 sim-lib-music-notation = { path = "../../crates/sim-lib-music-notation" }

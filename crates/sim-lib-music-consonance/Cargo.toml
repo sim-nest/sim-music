@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-consonance"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Exact identity-bearing consonance reports and reversible bounded additive completion."
@@ -10,27 +10,27 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-kernel = { version = "0.3.0" }
-sim-lib-core = { version = "0.3.0" }
-sim-lib-discrete-search = { version = "0.2.0" }
-sim-lib-music-core = { version = "0.3.0", path = "../sim-lib-music-core" }
-sim-lib-music-lift = { version = "0.2.0", path = "../sim-lib-music-lift" }
-sim-lib-music-shapes = { version = "0.3.0", path = "../sim-lib-music-shapes" }
-sim-lib-music-transform = { version = "0.2.0", path = "../sim-lib-music-transform" }
-sim-lib-pitch-dissonance = { version = "0.2.0", path = "../sim-lib-pitch-dissonance" }
-sim-lib-pitch-namer = { version = "0.2.0", path = "../sim-lib-pitch-namer" }
-sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
-sim-lib-sound-core = { version = "0.3.0", path = "../sim-lib-sound-core" }
-sim-lib-sound-dissonance = { version = "0.2.0", path = "../sim-lib-sound-dissonance" }
-sim-lib-sound-tuning = { version = "0.3.0", path = "../sim-lib-sound-tuning" }
-sim-shape = { version = "0.3.0" }
+sim-cookbook = { version = "0.4.0" }
+sim-kernel = { version = "0.4.0" }
+sim-lib-core = { version = "0.4.0" }
+sim-lib-discrete-search = { version = "0.3.0" }
+sim-lib-music-core = { version = "0.4.0", path = "../sim-lib-music-core" }
+sim-lib-music-lift = { version = "0.3.0", path = "../sim-lib-music-lift" }
+sim-lib-music-shapes = { version = "0.4.0", path = "../sim-lib-music-shapes" }
+sim-lib-music-transform = { version = "0.3.0", path = "../sim-lib-music-transform" }
+sim-lib-pitch-dissonance = { version = "0.3.0", path = "../sim-lib-pitch-dissonance" }
+sim-lib-pitch-namer = { version = "0.3.0", path = "../sim-lib-pitch-namer" }
+sim-lib-pitch-set = { version = "0.4.0", path = "../sim-lib-pitch-set" }
+sim-lib-sound-core = { version = "0.4.0", path = "../sim-lib-sound-core" }
+sim-lib-sound-dissonance = { version = "0.3.0", path = "../sim-lib-sound-dissonance" }
+sim-lib-sound-tuning = { version = "0.4.0", path = "../sim-lib-sound-tuning" }
+sim-shape = { version = "0.4.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
 
 [dev-dependencies]
 num-rational = "0.4"
-sim-lib-midi-core = { version = "0.2.0", path = "../sim-lib-midi-core" }
-sim-lib-midi-smf = { version = "0.3.0", path = "../sim-lib-midi-smf" }
+sim-lib-midi-core = { version = "0.3.0", path = "../sim-lib-midi-core" }
+sim-lib-midi-smf = { version = "0.4.0", path = "../sim-lib-midi-smf" }

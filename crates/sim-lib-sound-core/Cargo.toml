@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-sound-core"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Sound-domain frequency, envelope, partial, spectrum, tone, and sample models."
@@ -10,9 +10,9 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
+sim-cookbook = { version = "0.4.0" }
+sim-lib-pitch-core = { version = "0.4.0", path = "../sim-lib-pitch-core" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }

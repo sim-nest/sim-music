@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-sound-spectrum"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Partial lists, spectral centroids, and harmonic spectrum descriptors."
@@ -10,9 +10,9 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-lib-numbers-signal = { version = "0.2.0" }
-sim-lib-sound-core = { version = "0.3.0", path = "../sim-lib-sound-core" }
+sim-cookbook = { version = "0.4.0" }
+sim-lib-numbers-signal = { version = "0.3.0" }
+sim-lib-sound-core = { version = "0.4.0", path = "../sim-lib-sound-core" }
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
