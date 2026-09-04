@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-serial-core"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Finite symbolic alphabets, aggregate rules, and certified total series transforms for SIM."
@@ -10,13 +10,13 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-lib-discrete-rank = { version = "0.2.0" }
-sim-lib-rank = { version = "0.2.0" }
+sim-cookbook = { version = "0.4.0" }
+sim-lib-discrete-rank = { version = "0.3.0" }
+sim-lib-rank = { version = "0.3.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
 
 [lints]
 workspace = true

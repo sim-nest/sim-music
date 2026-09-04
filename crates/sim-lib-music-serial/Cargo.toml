@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-serial"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Immutable serial plans with stable row and event identity, explicit provenance, and validated partial temporal order."
@@ -10,30 +10,30 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-cookbook = { version = "0.3.0" }
-sim-lib-discrete-search = { version = "0.2.0" }
-sim-lib-music-core = { version = "0.3.0", path = "../sim-lib-music-core" }
-sim-lib-music-lower = { version = "0.2.0", path = "../sim-lib-music-lower" }
-sim-lib-pitch-chord = { version = "0.3.0", path = "../sim-lib-pitch-chord" }
-sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-dissonance = { version = "0.2.0", path = "../sim-lib-pitch-dissonance" }
-sim-lib-pitch-namer-roman = { version = "0.3.0", path = "../sim-lib-pitch-namer-roman" }
-sim-lib-pitch-ratio = { version = "0.2.0", path = "../sim-lib-pitch-ratio" }
-sim-lib-pitch-scale = { version = "0.3.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-serial = { version = "0.2.0", path = "../sim-lib-pitch-serial" }
-sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
-sim-lib-serial-core = { version = "0.2.0", path = "../sim-lib-serial-core" }
-sim-lib-sound-tuning = { version = "0.3.0", path = "../sim-lib-sound-tuning" }
+sim-cookbook = { version = "0.4.0" }
+sim-lib-discrete-search = { version = "0.3.0" }
+sim-lib-music-core = { version = "0.4.0", path = "../sim-lib-music-core" }
+sim-lib-music-lower = { version = "0.3.0", path = "../sim-lib-music-lower" }
+sim-lib-pitch-chord = { version = "0.4.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.4.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-dissonance = { version = "0.3.0", path = "../sim-lib-pitch-dissonance" }
+sim-lib-pitch-namer-roman = { version = "0.4.0", path = "../sim-lib-pitch-namer-roman" }
+sim-lib-pitch-ratio = { version = "0.3.0", path = "../sim-lib-pitch-ratio" }
+sim-lib-pitch-scale = { version = "0.4.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-serial = { version = "0.3.0", path = "../sim-lib-pitch-serial" }
+sim-lib-pitch-set = { version = "0.4.0", path = "../sim-lib-pitch-set" }
+sim-lib-serial-core = { version = "0.3.0", path = "../sim-lib-serial-core" }
+sim-lib-sound-tuning = { version = "0.4.0", path = "../sim-lib-sound-tuning" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
 
 [dev-dependencies]
-sim-codec = { version = "0.2.0" }
-sim-codec-lisp = { version = "0.3.0" }
-sim-kernel = { version = "0.3.0" }
-sim-lib-pitch-namer = { version = "0.2.0", path = "../sim-lib-pitch-namer" }
+sim-codec = { version = "0.3.0" }
+sim-codec-lisp = { version = "0.4.0" }
+sim-kernel = { version = "0.4.0" }
+sim-lib-pitch-namer = { version = "0.3.0", path = "../sim-lib-pitch-namer" }
 
 [lints]
 workspace = true

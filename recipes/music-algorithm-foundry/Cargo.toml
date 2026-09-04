@@ -8,9 +8,9 @@ readme = "README.md"
 publish = false
 
 [dependencies]
-sim-cookbook = "0.3.0"
-sim-kernel = "0.3.0"
-sim-lib-discrete-search = "0.2.0"
+sim-cookbook = "0.4.0"
+sim-kernel = "0.4.0"
+sim-lib-discrete-search = "0.3.0"
 sim-lib-midi-smf = { path = "../../crates/sim-lib-midi-smf" }
 sim-lib-music-analysis = { path = "../../crates/sim-lib-music-analysis" }
 sim-lib-music-core = { path = "../../crates/sim-lib-music-core" }
@@ -26,7 +26,7 @@ sim-lib-pitch-scale = { path = "../../crates/sim-lib-pitch-scale" }
 sim-lib-pitch-set = { path = "../../crates/sim-lib-pitch-set" }
 sim-lib-sound-core = { path = "../../crates/sim-lib-sound-core" }
 sim-lib-sound-render = { path = "../../crates/sim-lib-sound-render" }
-sim-shape = "0.3.0"
+sim-shape = "0.4.0"
 
 [lints]
 workspace = true

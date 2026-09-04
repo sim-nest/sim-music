@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-pitch-shapes"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2024"
 license = "MPL-2.0"
 description = "Text codecs, citizen descriptors, and runtime shapes for pitch-domain values."
@@ -10,23 +10,23 @@ repository = "https://github.com/sim-nest/sim-music"
 homepage = "https://github.com/sim-nest/sim-music"
 
 [dependencies]
-sim-citizen = { version = "0.3.0" }
-sim-citizen-derive = { version = "0.3.0" }
-sim-codec = { version = "0.2.0" }
-sim-cookbook = { version = "0.3.0" }
-sim-kernel = { version = "0.3.0" }
-sim-value = { version = "0.3.0" }
-sim-lib-pitch-chord = { version = "0.3.0", path = "../sim-lib-pitch-chord" }
-sim-lib-pitch-core = { version = "0.3.0", path = "../sim-lib-pitch-core" }
-sim-lib-pitch-scale = { version = "0.3.0", path = "../sim-lib-pitch-scale" }
-sim-lib-pitch-serial = { version = "0.2.0", path = "../sim-lib-pitch-serial" }
-sim-lib-pitch-set = { version = "0.3.0", path = "../sim-lib-pitch-set" }
-sim-shape = { version = "0.3.0" }
+sim-citizen = { version = "0.4.0" }
+sim-citizen-derive = { version = "0.4.0" }
+sim-codec = { version = "0.3.0" }
+sim-cookbook = { version = "0.4.0" }
+sim-kernel = { version = "0.4.0" }
+sim-value = { version = "0.4.0" }
+sim-lib-pitch-chord = { version = "0.4.0", path = "../sim-lib-pitch-chord" }
+sim-lib-pitch-core = { version = "0.4.0", path = "../sim-lib-pitch-core" }
+sim-lib-pitch-scale = { version = "0.4.0", path = "../sim-lib-pitch-scale" }
+sim-lib-pitch-serial = { version = "0.3.0", path = "../sim-lib-pitch-serial" }
+sim-lib-pitch-set = { version = "0.4.0", path = "../sim-lib-pitch-set" }
+sim-shape = { version = "0.4.0" }
 thiserror = "1"
 
 [build-dependencies]
-sim-cookbook-build = { version = "0.1.0" }
+sim-cookbook-build = { version = "0.2.0" }
 
 [dev-dependencies]
-sim-codec-lisp = { version = "0.3.0" }
-sim-kernel = { version = "0.3.0", features = ["test-support"] }
+sim-codec-lisp = { version = "0.4.0" }
+sim-kernel = { version = "0.4.0", features = ["test-support"] }
