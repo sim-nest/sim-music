@@ -1,6 +1,6 @@
 [package]
 name = "sim-lib-music-wasm-frame"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2024"
 license = "MPL-2.0"
 description = "Music binary-frame facade descriptors."
