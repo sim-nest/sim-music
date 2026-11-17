@@ -234,7 +234,7 @@ claims_surfaces = [
   "cli/music-algorithm-foundry",
 ]
 claims_specimens = [
-  "recipe/sim-music/music-algorithm-foundry",
+  "spec-test/sim-music/crates/sim-lib-music-analysis/src/foundry/tests",
 ]
 supports = [
   "feature/sim-music/audio-lift-and-render",
@@ -461,8 +461,8 @@ claims_anchors = [
   "anchor/crate/sim-lib-serial-core",
 ]
 claims_specimens = [
-  "recipe/sim-music/crates/sim-lib-serial-core/01-basics/custom-alphabet",
-  "recipe/sim-music/crates/sim-lib-serial-core/01-basics/certified-transforms",
+  "spec-test/sim-music/crates/sim-lib-serial-core/src/tests",
+  "spec-test/sim-music/crates/sim-lib-serial-core/tests/certified_transform_recipe",
 ]
 
 [[feature]]
@@ -476,8 +476,9 @@ claims_anchors = [
   "anchor/crate/sim-lib-pitch-serial",
 ]
 claims_specimens = [
-  "recipe/sim-music/crates/sim-lib-pitch-serial/01-basics/row-family-matrix",
-  "recipe/sim-music/crates/sim-lib-pitch-serial/02-partitions/partition-mosaic",
+  "spec-test/sim-music/crates/sim-lib-pitch-serial/tests/gate_row",
+  "spec-test/sim-music/crates/sim-lib-pitch-serial/tests/partition_mosaic_recipe",
+  "spec-test/sim-music/crates/sim-lib-pitch-serial/tests/row_family_matrix_recipe",
 ]
 
 [[feature]]
@@ -491,14 +492,14 @@ claims_anchors = [
   "anchor/crate/sim-lib-music-serial",
 ]
 claims_specimens = [
-  "recipe/sim-music/crates/sim-lib-music-serial/01-basics/immutable-plan",
-  "recipe/sim-music/crates/sim-lib-music-serial/01-basics/strict-row-realization",
-  "recipe/sim-music/crates/sim-lib-music-serial/01-basics/arrays-time-points",
-  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/simultaneous-forms",
-  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/derived-invariant-practice",
-  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/referential-subsets",
-  "recipe/sim-music/crates/sim-lib-music-serial/02-techniques/counter-voices",
-  "recipe/sim-music/crates/sim-lib-music-serial/03-parameters/integral-parameters",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/arrays_time_points_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/counter_voices_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/derived_invariant_practice_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/immutable_plan_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/integral_parameters_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/referential_subsets_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/simultaneous_forms_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/strict_row_realization_recipe",
 ]
 
 [[feature]]
@@ -509,8 +510,8 @@ owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use this row when a serial plan must adapt beyond strict twelve-tone output without mutating the source plan. The built-in modal degree-cycle, nearest-scale-tone, marked-chromatic-inflection, and non-pitch-spine realizers all start from the same immutable SerialPlan and explicit event specs, land pitches through an explicit twelve-tone pitch map derived from either a named Scale or a caller-defined PlayerScale, and attach a SerialSpineReport instead of pretending the result is still a strict chromatic aggregate. The report keeps modal membership, landed-versus-source pitch identity, chromatic aggregate loss, retained ordinal order, collisions, repeated degrees, and contextual sonance as separate inspectable facets. `realize_strict` stays strict and chromatic by default; open adaptation is opt-in through the realizer registry."
 claims_specimens = [
-  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/third-party-adaptation",
-  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/modal-spine",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/modal_spine_recipe",
+  "spec-test/sim-music/crates/sim-lib-music-shapes/tests/third_party_adaptation",
 ]
 supports = [
   "feature/sim-music/exact-music-analysis-and-transform",
@@ -526,7 +527,7 @@ owner = "crate/sim-lib-music-serial"
 audiences = ["user", "code", "framework"]
 guidance = "Use complete_serial when a realized serial plan must admit reversible additive material without mutating or disguising its structural source. The adapter starts from the immutable SerialPlan and realized Staff, filters generic additive candidates through explicit serial allowances for the current partition, already stated pitch classes, future aggregate remainder, caller-declared referential subsets, modal projection, derived reservoirs, and explicitly foreign material, then delegates bounded subset selection to sim-lib-discrete-search and exact additive application/removal to the shared music-transform patch surface. The result returns the unchanged structural plan, the unmodified generic completion receipt, and separate ledgers for the structural reading before/after completion plus the all-sounding reading after completion. Partial or cancelled search status stays partial or cancelled; budget exhaustion is never translated into success."
 claims_specimens = [
-  "recipe/sim-music/crates/sim-lib-music-serial/02-adaptation/serial-consonance-completion",
+  "spec-test/sim-music/crates/sim-lib-music-serial/tests/serial_completion_recipe",
 ]
 supports = [
   "feature/sim-music/serial-practice",
@@ -548,7 +549,7 @@ claims_surfaces = [
   "cli/serial-workbench",
 ]
 claims_specimens = [
-  "recipe/sim-music/serial-workbench/01-end-to-end/row-to-audition",
+  "spec-test/sim-music/recipes/serial-workbench/src/main",
 ]
 supports = [
   "feature/sim-music/serial-practice",
