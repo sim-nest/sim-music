@@ -29,17 +29,20 @@ fn run_isolated_simdoc(args: Vec<String>) -> Result<(), String> {
     }
 
     let root = env::current_dir().map_err(|err| format!("current dir: {err}"))?;
-    let mut command = if let Some(binary) = locate_built_simdoc(&root) {
-        let mut command = Command::new(binary);
-        command.arg("simdoc");
-        command
-    } else {
-        let manifest = locate_simdoc_manifest(&root)?;
-        let mut command = Command::new("cargo");
-        command.args(["run", "--locked", "--offline", "--manifest-path"]);
-        command.arg(manifest);
-        command.args(["--quiet", "--", "simdoc"]);
-        command
+    let hint = tooling_hint_from_env();
+    let mut command = match select_simdoc(&root, hint.as_deref())? {
+        SimdocLaunch::Binary(binary) => {
+            let mut command = Command::new(binary);
+            command.arg("simdoc");
+            command
+        }
+        SimdocLaunch::Manifest(manifest) => {
+            let mut command = Command::new("cargo");
+            command.args(["run", "--locked", "--offline", "--manifest-path"]);
+            command.arg(manifest);
+            command.args(["--quiet", "--", "simdoc"]);
+            command
+        }
     };
     configure_local_origin(&mut command);
     command.arg("--repo-root");
@@ -57,7 +60,8 @@ fn run_workspace_tool(args: Vec<String>, command_name: &str) -> Result<(), Strin
     }
 
     let root = env::current_dir().map_err(|err| format!("current dir: {err}"))?;
-    let manifest = locate_workspace_manifest(&root)?;
+    let hint = tooling_hint_from_env();
+    let manifest = select_workspace_manifest(&root, hint.as_deref())?;
     let mut command = Command::new("cargo");
     command.args(["run", "--manifest-path"]);
     command.arg(manifest);
@@ -98,23 +102,32 @@ fn has_repo_arg(args: &[String]) -> bool {
         .any(|arg| arg == "--repo" || arg.starts_with("--repo="))
 }
 
-fn locate_built_simdoc(repo_root: &Path) -> Option<PathBuf> {
-    let binary = repo_root
-        .parent()?
-        .join("sim-tooling/crates/simdoc/target/debug/simdoc");
-    binary.is_file().then_some(binary)
+fn tooling_hint_from_env() -> Option<PathBuf> {
+    env::var_os("SIMDOC_TOOLING_MANIFEST").map(PathBuf::from)
 }
 
-fn locate_simdoc_manifest(repo_root: &Path) -> Result<PathBuf, String> {
-    if let Ok(path) = env::var("SIMDOC_TOOLING_MANIFEST") {
-        return isolated_manifest_from_hint(Path::new(&path));
+#[derive(Debug, PartialEq, Eq)]
+enum SimdocLaunch {
+    Binary(PathBuf),
+    Manifest(PathBuf),
+}
+
+fn select_simdoc(repo_root: &Path, override_hint: Option<&Path>) -> Result<SimdocLaunch, String> {
+    if let Some(hint) = override_hint {
+        return Ok(SimdocLaunch::Manifest(isolated_manifest_from_hint(hint)?));
     }
-    locate_sibling_simdoc(repo_root)
+    if let Some(binary) = locate_built_simdoc(repo_root) {
+        return Ok(SimdocLaunch::Binary(binary));
+    }
+    Ok(SimdocLaunch::Manifest(locate_sibling_simdoc(repo_root)?))
 }
 
-fn locate_workspace_manifest(repo_root: &Path) -> Result<PathBuf, String> {
-    if let Ok(path) = env::var("SIMDOC_TOOLING_MANIFEST") {
-        return Ok(PathBuf::from(path));
+fn select_workspace_manifest(
+    repo_root: &Path,
+    override_hint: Option<&Path>,
+) -> Result<PathBuf, String> {
+    if let Some(path) = override_hint {
+        return Ok(path.to_path_buf());
     }
     let sibling = repo_root
         .parent()
@@ -125,6 +138,13 @@ fn locate_workspace_manifest(repo_root: &Path) -> Result<PathBuf, String> {
         return Ok(sibling);
     }
     Err("set SIMDOC_TOOLING_MANIFEST to the sim-tooling Cargo.toml".to_owned())
+}
+
+fn locate_built_simdoc(repo_root: &Path) -> Option<PathBuf> {
+    let binary = repo_root
+        .parent()?
+        .join("sim-tooling/crates/simdoc/target/debug/simdoc");
+    binary.is_file().then_some(binary)
 }
 
 fn locate_sibling_simdoc(repo_root: &Path) -> Result<PathBuf, String> {
@@ -246,7 +266,8 @@ mod tests {
         fs::create_dir_all(&repo).expect("repo");
         let error = locate_sibling_simdoc(&repo).expect_err("missing sibling");
         assert!(error.contains("set SIMDOC_TOOLING_MANIFEST"));
-        let workspace_error = locate_workspace_manifest(&repo).expect_err("missing workspace");
+        let workspace_error =
+            select_workspace_manifest(&repo, None).expect_err("missing workspace");
         assert!(workspace_error.contains("set SIMDOC_TOOLING_MANIFEST"));
         fs::remove_dir_all(parent).expect("cleanup");
     }
@@ -258,7 +279,7 @@ mod tests {
         let repo = parent.join("sim-music");
         fs::create_dir_all(&repo).expect("repo");
         assert_eq!(
-            locate_workspace_manifest(&repo).expect("workspace"),
+            select_workspace_manifest(&repo, None).expect("workspace"),
             workspace
         );
         assert_ne!(workspace, isolated);
@@ -266,23 +287,52 @@ mod tests {
     }
 
     #[test]
-    fn built_encoder_is_preferred_when_the_binary_exists() {
+    fn built_encoder_is_preferred_when_no_override_is_set() {
         let parent = scratch_root();
         let binary = parent.join("sim-tooling/crates/simdoc/target/debug/simdoc");
         fs::create_dir_all(binary.parent().expect("parent")).expect("dirs");
         fs::write(&binary, b"").expect("binary");
         let repo = parent.join("sim-music");
         fs::create_dir_all(&repo).expect("repo");
-        assert_eq!(locate_built_simdoc(&repo).expect("built"), binary);
+        assert_eq!(
+            select_simdoc(&repo, None).expect("built"),
+            SimdocLaunch::Binary(binary)
+        );
+        fs::remove_dir_all(parent).expect("cleanup");
+    }
+
+    #[test]
+    fn explicit_override_beats_the_sibling_binary() {
+        let parent = scratch_root();
+        let binary = parent.join("sim-tooling/crates/simdoc/target/debug/simdoc");
+        fs::create_dir_all(binary.parent().expect("parent")).expect("dirs");
+        fs::write(&binary, b"").expect("binary");
+        let (override_workspace, override_isolated) = write_tooling(&parent.join("other-tooling"));
+        let repo = parent.join("sim-music");
+        fs::create_dir_all(&repo).expect("repo");
+        assert_eq!(
+            select_simdoc(&repo, Some(&override_workspace)).expect("override"),
+            SimdocLaunch::Manifest(override_isolated)
+        );
+        assert_eq!(
+            select_workspace_manifest(&repo, Some(&override_workspace))
+                .expect("workspace override"),
+            override_workspace
+        );
         fs::remove_dir_all(parent).expect("cleanup");
     }
 
     #[test]
     fn missing_built_encoder_falls_through() {
         let parent = scratch_root();
+        let (_, manifest) = write_tooling(&parent.join("sim-tooling"));
         let repo = parent.join("sim-music");
         fs::create_dir_all(&repo).expect("repo");
         assert!(locate_built_simdoc(&repo).is_none());
+        assert_eq!(
+            select_simdoc(&repo, None).expect("manifest"),
+            SimdocLaunch::Manifest(manifest)
+        );
         fs::remove_dir_all(parent).expect("cleanup");
     }
 
